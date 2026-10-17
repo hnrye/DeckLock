@@ -5,15 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Deck do Caos · Deadlock</title>
 <meta name="description" content="Sorteador de cartas de desafio para partidas de Deadlock, com decks editáveis.">
-<meta name="theme-color" content="#0d0f12">
+<meta name="theme-color" content="#222021">
 <meta property="og:title" content="Deck do Caos · Deadlock">
 <meta property="og:description" content="Sorteador de cartas de desafio para partidas de Deadlock, com decks editáveis.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d0f12'/%3E%3Cpath d='M16 4l9 12-9 12-9-12z' fill='%23e2a64a'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23222021'/%3E%3Ccircle cx='16' cy='16' r='11' fill='none' stroke='%23efdebf' stroke-width='2'/%3E%3Cpath d='M6 16Q16 8 26 16Q16 24 6 16Z' fill='%23efdebf'/%3E%3Ccircle cx='16' cy='16' r='3.5' fill='%23222021'/%3E%3C/svg%3E">
 <style>
-:root{--bg:#0d0f12;--bg2:#151a20;--panel:#1b2129;--ink:#ece4d3;--mute:#8f98a3;--gold:#e2a64a;--rare:#4fb3b0;--leg:#d4503f;--line:#333c47;--onacc:#16110a;--cw:300px;--flip:700ms;--fh:Georgia,"Times New Roman",serif}
+:root{--bg:#222021;--bg2:#2f4442;--panel:#3f5d4d;--ink:#efdebf;--mute:#86a995;--gold:#efdebf;--rare:#8fb59f;--leg:#d98a5c;--line:#3f5d4d;--onacc:#16110a;--cw:300px;--flip:700ms;--fh:Georgia,"Times New Roman",serif}
 *{box-sizing:border-box}
 html,body{margin:0}
-body{background:radial-gradient(ellipse at 50% -10%,color-mix(in srgb,var(--gold) 14%,var(--bg)),var(--bg) 60%) fixed;color:var(--ink);font:16px/1.5 system-ui,sans-serif;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+body{background:radial-gradient(ellipse at 50% -10%,var(--bg2),var(--bg) 62%) fixed;color:var(--ink);font:16px/1.5 system-ui,sans-serif;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
 h1,h2,.ct,.title,h3{font-family:var(--fh)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 header{display:flex;flex-direction:column;align-items:center;gap:12px;padding:20px 24px 16px;border-bottom:1px solid var(--line);text-align:center}
@@ -53,7 +53,8 @@ main{flex:1;display:flex;flex-direction:column;align-items:center;gap:28px;paddi
 .back svg{position:absolute;inset:0;width:100%;height:100%}
 .bk-stripes{background:repeating-linear-gradient(45deg,var(--ba) 0 14px,var(--bb) 14px 28px)}
 .bk-diamonds{background-color:var(--ba);background-image:linear-gradient(45deg,var(--bb) 25%,transparent 25%),linear-gradient(-45deg,var(--bb) 25%,transparent 25%),linear-gradient(45deg,transparent 75%,var(--bb) 75%),linear-gradient(-45deg,transparent 75%,var(--bb) 75%);background-size:28px 28px;background-position:0 0,0 14px,14px -14px,-14px 0}
-.bk-eye{background:radial-gradient(circle at 50% 50%,color-mix(in srgb,var(--gold) 24%,var(--bg)),var(--bg) 72%)}
+.bk-eye{background:var(--bg)}
+.bk-eye::after{display:none}
 .bk-sunburst{background:repeating-conic-gradient(from 0deg at 50% 50%,var(--ba) 0 7.5deg,var(--bb) 7.5deg 15deg)}
 .bk-plain{background:var(--ba)}
 .bk-custom{background:var(--bg) var(--bkimg,none) center/cover no-repeat}
@@ -155,6 +156,9 @@ header{border-bottom:0;gap:10px;padding:26px 24px 8px}
 footer{padding:14px 24px 22px;text-align:center;color:var(--mute);font-size:.8rem;border-top:1px solid var(--line)}
 .top strong{font-family:var(--fh);color:var(--gold);font-size:1.1rem}
 .fsx{display:none;position:fixed;top:12px;right:12px;z-index:20;opacity:.45}.fsx:hover,.fsx:focus-visible{opacity:1}
+.emptystate{display:grid;gap:12px;justify-items:center;text-align:center;max-width:480px;padding:30px 26px;border:1px dashed var(--line);border-radius:14px;background:color-mix(in srgb,var(--panel) 40%,transparent)}
+.emptystate h2{margin:0;color:var(--gold);font-size:1.35rem}
+.emptystate .row{justify-content:center}
 @media(prefers-reduced-motion:reduce){.primary,.scene{animation:none!important}}
 </style>
 </head>
@@ -162,7 +166,7 @@ footer{padding:14px 24px 22px;text-align:center;color:var(--mute);font-size:.8re
 <noscript><p style="padding:24px;text-align:center">Este site precisa de JavaScript para funcionar.</p></noscript>
 <header>
   <h1 class="title" id="title" contenteditable="true" spellcheck="false" role="textbox" aria-label="Título do site (editável)" title="Clique para editar o título" data-ph="Título do site"></h1>
-  <div class="orn" aria-hidden="true"><span></span><i></i><span></span></div>
+  <div class="orn" aria-hidden="true"><span></span><svg viewBox="0 0 40 40" width="30" height="30" style="stroke:var(--gold);fill:none;stroke-width:1.6;flex:none"><circle cx="20" cy="20" r="17"/><path d="M6 20Q20 8 34 20Q20 32 6 20Z" style="fill:var(--gold)"/><circle cx="20" cy="20" r="5" style="fill:var(--bg);stroke:none"/><circle cx="20" cy="20" r="2.4" style="fill:var(--gold);stroke:none"/></svg><span></span></div>
   <div class="tools">
     <button id="bEdit">Editar decks</button>
     <button id="bSet">Configurações</button>
@@ -196,6 +200,7 @@ footer{padding:14px 24px 22px;text-align:center;color:var(--mute);font-size:.8re
     <strong class="grow">Editor de decks</strong>
     <button id="bExp">Salvar tudo em arquivo</button>
     <button id="bImp">Carregar arquivo</button>
+    <button id="bImpAdd" title="Adiciona os decks do arquivo aos que você já tem">Adicionar de arquivo</button>
     <button id="bClose">Fechar</button>
     <input type="file" id="fileJson" accept="application/json,.json" hidden>
     <input type="file" id="fileImg" accept="image/*" hidden>
@@ -207,7 +212,7 @@ footer{padding:14px 24px 22px;text-align:center;color:var(--mute);font-size:.8re
     <button id="bDDel" class="danger">Excluir deck</button>
     <span class="grow"></span>
     <button id="bAdd">Nova carta</button>
-    <button id="bReset" class="danger">Restaurar originais</button>
+    <button id="bReset" class="danger">Remover todos os decks</button>
   </div>
   <div class="ed">
     <div class="ed-side"><input type="search" id="edQ" placeholder="Buscar carta…" aria-label="Buscar carta"><div class="ed-list" id="edList"></div></div>
@@ -230,7 +235,8 @@ const CATS=["Handicap","Build","Objetivo","Comunicação","Caos","Individual","H
 const RARS={comum:"Comum",rara:"Rara",lendaria:"Lendária"};
 const COLORS=[["bg","Fundo"],["bg2","Fundo secundário"],["panel","Painéis"],["ink","Texto"],["mute","Texto suave"],["gold","Destaque"],["rare","Carta rara"],["leg","Carta lendária"],["line","Bordas"]];
 const PROFILES={
-"Deadlock":{back:"eye",colors:{bg:"#0d0f12",bg2:"#151a20",panel:"#1b2129",ink:"#ece4d3",mute:"#8f98a3",gold:"#e2a64a",rare:"#4fb3b0",leg:"#d4503f",line:"#333c47"}},
+"Deadlock":{back:"eye",colors:{bg:"#222021",bg2:"#2f4442",panel:"#3f5d4d",ink:"#efdebf",mute:"#86a995",gold:"#efdebf",rare:"#8fb59f",leg:"#d98a5c",line:"#3f5d4d"}},
+"Deadlock Creme":{back:"eye",colors:{bg:"#efdebf",bg2:"#f6ecd6",panel:"#e2d1ae",ink:"#222021",mute:"#44614f",gold:"#3f5d4d",rare:"#2f6b66",leg:"#a8442a",line:"#bfae8b"}},
 "Âmbar quente":{back:"stripes",colors:{bg:"#14100f",bg2:"#1e1715",panel:"#241b18",ink:"#f0e4cf",mute:"#a8967c",gold:"#d4a24a",rare:"#6aa9d8",leg:"#e0553d",line:"#4a3a2c"}},
 "Safira":{back:"diamonds",colors:{bg:"#0b1020",bg2:"#121a30",panel:"#18223c",ink:"#e6ecf7",mute:"#8b9ab8",gold:"#5aa2ff",rare:"#7ad1c2",leg:"#ff6b8b",line:"#2a3a5e"}},
 "Esmeralda":{back:"sunburst",colors:{bg:"#0a1210",bg2:"#101c18",panel:"#16251f",ink:"#e4efe6",mute:"#8aa396",gold:"#d9b44a",rare:"#4fb3a0",leg:"#d8624a",line:"#2a4037"}},
@@ -239,55 +245,14 @@ const PROFILES={
 const FONTS={serif:["Serifada","Georgia,'Times New Roman',serif"],sans:["Sem serifa","system-ui,sans-serif"],cond:["Condensada","'Arial Narrow',Bahnschrift,Impact,sans-serif"]};
 const DEF_CFG=()=>({profile:"b:Deadlock",mod:false,colors:{...PROFILES.Deadlock.colors},back:"eye",backImg:"",font:"serif",cw:300,flip:700,anim:!matchMedia("(prefers-reduced-motion: reduce)").matches,snd:false,hist:true,norepeat:true,cycle:true,rr:0,w:{comum:60,rara:30,lendaria:10}});
 
-const GRUPO=[
-["Pick do colega","Cada um joga o herói que o colega ao lado escolheu para você. Sem veto, sem troca.","Caos","comum"],
-["Herói esquecido","Todo mundo joga o herói que menos usou na conta. Se nunca jogou nenhum, vale qualquer um.","Caos","comum"],
-["Sem arma","Nenhum item de Arma na partida inteira. Só Vitalidade e Espírito.","Build","comum"],
-["Categoria única","Cada um escolhe uma categoria (Arma, Vitalidade ou Espírito) e só compra dela.","Build","comum"],
-["Só passivos","Nenhum item ativo na build. Se a luta depende de apertar um botão, ele não existe.","Build","rara"],
-["Mão fechada","Ninguém gasta souls antes do minuto 5. A primeira compra sai toda de uma vez.","Build","rara"],
-["Sem zipline","Zipline proibida. Quem chegar atrasado na luta, chegou a pé.","Handicap","comum"],
-["Lane no corpo a corpo","Até o minuto 5, só melee e habilidades. Tiro só depois disso.","Handicap","comum"],
-["Minimapa desligado","Ninguém olha o minimapa. Posição do inimigo só por callout no voz.","Handicap","rara"],
-["Lane única","O grupo todo na mesma lane até a primeira Guardian cair.","Objetivo","comum"],
-["Prioridade Mid-Boss","Assim que o Mid-Boss nascer, o grupo vai nele. Sem votação.","Objetivo","rara"],
-["Urn do mais pobre","Quem carrega a Soul Urn é sempre o jogador com menos souls do grupo.","Objetivo","rara"],
-["Primeiros 5 no camp","Ninguém fica em lane nos primeiros 5 minutos. Todo mundo no jungle.","Objetivo","comum"],
-["Sem falar","Sem voz até a primeira Guardian cair. Só pings e o chat de texto.","Comunicação","rara"],
-["Só perguntas","No voz, só vale falar em forma de pergunta. Afirmou, perdeu o turno de falar.","Comunicação","comum"],
-["Sem nomes","Não vale dizer nome de herói ou de item. Tem que descrever o que quer dizer.","Comunicação","rara"],
-["Narrador morto","Quem morreu narra a partida para o grupo até renascer.","Comunicação","comum"],
-["Elogio obrigatório","Depois de cada morte, o grupo elogia uma coisa que o inimigo fez bem. Sem ironia.","Comunicação","comum"],
-["Líder rotativo","A cada 5 minutos muda o líder. Só ele chama luta, objetivo e recuo.","Caos","comum"],
-["Quem tem menos decide","O jogador com menos kills decide para onde o grupo vai.","Caos","comum"],
-["Aposta de kills","Antes de começar, cada um crava quantas kills vai fazer. Quem errar por mais escolhe o herói por último na próxima.","Caos","rara"],
-["Dado de tudo","Rolem dado para herói, lane e categoria de item de cada um. Sem reclamar do resultado.","Caos","rara"],
-["Duas cartas","Sorteie mais uma carta e cumpram as duas ao mesmo tempo.","Caos","lendaria"],
-["Sem arma, sem voz","Nenhum item de Arma e ninguém fala no voz até o minuto 10.","Caos","lendaria"],
-["Tudo no dado","Herói, lane, itens permitidos e líder sorteados. O grupo só executa.","Caos","lendaria"]];
-const IND=[
-["Sem tiro","Só habilidades e melee até o minuto 8.","Handicap","comum"],
-["Sem ultimate","Não use a habilidade 4 até o minuto 15.","Handicap","comum"],
-["Pé no chão","Sem zipline para você nesta partida.","Handicap","comum"],
-["Pacifista de tropa","Tropas só morrem no melee.","Handicap","comum"],
-["Parry sempre","Tente parry em toda luta, acerte ou não.","Handicap","rara"],
-["Sem ativos","Nenhum item ativo na sua build.","Build","comum"],
-["Só Espírito","Só compra itens de Espírito.","Build","rara"],
-["Zero Vitalidade","Nenhum item de Vitalidade. Você vive do que tem.","Build","rara"],
-["Compra só morto","Só compra itens quando estiver morto.","Build","rara"],
-["Callout de tudo","Narre em voz alta o que você está fazendo, o tempo todo.","Comunicação","comum"],
-["Sombra","Fique sempre perto do jogador à sua esquerda.","Objetivo","comum"],
-["Dono da Urn","Você carrega a Soul Urn sempre que ela estiver disponível.","Objetivo","rara"],
-["Herói do sorteio","Joga o herói que o grupo sortear no deck de Heróis, sem reclamar.","Caos","lendaria"]];
-const HEROES=["Abrams","Apollo","Bebop","Billy","Calico","Celeste","Doorman","Drifter","Dynamo","Graves","Grey Talon","Haze","Holliday","Infernus","Ivy","Kelvin","Lady Geist","Lash","McGinnis","Mina","Mirage","Mo & Krill","Paige","Paradox","Pocket","Rem","Seven","Shiv","Silver","Sinclair","Venator","Victor","Vindicta","Viscous","Vyper","Warden","Wraith","Yamato"];
-const mk=(id,name,rows)=>({id,name,cards:rows.map((c,i)=>({id:id+i,title:c[0],text:c[1],cat:c[2],rar:c[3],img:""}))});
-const DEF_DECKS=()=>[mk("g","Grupo",GRUPO),mk("i","Individual",IND.map(r=>r)),mk("h","Heróis",HEROES.map(h=>[h,"","Herói","comum"]))];
+const DEF_DECKS=()=>[];
 
 const KEY="deadlock-deck-v3";
 
 function eyeSvg(){
-  let r="";for(let a=0;a<360;a+=15){const t=a*Math.PI/180,c=Math.cos(t),s=Math.sin(t);r+=`<line x1="${(125+c*66).toFixed(1)}" y1="${(175+s*66).toFixed(1)}" x2="${(125+c*150).toFixed(1)}" y2="${(175+s*150).toFixed(1)}"/>`}
-  return `<svg viewBox="0 0 250 350" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><g style="stroke:var(--gold);stroke-width:1.2;opacity:.28">${r}</g><circle cx="125" cy="175" r="60" style="fill:none;stroke:var(--gold);stroke-width:1.5;opacity:.6"/><path d="M50 175Q125 96 200 175Q125 254 50 175Z" style="fill:var(--bg);stroke:var(--gold);stroke-width:3"/><circle cx="125" cy="175" r="33" style="fill:color-mix(in srgb,var(--gold) 28%,var(--bg));stroke:var(--gold);stroke-width:2.5"/><ellipse cx="125" cy="175" rx="9" ry="27" style="fill:var(--gold)"/><circle cx="134" cy="164" r="4" style="fill:var(--bg);opacity:.85"/><path d="M125 46l9 13-9 13-9-13zM125 278l9 13-9 13-9-13z" style="fill:var(--gold)"/></svg>`;
+  const spoke='<path d="M161 175h24"/><path d="M196 158.6Q187 170 185 175Q187 180 196 191.4"/>';
+  let sp="";[45,135,225,315].forEach(a=>sp+=`<g transform="rotate(${a} 125 175)">${spoke}</g>`);
+  return `<svg viewBox="0 0 250 350" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g style="stroke:var(--ink);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><path d="M0 175H73M177 175H250M125 0V102M125 248V350"/><circle cx="125" cy="175" r="73"/>${sp}</g><path d="M73 175Q125 125 177 175Q125 225 73 175Z" style="fill:var(--ink)"/><circle cx="125" cy="175" r="21" style="fill:var(--bg)"/><circle cx="125" cy="175" r="11" style="fill:var(--ink)"/></svg>`;
 }
 const DIA='<svg viewBox="0 0 250 350" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="M125 130l34 45-34 45-34-45z" style="fill:var(--bg);stroke:var(--gold);stroke-width:2.5"/><path d="M125 150l16 25-16 25-16-25z" style="fill:var(--gold)"/></svg>';
 const BACKS={stripes:["Listras",""],eye:["Olho",eyeSvg()],diamonds:["Losangos",""],sunburst:["Raios",DIA],plain:["Liso",DIA],custom:["Imagem",""]};
@@ -308,6 +273,8 @@ function cleanCfg(c){
   if(!FONTS[o.font])o.font="serif";
   o.cw=Math.min(440,Math.max(200,+o.cw||300));o.flip=Math.min(1600,Math.max(0,+o.flip||700));
   if(c.profile===undefined)o.profile=PROFILES[c.preset]?"b:"+c.preset:(c.preset===undefined?d.profile:"");
+  const bp=typeof o.profile==="string"&&o.profile.startsWith("b:")?PROFILES[o.profile.slice(2)]:null;
+  if(bp&&!o.mod){o.colors=cleanColors(bp.colors);o.back=bp.back}
   return o;
 }
 function cleanProfile(p){
@@ -328,15 +295,12 @@ let S=load(),filt=new Set(),lastIds=new Set(),used={},table=[],busy=false,rrUsed
 /* ---------- Dados e armazenamento ---------- */
 function load(){
   let s=null;try{s=JSON.parse(localStorage.getItem(KEY))}catch(e){}
-  if(!s||!Array.isArray(s.decks)||!s.decks.length){
-    s={decks:DEF_DECKS()};
-    try{const o=JSON.parse(localStorage.getItem("deadlock-deck-v2"));if(Array.isArray(o)&&o.length)s.decks[0].cards=o}catch(e){}
-  }
+  if(!s||!Array.isArray(s.decks))s={decks:DEF_DECKS()};
   s.cfg=cleanCfg(s.cfg);
   s.profiles=(Array.isArray(s.profiles)?s.profiles:[]).map(cleanProfile).filter(Boolean);
   s.title=s.title||"Deck do Caos · Deadlock";
   s.active=(s.active||[]).filter(id=>s.decks.some(x=>x.id===id));
-  if(!s.active.length)s.active=[s.decks[0].id];
+  if(!s.active.length&&s.decks.length)s.active=[s.decks[0].id];
   s.count=Math.min(8,Math.max(1,s.count||1));
   s.hist=Array.isArray(s.hist)?s.hist.slice(0,12):[];
   return s;
@@ -405,7 +369,16 @@ function cardEl(g,i,noRR){
 }
 function build(groups){
   const t=$("#table");t.innerHTML="";
-  if(!groups.length){t.append(el("p","empty","Selecione ao menos um deck."));return}
+  if(!groups.length){
+    if(S.decks.length){t.append(el("p","empty","Selecione ao menos um deck."));return}
+    const w=el("div","emptystate"),r=el("div","row");
+    const a=el("button","primary","Carregar arquivo"),c=el("button","","Criar deck");
+    a.onclick=()=>{impMode="replace";$("#fileJson").click()};
+    c.onclick=()=>{openEd();$("#bDNew").click()};
+    r.append(a,c);
+    w.append(el("h2","","Nenhum deck por aqui ainda"),el("p","empty","Carregue um arquivo de decks (por exemplo o decks-exemplo.json) ou crie o seu primeiro deck."),r);
+    t.append(w);return;
+  }
   groups.forEach(g=>{
     const w=el("section","grp");
     if(groups.length>1)w.append(el("h2","gl",g.name));
@@ -440,7 +413,7 @@ function updateRR(){
 async function draw(){
   if(busy)return;
   const ds=sel();
-  if(!ds.length){toast("Selecione ao menos um deck.");return}
+  if(!ds.length){toast(S.decks.length?"Selecione ao menos um deck.":"Nenhum deck ainda. Carregue um arquivo ou crie um deck.");return}
   if(!ds.some(d=>d.cards.length)){toast("Os decks selecionados estão vazios.");return}
   setBusy(true);rrUsed=0;
   const picks=ds.map(d=>({name:d.name,deck:d,cards:pickN(d)}));
@@ -507,29 +480,32 @@ function setCount(n){S.count=Math.min(8,Math.max(1,n));syncCount();save();showBa
 function refreshAll(){renderDeckChips();renderChips();showBacks()}
 
 /* ---------- Editor ---------- */
-const curD=()=>S.decks.find(d=>d.id===ed.d)||S.decks[0];
-const curC=()=>curD().cards.find(c=>c.id===ed.c);
+const curD=()=>S.decks.find(d=>d.id===ed.d)||S.decks[0]||null;
+const curC=()=>curD()?.cards.find(c=>c.id===ed.c);
 const mark=()=>{ed.dirty=true;save()};
 function withUndo(msg,fn){
   const s=JSON.stringify({d:S.decks,a:S.active,t:S.title});
-  fn();mark();
+  fn();mark();if(!$("#dlg").open){ed.dirty=false;refreshAll()}
   toast(msg,"Desfazer",()=>{
     const o=JSON.parse(s);S.decks=o.d;S.active=o.a;S.title=o.t;syncTitle();
-    ed.d=S.decks[0].id;ed.c=S.decks[0].cards[0]?.id;mark();renderEd();
+    ed.d=S.decks[0]?.id||null;ed.c=S.decks[0]?.cards[0]?.id;mark();renderEd();if(!$("#dlg").open){ed.dirty=false;refreshAll()}
   });
 }
-function openEd(){ed.d=curD().id;ed.c=curD().cards[0]?.id;ed.q="";$("#edQ").value="";renderEd();$("#dlg").showModal()}
+function openEd(){const d=curD();ed.d=d?d.id:null;ed.c=d?.cards[0]?.id;ed.q="";$("#edQ").value="";renderEd();$("#dlg").showModal()}
 function renderEd(){
-  const d=curD();ed.d=d.id;
+  const d=curD();ed.d=d?d.id:null;
   const ds=$("#edDeck");ds.innerHTML="";
-  S.decks.forEach(x=>{const o=el("option","",x.name+" ("+x.cards.length+")");o.value=x.id;ds.append(o)});ds.value=d.id;
+  if(!d)ds.append(el("option","","(nenhum deck)"));
+  S.decks.forEach(x=>{const o=el("option","",x.name+" ("+x.cards.length+")");o.value=x.id;ds.append(o)});
+  if(d)ds.value=d.id;
+  ds.disabled=!d;["#bDRen","#bDDel","#bAdd"].forEach(k=>{$(k).disabled=!d});
   renderList();renderForm();
 }
 function renderList(){
-  const d=curD(),list=$("#edList"),q=ed.q.toLowerCase();list.innerHTML="";
+  const d=curD()||{cards:[]},list=$("#edList"),q=ed.q.toLowerCase();list.innerHTML="";
   const cs=d.cards.filter(c=>!q||(c.title+" "+c.cat).toLowerCase().includes(q));
   cs.forEach(c=>{const b=el("button",c.id===ed.c?"sel":"",c.title||"(sem título)");b.onclick=()=>{ed.c=c.id;renderList();renderForm()};list.append(b)});
-  if(!cs.length)list.append(el("p","empty",d.cards.length?"Nada encontrado.":"Deck vazio."));
+  if(!cs.length)list.append(el("p","empty",S.decks.length?(d.cards.length?"Nada encontrado.":"Deck vazio."):"Nenhum deck ainda."));
 }
 function renderPrev(c){
   const p=$("#prev");if(!p)return;p.innerHTML="";
@@ -538,7 +514,7 @@ function renderPrev(c){
 }
 function renderForm(){
   const d=curD(),form=$("#edForm");form.innerHTML="";const c=curC();
-  if(!c){form.append(el("p","empty","Selecione ou crie uma carta."));return}
+  if(!c){form.append(el("p","empty",S.decks.length?"Selecione ou crie uma carta.":"Crie um deck ou carregue um arquivo para começar."));return}
   const upd=(k,v)=>{c[k]=v;mark();if(k==="title")renderList();renderPrev(c)};
   const field=(lab,node)=>{const l=el("label","",lab);l.append(node);return l};
   const t=el("input");t.type="text";t.value=c.title;t.oninput=()=>upd("title",t.value);
@@ -562,14 +538,13 @@ function renderForm(){
 $("#edQ").oninput=e=>{ed.q=e.target.value;renderList()};
 $("#edDeck").onchange=e=>{ed.d=e.target.value;ed.c=curD().cards[0]?.id;renderEd()};
 $("#bDNew").onclick=()=>{const n=prompt("Nome do novo deck:");if(!n||!n.trim())return;const d={id:"u"+Date.now(),name:n.trim(),cards:[]};S.decks.push(d);ed.d=d.id;ed.c=null;mark();renderEd()};
-$("#bDRen").onclick=()=>{const d=curD(),n=prompt("Novo nome do deck:",d.name);if(!n||!n.trim())return;d.name=n.trim();mark();renderEd()};
+$("#bDRen").onclick=()=>{const d=curD();if(!d)return;const n=prompt("Novo nome do deck:",d.name);if(!n||!n.trim())return;d.name=n.trim();mark();renderEd()};
 $("#bDDel").onclick=()=>{
-  if(S.decks.length<2){toast("É preciso manter ao menos um deck.");return}
-  const d=curD();
-  withUndo("Deck '"+d.name+"' excluído.",()=>{S.decks=S.decks.filter(x=>x!==d);S.active=S.active.filter(id=>id!==d.id);if(!S.active.length)S.active=[S.decks[0].id];ed.d=S.decks[0].id;ed.c=S.decks[0].cards[0]?.id;renderEd()});
+  const d=curD();if(!d)return;
+  withUndo("Deck '"+d.name+"' excluído.",()=>{S.decks=S.decks.filter(x=>x!==d);S.active=S.active.filter(id=>id!==d.id);if(!S.active.length&&S.decks.length)S.active=[S.decks[0].id];ed.d=S.decks[0]?.id||null;ed.c=S.decks[0]?.cards[0]?.id;renderEd()});
 };
-$("#bAdd").onclick=()=>{const d=curD(),c={id:"n"+Date.now(),title:"Nova carta",text:"Descreva a regra aqui.",cat:d.cards[0]?.cat||"Caos",rar:"comum",img:""};d.cards.push(c);ed.c=c.id;ed.q="";$("#edQ").value="";mark();renderEd()};
-$("#bReset").onclick=()=>withUndo("Decks originais restaurados.",()=>{S.decks=DEF_DECKS();S.active=[S.decks[0].id];S.title="Deck do Caos · Deadlock";syncTitle();ed.d=S.decks[0].id;ed.c=S.decks[0].cards[0].id;renderEd()});
+$("#bAdd").onclick=()=>{const d=curD();if(!d){toast("Crie um deck primeiro.");return}const c={id:"n"+Date.now(),title:"Nova carta",text:"Descreva a regra aqui.",cat:d.cards[0]?.cat||"Caos",rar:"comum",img:""};d.cards.push(c);ed.c=c.id;ed.q="";$("#edQ").value="";mark();renderEd()};
+$("#bReset").onclick=()=>{if(!S.decks.length){toast("Não há decks para remover.");return}withUndo("Todos os decks removidos.",()=>{S.decks=[];S.active=[];ed.d=null;ed.c=null;renderEd()})};
 $("#fileImg").onchange=e=>{
   const f=e.target.files[0];e.target.value="";if(!f)return;
   const r=new FileReader();
@@ -589,22 +564,30 @@ $("#bExp").onclick=()=>{
   a.href=URL.createObjectURL(new Blob([JSON.stringify({versao:3,title:S.title,decks:S.decks,cfg:S.cfg,profiles:S.profiles},null,1)],{type:"application/json"}));
   a.download="decks-deadlock-"+new Date().toISOString().slice(0,10)+".json";a.click();URL.revokeObjectURL(a.href);toast("Tudo salvo em arquivo.");
 };
-$("#bImp").onclick=()=>$("#fileJson").click();
+let impMode="replace";
+$("#bImp").onclick=()=>{impMode="replace";$("#fileJson").click()};
+$("#bImpAdd").onclick=()=>{impMode="add";$("#fileJson").click()};
 function applyPayload(j){
   S.decks=j.decks.map(cleanDeck);if(j.title)S.title=String(j.title);
   if(Array.isArray(j.profiles))S.profiles=j.profiles.map(cleanProfile).filter(Boolean);
   if(j.cfg)S.cfg=cleanCfg(j.cfg);
   S.active=[S.decks[0].id];applyCfg();syncTitle();ed.d=S.decks[0].id;ed.c=S.decks[0].cards[0]?.id;
 }
+function mergeDecks(list){
+  const st=Date.now();
+  return list.map(cleanDeck).map((d,i)=>{d.id="m"+st+"_"+i;d.cards.forEach((c,j)=>{c.id=d.id+"_"+j});return d});
+}
 $("#fileJson").onchange=e=>{
   const f=e.target.files[0];e.target.value="";if(!f)return;
   f.text().then(t=>{try{
-    const j=JSON.parse(t);
-    if(Array.isArray(j.decks)&&j.decks.length){
-      withUndo("Carregado: "+j.decks.length+" decks.",()=>{applyPayload(j);renderEd()});
+    const j=JSON.parse(t),list=Array.isArray(j.decks)&&j.decks.length?j.decks:null;
+    if(list&&impMode==="replace"){
+      withUndo("Carregado: "+list.length+" deck(s).",()=>{applyPayload(j);renderEd()});
+    }else if(list){
+      withUndo(list.length+" deck(s) adicionado(s).",()=>{const m=mergeDecks(list);S.decks.push(...m);if(!S.active.length)S.active=[m[0].id];ed.d=m[0].id;ed.c=m[0].cards[0]?.id;renderEd()});
     }else{
       const cards=Array.isArray(j)?j:j.deck;if(!Array.isArray(cards)||!cards.length)throw 0;
-      withUndo("Deck antigo adicionado como 'Importado'.",()=>{const d=cleanDeck({name:"Importado",cards},S.decks.length);S.decks.push(d);ed.d=d.id;ed.c=d.cards[0]?.id;renderEd()});
+      withUndo("Deck antigo adicionado como 'Importado'.",()=>{const d=cleanDeck({name:"Importado",cards},S.decks.length);S.decks.push(d);if(!S.active.length)S.active=[d.id];ed.d=d.id;ed.c=d.cards[0]?.id;renderEd()});
     }
   }catch(err){toast("Arquivo inválido. Use um .json salvo por este site.")}});
 };
