@@ -31,9 +31,8 @@ button:disabled{opacity:.45;cursor:default}
 .primary[aria-disabled=true]{opacity:.65;cursor:progress}
 .danger{color:color-mix(in srgb,var(--leg) 70%,var(--ink))}
 .tools,.ctrl,.chips{display:flex;gap:8px;flex-wrap:wrap}
-main{flex:1;display:grid;grid-template-columns:1fr 260px;gap:24px;padding:24px;max-width:1280px;width:100%;margin:0 auto}
-main.nohist{grid-template-columns:1fr}
-.stage{display:flex;flex-direction:column;align-items:center;gap:18px;min-width:0}
+main{flex:1;display:flex;flex-direction:column;align-items:center;gap:28px;padding:24px;max-width:1280px;width:100%;margin:0 auto}
+.stage{display:flex;flex-direction:column;align-items:center;gap:18px;min-width:0;width:100%}
 .chips,.ctrl{justify-content:center;align-items:center}
 .chip{border-radius:99px;padding:4px 14px;min-height:34px;font-size:.9rem;color:var(--mute)}
 .chip.on{background:color-mix(in srgb,var(--gold) 18%,var(--bg2));color:var(--gold);border-color:var(--gold)}
@@ -80,10 +79,7 @@ main.nohist{grid-template-columns:1fr}
 .scene.live .rr{display:block}
 .scene:hover .rr,.rr:focus-visible{opacity:1}
 @media(hover:none){.scene.live .rr{opacity:.9}}
-aside{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;align-self:start}
-aside h2{margin:0 0 8px;font-size:1.1rem}
-#hist{list-style:none;margin:0;padding:0;display:grid;gap:4px}
-#hist li{padding:6px 8px;border-radius:5px;background:var(--bg2);font-size:.88rem}
+
 .empty{color:var(--mute);font-size:.92rem;margin:0}
 dialog{width:min(980px,96vw);max-height:92vh;background:var(--bg);color:var(--ink);border:1px solid var(--gold);border-radius:12px;padding:0;overflow:auto}
 dialog::backdrop{background:#000b}
@@ -112,26 +108,65 @@ textarea{min-height:100px;resize:vertical}
 #toast{position:fixed;inset:auto auto 20px 50%;transform:translateX(-50%);margin:0;border:0;display:flex;gap:12px;align-items:center;background:var(--gold);color:var(--onacc);padding:8px 18px;border-radius:8px;opacity:0;transition:opacity .25s;max-width:92vw}
 #toast.on{opacity:1}
 #toast button{background:transparent;color:inherit;border-color:currentColor;min-height:30px;padding:2px 12px}
-body.fs header,body.fs aside,body.fs .chips,body.fs .stepper,body.fs .hint{display:none}
-body.fs main{grid-template-columns:1fr;max-width:none}
-body.fs .scene{width:min(calc(var(--cw)*1.4),80vw)}
+body.fs header,body.fs .histbox,body.fs footer,body.fs .chips,body.fs .stepper,body.fs .hint,body.fs #bCopy{display:none}
+body.fs main{max-width:none;justify-content:center;padding:2vh 2vw}
+body.fs .scene{width:min(calc(var(--cw)*1.5),80vw,calc(66dvh*5/7))}
+body.fs .fsx{display:block}
 @media(max-width:760px){
- main,main.nohist{grid-template-columns:1fr;padding:16px}
+ main{padding:16px}
  .ed,.ed-form{grid-template-columns:1fr}.ed-side{border-right:0;border-bottom:1px solid var(--line)}.ed-list{max-height:170px}
  #prev{max-width:230px}
  .ctrl{position:sticky;bottom:0;z-index:5;width:100%;justify-content:center;padding:12px 0 max(12px,env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--bg) 35%)}
  .hint{display:none}}
 @media(prefers-reduced-motion:reduce){.card,.scene,dialog[open]{transition:none;animation:none}}
+
+/* ---------- Acabamento ---------- */
+::selection{background:color-mix(in srgb,var(--gold) 40%,transparent)}
+html{scrollbar-color:var(--line) var(--bg)}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:repeating-linear-gradient(45deg,transparent 0 38px,color-mix(in srgb,var(--gold) 5%,transparent) 38px 39px),repeating-linear-gradient(-45deg,transparent 0 38px,color-mix(in srgb,var(--gold) 5%,transparent) 38px 39px);-webkit-mask-image:radial-gradient(ellipse at 50% 25%,#000 15%,transparent 75%);mask-image:radial-gradient(ellipse at 50% 25%,#000 15%,transparent 75%)}
+header{border-bottom:0;gap:10px;padding:26px 24px 8px}
+.title{display:block;width:fit-content;margin:0 auto}
+.orn{display:flex;align-items:center;gap:12px;width:min(440px,72vw)}
+.orn span{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold))}
+.orn span:last-child{background:linear-gradient(270deg,transparent,var(--gold))}
+.orn i{width:9px;height:9px;background:var(--gold);transform:rotate(45deg);box-shadow:0 0 12px var(--gold)}
+.tools{justify-content:center;margin-top:4px}
+.chip{transition:all .2s}.chip:hover{transform:translateY(-1px)}
+.primary{background:linear-gradient(180deg,color-mix(in srgb,var(--gold) 80%,#fff),var(--gold));font-family:var(--fh);letter-spacing:.06em;text-transform:uppercase;box-shadow:0 6px 22px color-mix(in srgb,var(--gold) 32%,transparent)}
+.primary:not([aria-disabled=true]){animation:breathe 3.2s ease-in-out infinite}
+.primary:hover:not([aria-disabled=true]){transform:translateY(-2px);box-shadow:0 10px 30px color-mix(in srgb,var(--gold) 50%,transparent)}
+.primary:active:not([aria-disabled=true]){transform:scale(.97)}
+@keyframes breathe{50%{box-shadow:0 6px 36px color-mix(in srgb,var(--gold) 55%,transparent)}}
+.back,.front:not(.r-lendaria){box-shadow:0 16px 34px #000a}
+.front{background:linear-gradient(170deg,color-mix(in srgb,var(--gold) 8%,var(--bg2)),var(--bg2) 55%)}
+.front::after{content:"";position:absolute;inset:6px;border:1px solid color-mix(in srgb,var(--gold) 32%,transparent);border-radius:9px;pointer-events:none}
+.meta span:last-child{border:1px solid currentColor;border-radius:99px;padding:0 .75em}
+.r-rara .meta span:last-child{color:var(--rare)}.r-lendaria .meta span:last-child{color:var(--leg)}
+.ct{text-shadow:0 1px 14px color-mix(in srgb,currentColor 28%,transparent)}
+.scene{animation:drop .5s cubic-bezier(.2,.8,.2,1) backwards}
+@keyframes drop{from{opacity:0;transform:translateY(16px)}}
+.histbox{width:min(760px,100%);background:color-mix(in srgb,var(--panel) 78%,transparent);border:1px solid var(--line);border-radius:12px;padding:8px 16px;backdrop-filter:blur(6px)}
+.histbox summary{cursor:pointer;font-family:var(--fh);color:var(--gold);padding:6px 0;list-style:none}
+.histbox summary::-webkit-details-marker{display:none}
+.histbox summary::before{content:"▸";display:inline-block;margin-right:8px;transition:transform .2s}
+.histbox[open] summary::before{transform:rotate(90deg)}
+#hist{list-style:none;margin:6px 0 4px;padding:0;display:grid;gap:4px;max-height:220px;overflow:auto}
+#hist li{padding:6px 10px;border-radius:6px;background:var(--bg2);font-size:.9rem;border-left:2px solid var(--gold)}
+footer{padding:14px 24px 22px;text-align:center;color:var(--mute);font-size:.8rem;border-top:1px solid var(--line)}
+.top strong{font-family:var(--fh);color:var(--gold);font-size:1.1rem}
+.fsx{display:none;position:fixed;top:12px;right:12px;z-index:20;opacity:.45}.fsx:hover,.fsx:focus-visible{opacity:1}
+@media(prefers-reduced-motion:reduce){.primary,.scene{animation:none!important}}
 </style>
 </head>
 <body>
 <noscript><p style="padding:24px;text-align:center">Este site precisa de JavaScript para funcionar.</p></noscript>
 <header>
   <h1 class="title" id="title" contenteditable="true" spellcheck="false" role="textbox" aria-label="Título do site (editável)" title="Clique para editar o título" data-ph="Título do site"></h1>
+  <div class="orn" aria-hidden="true"><span></span><i></i><span></span></div>
   <div class="tools">
     <button id="bEdit">Editar decks</button>
     <button id="bSet">Configurações</button>
-    <button id="bFs">Modo stream</button>
+    <button id="bFs">Tela cheia</button>
   </div>
 </header>
 <main id="main">
@@ -144,14 +179,16 @@ body.fs .scene{width:min(calc(var(--cw)*1.4),80vw)}
       <button class="primary" id="bDraw">Sortear</button>
       <button id="bCopy" title="Copiar o resultado (C)">Copiar</button>
     </div>
-    <p class="empty hint">Atalhos: espaço sorteia · 1 a 8 quantidade · F stream · E editor · S configurações · C copiar</p>
+    <p class="empty hint">Atalhos: espaço sorteia · 1 a 8 quantidade · F tela cheia · E editor · S configurações · C copiar</p>
   </section>
-  <aside>
-    <h2>Últimos sorteios</h2>
+  <details class="histbox" id="histbox" open>
+    <summary>Últimos sorteios</summary>
     <ul id="hist"></ul>
     <p class="empty" id="histEmpty">Nenhum sorteio ainda.</p>
-  </aside>
+  </details>
 </main>
+<footer>Projeto de fã, sem vínculo com a Valve. Deadlock é marca da Valve Corporation.</footer>
+<button id="bFsExit" class="fsx" aria-label="Sair da tela cheia">✕ Sair</button>
 <div id="live" class="sr" aria-live="polite"></div>
 
 <dialog id="dlg" aria-label="Editor de decks">
@@ -331,7 +368,7 @@ function applyCfg(){
   r.setProperty("--onacc",lum(c.colors.gold)>.4?"#16110a":"#ffffff");
   r.colorScheme=lum(c.colors.bg)>.5?"light":"dark";
   document.querySelectorAll(".face.back").forEach(b=>paintBack(b,c.back,c.backImg));
-  $("aside").hidden=!c.hist;$("#main").classList.toggle("nohist",!c.hist);
+  $("#histbox").hidden=!c.hist;
   requestAnimationFrame(fit);
 }
 const flipMs=()=>S.cfg.anim?S.cfg.flip:0;
@@ -654,7 +691,7 @@ T.addEventListener("paste",e=>{e.preventDefault();document.execCommand("insertTe
 T.addEventListener("blur",()=>{S.title=T.textContent.trim();if(T.textContent!==S.title)T.textContent=S.title;save()});
 const isFs=()=>document.body.classList.contains("fs");
 function toggleFs(){
-  const on=!isFs();document.body.classList.toggle("fs",on);$("#bFs").textContent=on?"Sair do modo stream":"Modo stream";
+  const on=!isFs();document.body.classList.toggle("fs",on);$("#bFs").textContent=on?"Sair da tela cheia":"Tela cheia";
   try{if(on&&document.documentElement.requestFullscreen)document.documentElement.requestFullscreen().catch(()=>{});else if(!on&&document.fullscreenElement)document.exitFullscreen()}catch(e){}
   requestAnimationFrame(fit);
 }
@@ -666,6 +703,7 @@ $("#bCopy").onclick=copyTxt;
 $("#bMin").onclick=()=>setCount(S.count-1);
 $("#bPlus").onclick=()=>setCount(S.count+1);
 $("#bFs").onclick=toggleFs;
+$("#bFsExit").onclick=toggleFs;
 document.addEventListener("keydown",e=>{
   if(e.key==="Escape"&&isFs()&&!document.fullscreenElement&&!document.querySelector("dialog[open]"))return toggleFs();
   if(e.ctrlKey||e.metaKey||e.altKey||document.querySelector("dialog[open]")||/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)||document.activeElement.isContentEditable)return;
