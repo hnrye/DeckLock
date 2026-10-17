@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Deck do Caos · Deadlock</title>
+<meta name="description" content="Sorteador de cartas de desafio para partidas de Deadlock, com decks editáveis.">
+<meta name="theme-color" content="#0d0f12">
+<meta property="og:title" content="Deck do Caos · Deadlock">
+<meta property="og:description" content="Sorteador de cartas de desafio para partidas de Deadlock, com decks editáveis.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d0f12'/%3E%3Cpath d='M16 4l9 12-9 12-9-12z' fill='%23e2a64a'/%3E%3C/svg%3E">
+<style>
+:root{--bg:#0d0f12;--bg2:#151a20;--panel:#1b2129;--ink:#ece4d3;--mute:#8f98a3;--gold:#e2a64a;--rare:#4fb3b0;--leg:#d4503f;--line:#333c47;--onacc:#16110a;--cw:300px;--flip:700ms;--fh:Georgia,"Times New Roman",serif}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:radial-gradient(ellipse at 50% -10%,color-mix(in srgb,var(--gold) 14%,var(--bg)),var(--bg) 60%) fixed;color:var(--ink);font:16px/1.5 system-ui,sans-serif;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+h1,h2,.ct,.title,h3{font-family:var(--fh)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+header{display:flex;flex-direction:column;align-items:center;gap:12px;padding:20px 24px 16px;border-bottom:1px solid var(--line);text-align:center}
+.title{margin:0;font-size:clamp(1.5rem,4vw,2.3rem);font-weight:700;letter-spacing:.02em;color:var(--gold);text-align:center;max-width:min(900px,94vw);padding:2px 10px;border-radius:6px;cursor:text;overflow-wrap:anywhere;text-shadow:0 2px 20px color-mix(in srgb,var(--gold) 30%,transparent)}
+.title:empty::before{content:attr(data-ph);color:var(--mute)}
+.title:hover{text-decoration:underline dotted color-mix(in srgb,var(--gold) 55%,transparent);text-underline-offset:9px}
+.title:focus{text-decoration:none;outline:none;box-shadow:0 2px 0 0 var(--gold)}
+button,select,input{transition:border-color .15s,background .15s,transform .1s,opacity .2s}
+button,select{font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 14px;cursor:pointer;min-height:40px}
+button:hover:not(:disabled){border-color:var(--gold)}
+button:active:not(:disabled){transform:scale(.97)}
+button:disabled{opacity:.45;cursor:default}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.primary{background:var(--gold);color:var(--onacc);border-color:var(--gold);font-weight:700;font-size:1.1rem;padding:10px 34px}
+.primary[aria-disabled=true]{opacity:.65;cursor:progress}
+.danger{color:color-mix(in srgb,var(--leg) 70%,var(--ink))}
+.tools,.ctrl,.chips{display:flex;gap:8px;flex-wrap:wrap}
+main{flex:1;display:grid;grid-template-columns:1fr 260px;gap:24px;padding:24px;max-width:1280px;width:100%;margin:0 auto}
+main.nohist{grid-template-columns:1fr}
+.stage{display:flex;flex-direction:column;align-items:center;gap:18px;min-width:0}
+.chips,.ctrl{justify-content:center;align-items:center}
+.chip{border-radius:99px;padding:4px 14px;min-height:34px;font-size:.9rem;color:var(--mute)}
+.chip.on{background:color-mix(in srgb,var(--gold) 18%,var(--bg2));color:var(--gold);border-color:var(--gold)}
+.stepper{display:flex;align-items:center;gap:8px;color:var(--mute)}
+.stepper b{min-width:1.5ch;text-align:center;color:var(--ink)}
+.stepper button{padding:4px 12px}
+#table{display:flex;flex-wrap:wrap;gap:28px;justify-content:center}
+.grp{display:flex;flex-direction:column;align-items:center;gap:8px}
+.gl{margin:0;font-size:1rem;color:var(--mute);font-weight:400}
+.row2{display:flex;flex-wrap:wrap;gap:16px;justify-content:center}
+.scene{position:relative;perspective:1200px;container-type:inline-size;width:min(var(--cw),80vw);aspect-ratio:5/7;transition:transform .25s}
+.scene.live:hover{transform:translateY(-4px)}
+.card{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform var(--flip) cubic-bezier(.3,.7,.2,1)}
+.card.up{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;border-radius:14px;border:2px solid var(--gold);overflow:hidden;display:flex;flex-direction:column}
+.back{--ba:color-mix(in srgb,var(--gold) 10%,var(--bg));--bb:color-mix(in srgb,var(--gold) 22%,var(--bg))}
+.back::after{content:"";position:absolute;inset:12px;border:1px solid var(--gold);border-radius:8px;opacity:.5;pointer-events:none}
+.back svg{position:absolute;inset:0;width:100%;height:100%}
+.bk-stripes{background:repeating-linear-gradient(45deg,var(--ba) 0 14px,var(--bb) 14px 28px)}
+.bk-diamonds{background-color:var(--ba);background-image:linear-gradient(45deg,var(--bb) 25%,transparent 25%),linear-gradient(-45deg,var(--bb) 25%,transparent 25%),linear-gradient(45deg,transparent 75%,var(--bb) 75%),linear-gradient(-45deg,transparent 75%,var(--bb) 75%);background-size:28px 28px;background-position:0 0,0 14px,14px -14px,-14px 0}
+.bk-eye{background:radial-gradient(circle at 50% 50%,color-mix(in srgb,var(--gold) 24%,var(--bg)),var(--bg) 72%)}
+.bk-sunburst{background:repeating-conic-gradient(from 0deg at 50% 50%,var(--ba) 0 7.5deg,var(--bb) 7.5deg 15deg)}
+.bk-plain{background:var(--ba)}
+.bk-custom{background:var(--bg) var(--bkimg,none) center/cover no-repeat}
+.bk-custom::after{display:none}
+.bkgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:10px}
+.bkopt{display:grid;gap:6px;justify-items:center;padding:8px;font-size:.8rem}
+.bkopt.on{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 15%,var(--bg2))}
+.mini{position:relative;width:56px;aspect-ratio:5/7;border:2px solid var(--gold);border-radius:8px;overflow:hidden;display:grid;place-items:center;color:var(--gold);font-size:1.4rem}
+.mini.back::after{inset:5px;border-radius:4px}
+.front{transform:rotateY(180deg);background:var(--bg2);font-size:calc(100cqw/19)}
+.meta{flex:none;display:flex;justify-content:space-between;padding:.55em .9em;font-size:.85em;color:var(--mute);border-bottom:1px solid var(--line)}
+.art{flex:0 0 40%;position:relative;overflow:hidden;background:var(--bg);border-bottom:2px solid var(--gold)}
+.art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.body{padding:1em;display:flex;flex-direction:column;gap:.5em;flex:1 1 0;min-height:0;overflow:auto}
+.noimg .body{justify-content:center}.noimg .ct{font-size:1.9em}.noimg .tx{font-size:1.1em}
+.ct{font-size:1.5em;line-height:1.15;margin:0;color:var(--gold)}
+.tx{margin:0;font-size:1em}
+.r-rara{border-color:var(--rare)}.r-rara .ct{color:var(--rare)}
+.r-lendaria{border-color:var(--leg);box-shadow:0 0 28px color-mix(in srgb,var(--leg) 40%,transparent)}.r-lendaria .ct{color:var(--leg)}
+.card.up .r-lendaria::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;background:linear-gradient(110deg,transparent 40%,rgba(255,255,255,.22) 50%,transparent 60%);transform:translateX(-100%);animation:sh 1.3s .55s ease-out forwards}
+@keyframes sh{to{transform:translateX(100%)}}
+.rr{display:none;position:absolute;top:8px;right:8px;z-index:3;padding:2px 10px;min-height:30px;font-size:.8rem;background:color-mix(in srgb,var(--bg) 85%,transparent);opacity:0}
+.scene.live .rr{display:block}
+.scene:hover .rr,.rr:focus-visible{opacity:1}
+@media(hover:none){.scene.live .rr{opacity:.9}}
+aside{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;align-self:start}
+aside h2{margin:0 0 8px;font-size:1.1rem}
+#hist{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+#hist li{padding:6px 8px;border-radius:5px;background:var(--bg2);font-size:.88rem}
+.empty{color:var(--mute);font-size:.92rem;margin:0}
+dialog{width:min(980px,96vw);max-height:92vh;background:var(--bg);color:var(--ink);border:1px solid var(--gold);border-radius:12px;padding:0;overflow:auto}
+dialog::backdrop{background:#000b}
+dialog[open]{animation:pop .2s cubic-bezier(.2,.8,.2,1)}
+dialog[open]::backdrop{animation:fade .2s}
+@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98)}}
+@keyframes fade{from{opacity:0}}
+.top{display:flex;gap:8px;flex-wrap:wrap;padding:12px 16px;border-bottom:1px solid var(--line);align-items:center}
+.grow{flex:1}
+.ed{display:grid;grid-template-columns:250px 1fr;min-height:60vh}
+.ed-side{border-right:1px solid var(--line);padding:10px;display:grid;gap:8px;align-content:start;min-width:0}
+.ed-list{overflow:auto;max-height:60vh;display:grid;gap:4px;align-content:start}
+.ed-list button{text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ed-list button.sel{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 18%,var(--bg2))}
+.ed-form{padding:16px;display:grid;grid-template-columns:1fr 230px;gap:16px;align-items:start}
+.fields{display:grid;gap:10px}
+#prev .scene{width:100%}
+.set{padding:16px;display:grid;gap:10px;align-content:start}
+.set h3{margin:10px 0 0;color:var(--gold)}
+label{display:grid;gap:4px;color:var(--mute);font-size:.9rem}
+label.chk{display:flex;gap:8px;align-items:center;color:var(--ink)}
+input[type=text],input[type=search],input[type=number],textarea,select{width:100%;background:var(--bg2);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:8px}
+input[type=color]{width:100%;height:36px;padding:2px;background:var(--bg2);border:1px solid var(--line);border-radius:6px}
+textarea{min-height:100px;resize:vertical}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.row>label{flex:1;min-width:120px}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+#toast{position:fixed;inset:auto auto 20px 50%;transform:translateX(-50%);margin:0;border:0;display:flex;gap:12px;align-items:center;background:var(--gold);color:var(--onacc);padding:8px 18px;border-radius:8px;opacity:0;transition:opacity .25s;max-width:92vw}
+#toast.on{opacity:1}
+#toast button{background:transparent;color:inherit;border-color:currentColor;min-height:30px;padding:2px 12px}
+body.fs header,body.fs aside,body.fs .chips,body.fs .stepper,body.fs .hint{display:none}
+body.fs main{grid-template-columns:1fr;max-width:none}
+body.fs .scene{width:min(calc(var(--cw)*1.4),80vw)}
+@media(max-width:760px){
+ main,main.nohist{grid-template-columns:1fr;padding:16px}
+ .ed,.ed-form{grid-template-columns:1fr}.ed-side{border-right:0;border-bottom:1px solid var(--line)}.ed-list{max-height:170px}
+ #prev{max-width:230px}
+ .ctrl{position:sticky;bottom:0;z-index:5;width:100%;justify-content:center;padding:12px 0 max(12px,env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--bg) 35%)}
+ .hint{display:none}}
+@media(prefers-reduced-motion:reduce){.card,.scene,dialog[open]{transition:none;animation:none}}
+</style>
+</head>
+<body>
+<noscript><p style="padding:24px;text-align:center">Este site precisa de JavaScript para funcionar.</p></noscript>
+<header>
+  <h1 class="title" id="title" contenteditable="true" spellcheck="false" role="textbox" aria-label="Título do site (editável)" title="Clique para editar o título" data-ph="Título do site"></h1>
+  <div class="tools">
+    <button id="bEdit">Editar decks</button>
+    <button id="bSet">Configurações</button>
+    <button id="bFs">Modo stream</button>
+  </div>
+</header>
+<main id="main">
+  <section class="stage">
+    <div class="chips" id="deckChips" aria-label="Decks"></div>
+    <div class="chips" id="chips" aria-label="Categorias"></div>
+    <div id="table"></div>
+    <div class="ctrl">
+      <div class="stepper"><span>Cartas por deck</span><button id="bMin" aria-label="Menos cartas">−</button><b id="cnt" aria-live="polite">1</b><button id="bPlus" aria-label="Mais cartas">+</button></div>
+      <button class="primary" id="bDraw">Sortear</button>
+      <button id="bCopy" title="Copiar o resultado (C)">Copiar</button>
+    </div>
+    <p class="empty hint">Atalhos: espaço sorteia · 1 a 8 quantidade · F stream · E editor · S configurações · C copiar</p>
+  </section>
+  <aside>
+    <h2>Últimos sorteios</h2>
+    <ul id="hist"></ul>
+    <p class="empty" id="histEmpty">Nenhum sorteio ainda.</p>
+  </aside>
+</main>
+<div id="live" class="sr" aria-live="polite"></div>
+
+<dialog id="dlg" aria-label="Editor de decks">
+  <div class="top">
+    <strong class="grow">Editor de decks</strong>
+    <button id="bExp">Salvar tudo em arquivo</button>
+    <button id="bImp">Carregar arquivo</button>
+    <button id="bClose">Fechar</button>
+    <input type="file" id="fileJson" accept="application/json,.json" hidden>
+    <input type="file" id="fileImg" accept="image/*" hidden>
+  </div>
+  <div class="top">
+    <select id="edDeck" aria-label="Deck" style="width:auto"></select>
+    <button id="bDNew">Novo deck</button>
+    <button id="bDRen">Renomear</button>
+    <button id="bDDel" class="danger">Excluir deck</button>
+    <span class="grow"></span>
+    <button id="bAdd">Nova carta</button>
+    <button id="bReset" class="danger">Restaurar originais</button>
+  </div>
+  <div class="ed">
+    <div class="ed-side"><input type="search" id="edQ" placeholder="Buscar carta…" aria-label="Buscar carta"><div class="ed-list" id="edList"></div></div>
+    <div class="ed-form" id="edForm"></div>
+  </div>
+</dialog>
+
+<dialog id="dlgS" aria-label="Configurações">
+  <div class="top"><strong class="grow">Configurações</strong><button id="bSClose">Fechar</button></div>
+  <div class="set" id="setBody"></div>
+  <input type="file" id="fileBack" accept="image/*" hidden>
+</dialog>
+<div id="toast" popover="manual" role="status"></div>
+
+<script>
+const $=s=>document.querySelector(s);
+const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const CATS=["Handicap","Build","Objetivo","Comunicação","Caos","Individual","Herói"];
+const RARS={comum:"Comum",rara:"Rara",lendaria:"Lendária"};
+const COLORS=[["bg","Fundo"],["bg2","Fundo secundário"],["panel","Painéis"],["ink","Texto"],["mute","Texto suave"],["gold","Destaque"],["rare","Carta rara"],["leg","Carta lendária"],["line","Bordas"]];
+const PROFILES={
+"Deadlock":{back:"eye",colors:{bg:"#0d0f12",bg2:"#151a20",panel:"#1b2129",ink:"#ece4d3",mute:"#8f98a3",gold:"#e2a64a",rare:"#4fb3b0",leg:"#d4503f",line:"#333c47"}},
+"Âmbar quente":{back:"stripes",colors:{bg:"#14100f",bg2:"#1e1715",panel:"#241b18",ink:"#f0e4cf",mute:"#a8967c",gold:"#d4a24a",rare:"#6aa9d8",leg:"#e0553d",line:"#4a3a2c"}},
+"Safira":{back:"diamonds",colors:{bg:"#0b1020",bg2:"#121a30",panel:"#18223c",ink:"#e6ecf7",mute:"#8b9ab8",gold:"#5aa2ff",rare:"#7ad1c2",leg:"#ff6b8b",line:"#2a3a5e"}},
+"Esmeralda":{back:"sunburst",colors:{bg:"#0a1210",bg2:"#101c18",panel:"#16251f",ink:"#e4efe6",mute:"#8aa396",gold:"#d9b44a",rare:"#4fb3a0",leg:"#d8624a",line:"#2a4037"}},
+"Rubi":{back:"plain",colors:{bg:"#140b0d",bg2:"#1e1013",panel:"#271519",ink:"#f1e3dc",mute:"#a58f88",gold:"#e0b060",rare:"#5ea8c8",leg:"#e8574a",line:"#4a2a30"}},
+"Claro":{back:"plain",colors:{bg:"#f2ede3",bg2:"#fbf8f1",panel:"#e7dfcf",ink:"#241d16",mute:"#6e6252",gold:"#a8741a",rare:"#1f7a8c",leg:"#b3341f",line:"#c9bca3"}}};
+const FONTS={serif:["Serifada","Georgia,'Times New Roman',serif"],sans:["Sem serifa","system-ui,sans-serif"],cond:["Condensada","'Arial Narrow',Bahnschrift,Impact,sans-serif"]};
+const DEF_CFG=()=>({profile:"b:Deadlock",mod:false,colors:{...PROFILES.Deadlock.colors},back:"eye",backImg:"",font:"serif",cw:300,flip:700,anim:!matchMedia("(prefers-reduced-motion: reduce)").matches,snd:false,hist:true,norepeat:true,cycle:true,rr:0,w:{comum:60,rara:30,lendaria:10}});
+
+const GRUPO=[
+["Pick do colega","Cada um joga o herói que o colega ao lado escolheu para você. Sem veto, sem troca.","Caos","comum"],
+["Herói esquecido","Todo mundo joga o herói que menos usou na conta. Se nunca jogou nenhum, vale qualquer um.","Caos","comum"],
+["Sem arma","Nenhum item de Arma na partida inteira. Só Vitalidade e Espírito.","Build","comum"],
+["Categoria única","Cada um escolhe uma categoria (Arma, Vitalidade ou Espírito) e só compra dela.","Build","comum"],
+["Só passivos","Nenhum item ativo na build. Se a luta depende de apertar um botão, ele não existe.","Build","rara"],
+["Mão fechada","Ninguém gasta souls antes do minuto 5. A primeira compra sai toda de uma vez.","Build","rara"],
+["Sem zipline","Zipline proibida. Quem chegar atrasado na luta, chegou a pé.","Handicap","comum"],
+["Lane no corpo a corpo","Até o minuto 5, só melee e habilidades. Tiro só depois disso.","Handicap","comum"],
+["Minimapa desligado","Ninguém olha o minimapa. Posição do inimigo só por callout no voz.","Handicap","rara"],
+["Lane única","O grupo todo na mesma lane até a primeira Guardian cair.","Objetivo","comum"],
+["Prioridade Mid-Boss","Assim que o Mid-Boss nascer, o grupo vai nele. Sem votação.","Objetivo","rara"],
+["Urn do mais pobre","Quem carrega a Soul Urn é sempre o jogador com menos souls do grupo.","Objetivo","rara"],
+["Primeiros 5 no camp","Ninguém fica em lane nos primeiros 5 minutos. Todo mundo no jungle.","Objetivo","comum"],
+["Sem falar","Sem voz até a primeira Guardian cair. Só pings e o chat de texto.","Comunicação","rara"],
+["Só perguntas","No voz, só vale falar em forma de pergunta. Afirmou, perdeu o turno de falar.","Comunicação","comum"],
+["Sem nomes","Não vale dizer nome de herói ou de item. Tem que descrever o que quer dizer.","Comunicação","rara"],
+["Narrador morto","Quem morreu narra a partida para o grupo até renascer.","Comunicação","comum"],
+["Elogio obrigatório","Depois de cada morte, o grupo elogia uma coisa que o inimigo fez bem. Sem ironia.","Comunicação","comum"],
+["Líder rotativo","A cada 5 minutos muda o líder. Só ele chama luta, objetivo e recuo.","Caos","comum"],
+["Quem tem menos decide","O jogador com menos kills decide para onde o grupo vai.","Caos","comum"],
+["Aposta de kills","Antes de começar, cada um crava quantas kills vai fazer. Quem errar por mais escolhe o herói por último na próxima.","Caos","rara"],
+["Dado de tudo","Rolem dado para herói, lane e categoria de item de cada um. Sem reclamar do resultado.","Caos","rara"],
+["Duas cartas","Sorteie mais uma carta e cumpram as duas ao mesmo tempo.","Caos","lendaria"],
+["Sem arma, sem voz","Nenhum item de Arma e ninguém fala no voz até o minuto 10.","Caos","lendaria"],
+["Tudo no dado","Herói, lane, itens permitidos e líder sorteados. O grupo só executa.","Caos","lendaria"]];
+const IND=[
+["Sem tiro","Só habilidades e melee até o minuto 8.","Handicap","comum"],
+["Sem ultimate","Não use a habilidade 4 até o minuto 15.","Handicap","comum"],
+["Pé no chão","Sem zipline para você nesta partida.","Handicap","comum"],
+["Pacifista de tropa","Tropas só morrem no melee.","Handicap","comum"],
+["Parry sempre","Tente parry em toda luta, acerte ou não.","Handicap","rara"],
+["Sem ativos","Nenhum item ativo na sua build.","Build","comum"],
+["Só Espírito","Só compra itens de Espírito.","Build","rara"],
+["Zero Vitalidade","Nenhum item de Vitalidade. Você vive do que tem.","Build","rara"],
+["Compra só morto","Só compra itens quando estiver morto.","Build","rara"],
+["Callout de tudo","Narre em voz alta o que você está fazendo, o tempo todo.","Comunicação","comum"],
+["Sombra","Fique sempre perto do jogador à sua esquerda.","Objetivo","comum"],
+["Dono da Urn","Você carrega a Soul Urn sempre que ela estiver disponível.","Objetivo","rara"],
+["Herói do sorteio","Joga o herói que o grupo sortear no deck de Heróis, sem reclamar.","Caos","lendaria"]];
+const HEROES=["Abrams","Apollo","Bebop","Billy","Calico","Celeste","Doorman","Drifter","Dynamo","Graves","Grey Talon","Haze","Holliday","Infernus","Ivy","Kelvin","Lady Geist","Lash","McGinnis","Mina","Mirage","Mo & Krill","Paige","Paradox","Pocket","Rem","Seven","Shiv","Silver","Sinclair","Venator","Victor","Vindicta","Viscous","Vyper","Warden","Wraith","Yamato"];
+const mk=(id,name,rows)=>({id,name,cards:rows.map((c,i)=>({id:id+i,title:c[0],text:c[1],cat:c[2],rar:c[3],img:""}))});
+const DEF_DECKS=()=>[mk("g","Grupo",GRUPO),mk("i","Individual",IND.map(r=>r)),mk("h","Heróis",HEROES.map(h=>[h,"","Herói","comum"]))];
+
+const KEY="deadlock-deck-v3";
+
+function eyeSvg(){
+  let r="";for(let a=0;a<360;a+=15){const t=a*Math.PI/180,c=Math.cos(t),s=Math.sin(t);r+=`<line x1="${(125+c*66).toFixed(1)}" y1="${(175+s*66).toFixed(1)}" x2="${(125+c*150).toFixed(1)}" y2="${(175+s*150).toFixed(1)}"/>`}
+  return `<svg viewBox="0 0 250 350" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><g style="stroke:var(--gold);stroke-width:1.2;opacity:.28">${r}</g><circle cx="125" cy="175" r="60" style="fill:none;stroke:var(--gold);stroke-width:1.5;opacity:.6"/><path d="M50 175Q125 96 200 175Q125 254 50 175Z" style="fill:var(--bg);stroke:var(--gold);stroke-width:3"/><circle cx="125" cy="175" r="33" style="fill:color-mix(in srgb,var(--gold) 28%,var(--bg));stroke:var(--gold);stroke-width:2.5"/><ellipse cx="125" cy="175" rx="9" ry="27" style="fill:var(--gold)"/><circle cx="134" cy="164" r="4" style="fill:var(--bg);opacity:.85"/><path d="M125 46l9 13-9 13-9-13zM125 278l9 13-9 13-9-13z" style="fill:var(--gold)"/></svg>`;
+}
+const DIA='<svg viewBox="0 0 250 350" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="M125 130l34 45-34 45-34-45z" style="fill:var(--bg);stroke:var(--gold);stroke-width:2.5"/><path d="M125 150l16 25-16 25-16-25z" style="fill:var(--gold)"/></svg>';
+const BACKS={stripes:["Listras",""],eye:["Olho",eyeSvg()],diamonds:["Losangos",""],sunburst:["Raios",DIA],plain:["Liso",DIA],custom:["Imagem",""]};
+function paintBack(b,kind,img){
+  if(img===undefined)img=S.cfg.backImg;
+  if(!BACKS[kind]||(kind==="custom"&&!img))kind="stripes";
+  b.className=b.className.replace(/\bbk-\S+/g,"").trim()+" bk-"+kind;
+  b.innerHTML=BACKS[kind][1];
+  if(kind==="custom")b.style.setProperty("--bkimg",'url("'+img+'")');else b.style.removeProperty("--bkimg");
+}
+const okImg=v=>typeof v==="string"&&v.startsWith("data:image/");
+function cleanColors(o){const d=DEF_CFG().colors,r={};for(const k in d)r[k]=/^#[0-9a-f]{6}$/i.test(o&&o[k])?o[k]:d[k];return r}
+function cleanCfg(c){
+  const d=DEF_CFG();c=c&&typeof c==="object"?c:{};
+  const o={...d,...c,colors:cleanColors(c.colors),w:{...d.w,...c.w}};
+  if(!BACKS[o.back])o.back=d.back;
+  if(!okImg(o.backImg))o.backImg="";
+  if(!FONTS[o.font])o.font="serif";
+  o.cw=Math.min(440,Math.max(200,+o.cw||300));o.flip=Math.min(1600,Math.max(0,+o.flip||700));
+  if(c.profile===undefined)o.profile=PROFILES[c.preset]?"b:"+c.preset:(c.preset===undefined?d.profile:"");
+  return o;
+}
+function cleanProfile(p){
+  if(!p||!p.id||!p.name||!p.style)return null;
+  const s=p.style;
+  return{id:String(p.id),name:String(p.name),style:{colors:cleanColors(s.colors),font:FONTS[s.font]?s.font:"serif",cw:Math.min(440,Math.max(200,+s.cw||300)),back:BACKS[s.back]?s.back:"stripes",backImg:okImg(s.backImg)?s.backImg:""}};
+}
+const allProfiles=()=>[...Object.entries(PROFILES).map(([n,p])=>({id:"b:"+n,name:n,style:p})),...S.profiles];
+const curStyle=()=>({colors:{...S.cfg.colors},font:S.cfg.font,cw:S.cfg.cw,back:S.cfg.back,backImg:S.cfg.backImg||""});
+function applyProfile(id){
+  const p=allProfiles().find(x=>x.id===id);if(!p)return;
+  const s=p.style,c=S.cfg;
+  c.colors=cleanColors(s.colors);c.font=s.font||"serif";c.cw=s.cw||300;c.back=s.back||"stripes";c.backImg=s.backImg||"";c.profile=id;c.mod=false;
+  applyCfg();save();
+}
+let S=load(),filt=new Set(),lastIds=new Set(),used={},table=[],busy=false,rrUsed=0,ed={d:null,c:null,q:"",dirty:false};
+
+/* ---------- Dados e armazenamento ---------- */
+function load(){
+  let s=null;try{s=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+  if(!s||!Array.isArray(s.decks)||!s.decks.length){
+    s={decks:DEF_DECKS()};
+    try{const o=JSON.parse(localStorage.getItem("deadlock-deck-v2"));if(Array.isArray(o)&&o.length)s.decks[0].cards=o}catch(e){}
+  }
+  s.cfg=cleanCfg(s.cfg);
+  s.profiles=(Array.isArray(s.profiles)?s.profiles:[]).map(cleanProfile).filter(Boolean);
+  s.title=s.title||"Deck do Caos · Deadlock";
+  s.active=(s.active||[]).filter(id=>s.decks.some(x=>x.id===id));
+  if(!s.active.length)s.active=[s.decks[0].id];
+  s.count=Math.min(8,Math.max(1,s.count||1));
+  s.hist=Array.isArray(s.hist)?s.hist.slice(0,12):[];
+  return s;
+}
+let st;
+function save(){clearTimeout(st);st=setTimeout(flush,250)}
+function flush(){clearTimeout(st);try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast("Armazenamento cheio. Salve tudo em arquivo e use imagens menores.")}}
+addEventListener("beforeunload",flush);
+document.addEventListener("visibilitychange",()=>{if(document.hidden)flush()});
+addEventListener("storage",e=>{
+  if(e.key!==KEY||!e.newValue||busy||document.querySelector("dialog[open]"))return;
+  try{S=load();applyCfg();syncTitle();syncCount();refreshAll();renderHist()}catch(x){}
+});
+function toast(m,label,fn){
+  const t=$("#toast");t.textContent=m;
+  if(label){const b=el("button","",label);b.onclick=()=>{fn();hideToast()};t.append(b)}
+  try{if(!t.matches(":popover-open"))t.showPopover()}catch(e){}
+  clearTimeout(toast.t);clearTimeout(toast.h);
+  requestAnimationFrame(()=>t.classList.add("on"));
+  toast.t=setTimeout(hideToast,label?7000:2800);
+}
+function hideToast(){const t=$("#toast");t.classList.remove("on");clearTimeout(toast.h);toast.h=setTimeout(()=>{try{t.hidePopover()}catch(e){}},280)}
+function lum(h){const n=parseInt(h.slice(1),16),f=v=>{v/=255;return v<=.03928?v/12.92:((v+.055)/1.055)**2.4};return .2126*f(n>>16)+.7152*f(n>>8&255)+.0722*f(n&255)}
+function applyCfg(){
+  const c=S.cfg,r=document.documentElement.style;
+  for(const[k,v]of Object.entries(c.colors))r.setProperty("--"+k,v);
+  r.setProperty("--cw",c.cw+"px");r.setProperty("--flip",(c.anim?c.flip:0)+"ms");
+  r.setProperty("--fh",FONTS[c.font][1]);
+  r.setProperty("--onacc",lum(c.colors.gold)>.4?"#16110a":"#ffffff");
+  r.colorScheme=lum(c.colors.bg)>.5?"light":"dark";
+  document.querySelectorAll(".face.back").forEach(b=>paintBack(b,c.back,c.backImg));
+  $("aside").hidden=!c.hist;$("#main").classList.toggle("nohist",!c.hist);
+  requestAnimationFrame(fit);
+}
+const flipMs=()=>S.cfg.anim?S.cfg.flip:0;
+function fit(){
+  document.querySelectorAll(".body").forEach(b=>{
+    b.style.fontSize="";let fs=parseFloat(getComputedStyle(b).fontSize)||14;
+    while(b.scrollHeight>b.clientHeight+1&&fs>8){fs-=.5;b.style.fontSize=fs+"px"}
+  });
+}
+let rt;addEventListener("resize",()=>{clearTimeout(rt);rt=setTimeout(fit,150)});
+let ac;
+function blip(i=0){
+  if(!S.cfg.snd)return;
+  try{ac=ac||new AudioContext();const o=ac.createOscillator(),g=ac.createGain(),t=ac.currentTime;
+    o.type="triangle";o.frequency.value=380+i*60;
+    g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.08,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+.18);
+    o.connect(g).connect(ac.destination);o.start(t);o.stop(t+.2)}catch(e){}
+}
+
+/* ---------- Sorteio ---------- */
+const sel=()=>S.decks.filter(d=>S.active.includes(d.id));
+function fillCard(f,c){
+  f.className="face front r-"+c.rar+(c.img?"":" noimg");f.innerHTML="";
+  const m=el("div","meta");m.append(el("span","",c.cat),el("span","",RARS[c.rar]||c.rar));f.append(m);
+  if(c.img){const a=el("div","art"),i=new Image();i.src=c.img;i.alt="";a.append(i);f.append(a)}
+  const b=el("div","body");b.append(el("h2","ct",c.title));if(c.text)b.append(el("p","tx",c.text));f.append(b);
+}
+function cardEl(g,i,noRR){
+  const c=g.cards[i],sc=el("div","scene"),cd=el("div","card"),b=el("div","face back"),f=el("div","face front");
+  b.setAttribute("aria-hidden","true");paintBack(b,S.cfg.back,S.cfg.backImg);cd.append(b,f);sc.append(cd);
+  if(c){fillCard(f,c);sc._g=g;sc._i=i;
+    if(!noRR){const r=el("button","rr","↻ Trocar");r.title="Sortear outra carta no lugar desta";r.onclick=()=>reroll(sc);sc.append(r)}}
+  return sc;
+}
+function build(groups){
+  const t=$("#table");t.innerHTML="";
+  if(!groups.length){t.append(el("p","empty","Selecione ao menos um deck."));return}
+  groups.forEach(g=>{
+    const w=el("section","grp");
+    if(groups.length>1)w.append(el("h2","gl",g.name));
+    const row=el("div","row2");
+    if(!g.cards.length)row.append(el("p","empty","Deck vazio."));
+    g.cards.forEach((c,i)=>row.append(cardEl(g,i)));
+    w.append(row);t.append(w);
+  });
+  requestAnimationFrame(fit);
+}
+function showBacks(){table=[];build(sel().map(d=>({name:d.name,deck:d,cards:Array(S.count).fill(null)})))}
+function wpick(pool){
+  const w=pool.map(c=>S.cfg.w[c.rar]??30),t=w.reduce((a,b)=>a+b,0);
+  if(!t)return Math.floor(Math.random()*pool.length);
+  let r=Math.random()*t;for(let i=0;i<pool.length;i++){r-=w[i];if(r<=0)return i}
+  return pool.length-1;
+}
+function pickN(d){
+  const f=d.cards.filter(c=>!filt.size||filt.has(c.cat));let pool=f.length?f:d.cards;
+  const u=used[d.id]||(used[d.id]=new Set());
+  if(S.cfg.cycle){let r=pool.filter(c=>!u.has(c.id));if(r.length<Math.min(S.count,pool.length)){u.clear();r=pool}pool=r}
+  else if(S.cfg.norepeat){const r=pool.filter(c=>!lastIds.has(c.id));if(r.length>=S.count)pool=r}
+  pool=[...pool];const out=[];
+  while(out.length<S.count&&pool.length)out.push(pool.splice(wpick(pool),1)[0]);
+  out.forEach(c=>u.add(c.id));return out;
+}
+function setBusy(b){busy=b;const d=$("#bDraw");d.textContent=b?"Sorteando…":"Sortear";d.setAttribute("aria-disabled",b)}
+function updateRR(){
+  const l=S.cfg.rr;
+  document.querySelectorAll(".rr").forEach(r=>{r.disabled=!!l&&rrUsed>=l;r.textContent=l?"↻ Trocar ("+Math.max(0,l-rrUsed)+")":"↻ Trocar"});
+}
+async function draw(){
+  if(busy)return;
+  const ds=sel();
+  if(!ds.length){toast("Selecione ao menos um deck.");return}
+  if(!ds.some(d=>d.cards.length)){toast("Os decks selecionados estão vazios.");return}
+  setBusy(true);rrUsed=0;
+  const picks=ds.map(d=>({name:d.name,deck:d,cards:pickN(d)}));
+  const ups=[...document.querySelectorAll("#table .card.up")];
+  if(ups.length){
+    ups.forEach(c=>c.classList.remove("up"));
+    document.querySelectorAll(".scene.live").forEach(s=>s.classList.remove("live"));
+    await sleep(flipMs()+80);
+  }
+  build(picks);table=picks;void $("#table").offsetWidth;await sleep(40);
+  const sc=[...document.querySelectorAll("#table .scene")],gap=S.cfg.anim?110:0;
+  sc.forEach((s,i)=>setTimeout(()=>{s.querySelector(".card").classList.add("up");s.classList.add("live");blip(i)},i*gap));
+  updateRR();
+  lastIds=new Set(picks.flatMap(p=>p.cards.map(c=>c.id)));
+  const line=picks.map(p=>(ds.length>1?p.name+": ":"")+p.cards.map(c=>c.title).join(", ")).join("  |  ");
+  S.hist.unshift(line);S.hist=S.hist.slice(0,12);save();renderHist();
+  $("#live").textContent="Sorteado: "+line;
+  await sleep(sc.length*gap+flipMs());setBusy(false);
+}
+async function reroll(sc){
+  if(busy)return;
+  const lim=S.cfg.rr;if(lim&&rrUsed>=lim){toast("Limite de trocas atingido.");return}
+  const g=sc._g,i=sc._i;
+  const shown=new Set(table.flatMap(t=>t.cards.map(c=>c.id)));
+  let pool=g.deck.cards.filter(c=>!shown.has(c.id)&&(!filt.size||filt.has(c.cat)));
+  if(!pool.length)pool=g.deck.cards.filter(c=>!shown.has(c.id));
+  if(!pool.length){toast("Não há outra carta disponível neste deck.");return}
+  setBusy(true);rrUsed++;updateRR();
+  const cd=sc.querySelector(".card");cd.classList.remove("up");await sleep(flipMs()+80);
+  const c=pool[wpick(pool)];g.cards[i]=c;
+  fillCard(sc.querySelector(".front"),c);fit();void cd.offsetWidth;cd.classList.add("up");blip(0);
+  $("#live").textContent="Nova carta: "+c.title;
+  await sleep(flipMs());setBusy(false);
+}
+function copyTxt(){
+  if(!table.length){toast("Sorteie primeiro.");return}
+  const t=table.map(g=>(table.length>1?"["+g.name+"]\n":"")+g.cards.map(c=>"• "+c.title+(c.text?" — "+c.text:"")).join("\n")).join("\n\n");
+  const ok=()=>toast("Sorteio copiado.");
+  const fb=()=>{const a=el("textarea");a.value=t;document.body.append(a);a.select();try{document.execCommand("copy");ok()}catch(e){toast("Não foi possível copiar.")}a.remove()};
+  navigator.clipboard?navigator.clipboard.writeText(t).then(ok,fb):fb();
+}
+function renderHist(){
+  const ul=$("#hist");ul.innerHTML="";$("#histEmpty").hidden=S.hist.length>0;
+  S.hist.forEach(h=>ul.append(el("li","",h)));
+}
+function renderDeckChips(){
+  const box=$("#deckChips");box.innerHTML="";
+  S.decks.forEach(d=>{
+    const on=S.active.includes(d.id),b=el("button","chip"+(on?" on":""),d.name+" · "+d.cards.length);
+    b.setAttribute("aria-pressed",on);
+    b.onclick=()=>{S.active=on?S.active.filter(x=>x!==d.id):[...S.active,d.id];save();renderDeckChips();renderChips();showBacks()};
+    box.append(b);
+  });
+}
+function renderChips(){
+  const box=$("#chips");box.innerHTML="";
+  const cats=[...new Set(sel().flatMap(d=>d.cards.map(c=>c.cat)))];
+  [...filt].forEach(c=>{if(!cats.includes(c))filt.delete(c)});
+  if(cats.length<2)return;
+  cats.forEach(c=>{const b=el("button","chip"+(filt.has(c)?" on":""),c);b.setAttribute("aria-pressed",filt.has(c));b.onclick=()=>{filt.has(c)?filt.delete(c):filt.add(c);renderChips()};box.append(b)});
+}
+function syncCount(){$("#cnt").textContent=S.count;$("#bMin").disabled=S.count<=1;$("#bPlus").disabled=S.count>=8}
+function setCount(n){S.count=Math.min(8,Math.max(1,n));syncCount();save();showBacks()}
+function refreshAll(){renderDeckChips();renderChips();showBacks()}
+
+/* ---------- Editor ---------- */
+const curD=()=>S.decks.find(d=>d.id===ed.d)||S.decks[0];
+const curC=()=>curD().cards.find(c=>c.id===ed.c);
+const mark=()=>{ed.dirty=true;save()};
+function withUndo(msg,fn){
+  const s=JSON.stringify({d:S.decks,a:S.active,t:S.title});
+  fn();mark();
+  toast(msg,"Desfazer",()=>{
+    const o=JSON.parse(s);S.decks=o.d;S.active=o.a;S.title=o.t;syncTitle();
+    ed.d=S.decks[0].id;ed.c=S.decks[0].cards[0]?.id;mark();renderEd();
+  });
+}
+function openEd(){ed.d=curD().id;ed.c=curD().cards[0]?.id;ed.q="";$("#edQ").value="";renderEd();$("#dlg").showModal()}
+function renderEd(){
+  const d=curD();ed.d=d.id;
+  const ds=$("#edDeck");ds.innerHTML="";
+  S.decks.forEach(x=>{const o=el("option","",x.name+" ("+x.cards.length+")");o.value=x.id;ds.append(o)});ds.value=d.id;
+  renderList();renderForm();
+}
+function renderList(){
+  const d=curD(),list=$("#edList"),q=ed.q.toLowerCase();list.innerHTML="";
+  const cs=d.cards.filter(c=>!q||(c.title+" "+c.cat).toLowerCase().includes(q));
+  cs.forEach(c=>{const b=el("button",c.id===ed.c?"sel":"",c.title||"(sem título)");b.onclick=()=>{ed.c=c.id;renderList();renderForm()};list.append(b)});
+  if(!cs.length)list.append(el("p","empty",d.cards.length?"Nada encontrado.":"Deck vazio."));
+}
+function renderPrev(c){
+  const p=$("#prev");if(!p)return;p.innerHTML="";
+  const sc=cardEl({cards:[c]},0,true),cd=sc.querySelector(".card");
+  cd.style.transition="none";cd.classList.add("up");p.append(sc);requestAnimationFrame(fit);
+}
+function renderForm(){
+  const d=curD(),form=$("#edForm");form.innerHTML="";const c=curC();
+  if(!c){form.append(el("p","empty","Selecione ou crie uma carta."));return}
+  const upd=(k,v)=>{c[k]=v;mark();if(k==="title")renderList();renderPrev(c)};
+  const field=(lab,node)=>{const l=el("label","",lab);l.append(node);return l};
+  const t=el("input");t.type="text";t.value=c.title;t.oninput=()=>upd("title",t.value);
+  const x=el("textarea");x.value=c.text;x.oninput=()=>upd("text",x.value);
+  const ca=el("input");ca.type="text";ca.value=c.cat;ca.setAttribute("list","cl");ca.oninput=()=>upd("cat",ca.value);
+  const dl=el("datalist");dl.id="cl";CATS.forEach(k=>{const o=el("option");o.value=k;dl.append(o)});
+  const ra=el("select");Object.entries(RARS).forEach(([k,v])=>{const o=el("option","",v);o.value=k;ra.append(o)});ra.value=c.rar;ra.onchange=()=>upd("rar",ra.value);
+  const row=el("div","row");row.append(field("Categoria",ca),field("Raridade",ra));
+  const ir=el("div","row");
+  const bi=el("button","","Escolher imagem");bi.onclick=()=>$("#fileImg").click();
+  const br=el("button","","Remover imagem");br.disabled=!c.img;br.onclick=()=>{c.img="";mark();renderForm()};
+  ir.append(bi,br);
+  const ar=el("div","row");
+  const bc=el("button","","Duplicar");bc.onclick=()=>{const n={...c,id:"n"+Date.now(),title:c.title+" (cópia)"};d.cards.splice(d.cards.indexOf(c)+1,0,n);ed.c=n.id;mark();renderEd();toast("Carta duplicada.")};
+  const bd=el("button","danger","Excluir carta");
+  bd.onclick=()=>withUndo("Carta excluída.",()=>{const i=d.cards.indexOf(c);d.cards.splice(i,1);ed.c=d.cards[Math.min(i,d.cards.length-1)]?.id;renderEd()});
+  ar.append(bc,bd);
+  const fl=el("div","fields");fl.append(field("Título",t),field("Texto",x),row,el("label","","Imagem da carta"),ir,ar,dl);
+  const pv=el("div");pv.id="prev";form.append(fl,pv);renderPrev(c);
+}
+$("#edQ").oninput=e=>{ed.q=e.target.value;renderList()};
+$("#edDeck").onchange=e=>{ed.d=e.target.value;ed.c=curD().cards[0]?.id;renderEd()};
+$("#bDNew").onclick=()=>{const n=prompt("Nome do novo deck:");if(!n||!n.trim())return;const d={id:"u"+Date.now(),name:n.trim(),cards:[]};S.decks.push(d);ed.d=d.id;ed.c=null;mark();renderEd()};
+$("#bDRen").onclick=()=>{const d=curD(),n=prompt("Novo nome do deck:",d.name);if(!n||!n.trim())return;d.name=n.trim();mark();renderEd()};
+$("#bDDel").onclick=()=>{
+  if(S.decks.length<2){toast("É preciso manter ao menos um deck.");return}
+  const d=curD();
+  withUndo("Deck '"+d.name+"' excluído.",()=>{S.decks=S.decks.filter(x=>x!==d);S.active=S.active.filter(id=>id!==d.id);if(!S.active.length)S.active=[S.decks[0].id];ed.d=S.decks[0].id;ed.c=S.decks[0].cards[0]?.id;renderEd()});
+};
+$("#bAdd").onclick=()=>{const d=curD(),c={id:"n"+Date.now(),title:"Nova carta",text:"Descreva a regra aqui.",cat:d.cards[0]?.cat||"Caos",rar:"comum",img:""};d.cards.push(c);ed.c=c.id;ed.q="";$("#edQ").value="";mark();renderEd()};
+$("#bReset").onclick=()=>withUndo("Decks originais restaurados.",()=>{S.decks=DEF_DECKS();S.active=[S.decks[0].id];S.title="Deck do Caos · Deadlock";syncTitle();ed.d=S.decks[0].id;ed.c=S.decks[0].cards[0].id;renderEd()});
+$("#fileImg").onchange=e=>{
+  const f=e.target.files[0];e.target.value="";if(!f)return;
+  const r=new FileReader();
+  r.onerror=()=>toast("Não foi possível ler a imagem.");
+  r.onload=()=>{const im=new Image();
+    im.onerror=()=>toast("Arquivo de imagem inválido.");
+    im.onload=()=>{
+      const s=Math.min(1,480/im.width),cv=document.createElement("canvas");cv.width=Math.round(im.width*s);cv.height=Math.round(im.height*s);
+      cv.getContext("2d").drawImage(im,0,0,cv.width,cv.height);
+      const c=curC();if(!c)return;c.img=cv.toDataURL("image/jpeg",.8);mark();renderForm();toast("Imagem aplicada.");
+    };im.src=r.result};
+  r.readAsDataURL(f);
+};
+const cleanDeck=(d,i)=>({id:String(d.id||"i"+i+Date.now()),name:String(d.name||"Deck "+(i+1)),cards:(Array.isArray(d.cards)?d.cards:[]).filter(c=>c&&typeof c==="object").map((c,j)=>({id:String(c.id||"c"+i+"_"+j+Date.now()),title:String(c.title||""),text:String(c.text||""),cat:String(c.cat||"Caos"),rar:RARS[c.rar]?c.rar:"comum",img:typeof c.img==="string"&&c.img.startsWith("data:image/")?c.img:""}))});
+$("#bExp").onclick=()=>{
+  flush();const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([JSON.stringify({versao:3,title:S.title,decks:S.decks,cfg:S.cfg,profiles:S.profiles},null,1)],{type:"application/json"}));
+  a.download="decks-deadlock-"+new Date().toISOString().slice(0,10)+".json";a.click();URL.revokeObjectURL(a.href);toast("Tudo salvo em arquivo.");
+};
+$("#bImp").onclick=()=>$("#fileJson").click();
+function applyPayload(j){
+  S.decks=j.decks.map(cleanDeck);if(j.title)S.title=String(j.title);
+  if(Array.isArray(j.profiles))S.profiles=j.profiles.map(cleanProfile).filter(Boolean);
+  if(j.cfg)S.cfg=cleanCfg(j.cfg);
+  S.active=[S.decks[0].id];applyCfg();syncTitle();ed.d=S.decks[0].id;ed.c=S.decks[0].cards[0]?.id;
+}
+$("#fileJson").onchange=e=>{
+  const f=e.target.files[0];e.target.value="";if(!f)return;
+  f.text().then(t=>{try{
+    const j=JSON.parse(t);
+    if(Array.isArray(j.decks)&&j.decks.length){
+      withUndo("Carregado: "+j.decks.length+" decks.",()=>{applyPayload(j);renderEd()});
+    }else{
+      const cards=Array.isArray(j)?j:j.deck;if(!Array.isArray(cards)||!cards.length)throw 0;
+      withUndo("Deck antigo adicionado como 'Importado'.",()=>{const d=cleanDeck({name:"Importado",cards},S.decks.length);S.decks.push(d);ed.d=d.id;ed.c=d.cards[0]?.id;renderEd()});
+    }
+  }catch(err){toast("Arquivo inválido. Use um .json salvo por este site.")}});
+};
+$("#bClose").onclick=()=>$("#dlg").close();
+$("#dlg").addEventListener("close",()=>{if(ed.dirty){ed.dirty=false;refreshAll();renderHist()}});
+
+/* ---------- Configurações ---------- */
+function renderSet(){
+  const b=$("#setBody");b.innerHTML="";const c=S.cfg;let prof;
+  const up=()=>{applyCfg();save()};
+  const styl=()=>{c.mod=true;up()};
+  const field=(lab,node)=>{const l=el("label","",lab);l.append(node);return l};
+  const rng=(lab,k,min,max,step,u,sty)=>{const i=el("input");i.type="range";i.min=min;i.max=max;i.step=step;i.value=c[k];const l=el("label","",lab+": "+c[k]+u);i.oninput=()=>{c[k]=+i.value;l.firstChild.textContent=lab+": "+c[k]+u;sty?styl():up()};l.append(i);return l};
+  const chk=(lab,k)=>{const l=el("label","chk"),i=el("input");i.type="checkbox";i.checked=c[k];i.onchange=()=>{c[k]=i.checked;up();if(k==="snd"&&i.checked)blip(0)};l.append(i,document.createTextNode(lab));return l};
+  const ti=el("input");ti.type="text";ti.value=S.title;ti.oninput=()=>{S.title=ti.value;syncTitle();save()};
+  prof=el("select");
+  const g1=el("optgroup");g1.label="Perfis prontos";Object.keys(PROFILES).forEach(n=>{const o=el("option","",n);o.value="b:"+n;g1.append(o)});prof.append(g1);
+  if(S.profiles.length){const g2=el("optgroup");g2.label="Meus perfis";S.profiles.forEach(p=>{const o=el("option","",p.name);o.value=p.id;g2.append(o)});prof.append(g2)}
+  const oc=el("option","","Personalizado");oc.value="";prof.append(oc);
+  prof.value=allProfiles().some(p=>p.id===c.profile)?c.profile:"";
+  prof.onchange=()=>{if(prof.value){applyProfile(prof.value);renderSet()}};
+  const mine=S.profiles.find(p=>p.id===c.profile);
+  const pr=el("div","row");
+  const bN=el("button","","Salvar estilo atual como perfil");bN.onclick=()=>{const n=prompt("Nome do perfil:");if(!n||!n.trim())return;const p={id:"u:"+Date.now(),name:n.trim(),style:curStyle()};S.profiles.push(p);c.profile=p.id;c.mod=false;save();renderSet();toast("Perfil salvo.")};
+  const bU=el("button","","Atualizar perfil");bU.disabled=!mine;bU.onclick=()=>{mine.style=curStyle();c.mod=false;save();renderSet();toast("Perfil atualizado.")};
+  const bR=el("button","","Renomear");bR.disabled=!mine;bR.onclick=()=>{const n=prompt("Novo nome:",mine.name);if(!n||!n.trim())return;mine.name=n.trim();save();renderSet()};
+  const bD=el("button","danger","Excluir");bD.disabled=!mine;bD.onclick=()=>{const old=[...S.profiles],was=c.profile;S.profiles=S.profiles.filter(p=>p!==mine);c.profile="";save();renderSet();toast("Perfil excluído.","Desfazer",()=>{S.profiles=old;c.profile=was;save();renderSet()})};
+  pr.append(bN,bU,bR,bD);
+  const grid=el("div","cgrid");
+  COLORS.forEach(([k,n])=>{const i=el("input");i.type="color";i.value=c.colors[k];i.oninput=()=>{c.colors[k]=i.value;styl()};grid.append(field(n,i))});
+  const fs=el("select");Object.entries(FONTS).forEach(([k,v])=>{const o=el("option","",v[0]);o.value=k;fs.append(o)});fs.value=c.font;fs.onchange=()=>{c.font=fs.value;styl()};
+  const bg=el("div","bkgrid");
+  Object.entries(BACKS).forEach(([k,v])=>{
+    const o=el("button","bkopt"+(c.back===k?" on":""));o.setAttribute("aria-pressed",c.back===k);o.title=v[0];
+    const m=el("div","mini back");
+    if(k==="custom"&&!c.backImg)m.textContent="+";else paintBack(m,k,c.backImg);
+    o.append(m,el("span","",v[0]));
+    o.onclick=()=>{if(k==="custom"&&!c.backImg){$("#fileBack").click();return}c.back=k;styl();renderSet()};
+    bg.append(o);
+  });
+  const br=el("div","row");
+  const bu=el("button","",c.backImg?"Trocar imagem do verso":"Enviar imagem para o verso");bu.onclick=()=>$("#fileBack").click();
+  const bx=el("button","","Remover imagem do verso");bx.disabled=!c.backImg;bx.onclick=()=>{c.backImg="";if(c.back==="custom")c.back="stripes";styl();renderSet()};
+  br.append(bu,bx);
+  const wr=el("div","row");
+  Object.entries(RARS).forEach(([k,n])=>{const i=el("input");i.type="number";i.min=0;i.max=100;i.value=c.w[k];i.oninput=()=>{c.w[k]=Math.max(0,+i.value||0);save()};wr.append(field("Peso "+n,i))});
+  const rr=el("input");rr.type="number";rr.min=0;rr.max=20;rr.value=c.rr;rr.oninput=()=>{c.rr=Math.max(0,Math.min(20,+rr.value||0));save()};
+  const kb=Math.round((localStorage.getItem(KEY)||"").length*2/1024);
+  const rs=el("button","","Restaurar configurações padrão");rs.onclick=()=>{const p=S.cfg.profile;S.cfg=DEF_CFG();applyCfg();save();renderSet()};
+  b.append(el("h3","","Título"),field("Título do site (também dá para clicar nele no topo)",ti),
+    el("h3","","Perfis de estilo"),field("Perfil",prof),pr,
+    el("p","empty",c.mod?"O estilo foi alterado em relação ao perfil escolhido. Use 'Atualizar perfil' ou 'Salvar estilo atual como perfil' para guardar.":"Um perfil guarda cores, fonte, tamanho da carta e verso."),
+    el("h3","","Cores"),grid,
+    el("h3","","Verso das cartas"),bg,br,
+    el("h3","","Aparência"),field("Fonte dos títulos",fs),rng("Tamanho da carta","cw",200,440,10,"px",true),
+    el("h3","","Animação e som"),chk(" Animações ligadas","anim"),rng("Duração da virada","flip",200,1600,50,"ms"),chk(" Som suave ao virar a carta","snd"),
+    el("h3","","Sorteio"),chk(" Percorrer o deck inteiro antes de repetir cartas","cycle"),chk(" Evitar repetir as cartas do sorteio anterior","norepeat"),chk(" Mostrar histórico","hist"),
+    field("Trocas permitidas por sorteio (0 = ilimitado)",rr),
+    el("p","empty","Chance de cada raridade (pesos relativos; 0 desliga a raridade):"),wr,
+    el("h3","","Dados"),el("p","empty","Uso do armazenamento do navegador: cerca de "+kb+" KB de ~5000 KB. Imagens ocupam mais espaço. Faça backup com 'Salvar tudo em arquivo'. Para publicar seus decks como padrão do site no GitHub, exporte o arquivo e renomeie para decks.json."),rs);
+}
+$("#fileBack").onchange=e=>{
+  const f=e.target.files[0];e.target.value="";if(!f)return;
+  const r=new FileReader();
+  r.onerror=()=>toast("Não foi possível ler a imagem.");
+  r.onload=()=>{const im=new Image();
+    im.onerror=()=>toast("Arquivo de imagem inválido.");
+    im.onload=()=>{const s=Math.min(1,560/im.width),cv=document.createElement("canvas");cv.width=Math.round(im.width*s);cv.height=Math.round(im.height*s);
+      cv.getContext("2d").drawImage(im,0,0,cv.width,cv.height);
+      S.cfg.backImg=cv.toDataURL("image/jpeg",.85);S.cfg.back="custom";S.cfg.mod=true;applyCfg();save();if($("#dlgS").open)renderSet();toast("Verso aplicado.")};
+    im.src=r.result};
+  r.readAsDataURL(f);
+};
+const openSet=()=>{renderSet();$("#dlgS").showModal()};
+$("#bSet").onclick=openSet;
+$("#bSClose").onclick=()=>$("#dlgS").close();
+
+/* ---------- Geral ---------- */
+const T=$("#title");
+function syncTitle(){if(T.textContent!==S.title)T.textContent=S.title;document.title=S.title||"Deck"}
+T.addEventListener("input",()=>{S.title=T.textContent;document.title=S.title||"Deck";save()});
+T.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key==="Escape"){e.preventDefault();T.blur()}});
+T.addEventListener("paste",e=>{e.preventDefault();document.execCommand("insertText",false,((e.clipboardData||window.clipboardData).getData("text")||"").replace(/\s+/g," "))});
+T.addEventListener("blur",()=>{S.title=T.textContent.trim();if(T.textContent!==S.title)T.textContent=S.title;save()});
+const isFs=()=>document.body.classList.contains("fs");
+function toggleFs(){
+  const on=!isFs();document.body.classList.toggle("fs",on);$("#bFs").textContent=on?"Sair do modo stream":"Modo stream";
+  try{if(on&&document.documentElement.requestFullscreen)document.documentElement.requestFullscreen().catch(()=>{});else if(!on&&document.fullscreenElement)document.exitFullscreen()}catch(e){}
+  requestAnimationFrame(fit);
+}
+document.addEventListener("fullscreenchange",()=>{if(!document.fullscreenElement&&isFs())toggleFs()});
+for(const d of document.querySelectorAll("dialog"))d.addEventListener("click",e=>{if(e.target===d)d.close()});
+$("#bEdit").onclick=openEd;
+$("#bDraw").onclick=draw;
+$("#bCopy").onclick=copyTxt;
+$("#bMin").onclick=()=>setCount(S.count-1);
+$("#bPlus").onclick=()=>setCount(S.count+1);
+$("#bFs").onclick=toggleFs;
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"&&isFs()&&!document.fullscreenElement&&!document.querySelector("dialog[open]"))return toggleFs();
+  if(e.ctrlKey||e.metaKey||e.altKey||document.querySelector("dialog[open]")||/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)||document.activeElement.isContentEditable)return;
+  const k=e.key.toLowerCase();
+  if(e.code==="Space"){if(document.activeElement.tagName!=="BUTTON"){e.preventDefault();draw()}}
+  else if(k==="f")toggleFs();else if(k==="e")openEd();else if(k==="s")openSet();else if(k==="c")copyTxt();
+  else if(/^[1-8]$/.test(k))setCount(+k);
+});
+applyCfg();syncTitle();syncCount();renderDeckChips();renderChips();showBacks();renderHist();
+async function bootstrap(){
+  if(localStorage.getItem(KEY))return;
+  try{
+    const r=await fetch("decks.json",{cache:"no-store"});if(!r.ok)return;
+    const j=await r.json();if(!Array.isArray(j.decks)||!j.decks.length||localStorage.getItem(KEY)||ed.dirty)return;
+    applyPayload(j);syncCount();refreshAll();renderHist();
+  }catch(e){}
+}
+bootstrap();
+</script>
+</body>
+</html>
