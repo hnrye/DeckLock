@@ -3,17 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Deck do Caos · Deadlock</title>
+<title>Decklock</title>
 <meta name="description" content="Sorteador de cartas de desafio para partidas de Deadlock, com decks editáveis.">
 <meta name="theme-color" content="#222021">
-<meta property="og:title" content="Deck do Caos · Deadlock">
+<meta property="og:title" content="Decklock">
 <meta property="og:description" content="Sorteador de cartas de desafio para partidas de Deadlock, com decks editáveis.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23222021'/%3E%3Ccircle cx='16' cy='16' r='11' fill='none' stroke='%23efdebf' stroke-width='2'/%3E%3Cpath d='M6 16Q16 8 26 16Q16 24 6 16Z' fill='%23efdebf'/%3E%3Ccircle cx='16' cy='16' r='3.5' fill='%23222021'/%3E%3C/svg%3E">
 <style>
 :root{--bg:#222021;--bg2:#2f4442;--panel:#3f5d4d;--ink:#efdebf;--mute:#86a995;--gold:#efdebf;--rare:#8fb59f;--leg:#d98a5c;--line:#3f5d4d;--onacc:#16110a;--cw:300px;--flip:700ms;--fh:Georgia,"Times New Roman",serif}
 *{box-sizing:border-box}
 html,body{margin:0}
-body{background:radial-gradient(ellipse at 50% -10%,var(--bg2),var(--bg) 62%) fixed;color:var(--ink);font:16px/1.5 system-ui,sans-serif;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+body{background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,sans-serif;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
 h1,h2,.ct,.title,h3{font-family:var(--fh)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 header{display:flex;flex-direction:column;align-items:center;gap:12px;padding:20px 24px 16px;border-bottom:1px solid var(--line);text-align:center}
@@ -124,7 +124,6 @@ body.fs .fsx{display:block}
 /* ---------- Acabamento ---------- */
 ::selection{background:color-mix(in srgb,var(--gold) 40%,transparent)}
 html{scrollbar-color:var(--line) var(--bg)}
-body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:repeating-linear-gradient(45deg,transparent 0 38px,color-mix(in srgb,var(--gold) 5%,transparent) 38px 39px),repeating-linear-gradient(-45deg,transparent 0 38px,color-mix(in srgb,var(--gold) 5%,transparent) 38px 39px);-webkit-mask-image:radial-gradient(ellipse at 50% 25%,#000 15%,transparent 75%);mask-image:radial-gradient(ellipse at 50% 25%,#000 15%,transparent 75%)}
 header{border-bottom:0;gap:10px;padding:26px 24px 8px}
 .title{display:block;width:fit-content;margin:0 auto}
 .orn{display:flex;align-items:center;gap:12px;width:min(440px,72vw)}
@@ -159,6 +158,34 @@ footer{padding:14px 24px 22px;text-align:center;color:var(--mute);font-size:.8re
 .emptystate{display:grid;gap:12px;justify-items:center;text-align:center;max-width:480px;padding:30px 26px;border:1px dashed var(--line);border-radius:14px;background:color-mix(in srgb,var(--panel) 40%,transparent)}
 .emptystate h2{margin:0;color:var(--gold);font-size:1.35rem}
 .emptystate .row{justify-content:center}
+
+/* ---------- Fundos e animações ---------- */
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:var(--bgi,1);background-image:var(--fx,none);background-size:var(--fxs,auto)}
+html[data-bg=plain] body::before{display:none}
+html[data-bg=glow],.bgm[data-b=glow]{--fx:radial-gradient(ellipse at 50% -10%,var(--bg2),transparent 62%)}
+html[data-bg=aurora],.bgm[data-b=aurora]{--fx:radial-gradient(40% 45% at 18% 8%,color-mix(in srgb,var(--gold) 18%,transparent),transparent),radial-gradient(45% 50% at 88% 18%,color-mix(in srgb,var(--rare) 24%,transparent),transparent),radial-gradient(60% 50% at 50% 105%,color-mix(in srgb,var(--panel) 80%,transparent),transparent)}
+html[data-bg=spot],.bgm[data-b=spot]{--fx:radial-gradient(circle at 50% 42%,color-mix(in srgb,var(--gold) 14%,transparent),transparent 48%)}
+html[data-bg=gradient],.bgm[data-b=gradient]{--fx:linear-gradient(165deg,var(--bg2),transparent 55%,color-mix(in srgb,var(--rare) 12%,transparent))}
+html[data-bg=vignette],.bgm[data-b=vignette]{--fx:radial-gradient(ellipse at center,var(--bg2),var(--bg) 85%)}
+html[data-bg=dots],.bgm[data-b=dots]{--fx:radial-gradient(color-mix(in srgb,var(--gold) 22%,transparent) 1px,transparent 1.6px);--fxs:22px 22px}
+html[data-bg=grain],.bgm[data-b=grain]{--fx:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),radial-gradient(ellipse at 50% -10%,var(--bg2),transparent 62%);--fxs:160px 160px,auto}
+html[data-bg=rays],.bgm[data-b=rays]{--fx:repeating-conic-gradient(from 0deg at 50% -5%,color-mix(in srgb,var(--gold) 9%,transparent) 0 5deg,transparent 5deg 10deg)}
+.bgm{width:100%;aspect-ratio:16/10;border-radius:6px;border:1px solid var(--line);background-color:var(--bg);background-image:var(--fx,none);background-size:var(--fxs,auto)}
+.scene[class*="fx-"]{animation-duration:calc(var(--flip)*1.3);animation-timing-function:cubic-bezier(.2,.8,.2,1);animation-fill-mode:both}
+.fx-spin{animation-name:fx-spin}.fx-rise{animation-name:fx-rise}.fx-drop{animation-name:fx-drop}.fx-zoom{animation-name:fx-zoom}.fx-slide{animation-name:fx-slide}.fx-shake{animation-name:fx-shake}.fx-tilt{animation-name:fx-tilt}
+@keyframes fx-spin{from{transform:rotateY(-360deg) scale(.9)}to{transform:none}}
+@keyframes fx-rise{from{transform:translateY(130px) scale(.85);opacity:0}60%{transform:translateY(-12px) scale(1.03);opacity:1}to{transform:none}}
+@keyframes fx-drop{from{transform:translateY(-240px) rotate(-6deg);opacity:0}50%{transform:none;opacity:1}65%{transform:translateY(-28px)}80%{transform:none}90%{transform:translateY(-9px)}to{transform:none}}
+@keyframes fx-zoom{from{transform:scale(.1);opacity:0}60%{transform:scale(1.18);opacity:1}to{transform:none}}
+@keyframes fx-slide{from{transform:translateX(-170px) rotate(-12deg);opacity:0}to{transform:none}}
+@keyframes fx-shake{0%,100%{transform:none}10%{transform:translateX(-10px) rotate(-2deg)}20%{transform:translateX(10px) rotate(2deg)}30%{transform:translateX(-8px)}40%{transform:translateX(8px)}50%{transform:translateX(-5px)}60%{transform:translateX(5px)}}
+@keyframes fx-tilt{from{transform:rotateX(70deg) translateY(60px);opacity:0}to{transform:none}}
+.fxl{position:fixed;inset:0;width:100%;height:100%;margin:0;padding:0;border:0;background:transparent;overflow:hidden;pointer-events:none}
+.fxl i{position:absolute;display:block}
+.fxrow{align-items:flex-end}.fxrow strong{min-width:72px;padding-bottom:8px}
+#fxPrev{display:flex;justify-content:center}#fxPrev .scene{width:170px}
+.fitem{display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between;padding:10px 14px;border:1px solid var(--line);border-radius:10px;background:var(--bg2)}
+.ft{display:grid;gap:2px}
 @media(prefers-reduced-motion:reduce){.primary,.scene{animation:none!important}}
 </style>
 </head>
@@ -169,6 +196,7 @@ footer{padding:14px 24px 22px;text-align:center;color:var(--mute);font-size:.8re
   <div class="orn" aria-hidden="true"><span></span><svg viewBox="0 0 40 40" width="30" height="30" style="stroke:var(--gold);fill:none;stroke-width:1.6;flex:none"><circle cx="20" cy="20" r="17"/><path d="M6 20Q20 8 34 20Q20 32 6 20Z" style="fill:var(--gold)"/><circle cx="20" cy="20" r="5" style="fill:var(--bg);stroke:none"/><circle cx="20" cy="20" r="2.4" style="fill:var(--gold);stroke:none"/></svg><span></span></div>
   <div class="tools">
     <button id="bEdit">Editar decks</button>
+    <button id="bFiles">Arquivos</button>
     <button id="bSet">Configurações</button>
     <button id="bFs">Tela cheia</button>
   </div>
@@ -199,8 +227,7 @@ footer{padding:14px 24px 22px;text-align:center;color:var(--mute);font-size:.8re
   <div class="top">
     <strong class="grow">Editor de decks</strong>
     <button id="bExp">Salvar tudo em arquivo</button>
-    <button id="bImp">Carregar arquivo</button>
-    <button id="bImpAdd" title="Adiciona os decks do arquivo aos que você já tem">Adicionar de arquivo</button>
+    <button id="bImp">Importar arquivo</button>
     <button id="bClose">Fechar</button>
     <input type="file" id="fileJson" accept="application/json,.json" hidden>
     <input type="file" id="fileImg" accept="image/*" hidden>
@@ -225,13 +252,22 @@ footer{padding:14px 24px 22px;text-align:center;color:var(--mute);font-size:.8re
   <div class="set" id="setBody"></div>
   <input type="file" id="fileBack" accept="image/*" hidden>
 </dialog>
+<dialog id="dlgImp" aria-label="Importar arquivo">
+  <div class="top"><strong class="grow">Importar arquivo</strong></div>
+  <div class="set"><p class="empty" id="impMsg"></p>
+    <div class="row"><button id="impAdd">Adicionar aos meus decks</button><button id="impRep" class="danger">Substituir tudo</button><button id="impCancel">Cancelar</button></div></div>
+</dialog>
+<dialog id="dlgF" aria-label="Arquivos">
+  <div class="top"><strong class="grow">Arquivos</strong><button id="bFClose">Fechar</button></div>
+  <div class="set" id="filesBody"></div>
+</dialog>
 <div id="toast" popover="manual" role="status"></div>
 
 <script>
 const $=s=>document.querySelector(s);
 const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-const CATS=["Handicap","Build","Objetivo","Comunicação","Caos","Individual","Herói"];
+const CATS=["Geral","Handicap","Build","Objetivo","Comunicação","Caos","Individual","Herói"];
 const RARS={comum:"Comum",rara:"Rara",lendaria:"Lendária"};
 const COLORS=[["bg","Fundo"],["bg2","Fundo secundário"],["panel","Painéis"],["ink","Texto"],["mute","Texto suave"],["gold","Destaque"],["rare","Carta rara"],["leg","Carta lendária"],["line","Bordas"]];
 const PROFILES={
@@ -243,9 +279,10 @@ const PROFILES={
 "Rubi":{back:"plain",colors:{bg:"#140b0d",bg2:"#1e1013",panel:"#271519",ink:"#f1e3dc",mute:"#a58f88",gold:"#e0b060",rare:"#5ea8c8",leg:"#e8574a",line:"#4a2a30"}},
 "Claro":{back:"plain",colors:{bg:"#f2ede3",bg2:"#fbf8f1",panel:"#e7dfcf",ink:"#241d16",mute:"#6e6252",gold:"#a8741a",rare:"#1f7a8c",leg:"#b3341f",line:"#c9bca3"}}};
 const FONTS={serif:["Serifada","Georgia,'Times New Roman',serif"],sans:["Sem serifa","system-ui,sans-serif"],cond:["Condensada","'Arial Narrow',Bahnschrift,Impact,sans-serif"]};
-const DEF_CFG=()=>({profile:"b:Deadlock",mod:false,colors:{...PROFILES.Deadlock.colors},back:"eye",backImg:"",font:"serif",cw:300,flip:700,anim:!matchMedia("(prefers-reduced-motion: reduce)").matches,snd:false,hist:true,norepeat:true,cycle:true,rr:0,w:{comum:60,rara:30,lendaria:10}});
+const DEF_CFG=()=>({profile:"b:Deadlock",mod:false,colors:{...PROFILES.Deadlock.colors},back:"eye",backImg:"",bgfx:"glow",bgi:100,font:"serif",cw:300,flip:700,anim:!matchMedia("(prefers-reduced-motion: reduce)").matches,snd:false,fxn:100,fx:{comum:{in:"flip",fx:"none"},rara:{in:"rise",fx:"glow"},lendaria:{in:"spin",fx:"confetti"}},hist:true,norepeat:true,cycle:true,rr:0,w:{comum:60,rara:30,lendaria:10}});
 
-const DEF_DECKS=()=>[];
+const DEF_DECKS=()=>[{id:"d1",name:"Meu deck",cards:[{id:"c1",title:"Primeira carta",text:"Edite esta carta em Editar decks ou crie outras. Decks prontos ficam na aba Arquivos.",cat:"Geral",rar:"comum",img:""}]}];
+const EXEMPLOS=[{"id":"g","name":"Grupo","cards":[{"id":"g0","title":"Pick do colega","text":"Cada um joga o herói que o colega ao lado escolheu para você. Sem veto, sem troca.","cat":"Caos","rar":"comum","img":""},{"id":"g1","title":"Herói esquecido","text":"Todo mundo joga o herói que menos usou na conta. Se nunca jogou nenhum, vale qualquer um.","cat":"Caos","rar":"comum","img":""},{"id":"g2","title":"Sem arma","text":"Nenhum item de Arma na partida inteira. Só Vitalidade e Espírito.","cat":"Build","rar":"comum","img":""},{"id":"g3","title":"Categoria única","text":"Cada um escolhe uma categoria (Arma, Vitalidade ou Espírito) e só compra dela.","cat":"Build","rar":"comum","img":""},{"id":"g4","title":"Só passivos","text":"Nenhum item ativo na build. Se a luta depende de apertar um botão, ele não existe.","cat":"Build","rar":"rara","img":""},{"id":"g5","title":"Mão fechada","text":"Ninguém gasta souls antes do minuto 5. A primeira compra sai toda de uma vez.","cat":"Build","rar":"rara","img":""},{"id":"g6","title":"Sem zipline","text":"Zipline proibida. Quem chegar atrasado na luta, chegou a pé.","cat":"Handicap","rar":"comum","img":""},{"id":"g7","title":"Lane no corpo a corpo","text":"Até o minuto 5, só melee e habilidades. Tiro só depois disso.","cat":"Handicap","rar":"comum","img":""},{"id":"g8","title":"Minimapa desligado","text":"Ninguém olha o minimapa. Posição do inimigo só por callout no voz.","cat":"Handicap","rar":"rara","img":""},{"id":"g9","title":"Lane única","text":"O grupo todo na mesma lane até a primeira Guardian cair.","cat":"Objetivo","rar":"comum","img":""},{"id":"g10","title":"Prioridade Mid-Boss","text":"Assim que o Mid-Boss nascer, o grupo vai nele. Sem votação.","cat":"Objetivo","rar":"rara","img":""},{"id":"g11","title":"Urn do mais pobre","text":"Quem carrega a Soul Urn é sempre o jogador com menos souls do grupo.","cat":"Objetivo","rar":"rara","img":""},{"id":"g12","title":"Primeiros 5 no camp","text":"Ninguém fica em lane nos primeiros 5 minutos. Todo mundo no jungle.","cat":"Objetivo","rar":"comum","img":""},{"id":"g13","title":"Sem falar","text":"Sem voz até a primeira Guardian cair. Só pings e o chat de texto.","cat":"Comunicação","rar":"rara","img":""},{"id":"g14","title":"Só perguntas","text":"No voz, só vale falar em forma de pergunta. Afirmou, perdeu o turno de falar.","cat":"Comunicação","rar":"comum","img":""},{"id":"g15","title":"Sem nomes","text":"Não vale dizer nome de herói ou de item. Tem que descrever o que quer dizer.","cat":"Comunicação","rar":"rara","img":""},{"id":"g16","title":"Narrador morto","text":"Quem morreu narra a partida para o grupo até renascer.","cat":"Comunicação","rar":"comum","img":""},{"id":"g17","title":"Elogio obrigatório","text":"Depois de cada morte, o grupo elogia uma coisa que o inimigo fez bem. Sem ironia.","cat":"Comunicação","rar":"comum","img":""},{"id":"g18","title":"Líder rotativo","text":"A cada 5 minutos muda o líder. Só ele chama luta, objetivo e recuo.","cat":"Caos","rar":"comum","img":""},{"id":"g19","title":"Quem tem menos decide","text":"O jogador com menos kills decide para onde o grupo vai.","cat":"Caos","rar":"comum","img":""},{"id":"g20","title":"Aposta de kills","text":"Antes de começar, cada um crava quantas kills vai fazer. Quem errar por mais escolhe o herói por último na próxima.","cat":"Caos","rar":"rara","img":""},{"id":"g21","title":"Dado de tudo","text":"Rolem dado para herói, lane e categoria de item de cada um. Sem reclamar do resultado.","cat":"Caos","rar":"rara","img":""},{"id":"g22","title":"Duas cartas","text":"Sorteie mais uma carta e cumpram as duas ao mesmo tempo.","cat":"Caos","rar":"lendaria","img":""},{"id":"g23","title":"Sem arma, sem voz","text":"Nenhum item de Arma e ninguém fala no voz até o minuto 10.","cat":"Caos","rar":"lendaria","img":""},{"id":"g24","title":"Tudo no dado","text":"Herói, lane, itens permitidos e líder sorteados. O grupo só executa.","cat":"Caos","rar":"lendaria","img":""}]},{"id":"i","name":"Individual","cards":[{"id":"i0","title":"Sem tiro","text":"Só habilidades e melee até o minuto 8.","cat":"Handicap","rar":"comum","img":""},{"id":"i1","title":"Sem ultimate","text":"Não use a habilidade 4 até o minuto 15.","cat":"Handicap","rar":"comum","img":""},{"id":"i2","title":"Pé no chão","text":"Sem zipline para você nesta partida.","cat":"Handicap","rar":"comum","img":""},{"id":"i3","title":"Pacifista de tropa","text":"Tropas só morrem no melee.","cat":"Handicap","rar":"comum","img":""},{"id":"i4","title":"Parry sempre","text":"Tente parry em toda luta, acerte ou não.","cat":"Handicap","rar":"rara","img":""},{"id":"i5","title":"Sem ativos","text":"Nenhum item ativo na sua build.","cat":"Build","rar":"comum","img":""},{"id":"i6","title":"Só Espírito","text":"Só compra itens de Espírito.","cat":"Build","rar":"rara","img":""},{"id":"i7","title":"Zero Vitalidade","text":"Nenhum item de Vitalidade. Você vive do que tem.","cat":"Build","rar":"rara","img":""},{"id":"i8","title":"Compra só morto","text":"Só compra itens quando estiver morto.","cat":"Build","rar":"rara","img":""},{"id":"i9","title":"Callout de tudo","text":"Narre em voz alta o que você está fazendo, o tempo todo.","cat":"Comunicação","rar":"comum","img":""},{"id":"i10","title":"Sombra","text":"Fique sempre perto do jogador à sua esquerda.","cat":"Objetivo","rar":"comum","img":""},{"id":"i11","title":"Dono da Urn","text":"Você carrega a Soul Urn sempre que ela estiver disponível.","cat":"Objetivo","rar":"rara","img":""},{"id":"i12","title":"Herói do sorteio","text":"Joga o herói que o grupo sortear no deck de Heróis, sem reclamar.","cat":"Caos","rar":"lendaria","img":""}]},{"id":"h","name":"Heróis","cards":[{"id":"h0","title":"Abrams","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h1","title":"Apollo","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h2","title":"Bebop","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h3","title":"Billy","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h4","title":"Calico","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h5","title":"Celeste","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h6","title":"Doorman","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h7","title":"Drifter","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h8","title":"Dynamo","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h9","title":"Graves","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h10","title":"Grey Talon","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h11","title":"Haze","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h12","title":"Holliday","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h13","title":"Infernus","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h14","title":"Ivy","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h15","title":"Kelvin","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h16","title":"Lady Geist","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h17","title":"Lash","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h18","title":"McGinnis","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h19","title":"Mina","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h20","title":"Mirage","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h21","title":"Mo & Krill","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h22","title":"Paige","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h23","title":"Paradox","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h24","title":"Pocket","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h25","title":"Rem","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h26","title":"Seven","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h27","title":"Shiv","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h28","title":"Silver","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h29","title":"Sinclair","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h30","title":"Venator","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h31","title":"Victor","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h32","title":"Vindicta","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h33","title":"Viscous","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h34","title":"Vyper","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h35","title":"Warden","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h36","title":"Wraith","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h37","title":"Yamato","text":"","cat":"Herói","rar":"comum","img":""}]}];
 
 const KEY="deadlock-deck-v3";
 
@@ -263,6 +300,9 @@ function paintBack(b,kind,img){
   b.innerHTML=BACKS[kind][1];
   if(kind==="custom")b.style.setProperty("--bkimg",'url("'+img+'")');else b.style.removeProperty("--bkimg");
 }
+const ENTRADAS={flip:"Virar (padrão)",spin:"Giro duplo",rise:"Subir",drop:"Cair com quique",zoom:"Zoom",slide:"Deslizar",shake:"Tremer",tilt:"Inclinar 3D"};
+const EFEITOS={none:"Nenhum",glow:"Ondas de luz",sparks:"Faíscas",confetti:"Confete",flash:"Clarão",rain:"Chuva de brilho",burst:"Explosão (tudo junto)"};
+const BGFX={plain:"Plano",glow:"Brilho suave",aurora:"Aurora",spot:"Holofote",gradient:"Degradê",vignette:"Vinheta",dots:"Pontos",grain:"Granulado",rays:"Raios"};
 const okImg=v=>typeof v==="string"&&v.startsWith("data:image/");
 function cleanColors(o){const d=DEF_CFG().colors,r={};for(const k in d)r[k]=/^#[0-9a-f]{6}$/i.test(o&&o[k])?o[k]:d[k];return r}
 function cleanCfg(c){
@@ -271,23 +311,26 @@ function cleanCfg(c){
   if(!BACKS[o.back])o.back=d.back;
   if(!okImg(o.backImg))o.backImg="";
   if(!FONTS[o.font])o.font="serif";
+  const fx={};for(const k of Object.keys(RARS)){const v=(c.fx&&c.fx[k])||d.fx[k];fx[k]={in:ENTRADAS[v.in]?v.in:d.fx[k].in,fx:EFEITOS[v.fx]?v.fx:d.fx[k].fx}}o.fx=fx;
+  if(!BGFX[o.bgfx])o.bgfx="glow";
+  o.bgi=Math.min(100,Math.max(0,isNaN(+o.bgi)?100:+o.bgi));o.fxn=Math.min(200,Math.max(50,+o.fxn||100));
   o.cw=Math.min(440,Math.max(200,+o.cw||300));o.flip=Math.min(1600,Math.max(0,+o.flip||700));
   if(c.profile===undefined)o.profile=PROFILES[c.preset]?"b:"+c.preset:(c.preset===undefined?d.profile:"");
   const bp=typeof o.profile==="string"&&o.profile.startsWith("b:")?PROFILES[o.profile.slice(2)]:null;
-  if(bp&&!o.mod){o.colors=cleanColors(bp.colors);o.back=bp.back}
+  if(bp&&!o.mod){o.colors=cleanColors(bp.colors);o.back=bp.back;o.bgfx=bp.bgfx||"glow"}
   return o;
 }
 function cleanProfile(p){
   if(!p||!p.id||!p.name||!p.style)return null;
   const s=p.style;
-  return{id:String(p.id),name:String(p.name),style:{colors:cleanColors(s.colors),font:FONTS[s.font]?s.font:"serif",cw:Math.min(440,Math.max(200,+s.cw||300)),back:BACKS[s.back]?s.back:"stripes",backImg:okImg(s.backImg)?s.backImg:""}};
+  return{id:String(p.id),name:String(p.name),style:{colors:cleanColors(s.colors),font:FONTS[s.font]?s.font:"serif",cw:Math.min(440,Math.max(200,+s.cw||300)),back:BACKS[s.back]?s.back:"stripes",backImg:okImg(s.backImg)?s.backImg:"",bgfx:BGFX[s.bgfx]?s.bgfx:"glow"}};
 }
 const allProfiles=()=>[...Object.entries(PROFILES).map(([n,p])=>({id:"b:"+n,name:n,style:p})),...S.profiles];
-const curStyle=()=>({colors:{...S.cfg.colors},font:S.cfg.font,cw:S.cfg.cw,back:S.cfg.back,backImg:S.cfg.backImg||""});
+const curStyle=()=>({colors:{...S.cfg.colors},font:S.cfg.font,cw:S.cfg.cw,back:S.cfg.back,backImg:S.cfg.backImg||"",bgfx:S.cfg.bgfx});
 function applyProfile(id){
   const p=allProfiles().find(x=>x.id===id);if(!p)return;
   const s=p.style,c=S.cfg;
-  c.colors=cleanColors(s.colors);c.font=s.font||"serif";c.cw=s.cw||300;c.back=s.back||"stripes";c.backImg=s.backImg||"";c.profile=id;c.mod=false;
+  c.colors=cleanColors(s.colors);c.font=s.font||"serif";c.cw=s.cw||300;c.back=s.back||"stripes";c.backImg=s.backImg||"";c.bgfx=s.bgfx||"glow";c.profile=id;c.mod=false;
   applyCfg();save();
 }
 let S=load(),filt=new Set(),lastIds=new Set(),used={},table=[],busy=false,rrUsed=0,ed={d:null,c:null,q:"",dirty:false};
@@ -298,7 +341,7 @@ function load(){
   if(!s||!Array.isArray(s.decks))s={decks:DEF_DECKS()};
   s.cfg=cleanCfg(s.cfg);
   s.profiles=(Array.isArray(s.profiles)?s.profiles:[]).map(cleanProfile).filter(Boolean);
-  s.title=s.title||"Deck do Caos · Deadlock";
+  s.title=s.title||"Decklock";
   s.active=(s.active||[]).filter(id=>s.decks.some(x=>x.id===id));
   if(!s.active.length&&s.decks.length)s.active=[s.decks[0].id];
   s.count=Math.min(8,Math.max(1,s.count||1));
@@ -329,6 +372,7 @@ function applyCfg(){
   for(const[k,v]of Object.entries(c.colors))r.setProperty("--"+k,v);
   r.setProperty("--cw",c.cw+"px");r.setProperty("--flip",(c.anim?c.flip:0)+"ms");
   r.setProperty("--fh",FONTS[c.font][1]);
+  r.setProperty("--bgi",c.bgi/100);document.documentElement.dataset.bg=c.bgfx;
   r.setProperty("--onacc",lum(c.colors.gold)>.4?"#16110a":"#ffffff");
   r.colorScheme=lum(c.colors.bg)>.5?"light":"dark";
   document.querySelectorAll(".face.back").forEach(b=>paintBack(b,c.back,c.backImg));
@@ -373,7 +417,7 @@ function build(groups){
     if(S.decks.length){t.append(el("p","empty","Selecione ao menos um deck."));return}
     const w=el("div","emptystate"),r=el("div","row");
     const a=el("button","primary","Carregar arquivo"),c=el("button","","Criar deck");
-    a.onclick=()=>{impMode="replace";$("#fileJson").click()};
+    a.onclick=()=>$("#fileJson").click();
     c.onclick=()=>{openEd();$("#bDNew").click()};
     r.append(a,c);
     w.append(el("h2","","Nenhum deck por aqui ainda"),el("p","empty","Carregue um arquivo de decks (por exemplo o decks-exemplo.json) ou crie o seu primeiro deck."),r);
@@ -410,6 +454,37 @@ function updateRR(){
   const l=S.cfg.rr;
   document.querySelectorAll(".rr").forEach(r=>{r.disabled=!!l&&rrUsed>=l;r.textContent=l?"↻ Trocar ("+Math.max(0,l-rrUsed)+")":"↻ Trocar"});
 }
+function reveal(sc,delay,i){
+  setTimeout(()=>{
+    const cfg=S.cfg,rar=sc._g.cards[sc._i].rar,f=(cfg.fx&&cfg.fx[rar])||{in:"flip",fx:"none"};
+    if(cfg.anim&&f.in!=="flip"){
+      const cl="fx-"+f.in;sc.classList.add(cl);
+      sc.addEventListener("animationend",function h(e){if(e.target===sc&&e.animationName===cl){sc.classList.remove(cl);sc.removeEventListener("animationend",h)}});
+    }
+    sc.querySelector(".card").classList.add("up");sc.classList.add("live");blip(i);
+    if(cfg.anim&&f.fx!=="none")setTimeout(()=>{(f.fx==="burst"?["glow","sparks","flash"]:[f.fx]).forEach(k=>effect(sc,k,rar))},flipMs()*.55);
+  },delay);
+}
+function effect(sc,kind,rar){
+  if(!sc.isConnected)return;
+  const R=sc.getBoundingClientRect(),cx=R.left+R.width/2,cy=R.top+R.height/2,k=S.cfg.fxn/100;
+  const col=rar==="lendaria"?"var(--leg)":rar==="rara"?"var(--rare)":"var(--gold)";
+  const L=el("div","fxl");L.setAttribute("popover","manual");document.body.append(L);
+  try{L.showPopover()}catch(e){}
+  const add=(css,kf,opt)=>{const d=el("i");d.style.cssText=css;L.append(d);d.animate(kf,{fill:"forwards",...opt})};
+  const rnd=(a,b)=>a+Math.random()*(b-a);let life=1800;
+  if(kind==="glow"){for(let n=0;n<3;n++)add(`left:${cx}px;top:${cy}px;width:${R.width}px;height:${R.width}px;border:3px solid ${col};border-radius:50%;box-shadow:0 0 30px ${col}`,[{transform:"translate(-50%,-50%) scale(.3)",opacity:.9},{transform:"translate(-50%,-50%) scale(2.6)",opacity:0}],{duration:1000,delay:n*180,easing:"ease-out"});life=2000}
+  else if(kind==="sparks"){for(let n=0,m=Math.round(28*k);n<m;n++){const a=rnd(0,6.283),d=rnd(90,300);add(`left:${cx}px;top:${cy}px;width:7px;height:7px;background:${col};border-radius:50%;box-shadow:0 0 10px ${col}`,[{transform:"translate(-50%,-50%) scale(1)",opacity:1},{transform:`translate(calc(-50% + ${Math.cos(a)*d}px),calc(-50% + ${Math.sin(a)*d+60}px)) scale(.1)`,opacity:0}],{duration:rnd(700,1200),easing:"cubic-bezier(.1,.7,.3,1)"})}}
+  else if(kind==="confetti"){const cols=["var(--gold)","var(--rare)","var(--leg)","var(--ink)"];for(let n=0,m=Math.round(44*k);n<m;n++){add(`left:${cx+rnd(-R.width*.6,R.width*.6)}px;top:${R.top}px;width:8px;height:13px;background:${cols[n%4]}`,[{transform:"translate(0,0) rotate(0)",opacity:1},{transform:`translate(${rnd(-140,140)}px,${rnd(260,520)}px) rotate(${rnd(-720,720)}deg)`,opacity:0}],{duration:rnd(1300,2200),delay:rnd(0,250),easing:"cubic-bezier(.2,.6,.4,1)"})}life=2800}
+  else if(kind==="flash"){add(`inset:0;background:radial-gradient(circle at ${cx}px ${cy}px,${col},transparent 60%)`,[{opacity:0},{opacity:.55,offset:.2},{opacity:0}],{duration:650});life=900}
+  else if(kind==="rain"){for(let n=0,m=Math.round(36*k);n<m;n++)add(`left:${rnd(0,innerWidth)}px;top:-40px;width:2px;height:${rnd(24,60)}px;background:linear-gradient(transparent,${col});border-radius:2px`,[{transform:"translateY(0)",opacity:0},{opacity:.9,offset:.15},{transform:`translateY(${innerHeight+80}px)`,opacity:0}],{duration:rnd(900,1500),delay:rnd(0,700),easing:"ease-in"});life=2600}
+  setTimeout(()=>{try{L.hidePopover()}catch(e){}L.remove()},life);
+}
+async function testFx(rk,pv){
+  pv.innerHTML="";
+  const g={cards:[{title:"Carta "+RARS[rk].toLowerCase(),text:"Teste de animação.",cat:"Teste",rar:rk,img:""}]};
+  const sc=cardEl(g,0,true);pv.append(sc);fit();await sleep(120);reveal(sc,0,0);
+}
 async function draw(){
   if(busy)return;
   const ds=sel();
@@ -425,7 +500,7 @@ async function draw(){
   }
   build(picks);table=picks;void $("#table").offsetWidth;await sleep(40);
   const sc=[...document.querySelectorAll("#table .scene")],gap=S.cfg.anim?110:0;
-  sc.forEach((s,i)=>setTimeout(()=>{s.querySelector(".card").classList.add("up");s.classList.add("live");blip(i)},i*gap));
+  sc.forEach((s,i)=>reveal(s,i*gap,i));
   updateRR();
   lastIds=new Set(picks.flatMap(p=>p.cards.map(c=>c.id)));
   const line=picks.map(p=>(ds.length>1?p.name+": ":"")+p.cards.map(c=>c.title).join(", ")).join("  |  ");
@@ -444,7 +519,7 @@ async function reroll(sc){
   setBusy(true);rrUsed++;updateRR();
   const cd=sc.querySelector(".card");cd.classList.remove("up");await sleep(flipMs()+80);
   const c=pool[wpick(pool)];g.cards[i]=c;
-  fillCard(sc.querySelector(".front"),c);fit();void cd.offsetWidth;cd.classList.add("up");blip(0);
+  fillCard(sc.querySelector(".front"),c);fit();void cd.offsetWidth;reveal(sc,0,0);
   $("#live").textContent="Nova carta: "+c.title;
   await sleep(flipMs());setBusy(false);
 }
@@ -564,9 +639,7 @@ $("#bExp").onclick=()=>{
   a.href=URL.createObjectURL(new Blob([JSON.stringify({versao:3,title:S.title,decks:S.decks,cfg:S.cfg,profiles:S.profiles},null,1)],{type:"application/json"}));
   a.download="decks-deadlock-"+new Date().toISOString().slice(0,10)+".json";a.click();URL.revokeObjectURL(a.href);toast("Tudo salvo em arquivo.");
 };
-let impMode="replace";
-$("#bImp").onclick=()=>{impMode="replace";$("#fileJson").click()};
-$("#bImpAdd").onclick=()=>{impMode="add";$("#fileJson").click()};
+$("#bImp").onclick=()=>$("#fileJson").click();
 function applyPayload(j){
   S.decks=j.decks.map(cleanDeck);if(j.title)S.title=String(j.title);
   if(Array.isArray(j.profiles))S.profiles=j.profiles.map(cleanProfile).filter(Boolean);
@@ -577,20 +650,33 @@ function mergeDecks(list){
   const st=Date.now();
   return list.map(cleanDeck).map((d,i)=>{d.id="m"+st+"_"+i;d.cards.forEach((c,j)=>{c.id=d.id+"_"+j});return d});
 }
+function addDecks(list){
+  withUndo(list.length+" deck(s) adicionado(s).",()=>{const m=mergeDecks(list);S.decks.push(...m);if(!S.active.length)S.active=[m[0].id];ed.d=m[0].id;ed.c=m[0].cards[0]?.id;renderEd()});
+}
+function runImport(j,mode){
+  const list=Array.isArray(j.decks)&&j.decks.length?j.decks:null;
+  if(list&&mode==="replace")withUndo("Carregado: "+list.length+" deck(s).",()=>{applyPayload(j);renderEd()});
+  else if(list)addDecks(list);
+  else{
+    const cards=Array.isArray(j)?j:j.deck;if(!Array.isArray(cards)||!cards.length)throw 0;
+    withUndo("Deck antigo adicionado como 'Importado'.",()=>{const d=cleanDeck({name:"Importado",cards},S.decks.length);S.decks.push(d);if(!S.active.length)S.active=[d.id];ed.d=d.id;ed.c=d.cards[0]?.id;renderEd()});
+  }
+}
+let pend=null;
 $("#fileJson").onchange=e=>{
   const f=e.target.files[0];e.target.value="";if(!f)return;
   f.text().then(t=>{try{
-    const j=JSON.parse(t),list=Array.isArray(j.decks)&&j.decks.length?j.decks:null;
-    if(list&&impMode==="replace"){
-      withUndo("Carregado: "+list.length+" deck(s).",()=>{applyPayload(j);renderEd()});
-    }else if(list){
-      withUndo(list.length+" deck(s) adicionado(s).",()=>{const m=mergeDecks(list);S.decks.push(...m);if(!S.active.length)S.active=[m[0].id];ed.d=m[0].id;ed.c=m[0].cards[0]?.id;renderEd()});
-    }else{
-      const cards=Array.isArray(j)?j:j.deck;if(!Array.isArray(cards)||!cards.length)throw 0;
-      withUndo("Deck antigo adicionado como 'Importado'.",()=>{const d=cleanDeck({name:"Importado",cards},S.decks.length);S.decks.push(d);if(!S.active.length)S.active=[d.id];ed.d=d.id;ed.c=d.cards[0]?.id;renderEd()});
-    }
+    const j=JSON.parse(t);
+    if(Array.isArray(j.decks)&&j.decks.length&&S.decks.length){
+      pend=j;
+      $("#impMsg").textContent="O arquivo tem "+j.decks.length+" deck(s): "+j.decks.map(d=>String(d&&d.name||"sem nome")).join(", ").slice(0,160)+". O que fazer?";
+      $("#dlgImp").showModal();
+    }else runImport(j,"replace");
   }catch(err){toast("Arquivo inválido. Use um .json salvo por este site.")}});
 };
+$("#impAdd").onclick=()=>{$("#dlgImp").close();if(pend)runImport(pend,"add");pend=null};
+$("#impRep").onclick=()=>{$("#dlgImp").close();if(pend)runImport(pend,"replace");pend=null};
+$("#impCancel").onclick=()=>{$("#dlgImp").close();pend=null};
 $("#bClose").onclick=()=>$("#dlg").close();
 $("#dlg").addEventListener("close",()=>{if(ed.dirty){ed.dirty=false;refreshAll();renderHist()}});
 
@@ -634,6 +720,18 @@ function renderSet(){
   br.append(bu,bx);
   const wr=el("div","row");
   Object.entries(RARS).forEach(([k,n])=>{const i=el("input");i.type="number";i.min=0;i.max=100;i.value=c.w[k];i.oninput=()=>{c.w[k]=Math.max(0,+i.value||0);save()};wr.append(field("Peso "+n,i))});
+  const bgg=el("div","bkgrid");
+  Object.entries(BGFX).forEach(([k,n])=>{const o=el("button","bkopt"+(c.bgfx===k?" on":""));o.setAttribute("aria-pressed",c.bgfx===k);const m=el("div","bgm");m.dataset.b=k;o.append(m,el("span","",n));o.onclick=()=>{c.bgfx=k;styl();renderSet()};bgg.append(o)});
+  const fxRows=el("div","fxrows"),pv=el("div","");pv.id="fxPrev";
+  Object.entries(RARS).forEach(([rk,rn])=>{
+    const row=el("div","row fxrow"),sIn=el("select"),sFx=el("select");
+    Object.entries(ENTRADAS).forEach(([k,n])=>{const o=el("option","",n);o.value=k;sIn.append(o)});
+    Object.entries(EFEITOS).forEach(([k,n])=>{const o=el("option","",n);o.value=k;sFx.append(o)});
+    sIn.value=c.fx[rk].in;sFx.value=c.fx[rk].fx;
+    sIn.onchange=()=>{c.fx[rk].in=sIn.value;save()};sFx.onchange=()=>{c.fx[rk].fx=sFx.value;save()};
+    const tb=el("button","","Testar");tb.onclick=()=>testFx(rk,pv);
+    row.append(el("strong","",rn),field("Entrada",sIn),field("Efeito",sFx),tb);fxRows.append(row);
+  });
   const rr=el("input");rr.type="number";rr.min=0;rr.max=20;rr.value=c.rr;rr.oninput=()=>{c.rr=Math.max(0,Math.min(20,+rr.value||0));save()};
   const kb=Math.round((localStorage.getItem(KEY)||"").length*2/1024);
   const rs=el("button","","Restaurar configurações padrão");rs.onclick=()=>{const p=S.cfg.profile;S.cfg=DEF_CFG();applyCfg();save();renderSet()};
@@ -642,8 +740,10 @@ function renderSet(){
     el("p","empty",c.mod?"O estilo foi alterado em relação ao perfil escolhido. Use 'Atualizar perfil' ou 'Salvar estilo atual como perfil' para guardar.":"Um perfil guarda cores, fonte, tamanho da carta e verso."),
     el("h3","","Cores"),grid,
     el("h3","","Verso das cartas"),bg,br,
+    el("h3","","Fundo do site"),bgg,rng("Intensidade do fundo","bgi",0,100,5,"%",true),
     el("h3","","Aparência"),field("Fonte dos títulos",fs),rng("Tamanho da carta","cw",200,440,10,"px",true),
     el("h3","","Animação e som"),chk(" Animações ligadas","anim"),rng("Duração da virada","flip",200,1600,50,"ms"),chk(" Som suave ao virar a carta","snd"),
+    el("h3","","Animações por raridade"),el("p","empty","Cada raridade pode ter uma entrada e um efeito diferentes. Use Testar para ver."),fxRows,pv,rng("Intensidade dos efeitos","fxn",50,200,10,"%"),
     el("h3","","Sorteio"),chk(" Percorrer o deck inteiro antes de repetir cartas","cycle"),chk(" Evitar repetir as cartas do sorteio anterior","norepeat"),chk(" Mostrar histórico","hist"),
     field("Trocas permitidas por sorteio (0 = ilimitado)",rr),
     el("p","empty","Chance de cada raridade (pesos relativos; 0 desliga a raridade):"),wr,
@@ -680,6 +780,29 @@ function toggleFs(){
 }
 document.addEventListener("fullscreenchange",()=>{if(!document.fullscreenElement&&isFs())toggleFs()});
 for(const d of document.querySelectorAll("dialog"))d.addEventListener("click",e=>{if(e.target===d)d.close()});
+function dl(name,obj){
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(obj,null,1)],{type:"application/json"}));
+  a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500);
+}
+function renderFiles(){
+  const b=$("#filesBody");b.innerHTML="";
+  const item=(title,desc,file,payload,canAdd)=>{
+    const r=el("div","fitem"),t=el("div","ft"),a=el("div","row");
+    t.append(el("strong","",title),el("span","empty",desc));
+    const bd=el("button","","Baixar");bd.onclick=()=>{dl(file,payload);toast("Arquivo baixado.")};a.append(bd);
+    if(canAdd){const ba=el("button","","Adicionar ao site");ba.onclick=()=>addDecks(payload.decks);a.append(ba)}
+    r.append(t,a);return r;
+  };
+  const n=EXEMPLOS.reduce((x,d)=>x+d.cards.length,0);
+  b.append(el("h3","","Decks prontos"),
+    item("Pacote completo",EXEMPLOS.length+" decks, "+n+" cartas","decks-exemplo.json",{versao:3,decks:EXEMPLOS},true));
+  EXEMPLOS.forEach(d=>b.append(item(d.name,d.cards.length+" cartas","deck-"+d.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\W+/g,"-")+".json",{versao:3,decks:[d]},true)));
+  b.append(el("h3","","Seus dados"),
+    item("Backup completo","Seus decks, perfis de estilo e configurações","decks-backup-"+new Date().toISOString().slice(0,10)+".json",{versao:3,title:S.title,decks:S.decks,cfg:S.cfg,profiles:S.profiles},false),
+    el("p","empty","Para usar um arquivo baixado depois, vá em Editar decks e clique em Importar arquivo."));
+}
+$("#bFiles").onclick=()=>{renderFiles();$("#dlgF").showModal()};
+$("#bFClose").onclick=()=>$("#dlgF").close();
 $("#bEdit").onclick=openEd;
 $("#bDraw").onclick=draw;
 $("#bCopy").onclick=copyTxt;
