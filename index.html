@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Decklock</title>
+<title>DeckLock</title>
 <meta name="description" content="Sorteador de cartas de desafio para partidas de Deadlock, com decks editáveis.">
 <meta name="theme-color" content="#222021">
-<meta property="og:title" content="Decklock">
+<meta property="og:title" content="DeckLock">
 <meta property="og:description" content="Sorteador de cartas de desafio para partidas de Deadlock, com decks editáveis.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23222021'/%3E%3Ccircle cx='16' cy='16' r='11' fill='none' stroke='%23efdebf' stroke-width='2'/%3E%3Cpath d='M6 16Q16 8 26 16Q16 24 6 16Z' fill='%23efdebf'/%3E%3Ccircle cx='16' cy='16' r='3.5' fill='%23222021'/%3E%3C/svg%3E">
 <style>
@@ -56,7 +56,7 @@ main{flex:1;display:flex;flex-direction:column;align-items:center;gap:28px;paddi
 .bk-eye{background:var(--bg)}
 .bk-eye::after{display:none}
 .bk-sunburst{background:repeating-conic-gradient(from 0deg at 50% 50%,var(--ba) 0 7.5deg,var(--bb) 7.5deg 15deg)}
-.bk-plain{background:var(--ba)}
+.bk-plain,.bk-emblem{background:var(--ba)}
 .bk-custom{background:var(--bg) var(--bkimg,none) center/cover no-repeat}
 .bk-custom::after{display:none}
 .bkgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:10px}
@@ -138,7 +138,7 @@ header{border-bottom:0;gap:10px;padding:26px 24px 8px}
 .primary:active:not([aria-disabled=true]){transform:scale(.97)}
 @keyframes breathe{50%{box-shadow:0 6px 36px color-mix(in srgb,var(--gold) 55%,transparent)}}
 .back,.front:not(.r-lendaria){box-shadow:0 16px 34px #000a}
-.front{background:linear-gradient(170deg,color-mix(in srgb,var(--gold) 8%,var(--bg2)),var(--bg2) 55%)}
+html[data-face=gradient] .front{background:linear-gradient(170deg,color-mix(in srgb,var(--gold) 8%,var(--bg2)),var(--bg2) 55%)}
 .front::after{content:"";position:absolute;inset:6px;border:1px solid color-mix(in srgb,var(--gold) 32%,transparent);border-radius:9px;pointer-events:none}
 .meta span:last-child{border:1px solid currentColor;border-radius:99px;padding:0 .75em}
 .r-rara .meta span:last-child{color:var(--rare)}.r-lendaria .meta span:last-child{color:var(--leg)}
@@ -186,20 +186,35 @@ html[data-bg=rays],.bgm[data-b=rays]{--fx:repeating-conic-gradient(from 0deg at 
 #fxPrev{display:flex;justify-content:center}#fxPrev .scene{width:170px}
 .fitem{display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between;padding:10px 14px;border:1px solid var(--line);border-radius:10px;background:var(--bg2)}
 .ft{display:grid;gap:2px}
+
+/* ---------- Cabeçalho com ícones ---------- */
+header{display:grid;grid-template-columns:1fr auto 1fr;grid-template-areas:"l t r" "o o o";align-items:center;column-gap:16px;row-gap:8px;padding:16px 20px 6px;text-align:center}
+.hl{grid-area:l;display:flex;gap:8px;justify-self:start}.hr{grid-area:r;display:flex;gap:8px;justify-self:end}
+header .title{grid-area:t}header .orn{grid-area:o;justify-self:center}
+.ibtn{position:relative;width:44px;height:44px;min-height:0;padding:0;display:grid;place-items:center;border-radius:12px}
+.ibtn svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ibtn::after{content:attr(data-tip);position:absolute;top:calc(100% + 8px);padding:4px 10px;border-radius:6px;background:var(--panel);color:var(--ink);border:1px solid var(--line);font:500 .8rem system-ui,sans-serif;white-space:nowrap;opacity:0;pointer-events:none;transform:translateY(-3px);transition:opacity .15s,transform .15s;z-index:30}
+.hl .ibtn::after{left:0}.hr .ibtn::after{right:0}
+.ibtn:hover::after,.ibtn:focus-visible::after{opacity:1;transform:none}
+@media(hover:none){.ibtn::after{display:none}}
+@media(max-width:640px){header{grid-template-columns:1fr 1fr;grid-template-areas:"l r" "t t" "o o"}}
+.linkbtn{min-height:30px;padding:2px 12px;font-size:.85rem;margin:6px 0 2px}
 @media(prefers-reduced-motion:reduce){.primary,.scene{animation:none!important}}
 </style>
 </head>
 <body>
 <noscript><p style="padding:24px;text-align:center">Este site precisa de JavaScript para funcionar.</p></noscript>
 <header>
-  <h1 class="title" id="title" contenteditable="true" spellcheck="false" role="textbox" aria-label="Título do site (editável)" title="Clique para editar o título" data-ph="Título do site"></h1>
-  <div class="orn" aria-hidden="true"><span></span><svg viewBox="0 0 40 40" width="30" height="30" style="stroke:var(--gold);fill:none;stroke-width:1.6;flex:none"><circle cx="20" cy="20" r="17"/><path d="M6 20Q20 8 34 20Q20 32 6 20Z" style="fill:var(--gold)"/><circle cx="20" cy="20" r="5" style="fill:var(--bg);stroke:none"/><circle cx="20" cy="20" r="2.4" style="fill:var(--gold);stroke:none"/></svg><span></span></div>
-  <div class="tools">
-    <button id="bEdit">Editar decks</button>
-    <button id="bFiles">Arquivos</button>
-    <button id="bSet">Configurações</button>
-    <button id="bFs">Tela cheia</button>
+  <div class="hl">
+    <button class="ibtn" id="bEdit" aria-label="Editar decks" data-tip="Editar decks (E)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2.5 2.5 0 0 0-3.5-3.5L4.5 16.5V20z"/><path d="M14 7l3 3"/></svg></button>
+    <button class="ibtn" id="bFiles" aria-label="Arquivos" data-tip="Arquivos (A)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg></button>
   </div>
+  <h1 class="title" id="title" contenteditable="true" spellcheck="false" role="textbox" aria-label="Título do site (editável)" title="Clique para editar o título" data-ph="Título do site"></h1>
+  <div class="hr">
+    <button class="ibtn" id="bSet" aria-label="Configurações" data-tip="Configurações (S)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.88 9.87 L21.86 10.31 L21.86 13.69 L18.88 14.13 L18.37 15.36 L20.17 17.77 L17.77 20.17 L15.36 18.37 L14.13 18.88 L13.69 21.86 L10.31 21.86 L9.87 18.88 L8.64 18.37 L6.23 20.17 L3.83 17.77 L5.63 15.36 L5.12 14.13 L2.14 13.69 L2.14 10.31 L5.12 9.87 L5.63 8.64 L3.83 6.23 L6.23 3.83 L8.64 5.63 L9.87 5.12 L10.31 2.14 L13.69 2.14 L14.13 5.12 L15.36 5.63 L17.77 3.83 L20.17 6.23 L18.37 8.64Z"/><circle cx="12" cy="12" r="3"/></svg></button>
+    <button class="ibtn" id="bFs" aria-label="Tela cheia" aria-pressed="false" data-tip="Tela cheia (F)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+  </div>
+  <div class="orn" aria-hidden="true"><span></span><svg viewBox="0 0 40 40" width="30" height="30" style="stroke:var(--gold);fill:none;stroke-width:1.6;flex:none"><circle cx="20" cy="20" r="17"/><path d="M6 20Q20 8 34 20Q20 32 6 20Z" style="fill:var(--gold)"/><circle cx="20" cy="20" r="5" style="fill:var(--bg);stroke:none"/><circle cx="20" cy="20" r="2.4" style="fill:var(--gold);stroke:none"/></svg><span></span></div>
 </header>
 <main id="main">
   <section class="stage">
@@ -211,12 +226,13 @@ html[data-bg=rays],.bgm[data-b=rays]{--fx:repeating-conic-gradient(from 0deg at 
       <button class="primary" id="bDraw">Sortear</button>
       <button id="bCopy" title="Copiar o resultado (C)">Copiar</button>
     </div>
-    <p class="empty hint">Atalhos: espaço sorteia · 1 a 8 quantidade · F tela cheia · E editor · S configurações · C copiar</p>
+    <p class="empty hint">Atalhos: espaço sorteia · 1 a 8 quantidade · F tela cheia · E editor · A arquivos · S configurações · C copiar</p>
   </section>
   <details class="histbox" id="histbox" open>
     <summary>Últimos sorteios</summary>
     <ul id="hist"></ul>
     <p class="empty" id="histEmpty">Nenhum sorteio ainda.</p>
+    <button id="bHistClear" class="linkbtn" hidden>Limpar histórico</button>
   </details>
 </main>
 <footer>Projeto de fã, sem vínculo com a Valve. Deadlock é marca da Valve Corporation.</footer>
@@ -279,7 +295,7 @@ const PROFILES={
 "Rubi":{back:"plain",colors:{bg:"#140b0d",bg2:"#1e1013",panel:"#271519",ink:"#f1e3dc",mute:"#a58f88",gold:"#e0b060",rare:"#5ea8c8",leg:"#e8574a",line:"#4a2a30"}},
 "Claro":{back:"plain",colors:{bg:"#f2ede3",bg2:"#fbf8f1",panel:"#e7dfcf",ink:"#241d16",mute:"#6e6252",gold:"#a8741a",rare:"#1f7a8c",leg:"#b3341f",line:"#c9bca3"}}};
 const FONTS={serif:["Serifada","Georgia,'Times New Roman',serif"],sans:["Sem serifa","system-ui,sans-serif"],cond:["Condensada","'Arial Narrow',Bahnschrift,Impact,sans-serif"]};
-const DEF_CFG=()=>({profile:"b:Deadlock",mod:false,colors:{...PROFILES.Deadlock.colors},back:"eye",backImg:"",bgfx:"glow",bgi:100,font:"serif",cw:300,flip:700,anim:!matchMedia("(prefers-reduced-motion: reduce)").matches,snd:false,fxn:100,fx:{comum:{in:"flip",fx:"none"},rara:{in:"rise",fx:"glow"},lendaria:{in:"spin",fx:"confetti"}},hist:true,norepeat:true,cycle:true,rr:0,w:{comum:60,rara:30,lendaria:10}});
+const DEF_CFG=()=>({profile:"b:Deadlock",mod:false,colors:{...PROFILES.Deadlock.colors},back:"eye",backImg:"",bgfx:"glow",face:"solid",bgi:100,font:"serif",cw:300,flip:700,anim:!matchMedia("(prefers-reduced-motion: reduce)").matches,snd:false,fxn:100,fx:{comum:{in:"flip",fx:"none"},rara:{in:"rise",fx:"glow"},lendaria:{in:"spin",fx:"confetti"}},hist:true,norepeat:true,cycle:true,rr:0,w:{comum:60,rara:30,lendaria:10}});
 
 const DEF_DECKS=()=>[{id:"d1",name:"Meu deck",cards:[{id:"c1",title:"Primeira carta",text:"Edite esta carta em Editar decks ou crie outras. Decks prontos ficam na aba Arquivos.",cat:"Geral",rar:"comum",img:""}]}];
 const EXEMPLOS=[{"id":"g","name":"Grupo","cards":[{"id":"g0","title":"Pick do colega","text":"Cada um joga o herói que o colega ao lado escolheu para você. Sem veto, sem troca.","cat":"Caos","rar":"comum","img":""},{"id":"g1","title":"Herói esquecido","text":"Todo mundo joga o herói que menos usou na conta. Se nunca jogou nenhum, vale qualquer um.","cat":"Caos","rar":"comum","img":""},{"id":"g2","title":"Sem arma","text":"Nenhum item de Arma na partida inteira. Só Vitalidade e Espírito.","cat":"Build","rar":"comum","img":""},{"id":"g3","title":"Categoria única","text":"Cada um escolhe uma categoria (Arma, Vitalidade ou Espírito) e só compra dela.","cat":"Build","rar":"comum","img":""},{"id":"g4","title":"Só passivos","text":"Nenhum item ativo na build. Se a luta depende de apertar um botão, ele não existe.","cat":"Build","rar":"rara","img":""},{"id":"g5","title":"Mão fechada","text":"Ninguém gasta souls antes do minuto 5. A primeira compra sai toda de uma vez.","cat":"Build","rar":"rara","img":""},{"id":"g6","title":"Sem zipline","text":"Zipline proibida. Quem chegar atrasado na luta, chegou a pé.","cat":"Handicap","rar":"comum","img":""},{"id":"g7","title":"Lane no corpo a corpo","text":"Até o minuto 5, só melee e habilidades. Tiro só depois disso.","cat":"Handicap","rar":"comum","img":""},{"id":"g8","title":"Minimapa desligado","text":"Ninguém olha o minimapa. Posição do inimigo só por callout no voz.","cat":"Handicap","rar":"rara","img":""},{"id":"g9","title":"Lane única","text":"O grupo todo na mesma lane até a primeira Guardian cair.","cat":"Objetivo","rar":"comum","img":""},{"id":"g10","title":"Prioridade Mid-Boss","text":"Assim que o Mid-Boss nascer, o grupo vai nele. Sem votação.","cat":"Objetivo","rar":"rara","img":""},{"id":"g11","title":"Urn do mais pobre","text":"Quem carrega a Soul Urn é sempre o jogador com menos souls do grupo.","cat":"Objetivo","rar":"rara","img":""},{"id":"g12","title":"Primeiros 5 no camp","text":"Ninguém fica em lane nos primeiros 5 minutos. Todo mundo no jungle.","cat":"Objetivo","rar":"comum","img":""},{"id":"g13","title":"Sem falar","text":"Sem voz até a primeira Guardian cair. Só pings e o chat de texto.","cat":"Comunicação","rar":"rara","img":""},{"id":"g14","title":"Só perguntas","text":"No voz, só vale falar em forma de pergunta. Afirmou, perdeu o turno de falar.","cat":"Comunicação","rar":"comum","img":""},{"id":"g15","title":"Sem nomes","text":"Não vale dizer nome de herói ou de item. Tem que descrever o que quer dizer.","cat":"Comunicação","rar":"rara","img":""},{"id":"g16","title":"Narrador morto","text":"Quem morreu narra a partida para o grupo até renascer.","cat":"Comunicação","rar":"comum","img":""},{"id":"g17","title":"Elogio obrigatório","text":"Depois de cada morte, o grupo elogia uma coisa que o inimigo fez bem. Sem ironia.","cat":"Comunicação","rar":"comum","img":""},{"id":"g18","title":"Líder rotativo","text":"A cada 5 minutos muda o líder. Só ele chama luta, objetivo e recuo.","cat":"Caos","rar":"comum","img":""},{"id":"g19","title":"Quem tem menos decide","text":"O jogador com menos kills decide para onde o grupo vai.","cat":"Caos","rar":"comum","img":""},{"id":"g20","title":"Aposta de kills","text":"Antes de começar, cada um crava quantas kills vai fazer. Quem errar por mais escolhe o herói por último na próxima.","cat":"Caos","rar":"rara","img":""},{"id":"g21","title":"Dado de tudo","text":"Rolem dado para herói, lane e categoria de item de cada um. Sem reclamar do resultado.","cat":"Caos","rar":"rara","img":""},{"id":"g22","title":"Duas cartas","text":"Sorteie mais uma carta e cumpram as duas ao mesmo tempo.","cat":"Caos","rar":"lendaria","img":""},{"id":"g23","title":"Sem arma, sem voz","text":"Nenhum item de Arma e ninguém fala no voz até o minuto 10.","cat":"Caos","rar":"lendaria","img":""},{"id":"g24","title":"Tudo no dado","text":"Herói, lane, itens permitidos e líder sorteados. O grupo só executa.","cat":"Caos","rar":"lendaria","img":""}]},{"id":"i","name":"Individual","cards":[{"id":"i0","title":"Sem tiro","text":"Só habilidades e melee até o minuto 8.","cat":"Handicap","rar":"comum","img":""},{"id":"i1","title":"Sem ultimate","text":"Não use a habilidade 4 até o minuto 15.","cat":"Handicap","rar":"comum","img":""},{"id":"i2","title":"Pé no chão","text":"Sem zipline para você nesta partida.","cat":"Handicap","rar":"comum","img":""},{"id":"i3","title":"Pacifista de tropa","text":"Tropas só morrem no melee.","cat":"Handicap","rar":"comum","img":""},{"id":"i4","title":"Parry sempre","text":"Tente parry em toda luta, acerte ou não.","cat":"Handicap","rar":"rara","img":""},{"id":"i5","title":"Sem ativos","text":"Nenhum item ativo na sua build.","cat":"Build","rar":"comum","img":""},{"id":"i6","title":"Só Espírito","text":"Só compra itens de Espírito.","cat":"Build","rar":"rara","img":""},{"id":"i7","title":"Zero Vitalidade","text":"Nenhum item de Vitalidade. Você vive do que tem.","cat":"Build","rar":"rara","img":""},{"id":"i8","title":"Compra só morto","text":"Só compra itens quando estiver morto.","cat":"Build","rar":"rara","img":""},{"id":"i9","title":"Callout de tudo","text":"Narre em voz alta o que você está fazendo, o tempo todo.","cat":"Comunicação","rar":"comum","img":""},{"id":"i10","title":"Sombra","text":"Fique sempre perto do jogador à sua esquerda.","cat":"Objetivo","rar":"comum","img":""},{"id":"i11","title":"Dono da Urn","text":"Você carrega a Soul Urn sempre que ela estiver disponível.","cat":"Objetivo","rar":"rara","img":""},{"id":"i12","title":"Herói do sorteio","text":"Joga o herói que o grupo sortear no deck de Heróis, sem reclamar.","cat":"Caos","rar":"lendaria","img":""}]},{"id":"h","name":"Heróis","cards":[{"id":"h0","title":"Abrams","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h1","title":"Apollo","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h2","title":"Bebop","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h3","title":"Billy","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h4","title":"Calico","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h5","title":"Celeste","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h6","title":"Doorman","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h7","title":"Drifter","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h8","title":"Dynamo","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h9","title":"Graves","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h10","title":"Grey Talon","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h11","title":"Haze","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h12","title":"Holliday","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h13","title":"Infernus","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h14","title":"Ivy","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h15","title":"Kelvin","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h16","title":"Lady Geist","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h17","title":"Lash","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h18","title":"McGinnis","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h19","title":"Mina","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h20","title":"Mirage","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h21","title":"Mo & Krill","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h22","title":"Paige","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h23","title":"Paradox","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h24","title":"Pocket","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h25","title":"Rem","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h26","title":"Seven","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h27","title":"Shiv","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h28","title":"Silver","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h29","title":"Sinclair","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h30","title":"Venator","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h31","title":"Victor","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h32","title":"Vindicta","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h33","title":"Viscous","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h34","title":"Vyper","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h35","title":"Warden","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h36","title":"Wraith","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h37","title":"Yamato","text":"","cat":"Herói","rar":"comum","img":""}]}];
@@ -302,7 +318,7 @@ function eyeSvg(){
   return `<svg viewBox="0 0 250 350" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g style="stroke:var(--ink);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><path d="M0 175H73M177 175H250M125 0V102M125 248V350"/><circle cx="125" cy="175" r="73"/>${sp}</g><path d="M73 175Q125 125 177 175Q125 225 73 175Z" style="fill:var(--ink)"/><circle cx="125" cy="175" r="21" style="fill:var(--bg)"/><circle cx="125" cy="175" r="11" style="fill:var(--ink)"/></svg>`;
 }
 const DIA='<svg viewBox="0 0 250 350" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="M125 130l34 45-34 45-34-45z" style="fill:var(--bg);stroke:var(--gold);stroke-width:2.5"/><path d="M125 150l16 25-16 25-16-25z" style="fill:var(--gold)"/></svg>';
-const BACKS={stripes:["Listras",""],eye:["Olho",eyeSvg()],diamonds:["Losangos",""],sunburst:["Raios",DIA],plain:["Liso",DIA],custom:["Imagem",""]};
+const BACKS={stripes:["Listras",""],eye:["Olho",eyeSvg()],diamonds:["Losangos",""],sunburst:["Raios",DIA],plain:["Liso",""],emblem:["Losango",DIA],custom:["Imagem",""]};
 function paintBack(b,kind,img){
   if(img===undefined)img=S.cfg.backImg;
   if(!BACKS[kind]||(kind==="custom"&&!img))kind="stripes";
@@ -312,6 +328,7 @@ function paintBack(b,kind,img){
 }
 const ENTRADAS={flip:"Virar (padrão)",spin:"Giro duplo",rise:"Subir",drop:"Cair com quique",zoom:"Zoom",slide:"Deslizar",shake:"Tremer",tilt:"Inclinar 3D"};
 const EFEITOS={none:"Nenhum",glow:"Ondas de luz",sparks:"Faíscas",confetti:"Confete",flash:"Clarão",rain:"Chuva de brilho",burst:"Explosão (tudo junto)"};
+const FACES={solid:"Liso",gradient:"Degradê suave"};
 const BGFX={plain:"Plano",glow:"Brilho suave",aurora:"Aurora",spot:"Holofote",gradient:"Degradê",vignette:"Vinheta",dots:"Pontos",grain:"Granulado",rays:"Raios"};
 const okImg=v=>typeof v==="string"&&v.startsWith("data:image/");
 function cleanColors(o){const d=DEF_CFG().colors,r={};for(const k in d)r[k]=/^#[0-9a-f]{6}$/i.test(o&&o[k])?o[k]:d[k];return r}
@@ -323,24 +340,25 @@ function cleanCfg(c){
   if(!FONTS[o.font])o.font="serif";
   const fx={};for(const k of Object.keys(RARS)){const v=(c.fx&&c.fx[k])||d.fx[k];fx[k]={in:ENTRADAS[v.in]?v.in:d.fx[k].in,fx:EFEITOS[v.fx]?v.fx:d.fx[k].fx}}o.fx=fx;
   if(!BGFX[o.bgfx])o.bgfx="glow";
+  if(!FACES[o.face])o.face="solid";
   o.bgi=Math.min(100,Math.max(0,isNaN(+o.bgi)?100:+o.bgi));o.fxn=Math.min(200,Math.max(50,+o.fxn||100));
   o.cw=Math.min(440,Math.max(200,+o.cw||300));o.flip=Math.min(1600,Math.max(0,+o.flip||700));
   if(c.profile===undefined)o.profile=PROFILES[c.preset]?"b:"+c.preset:(c.preset===undefined?d.profile:"");
   const bp=typeof o.profile==="string"&&o.profile.startsWith("b:")?PROFILES[o.profile.slice(2)]:null;
-  if(bp&&!o.mod){o.colors=cleanColors(bp.colors);o.back=bp.back;o.bgfx=bp.bgfx||"glow"}
+  if(bp&&!o.mod){o.colors=cleanColors(bp.colors);o.back=bp.back;o.bgfx=bp.bgfx||"glow";o.face=bp.face||"solid"}
   return o;
 }
 function cleanProfile(p){
   if(!p||!p.id||!p.name||!p.style)return null;
   const s=p.style;
-  return{id:String(p.id),name:String(p.name),style:{colors:cleanColors(s.colors),font:FONTS[s.font]?s.font:"serif",cw:Math.min(440,Math.max(200,+s.cw||300)),back:BACKS[s.back]?s.back:"stripes",backImg:okImg(s.backImg)?s.backImg:"",bgfx:BGFX[s.bgfx]?s.bgfx:"glow"}};
+  return{id:String(p.id),name:String(p.name),style:{colors:cleanColors(s.colors),font:FONTS[s.font]?s.font:"serif",cw:Math.min(440,Math.max(200,+s.cw||300)),back:BACKS[s.back]?s.back:"stripes",backImg:okImg(s.backImg)?s.backImg:"",bgfx:BGFX[s.bgfx]?s.bgfx:"glow",face:FACES[s.face]?s.face:"solid"}};
 }
 const allProfiles=()=>[...Object.entries(PROFILES).map(([n,p])=>({id:"b:"+n,name:n,style:p})),...S.profiles];
-const curStyle=()=>({colors:{...S.cfg.colors},font:S.cfg.font,cw:S.cfg.cw,back:S.cfg.back,backImg:S.cfg.backImg||"",bgfx:S.cfg.bgfx});
+const curStyle=()=>({colors:{...S.cfg.colors},font:S.cfg.font,cw:S.cfg.cw,back:S.cfg.back,backImg:S.cfg.backImg||"",bgfx:S.cfg.bgfx,face:S.cfg.face});
 function applyProfile(id){
   const p=allProfiles().find(x=>x.id===id);if(!p)return;
   const s=p.style,c=S.cfg;
-  c.colors=cleanColors(s.colors);c.font=s.font||"serif";c.cw=s.cw||300;c.back=s.back||"stripes";c.backImg=s.backImg||"";c.bgfx=s.bgfx||"glow";c.profile=id;c.mod=false;
+  c.colors=cleanColors(s.colors);c.font=s.font||"serif";c.cw=s.cw||300;c.back=s.back||"stripes";c.backImg=s.backImg||"";c.bgfx=s.bgfx||"glow";c.face=s.face||"solid";c.profile=id;c.mod=false;
   applyCfg();save();
 }
 let S=load(true),filt=new Set(),lastIds=new Set(),used={},table=[],busy=false,rrUsed=0,ed={d:null,c:null,q:"",dirty:false};
@@ -357,7 +375,7 @@ function load(first){
   if(!s||!Array.isArray(s.decks))s={decks:DEF_DECKS()};
   s.cfg=cleanCfg(s.cfg);
   s.profiles=(Array.isArray(s.profiles)?s.profiles:[]).map(cleanProfile).filter(Boolean);
-  s.title=s.title==="Deck do Caos \u00b7 Deadlock"?"Decklock":(s.title||"Decklock");
+  s.title=["Deck do Caos \u00b7 Deadlock","Decklock"].includes(s.title)?"DeckLock":(s.title||"DeckLock");
   s.active=(s.active||[]).filter(id=>s.decks.some(x=>x.id===id));
   if(!s.active.length&&s.decks.length)s.active=[s.decks[0].id];
   s.count=Math.min(8,Math.max(1,s.count||1));
@@ -399,7 +417,7 @@ function applyCfg(){
   for(const[k,v]of Object.entries(c.colors))r.setProperty("--"+k,v);
   r.setProperty("--cw",c.cw+"px");r.setProperty("--flip",(c.anim?c.flip:0)+"ms");
   r.setProperty("--fh",FONTS[c.font][1]);
-  r.setProperty("--bgi",c.bgi/100);document.documentElement.dataset.bg=c.bgfx;
+  r.setProperty("--bgi",c.bgi/100);document.documentElement.dataset.bg=c.bgfx;document.documentElement.dataset.face=c.face;
   r.setProperty("--onacc",lum(c.colors.gold)>.4?"#16110a":"#ffffff");
   r.colorScheme=lum(c.colors.bg)>.5?"light":"dark";
   document.querySelectorAll(".face.back").forEach(b=>paintBack(b,c.back,c.backImg));
@@ -558,7 +576,7 @@ function copyTxt(){
   navigator.clipboard?navigator.clipboard.writeText(t).then(ok,fb):fb();
 }
 function renderHist(){
-  const ul=$("#hist");ul.innerHTML="";$("#histEmpty").hidden=S.hist.length>0;
+  const ul=$("#hist");ul.innerHTML="";$("#histEmpty").hidden=S.hist.length>0;$("#bHistClear").hidden=!S.hist.length;
   S.hist.forEach(h=>ul.append(el("li","",h)));
 }
 function renderDeckChips(){
@@ -633,7 +651,10 @@ function renderForm(){
   const bc=el("button","","Duplicar");bc.onclick=()=>{const n={...c,id:"n"+Date.now(),title:c.title+" (cópia)"};d.cards.splice(d.cards.indexOf(c)+1,0,n);ed.c=n.id;mark();renderEd();toast("Carta duplicada.")};
   const bd=el("button","danger","Excluir carta");
   bd.onclick=()=>withUndo("Carta excluída.",()=>{const i=d.cards.indexOf(c);d.cards.splice(i,1);ed.c=d.cards[Math.min(i,d.cards.length-1)]?.id;renderEd()});
-  ar.append(bc,bd);
+  const mv=dir=>{const i=d.cards.indexOf(c),j=i+dir;if(j<0||j>=d.cards.length)return;[d.cards[i],d.cards[j]]=[d.cards[j],d.cards[i]];mark();renderList()};
+  const bu=el("button","","Subir na lista");bu.onclick=()=>mv(-1);
+  const bn=el("button","","Descer na lista");bn.onclick=()=>mv(1);
+  ar.append(bu,bn,bc,bd);
   const fl=el("div","fields");fl.append(field("Título",t),field("Texto",x),row,el("label","","Imagem da carta"),ir,ar,dl);
   const pv=el("div");pv.id="prev";form.append(fl,pv);renderPrev(c);
 }
@@ -732,6 +753,7 @@ function renderSet(){
   const grid=el("div","cgrid");
   COLORS.forEach(([k,n])=>{const i=el("input");i.type="color";i.value=c.colors[k];i.oninput=()=>{c.colors[k]=i.value;styl()};grid.append(field(n,i))});
   const fs=el("select");Object.entries(FONTS).forEach(([k,v])=>{const o=el("option","",v[0]);o.value=k;fs.append(o)});fs.value=c.font;fs.onchange=()=>{c.font=fs.value;styl()};
+  const fcs=el("select");Object.entries(FACES).forEach(([k,n])=>{const o=el("option","",n);o.value=k;fcs.append(o)});fcs.value=c.face;fcs.onchange=()=>{c.face=fcs.value;styl()};
   const bg=el("div","bkgrid");
   Object.entries(BACKS).forEach(([k,v])=>{
     const o=el("button","bkopt"+(c.back===k?" on":""));o.setAttribute("aria-pressed",c.back===k);o.title=v[0];
@@ -768,7 +790,7 @@ function renderSet(){
     el("h3","","Perfis de estilo"),field("Perfil",prof),pr,
     el("p","empty",c.mod?"O estilo foi alterado em relação ao perfil escolhido. Use 'Atualizar perfil' ou 'Salvar estilo atual como perfil' para guardar.":"Um perfil guarda cores, fonte, tamanho da carta e verso."),
     el("h3","","Cores"),grid,
-    el("h3","","Verso das cartas"),bg,br,
+    el("h3","","Cartas"),field("Fundo da frente da carta",fcs),el("h3","","Verso das cartas"),bg,br,
     el("h3","","Fundo do site"),bgg,rng("Intensidade do fundo","bgi",0,100,5,"%",true),
     el("h3","","Aparência"),field("Fonte dos títulos",fs),rng("Tamanho da carta","cw",200,440,10,"px",true),
     el("h3","","Animação e som"),chk(" Animações ligadas","anim"),rng("Duração da virada","flip",200,1600,50,"ms"),chk(" Som suave ao virar a carta","snd"),
@@ -800,10 +822,10 @@ function syncTitle(){if(T.textContent!==S.title)T.textContent=S.title;document.t
 T.addEventListener("input",()=>{S.title=T.textContent;document.title=S.title||"Deck";save()});
 T.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key==="Escape"){e.preventDefault();T.blur()}});
 T.addEventListener("paste",e=>{e.preventDefault();document.execCommand("insertText",false,((e.clipboardData||window.clipboardData).getData("text")||"").replace(/\s+/g," "))});
-T.addEventListener("blur",()=>{S.title=T.textContent.trim();if(T.textContent!==S.title)T.textContent=S.title;save()});
+T.addEventListener("blur",()=>{S.title=T.textContent.trim()||"DeckLock";if(T.textContent!==S.title)T.textContent=S.title;document.title=S.title;save()});
 const isFs=()=>document.body.classList.contains("fs");
 function toggleFs(){
-  const on=!isFs();document.body.classList.toggle("fs",on);$("#bFs").textContent=on?"Sair da tela cheia":"Tela cheia";
+  const on=!isFs();document.body.classList.toggle("fs",on);$("#bFs").setAttribute("aria-pressed",on);
   try{if(on&&document.documentElement.requestFullscreen)document.documentElement.requestFullscreen().catch(()=>{});else if(!on&&document.fullscreenElement)document.exitFullscreen()}catch(e){}
   requestAnimationFrame(fit);
 }
@@ -823,9 +845,11 @@ function renderFiles(){
     r.append(t,a);return r;
   };
   const n=EXEMPLOS.reduce((x,d)=>x+d.cards.length,0);
+  const slug=t=>t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\W+/g,"-").replace(/^-|-$/g,"")||"deck";
   b.append(el("h3","","Decks prontos"),
     item("Pacote completo",EXEMPLOS.length+" decks, "+n+" cartas","decks-exemplo.json",{versao:3,decks:EXEMPLOS},true));
-  EXEMPLOS.forEach(d=>b.append(item(d.name,d.cards.length+" cartas","deck-"+d.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\W+/g,"-")+".json",{versao:3,decks:[d]},true)));
+  EXEMPLOS.forEach(d=>b.append(item(d.name,d.cards.length+" cartas","deck-"+slug(d.name)+".json",{versao:3,decks:[d]},true)));
+  if(S.decks.length){b.append(el("h3","","Seus decks"));S.decks.forEach(d=>b.append(item(d.name,d.cards.length+" cartas","deck-"+slug(d.name)+".json",{versao:3,decks:[d]},false)))}
   b.append(el("h3","","Seus dados"),
     item("Backup completo","Seus decks, perfis de estilo e configurações","decks-backup-"+new Date().toISOString().slice(0,10)+".json",{versao:3,title:S.title,decks:S.decks,cfg:S.cfg,profiles:S.profiles},false),
     el("p","empty","Para usar um arquivo baixado depois, vá em Editar decks e clique em Importar arquivo."));
@@ -840,6 +864,7 @@ function renderFiles(){
 }
 $("#bFiles").onclick=()=>{renderFiles();$("#dlgF").showModal()};
 $("#bFClose").onclick=()=>$("#dlgF").close();
+$("#bHistClear").onclick=()=>{S.hist=[];save();renderHist()};
 $("#bEdit").onclick=openEd;
 $("#bDraw").onclick=draw;
 $("#bCopy").onclick=copyTxt;
@@ -852,7 +877,7 @@ document.addEventListener("keydown",e=>{
   if(e.ctrlKey||e.metaKey||e.altKey||document.querySelector("dialog[open]")||/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)||document.activeElement.isContentEditable)return;
   const k=e.key.toLowerCase();
   if(e.code==="Space"){if(document.activeElement.tagName!=="BUTTON"){e.preventDefault();draw()}}
-  else if(k==="f")toggleFs();else if(k==="e")openEd();else if(k==="s")openSet();else if(k==="c")copyTxt();
+  else if(k==="f")toggleFs();else if(k==="e")openEd();else if(k==="a")$("#bFiles").click();else if(k==="s")openSet();else if(k==="c")copyTxt();
   else if(/^[1-8]$/.test(k))setCount(+k);
 });
 applyCfg();syncTitle();syncCount();renderDeckChips();renderChips();showBacks();renderHist();
@@ -865,7 +890,7 @@ async function bootstrap(){
   }catch(e){}
 }
 bootstrap();
-if(resetNotice)toast("O Decklock foi atualizado e voltou ao início. Seus dados antigos foram guardados na aba Arquivos.","Restaurar",()=>{if(confirm("Voltar aos dados de antes da atualização?"))restoreBackup()},20000);
+if(resetNotice)toast("O DeckLock foi atualizado e voltou ao início. Seus dados antigos foram guardados na aba Arquivos.","Restaurar",()=>{if(confirm("Voltar aos dados de antes da atualização?"))restoreBackup()},20000);
 </script>
 </body>
 </html>
