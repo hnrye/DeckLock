@@ -341,16 +341,16 @@ function load(){
   if(!s||!Array.isArray(s.decks))s={decks:DEF_DECKS()};
   s.cfg=cleanCfg(s.cfg);
   s.profiles=(Array.isArray(s.profiles)?s.profiles:[]).map(cleanProfile).filter(Boolean);
-  s.title=s.title||"Decklock";
+  s.title=s.title==="Deck do Caos \u00b7 Deadlock"?"Decklock":(s.title||"Decklock");
   s.active=(s.active||[]).filter(id=>s.decks.some(x=>x.id===id));
   if(!s.active.length&&s.decks.length)s.active=[s.decks[0].id];
   s.count=Math.min(8,Math.max(1,s.count||1));
   s.hist=Array.isArray(s.hist)?s.hist.slice(0,12):[];
   return s;
 }
-let st;
+let st,wiping=false;
 function save(){clearTimeout(st);st=setTimeout(flush,250)}
-function flush(){clearTimeout(st);try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast("Armazenamento cheio. Salve tudo em arquivo e use imagens menores.")}}
+function flush(){clearTimeout(st);if(wiping)return;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast("Armazenamento cheio. Salve tudo em arquivo e use imagens menores.")}}
 addEventListener("beforeunload",flush);
 document.addEventListener("visibilitychange",()=>{if(document.hidden)flush()});
 addEventListener("storage",e=>{
@@ -734,6 +734,8 @@ function renderSet(){
   });
   const rr=el("input");rr.type="number";rr.min=0;rr.max=20;rr.value=c.rr;rr.oninput=()=>{c.rr=Math.max(0,Math.min(20,+rr.value||0));save()};
   const kb=Math.round((localStorage.getItem(KEY)||"").length*2/1024);
+  const wp=el("button","danger","Apagar todos os dados e voltar ao início");
+  wp.onclick=()=>{if(!confirm("Isso apaga TODOS os seus decks, perfis e configurações neste navegador e volta ao estado inicial. Faça um backup na aba Arquivos antes. Continuar?"))return;wiping=true;clearTimeout(st);try{localStorage.removeItem(KEY)}catch(e){}location.reload()};
   const rs=el("button","","Restaurar configurações padrão");rs.onclick=()=>{const p=S.cfg.profile;S.cfg=DEF_CFG();applyCfg();save();renderSet()};
   b.append(el("h3","","Título"),field("Título do site (também dá para clicar nele no topo)",ti),
     el("h3","","Perfis de estilo"),field("Perfil",prof),pr,
@@ -747,7 +749,7 @@ function renderSet(){
     el("h3","","Sorteio"),chk(" Percorrer o deck inteiro antes de repetir cartas","cycle"),chk(" Evitar repetir as cartas do sorteio anterior","norepeat"),chk(" Mostrar histórico","hist"),
     field("Trocas permitidas por sorteio (0 = ilimitado)",rr),
     el("p","empty","Chance de cada raridade (pesos relativos; 0 desliga a raridade):"),wr,
-    el("h3","","Dados"),el("p","empty","Uso do armazenamento do navegador: cerca de "+kb+" KB de ~5000 KB. Imagens ocupam mais espaço. Faça backup com 'Salvar tudo em arquivo'. Para publicar seus decks como padrão do site no GitHub, exporte o arquivo e renomeie para decks.json."),rs);
+    el("h3","","Dados"),el("p","empty","Uso do armazenamento do navegador: cerca de "+kb+" KB de ~5000 KB. Imagens ocupam mais espaço. Faça backup com 'Salvar tudo em arquivo'. Para publicar seus decks como padrão do site no GitHub, exporte o arquivo e renomeie para decks.json."),rs,wp);
 }
 $("#fileBack").onchange=e=>{
   const f=e.target.files[0];e.target.value="";if(!f)return;
