@@ -205,6 +205,28 @@ body.fs #ver{display:none}
 #dlgNotice .set{text-align:center;padding:28px 24px}
 #dlgNotice .row{justify-content:center}
 #noticeMsg{margin:0;font-size:1.15rem}
+.acc{display:none;position:absolute;top:8px;left:8px;z-index:3;padding:2px 10px;min-height:30px;font-size:.8rem;background:color-mix(in srgb,var(--bg) 85%,transparent);opacity:0}
+.scene.live .acc{display:block}.scene:hover .acc,.acc:focus-visible{opacity:1}
+@media(hover:none){.scene.live .acc{opacity:.9}}
+.ctrl2{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center}
+.modelab{display:flex;align-items:center;gap:6px;font-size:.85rem}
+.ctrl2 select{width:auto;min-height:32px;padding:4px 8px}
+#quests{list-style:none;margin:6px 0 2px;padding:0;display:grid;gap:6px}
+.q{display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap;padding:8px 10px;border-radius:8px;background:var(--bg2);border-left:2px solid var(--gold)}
+.q.later{opacity:.6}.qt{display:grid}
+.q button{min-height:32px;padding:2px 12px;font-size:.85rem}
+#hist time{color:var(--mute);font-size:.8rem}
+#hist summary{cursor:pointer}#hist details .empty{margin:4px 0 0 12px}
+.sbars{display:grid;gap:8px;margin:6px 0}
+.sbar{display:grid;gap:3px;font-size:.85rem}
+.sbar i{display:block;height:8px;border-radius:99px;min-width:3px}
+.s-comum{background:var(--gold)}.s-rara{background:var(--rare)}.s-lendaria{background:var(--leg)}
+.tl{margin:6px 0 0;padding-left:22px;display:grid;gap:3px;font-size:.9rem}
+body.fs .ctrl2,body.fs #finInfo,body.fs #remain,body.fs #qbox{display:none}
+body.compact .orn,body.compact .hint,body.compact footer,body.compact #histbox,body.compact #remain,body.compact #chips,body.compact #ver{display:none}
+body.compact main{padding-top:10px;gap:14px}
+body.compact header{padding:8px 20px 0}
+body.compact .title{font-size:1.2rem}
 @media(prefers-reduced-motion:reduce){.primary,.scene{animation:none!important}}
 </style>
 </head>
@@ -232,8 +254,19 @@ body.fs #ver{display:none}
       <button class="primary" id="bDraw">Sortear</button>
       <button id="bCopy" title="Copiar o resultado (C)">Copiar</button>
     </div>
-    <p class="empty hint">Atalhos: espaço sorteia · 1 a 8 quantidade · F tela cheia · E editor · A arquivos · S configurações · C copiar</p>
+    <div class="ctrl2">
+      <label class="modelab">Modo <select id="modeSel" aria-label="Modo de partida" title="Livre: sem regras. Clássico: sem trocas, cada carta vira missão. Caos: quantidade aleatória, raras mais frequentes, só 1 troca. Baralho finito: número limitado de sorteios, com resumo no fim."><option value="free">Livre</option><option value="classic">Clássico</option><option value="chaos">Caos</option><option value="finite">Baralho finito</option></select></label>
+      <button id="bUndo" class="linkbtn" hidden title="Desfazer o último sorteio (U)">Desfazer sorteio</button>
+      <button id="bSum" class="linkbtn" hidden>Resumo</button>
+    </div>
+    <p class="empty" id="finInfo" hidden></p>
+    <p class="empty" id="remain" hidden></p>
+    <p class="empty hint">Atalhos: espaço sorteia · 1 a 8 quantidade · F tela cheia · E editor · A arquivos · S configurações · C copiar · U desfazer · M modo compacto</p>
   </section>
+  <details class="histbox" id="qbox" open hidden>
+    <summary>Missões em andamento (<span id="qcount">0</span>)</summary>
+    <ul id="quests"></ul>
+  </details>
   <details class="histbox" id="histbox" open>
     <summary>Últimos sorteios</summary>
     <ul id="hist"></ul>
@@ -288,6 +321,15 @@ body.fs #ver{display:none}
   <div class="top"><strong class="grow">Arquivos</strong><button id="bFClose">Fechar</button></div>
   <div class="set" id="filesBody"></div>
 </dialog>
+<dialog id="dlgSum" aria-label="Resumo da sessão">
+  <div class="top"><strong class="grow">Resumo da sessão</strong><button id="sumClose">Fechar</button></div>
+  <div class="set" id="sumBody"></div>
+  <div class="top"><button id="sumCopy">Copiar resumo</button><button id="sumNew" class="primary">Nova sessão</button></div>
+</dialog>
+<dialog id="dlgCode" aria-label="Deck compartilhado">
+  <div class="top"><strong class="grow">Deck compartilhado</strong></div>
+  <div class="set"><p id="codeMsg"></p><div class="row"><button class="primary" id="codeAdd">Adicionar</button><button id="codeCancel">Cancelar</button></div></div>
+</dialog>
 <div id="toast" popover="manual" role="status"></div>
 
 <script>
@@ -306,7 +348,7 @@ const PROFILES={
 "Rubi":{back:"plain",colors:{bg:"#140b0d",bg2:"#1e1013",panel:"#271519",ink:"#f1e3dc",mute:"#a58f88",gold:"#e0b060",rare:"#5ea8c8",leg:"#e8574a",line:"#4a2a30"}},
 "Claro":{back:"plain",colors:{bg:"#f2ede3",bg2:"#fbf8f1",panel:"#e7dfcf",ink:"#241d16",mute:"#6e6252",gold:"#a8741a",rare:"#1f7a8c",leg:"#b3341f",line:"#c9bca3"}}};
 const FONTS={serif:["Serifada","Georgia,'Times New Roman',serif"],sans:["Sem serifa","system-ui,sans-serif"],cond:["Condensada","'Arial Narrow',Bahnschrift,Impact,sans-serif"]};
-const DEF_CFG=()=>({profile:"b:Deadlock",mod:false,colors:{...PROFILES.Deadlock.colors},back:"plain",backImg:"",bgfx:"glow",face:"solid",bgi:100,font:"serif",cw:300,flip:700,anim:!matchMedia("(prefers-reduced-motion: reduce)").matches,snd:false,fxn:100,fx:{comum:{in:"flip",fx:"none"},rara:{in:"rise",fx:"glow"},lendaria:{in:"spin",fx:"confetti"}},hist:true,norepeat:true,cycle:true,rr:0,w:{comum:60,rara:30,lendaria:10}});
+const DEF_CFG=()=>({profile:"b:Deadlock",mod:false,colors:{...PROFILES.Deadlock.colors},back:"plain",backImg:"",bgfx:"glow",face:"solid",bgi:100,font:"serif",cw:300,flip:700,anim:!matchMedia("(prefers-reduced-motion: reduce)").matches,snd:false,pack:"soft",finiteN:10,compact:false,fxn:100,fx:{comum:{in:"flip",fx:"none"},rara:{in:"rise",fx:"glow"},lendaria:{in:"spin",fx:"confetti"}},hist:true,norepeat:true,cycle:true,rr:0,w:{comum:60,rara:30,lendaria:10}});
 
 const DEF_DECKS=()=>EXEMPLOS.filter(d=>d.name==="Grupo"||d.name==="Heróis").map(d=>JSON.parse(JSON.stringify(d)));
 const EXEMPLOS=[{"id":"g","name":"Grupo","cards":[{"id":"g0","title":"Pick do colega","text":"Cada um joga o herói que o colega ao lado escolheu para você. Sem veto, sem troca.","cat":"Caos","rar":"comum","img":""},{"id":"g1","title":"Herói esquecido","text":"Todo mundo joga o herói que menos usou na conta. Se nunca jogou nenhum, vale qualquer um.","cat":"Caos","rar":"comum","img":""},{"id":"g2","title":"Sem arma","text":"Nenhum item de Arma na partida inteira. Só Vitalidade e Espírito.","cat":"Build","rar":"comum","img":""},{"id":"g3","title":"Categoria única","text":"Cada um escolhe uma categoria (Arma, Vitalidade ou Espírito) e só compra dela.","cat":"Build","rar":"comum","img":""},{"id":"g4","title":"Só passivos","text":"Nenhum item ativo na build. Se a luta depende de apertar um botão, ele não existe.","cat":"Build","rar":"rara","img":""},{"id":"g5","title":"Mão fechada","text":"Ninguém gasta souls antes do minuto 5. A primeira compra sai toda de uma vez.","cat":"Build","rar":"rara","img":""},{"id":"g6","title":"Sem zipline","text":"Zipline proibida. Quem chegar atrasado na luta, chegou a pé.","cat":"Handicap","rar":"comum","img":""},{"id":"g7","title":"Lane no corpo a corpo","text":"Até o minuto 5, só melee e habilidades. Tiro só depois disso.","cat":"Handicap","rar":"comum","img":""},{"id":"g8","title":"Minimapa desligado","text":"Ninguém olha o minimapa. Posição do inimigo só por callout no voz.","cat":"Handicap","rar":"rara","img":""},{"id":"g9","title":"Lane única","text":"O grupo todo na mesma lane até a primeira Guardian cair.","cat":"Objetivo","rar":"comum","img":""},{"id":"g10","title":"Prioridade Mid-Boss","text":"Assim que o Mid-Boss nascer, o grupo vai nele. Sem votação.","cat":"Objetivo","rar":"rara","img":""},{"id":"g11","title":"Urn do mais pobre","text":"Quem carrega a Soul Urn é sempre o jogador com menos souls do grupo.","cat":"Objetivo","rar":"rara","img":""},{"id":"g12","title":"Primeiros 5 no camp","text":"Ninguém fica em lane nos primeiros 5 minutos. Todo mundo no jungle.","cat":"Objetivo","rar":"comum","img":""},{"id":"g13","title":"Sem falar","text":"Sem voz até a primeira Guardian cair. Só pings e o chat de texto.","cat":"Comunicação","rar":"rara","img":""},{"id":"g14","title":"Só perguntas","text":"No voz, só vale falar em forma de pergunta. Afirmou, perdeu o turno de falar.","cat":"Comunicação","rar":"comum","img":""},{"id":"g15","title":"Sem nomes","text":"Não vale dizer nome de herói ou de item. Tem que descrever o que quer dizer.","cat":"Comunicação","rar":"rara","img":""},{"id":"g16","title":"Narrador morto","text":"Quem morreu narra a partida para o grupo até renascer.","cat":"Comunicação","rar":"comum","img":""},{"id":"g17","title":"Elogio obrigatório","text":"Depois de cada morte, o grupo elogia uma coisa que o inimigo fez bem. Sem ironia.","cat":"Comunicação","rar":"comum","img":""},{"id":"g18","title":"Líder rotativo","text":"A cada 5 minutos muda o líder. Só ele chama luta, objetivo e recuo.","cat":"Caos","rar":"comum","img":""},{"id":"g19","title":"Quem tem menos decide","text":"O jogador com menos kills decide para onde o grupo vai.","cat":"Caos","rar":"comum","img":""},{"id":"g20","title":"Aposta de kills","text":"Antes de começar, cada um crava quantas kills vai fazer. Quem errar por mais escolhe o herói por último na próxima.","cat":"Caos","rar":"rara","img":""},{"id":"g21","title":"Dado de tudo","text":"Rolem dado para herói, lane e categoria de item de cada um. Sem reclamar do resultado.","cat":"Caos","rar":"rara","img":""},{"id":"g22","title":"Duas cartas","text":"Sorteie mais uma carta e cumpram as duas ao mesmo tempo.","cat":"Caos","rar":"lendaria","img":""},{"id":"g23","title":"Sem arma, sem voz","text":"Nenhum item de Arma e ninguém fala no voz até o minuto 10.","cat":"Caos","rar":"lendaria","img":""},{"id":"g24","title":"Tudo no dado","text":"Herói, lane, itens permitidos e líder sorteados. O grupo só executa.","cat":"Caos","rar":"lendaria","img":""}]},{"id":"i","name":"Individual","cards":[{"id":"i0","title":"Sem tiro","text":"Só habilidades e melee até o minuto 8.","cat":"Handicap","rar":"comum","img":""},{"id":"i1","title":"Sem ultimate","text":"Não use a habilidade 4 até o minuto 15.","cat":"Handicap","rar":"comum","img":""},{"id":"i2","title":"Pé no chão","text":"Sem zipline para você nesta partida.","cat":"Handicap","rar":"comum","img":""},{"id":"i3","title":"Pacifista de tropa","text":"Tropas só morrem no melee.","cat":"Handicap","rar":"comum","img":""},{"id":"i4","title":"Parry sempre","text":"Tente parry em toda luta, acerte ou não.","cat":"Handicap","rar":"rara","img":""},{"id":"i5","title":"Sem ativos","text":"Nenhum item ativo na sua build.","cat":"Build","rar":"comum","img":""},{"id":"i6","title":"Só Espírito","text":"Só compra itens de Espírito.","cat":"Build","rar":"rara","img":""},{"id":"i7","title":"Zero Vitalidade","text":"Nenhum item de Vitalidade. Você vive do que tem.","cat":"Build","rar":"rara","img":""},{"id":"i8","title":"Compra só morto","text":"Só compra itens quando estiver morto.","cat":"Build","rar":"rara","img":""},{"id":"i9","title":"Callout de tudo","text":"Narre em voz alta o que você está fazendo, o tempo todo.","cat":"Comunicação","rar":"comum","img":""},{"id":"i10","title":"Sombra","text":"Fique sempre perto do jogador à sua esquerda.","cat":"Objetivo","rar":"comum","img":""},{"id":"i11","title":"Dono da Urn","text":"Você carrega a Soul Urn sempre que ela estiver disponível.","cat":"Objetivo","rar":"rara","img":""},{"id":"i12","title":"Herói do sorteio","text":"Joga o herói que o grupo sortear no deck de Heróis, sem reclamar.","cat":"Caos","rar":"lendaria","img":""}]},{"id":"h","name":"Heróis","cards":[{"id":"h0","title":"Abrams","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h1","title":"Apollo","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h2","title":"Bebop","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h3","title":"Billy","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h4","title":"Calico","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h5","title":"Celeste","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h6","title":"Doorman","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h7","title":"Drifter","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h8","title":"Dynamo","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h9","title":"Graves","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h10","title":"Grey Talon","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h11","title":"Haze","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h12","title":"Holliday","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h13","title":"Infernus","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h14","title":"Ivy","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h15","title":"Kelvin","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h16","title":"Lady Geist","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h17","title":"Lash","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h18","title":"McGinnis","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h19","title":"Mina","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h20","title":"Mirage","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h21","title":"Mo & Krill","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h22","title":"Paige","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h23","title":"Paradox","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h24","title":"Pocket","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h25","title":"Rem","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h26","title":"Seven","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h27","title":"Shiv","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h28","title":"Silver","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h29","title":"Sinclair","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h30","title":"Venator","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h31","title":"Victor","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h32","title":"Vindicta","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h33","title":"Viscous","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h34","title":"Vyper","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h35","title":"Warden","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h36","title":"Wraith","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h37","title":"Yamato","text":"","cat":"Herói","rar":"comum","img":""}]}];
@@ -314,7 +356,7 @@ const EXEMPLOS=[{"id":"g","name":"Grupo","cards":[{"id":"g0","title":"Pick do co
 const KEY="deadlock-deck-v3";
 /* Reset único: quem tem dados salvos sem "epoch" (versões antigas) volta ao início UMA vez.
    Os dados antigos são guardados em BKEY antes. Só aumente RESET_EPOCH se quiser forçar outro reset. */
-const RESET_EPOCH=2,APP_VERSION="1.1",BKEY="deadlock-deck-v3:backup";
+const RESET_EPOCH=2,APP_VERSION="1.2",BKEY="deadlock-deck-v3:backup";
 let resetNotice=null;
 /* Guarda os dados antigos numa chave própria desta atualização. Devolve a chave, ou null se não conseguiu. */
 function stashOld(raw){
@@ -349,6 +391,11 @@ function paintBack(b,kind,img){
 const ENTRADAS={flip:"Virar (padrão)",spin:"Giro duplo",rise:"Subir",drop:"Cair com quique",zoom:"Zoom",slide:"Deslizar",shake:"Tremer",tilt:"Inclinar 3D"};
 const EFEITOS={none:"Nenhum",glow:"Ondas de luz",sparks:"Faíscas",confetti:"Confete",flash:"Clarão",rain:"Chuva de brilho",burst:"Explosão (tudo junto)"};
 const FACES={solid:"Liso",gradient:"Degradê suave"};
+const MODES={free:"Livre",classic:"Clássico",chaos:"Caos",finite:"Baralho finito"};
+const SFX={soft:{n:"Suave"},casino:{n:"Cassino"},type:{n:"Máquina de escrever"},magic:{n:"Magia de palco"},arcade:{n:"Arcade retrô"}};
+const normHist=h=>(Array.isArray(h)?h:[]).slice(0,12).map(e=>typeof e==="string"?{t:0,text:e,groups:[]}:(e&&typeof e==="object"&&Array.isArray(e.groups)?e:null)).filter(Boolean);
+const normSess=x=>x&&typeof x==="object"&&Array.isArray(x.draws)?{t0:+x.t0||Date.now(),mode:MODES[x.mode]?x.mode:"free",draws:x.draws.filter(e=>e&&Array.isArray(e.groups)).slice(-300)}:{t0:Date.now(),mode:"free",draws:[]};
+const normQuests=q=>(Array.isArray(q)?q:[]).filter(x=>x&&typeof x.title==="string"&&["active","later","done","dropped"].includes(x.st)).slice(-100).map(x=>({id:String(x.id||"q"+Math.random()),title:String(x.title).slice(0,120),text:String(x.text||"").slice(0,600),deck:String(x.deck||"").slice(0,60),rar:RARS[x.rar]?x.rar:"comum",st:x.st,t:+x.t||0,t2:+x.t2||0}));
 const BGFX={plain:"Plano",glow:"Brilho suave",aurora:"Aurora",spot:"Holofote",gradient:"Degradê",vignette:"Vinheta",dots:"Pontos",grain:"Granulado",rays:"Raios"};
 const okImg=v=>typeof v==="string"&&v.startsWith("data:image/");
 function cleanColors(o){const d=DEF_CFG().colors,r={};for(const k in d)r[k]=/^#[0-9a-f]{6}$/i.test(o&&o[k])?o[k]:d[k];return r}
@@ -361,6 +408,8 @@ function cleanCfg(c){
   const fx={};for(const k of Object.keys(RARS)){const v=(c.fx&&c.fx[k])||d.fx[k];fx[k]={in:ENTRADAS[v.in]?v.in:d.fx[k].in,fx:EFEITOS[v.fx]?v.fx:d.fx[k].fx}}o.fx=fx;
   if(!BGFX[o.bgfx])o.bgfx="glow";
   if(!FACES[o.face])o.face="solid";
+  if(!SFX[o.pack])o.pack="soft";
+  o.finiteN=Math.min(60,Math.max(3,Math.round(+o.finiteN)||10));o.compact=!!o.compact;
   o.bgi=Math.min(100,Math.max(0,isNaN(+o.bgi)?100:+o.bgi));o.fxn=Math.min(200,Math.max(50,+o.fxn||100));
   o.cw=Math.min(440,Math.max(200,+o.cw||300));o.flip=Math.min(1600,Math.max(0,+o.flip||700));
   if(c.profile===undefined)o.profile=PROFILES[c.preset]?"b:"+c.preset:(c.preset===undefined?d.profile:"");
@@ -400,7 +449,9 @@ function load(first){
   s.active=(s.active||[]).filter(id=>s.decks.some(x=>x.id===id));
   if(!s.active.length&&s.decks.length)s.active=[s.decks[0].id];
   s.count=Math.min(8,Math.max(1,s.count||1));
-  s.hist=Array.isArray(s.hist)?s.hist.slice(0,12):[];
+  s.hist=normHist(s.hist);s.quests=normQuests(s.quests);s.sess=normSess(s.sess);
+  s.mode=MODES[s.mode]?s.mode:"free";
+  if(s.mode==="finite"){const f=s.fin;s.fin=f&&+f.total>0?{total:+f.total,left:Math.max(0,Math.min(+f.total,+f.left||0))}:{total:s.cfg.finiteN,left:s.cfg.finiteN}}else s.fin=null;
   s.epoch=RESET_EPOCH;s.ver=APP_VERSION;
   if(did){s.notice={key:bk,ver:APP_VERSION};resetNotice=true;try{localStorage.setItem(KEY,JSON.stringify(s))}catch(e){}}
   return s;
@@ -421,7 +472,7 @@ addEventListener("beforeunload",flush);
 document.addEventListener("visibilitychange",()=>{if(document.hidden)flush()});
 addEventListener("storage",e=>{
   if(e.key!==KEY||!e.newValue||busy||document.querySelector("dialog[open]"))return;
-  try{S=load();applyCfg();syncTitle();syncCount();refreshAll();renderHist()}catch(x){}
+  try{S=load();applyCfg();syncTitle();syncCount();refreshAll();renderHist();renderQuests()}catch(x){}
 });
 function toast(m,label,fn,ms){
   const t=$("#toast");t.textContent=m;
@@ -438,7 +489,7 @@ function applyCfg(){
   for(const[k,v]of Object.entries(c.colors))r.setProperty("--"+k,v);
   r.setProperty("--cw",c.cw+"px");r.setProperty("--flip",(c.anim?c.flip:0)+"ms");
   r.setProperty("--fh",FONTS[c.font][1]);
-  r.setProperty("--bgi",c.bgi/100);document.documentElement.dataset.bg=c.bgfx;document.documentElement.dataset.face=c.face;
+  r.setProperty("--bgi",c.bgi/100);document.documentElement.dataset.bg=c.bgfx;document.documentElement.dataset.face=c.face;document.body.classList.toggle("compact",!!c.compact);
   r.setProperty("--onacc",lum(c.colors.gold)>.4?"#16110a":"#ffffff");
   r.colorScheme=lum(c.colors.bg)>.5?"light":"dark";
   document.querySelectorAll(".face.back").forEach(b=>paintBack(b,c.back,c.backImg));
@@ -474,7 +525,11 @@ function cardEl(g,i,noRR){
   const c=g.cards[i],sc=el("div","scene"),cd=el("div","card"),b=el("div","face back"),f=el("div","face front");
   b.setAttribute("aria-hidden","true");paintBack(b,S.cfg.back,S.cfg.backImg);cd.append(b,f);sc.append(cd);
   if(c){fillCard(f,c);sc._g=g;sc._i=i;
-    if(!noRR){const r=el("button","rr","↻ Trocar");r.title="Sortear outra carta no lugar desta";r.onclick=()=>reroll(sc);sc.append(r)}}
+    if(!noRR&&S.mode!=="classic"){
+      const r=el("button","rr","↻ Trocar");r.title="Sortear outra carta no lugar desta";r.onclick=()=>reroll(sc);
+      const a=el("button","acc","✓ Aceitar");a.title="Guardar como missão em andamento";a.onclick=()=>{addQuest(sc._g,sc._g.cards[sc._i]);a.disabled=true;a.textContent="✓ Aceita"};
+      sc.append(r,a);
+    }}
   return sc;
 }
 function build(groups){
@@ -499,25 +554,29 @@ function build(groups){
   });
   requestAnimationFrame(fit);
 }
-function showBacks(){table=[];build(sel().map(d=>({name:d.name,deck:d,cards:Array(S.count).fill(null)})))}
+function showBacks(){table=[];undoStack=[];build(sel().map(d=>({name:d.name,deck:d,cards:Array(S.mode==="chaos"?1:S.count).fill(null)})));renderMeta()}
 function wpick(pool){
-  const w=pool.map(c=>S.cfg.w[c.rar]??30),t=w.reduce((a,b)=>a+b,0);
+  const w=pool.map(c=>(S.cfg.w[c.rar]??30)*(c.fav?2:1)*(S.mode==="chaos"?({comum:1,rara:2,lendaria:3})[c.rar]||1:1)),t=w.reduce((a,b)=>a+b,0);
   if(!t)return Math.floor(Math.random()*pool.length);
   let r=Math.random()*t;for(let i=0;i<pool.length;i++){r-=w[i];if(r<=0)return i}
   return pool.length-1;
 }
-function pickN(d){
-  const f=d.cards.filter(c=>!filt.size||filt.has(c.cat));let pool=f.length?f:d.cards;
-  const u=used[d.id]||(used[d.id]=new Set());
-  if(S.cfg.cycle){let r=pool.filter(c=>!u.has(c.id));if(r.length<Math.min(S.count,pool.length)){u.clear();r=pool}pool=r}
-  else if(S.cfg.norepeat){const r=pool.filter(c=>!lastIds.has(c.id));if(r.length>=S.count)pool=r}
+function pickN(d,n){
+  n=n||S.count;
+  const live=d.cards.filter(c=>!c.off),f=live.filter(c=>!filt.size||filt.has(c.cat));let pool=f.length?f:live;
+  const u=used[d.id]||(used[d.id]=new Set()),cyc=S.cfg.cycle||S.mode==="finite";
+  if(cyc){
+    let r=pool.filter(c=>!u.has(c.id));
+    if(r.length<Math.min(n,pool.length)){pool.forEach(c=>u.delete(c.id));const r2=pool.filter(c=>!lastIds.has(c.id));r=r2.length>=Math.min(n,pool.length)?r2:pool}
+    pool=r;
+  }else if(S.cfg.norepeat){const r=pool.filter(c=>!lastIds.has(c.id));if(r.length>=n)pool=r}
   pool=[...pool];const out=[];
-  while(out.length<S.count&&pool.length)out.push(pool.splice(wpick(pool),1)[0]);
+  while(out.length<n&&pool.length)out.push(pool.splice(wpick(pool),1)[0]);
   out.forEach(c=>u.add(c.id));return out;
 }
 function setBusy(b){busy=b;const d=$("#bDraw");d.textContent=b?"Sorteando…":"Sortear";d.setAttribute("aria-disabled",b)}
 function updateRR(){
-  const l=S.cfg.rr;
+  const l=rrLimit();
   document.querySelectorAll(".rr").forEach(r=>{r.disabled=!!l&&rrUsed>=l;r.textContent=l?"↻ Trocar ("+Math.max(0,l-rrUsed)+")":"↻ Trocar"});
 }
 function reveal(sc,delay,i){
@@ -527,7 +586,7 @@ function reveal(sc,delay,i){
       const cl="fx-"+f.in;sc.classList.add(cl);
       sc.addEventListener("animationend",function h(e){if(e.target===sc&&e.animationName===cl){sc.classList.remove(cl);sc.removeEventListener("animationend",h)}});
     }
-    sc.querySelector(".card").classList.add("up");sc.classList.add("live");blip(i);
+    sc.querySelector(".card").classList.add("up");sc.classList.add("live");sfx(rar==="comum"?"reveal":"rare",i);
     if(cfg.anim&&f.fx!=="none")setTimeout(()=>{(f.fx==="burst"?["glow","sparks","flash"]:[f.fx]).forEach(k=>effect(sc,k,rar))},flipMs()*.55);
   },delay);
 }
@@ -551,43 +610,210 @@ async function testFx(rk,pv){
   const g={cards:[{title:"Carta "+RARS[rk].toLowerCase(),text:"Teste de animação.",cat:"Teste",rar:rk,img:""}]};
   const sc=cardEl(g,0,true);pv.append(sc);fit();await sleep(120);reveal(sc,0,0);
 }
+let curEntry=null,undoStack=[],curSnap=null,pendCode=null;
+const rrLimit=()=>S.mode==="chaos"?1:S.cfg.rr;
+const entryText=e=>e.text||e.groups.map(g=>(e.groups.length>1?g.name+": ":"")+g.cards.map(c=>c.title).join(", ")).join("  |  ");
+function snapshot(){
+  const cp={};for(const k in used)cp[k]=[...used[k]];
+  return{table:table.map(g=>({name:g.name,deck:g.deck,cards:[...g.cards]})),used:cp,last:[...lastIds],hist:S.hist.slice(),sess:S.sess.draws.slice(),fin:S.fin?{...S.fin}:null,cur:curEntry,questIds:[],up:!!document.querySelector("#table .card.up")};
+}
 async function draw(){
   if(busy)return;
   const ds=sel();
   if(!ds.length){toast(S.decks.length?"Selecione ao menos um deck.":"Nenhum deck ainda. Carregue um arquivo ou crie um deck.");return}
-  if(!ds.some(d=>d.cards.length)){toast("Os decks selecionados estão vazios.");return}
-  setBusy(true);rrUsed=0;
-  const picks=ds.map(d=>({name:d.name,deck:d,cards:pickN(d)}));
+  if(!ds.some(d=>d.cards.some(c=>!c.off))){toast("Os decks selecionados estão vazios ou sem cartas ativas.");return}
+  if(S.mode==="finite"&&S.fin&&S.fin.left<=0){showSummary();return}
+  setBusy(true);rrUsed=0;sfx("shuffle");
+  const snap=snapshot();curSnap=snap;
+  const n=S.mode==="chaos"?1+Math.floor(Math.random()*3):S.count;
+  const picks=ds.map(d=>({name:d.name,deck:d,cards:pickN(d,n)}));
   const ups=[...document.querySelectorAll("#table .card.up")];
   if(ups.length){
     ups.forEach(c=>c.classList.remove("up"));
     document.querySelectorAll(".scene.live").forEach(s=>s.classList.remove("live"));
     await sleep(flipMs()+80);
   }
-  build(picks);table=picks;void $("#table").offsetWidth;await sleep(40);
+  const entry={t:Date.now(),mode:S.mode,groups:picks.map(p=>({name:p.name,cards:p.cards.map(c=>({id:c.id,title:c.title,rar:c.rar,cat:c.cat,swaps:[]}))}))};
+  curEntry=entry;S.hist.unshift(entry);S.hist=S.hist.slice(0,12);S.sess.draws.push(entry);S.sess.draws=S.sess.draws.slice(-300);
+  if(S.mode==="finite"&&S.fin)S.fin.left--;
+  lastIds=new Set(picks.flatMap(p=>p.cards.map(c=>c.id)));
+  build(picks);table=picks;
+  if(S.mode==="classic")picks.forEach(g=>g.cards.forEach(c=>addQuest(g,c,true)));
+  undoStack.push(snap);undoStack=undoStack.slice(-20);
+  void $("#table").offsetWidth;await sleep(40);
   const sc=[...document.querySelectorAll("#table .scene")],gap=S.cfg.anim?110:0;
   sc.forEach((s,i)=>reveal(s,i*gap,i));
-  updateRR();
-  lastIds=new Set(picks.flatMap(p=>p.cards.map(c=>c.id)));
-  const line=picks.map(p=>(ds.length>1?p.name+": ":"")+p.cards.map(c=>c.title).join(", ")).join("  |  ");
-  S.hist.unshift(line);S.hist=S.hist.slice(0,12);save();renderHist();
-  $("#live").textContent="Sorteado: "+line;
+  updateRR();save();renderHist();renderMeta();
+  $("#live").textContent="Sorteado: "+entryText(entry);
   await sleep(sc.length*gap+flipMs());setBusy(false);
+  if(S.mode==="finite"&&S.fin&&S.fin.left<=0){await sleep(1400);showSummary()}
 }
 async function reroll(sc){
   if(busy)return;
-  const lim=S.cfg.rr;if(lim&&rrUsed>=lim){toast("Limite de trocas atingido.");return}
+  if(S.mode==="classic"){toast("No modo Clássico a carta sorteada vale.");return}
+  const lim=rrLimit();if(lim&&rrUsed>=lim){toast("Limite de trocas atingido.");return}
   const g=sc._g,i=sc._i;
   const shown=new Set(table.flatMap(t=>t.cards.map(c=>c.id)));
-  let pool=g.deck.cards.filter(c=>!shown.has(c.id)&&(!filt.size||filt.has(c.cat)));
-  if(!pool.length)pool=g.deck.cards.filter(c=>!shown.has(c.id));
+  const ok=c=>!c.off&&!shown.has(c.id)&&(!filt.size||filt.has(c.cat));
+  const cyc=S.cfg.cycle||S.mode==="finite",u=used[g.deck.id]||(used[g.deck.id]=new Set());
+  let pool=g.deck.cards.filter(c=>ok(c)&&(!cyc||!u.has(c.id)));
+  if(!pool.length)pool=g.deck.cards.filter(ok);
+  if(!pool.length)pool=g.deck.cards.filter(c=>!c.off&&!shown.has(c.id));
   if(!pool.length){toast("Não há outra carta disponível neste deck.");return}
   setBusy(true);rrUsed++;updateRR();
   const cd=sc.querySelector(".card");cd.classList.remove("up");await sleep(flipMs()+80);
   const c=pool[wpick(pool)];g.cards[i]=c;
+  const gi=table.indexOf(g),ec=curEntry&&curEntry.groups[gi]&&curEntry.groups[gi].cards[i];
+  if(ec){(ec.swaps=ec.swaps||[]).push(ec.title);ec.id=c.id;ec.title=c.title;ec.rar=c.rar;ec.cat=c.cat}
+  u.add(c.id);lastIds=new Set(table.flatMap(t=>t.cards.map(x=>x.id)));
+  const ab=sc.querySelector(".acc");if(ab){ab.disabled=false;ab.textContent="✓ Aceitar"}
   fillCard(sc.querySelector(".front"),c);fit();void cd.offsetWidth;reveal(sc,0,0);
+  save();renderHist();renderMeta();
   $("#live").textContent="Nova carta: "+c.title;
   await sleep(flipMs());setBusy(false);
+}
+function undo(){
+  if(busy||!undoStack.length)return;
+  if(S.mode==="classic"){toast("No modo Clássico a carta sorteada vale.");return}
+  const s=undoStack.pop();
+  used={};for(const k in s.used)used[k]=new Set(s.used[k]);
+  lastIds=new Set(s.last);S.hist=s.hist;S.sess.draws=s.sess;S.fin=s.fin;curEntry=s.cur;rrUsed=0;
+  S.quests=S.quests.filter(q=>!s.questIds.includes(q.id));
+  table=s.table;
+  if(s.up&&table.length){
+    build(table);
+    document.querySelectorAll("#table .card").forEach(c=>{c.style.transition="none";c.classList.add("up")});
+    document.querySelectorAll("#table .scene").forEach(x=>x.classList.add("live"));
+    requestAnimationFrame(()=>document.querySelectorAll("#table .card").forEach(c=>{c.style.transition=""}));
+    updateRR();
+  }else{const keep=undoStack;showBacks();undoStack=keep}
+  save();renderHist();renderQuests();renderMeta();toast("Último sorteio desfeito.");
+}
+/* ----- modos, sessão, resumo ----- */
+function renderMeta(){
+  $("#modeSel").value=S.mode;
+  $("#bUndo").hidden=!undoStack.length||S.mode==="classic";
+  $("#bSum").hidden=!S.sess.draws.length;
+  const fin=$("#finInfo");fin.hidden=S.mode!=="finite"||!S.fin;
+  if(!fin.hidden)fin.textContent="Baralho: "+S.fin.left+" de "+S.fin.total+" sorteios restantes";
+  const rm=$("#remain"),ds=sel();
+  if((S.cfg.cycle||S.mode==="finite")&&ds.length){
+    rm.hidden=false;
+    rm.textContent="Restantes no ciclo: "+ds.map(d=>{const live=d.cards.filter(c=>!c.off&&(!filt.size||filt.has(c.cat))),u=used[d.id]||new Set();return d.name+" "+live.filter(c=>!u.has(c.id)).length+"/"+live.length}).join(" · ");
+  }else rm.hidden=true;
+}
+function newSession(){
+  S.sess={t0:Date.now(),mode:S.mode,draws:[]};used={};lastIds=new Set();curEntry=null;
+  S.fin=S.mode==="finite"?{total:S.cfg.finiteN,left:S.cfg.finiteN}:null;
+  save();showBacks();
+}
+function setMode(m){if(!MODES[m]||m===S.mode)return;S.mode=m;newSession();toast("Modo: "+MODES[m]+".")}
+function summaryData(){
+  const cards=S.sess.draws.flatMap(e=>e.groups.flatMap(g=>g.cards.map(c=>({...c,deck:g.name}))));
+  const byR={comum:0,rara:0,lendaria:0};cards.forEach(c=>{if(c.rar in byR)byR[c.rar]++});
+  const qs=S.quests.filter(q=>Math.max(q.t,q.t2)>=S.sess.t0);
+  return{draws:S.sess.draws.length,cards,byR,swaps:cards.reduce((n,c)=>n+(c.swaps?c.swaps.length:0),0),
+    done:qs.filter(q=>q.st==="done").length,dropped:qs.filter(q=>q.st==="dropped").length,open:S.quests.filter(q=>q.st==="active"||q.st==="later").length};
+}
+function summaryText(){
+  const d=summaryData(),mins=Math.max(1,Math.round((Date.now()-S.sess.t0)/60000));
+  return S.title+" · "+MODES[S.sess.mode]+"\n"+d.draws+" sorteio(s), "+d.cards.length+" carta(s), "+d.swaps+" troca(s), "+mins+" min\nComuns "+d.byR.comum+" · Raras "+d.byR.rara+" · Lendárias "+d.byR.lendaria+"\nMissões: "+d.done+" concluída(s), "+d.dropped+" abandonada(s)\n\n"+S.sess.draws.map((e,i)=>(i+1)+". "+entryText(e)).join("\n");
+}
+function showSummary(){
+  const d=summaryData(),b=$("#sumBody");b.innerHTML="";
+  const mins=Math.max(1,Math.round((Date.now()-S.sess.t0)/60000));
+  b.append(el("p","empty",MODES[S.sess.mode]+" · "+d.draws+" sorteio(s) · "+d.cards.length+" carta(s) · "+d.swaps+" troca(s) · "+mins+" min"));
+  const bars=el("div","sbars");
+  Object.entries(RARS).forEach(([k,n])=>{const row=el("div","sbar"),i=el("i","s-"+k);i.style.width=(d.cards.length?Math.round(d.byR[k]/d.cards.length*100):0)+"%";row.append(el("span","",n+": "+d.byR[k]),i);bars.append(row)});
+  b.append(bars,el("p","empty","Missões: "+d.done+" concluída(s), "+d.dropped+" abandonada(s), "+d.open+" em aberto."));
+  if(S.sess.draws.length){const ol=el("ol","tl");S.sess.draws.forEach(e=>ol.append(el("li","",entryText(e))));b.append(el("h3","","Linha do tempo"),ol)}
+  else b.append(el("p","empty","Nenhum sorteio nesta sessão ainda."));
+  $("#dlgSum").showModal();
+}
+/* ----- missões ----- */
+function addQuest(g,c,auto){
+  const q={id:"q"+Date.now()+Math.random().toString(36).slice(2,6),title:c.title,text:c.text||"",deck:g.name,rar:c.rar,st:"active",t:Date.now(),t2:0};
+  S.quests.push(q);S.quests=S.quests.slice(-100);
+  if(auto&&curSnap)curSnap.questIds.push(q.id);
+  save();renderQuests();return q;
+}
+function setQ(q,st){q.st=st;q.t2=Date.now();save();renderQuests();renderMeta();if(st==="done"){sfx("quest");toast("Missão concluída.")}}
+function renderQuests(){
+  const act=S.quests.filter(q=>q.st==="active"||q.st==="later"),ul=$("#quests");ul.innerHTML="";
+  $("#qbox").hidden=!act.length;$("#qcount").textContent=S.quests.filter(q=>q.st==="active").length;
+  act.forEach(q=>{
+    const li=el("li","q"+(q.st==="later"?" later":"")),tx=el("div","qt"),bs=el("div","row");
+    tx.append(el("strong","",q.title),el("span","empty",q.deck+(q.st==="later"?" · para depois":"")));
+    const b1=el("button","","Concluir"),b2=el("button","",q.st==="later"?"Retomar":"Depois"),b3=el("button","danger","Abandonar");
+    b1.onclick=()=>setQ(q,"done");b2.onclick=()=>setQ(q,q.st==="later"?"active":"later");b3.onclick=()=>setQ(q,"dropped");
+    bs.append(b1,b2,b3);li.append(tx,bs);ul.append(li);
+  });
+}
+/* ----- sons ----- */
+const PACKS={
+ soft:{reveal:[[420,.16,"triangle",.07]],rare:[[520,.14,"triangle",.07],[780,.22,"triangle",.07,.1]],shuffle:[[300,.05,"triangle",.04],[340,.05,"triangle",.04,.06]],quest:[[520,.1,"triangle",.07],[660,.1,"triangle",.07,.1],[880,.2,"triangle",.07,.2]]},
+ casino:{reveal:[[880,.06,"square",.04],[1175,.1,"square",.04,.07]],rare:[[880,.07,"square",.05],[1175,.07,"square",.05,.08],[1568,.07,"square",.05,.16],[2093,.22,"square",.05,.24]],shuffle:[[200,.03,"sawtooth",.04],[240,.03,"sawtooth",.04,.05],[200,.03,"sawtooth",.04,.1],[260,.03,"sawtooth",.04,.15]],quest:[[1047,.08,"square",.05],[1319,.08,"square",.05,.09],[1568,.2,"square",.05,.18]]},
+ type:{reveal:[[1800,.03,"noise",.12]],rare:[[1800,.03,"noise",.12],[2400,.5,"sine",.07,.06]],shuffle:[[1500,.025,"noise",.1],[1700,.025,"noise",.1,.07],[1500,.025,"noise",.1,.14],[1900,.025,"noise",.1,.21]],quest:[[1800,.03,"noise",.12],[2400,.5,"sine",.07,.08]]},
+ magic:{reveal:[[880,.12,"sine",.06],[1175,.16,"sine",.05,.06]],rare:[[784,.2,"sine",.06],[988,.2,"sine",.06,.08],[1175,.2,"sine",.06,.16],[1568,.2,"sine",.06,.24],[1976,.5,"sine",.05,.32]],shuffle:[[1200,.28,"noise",.05]],quest:[[1047,.3,"sine",.06],[1568,.5,"sine",.05,.12]]},
+ arcade:{reveal:[[660,.06,"square",.04],[880,.08,"square",.04,.07]],rare:[[523,.07,"square",.05],[659,.07,"square",.05,.08],[784,.07,"square",.05,.16],[1047,.2,"square",.05,.24]],shuffle:[[300,.04,"square",.03],[400,.04,"square",.03,.05],[300,.04,"square",.03,.1]],quest:[[784,.08,"square",.05],[1047,.08,"square",.05,.09],[1319,.22,"square",.05,.18]]}
+};
+function sfx(kind,i=0){
+  if(!S.cfg.snd)return;
+  const seq=(PACKS[S.cfg.pack]||PACKS.soft)[kind];if(!seq)return;
+  try{
+    ac=ac||new AudioContext();const t0=ac.currentTime+i*.11;
+    seq.forEach(([f,d,ty,g,dl=0])=>{
+      const t=t0+dl,gn=ac.createGain();gn.gain.setValueAtTime(.0001,t);gn.gain.exponentialRampToValueAtTime(g,t+.01);gn.gain.exponentialRampToValueAtTime(.0001,t+d);
+      let src;
+      if(ty==="noise"){const n=Math.ceil(ac.sampleRate*d),buf=ac.createBuffer(1,n,ac.sampleRate),a=buf.getChannelData(0);for(let k=0;k<n;k++)a[k]=Math.random()*2-1;src=ac.createBufferSource();src.buffer=buf;const bp=ac.createBiquadFilter();bp.type="bandpass";bp.frequency.value=f;src.connect(bp).connect(gn)}
+      else{src=ac.createOscillator();src.type=ty;src.frequency.value=f;src.connect(gn)}
+      gn.connect(ac.destination);src.start(t);src.stop(t+d+.02);
+    });
+  }catch(e){}
+}
+/* ----- compartilhar deck por código ----- */
+const b64u={
+  enc:b=>{let s="";for(let i=0;i<b.length;i+=8192)s+=String.fromCharCode.apply(null,b.subarray(i,i+8192));return btoa(s).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")},
+  dec:t=>{t=t.replace(/-/g,"+").replace(/_/g,"/");while(t.length%4)t+="=";const bin=atob(t),o=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)o[i]=bin.charCodeAt(i);return o}
+};
+async function pipeBytes(bytes,stream,cap){
+  const w=stream.writable.getWriter();w.write(bytes).catch(()=>{});w.close().catch(()=>{});
+  const r=stream.readable.getReader(),parts=[];let n=0;
+  for(;;){const{done,value}=await r.read();if(done)break;n+=value.length;if(n>cap){r.cancel().catch(()=>{});throw new Error("grande")}parts.push(value)}
+  const out=new Uint8Array(n);let o=0;for(const x of parts){out.set(x,o);o+=x.length}return out;
+}
+async function encodeDeck(d){
+  const raw=new TextEncoder().encode(JSON.stringify({v:1,n:d.name,c:d.cards.map(c=>[c.title,c.text,c.cat,c.rar,c.fav?1:0])}));
+  if(typeof CompressionStream==="function")return "DL1."+b64u.enc(await pipeBytes(raw,new CompressionStream("deflate-raw"),4e6));
+  return "DL0."+b64u.enc(raw);
+}
+async function decodeDeck(code){
+  const m=String(code||"").trim().match(/(?:#deck=)?(DL[01])\.([A-Za-z0-9_-]+)$/);if(!m)throw new Error("formato");
+  if(m[2].length>150000)throw new Error("grande");
+  let bytes=b64u.dec(m[2]);
+  if(m[1]==="DL1"){if(typeof DecompressionStream!=="function")throw new Error("navegador");bytes=await pipeBytes(bytes,new DecompressionStream("deflate-raw"),600000)}
+  else if(bytes.length>600000)throw new Error("grande");
+  const o=JSON.parse(new TextDecoder().decode(bytes));
+  if(!o||o.v!==1||!Array.isArray(o.c)||o.c.length>400)throw new Error("invalido");
+  const cl=(v,n)=>String(v==null?"":v).slice(0,n),st=Date.now();
+  return{id:"s"+st,name:cl(o.n,60).trim()||"Deck importado",cards:o.c.map((a,i)=>{a=Array.isArray(a)?a:[];return{id:"s"+st+"_"+i,title:cl(a[0],120),text:cl(a[1],600),cat:cl(a[2],40)||"Geral",rar:RARS[a[3]]?a[3]:"comum",img:"",fav:!!a[4],off:false}})};
+}
+function copyText(t,msg){
+  const ok=()=>toast(msg||"Copiado."),fb=()=>{const a=el("textarea");a.value=t;document.body.append(a);a.select();try{document.execCommand("copy");ok()}catch(e){toast("Não foi possível copiar.")}a.remove()};
+  navigator.clipboard?navigator.clipboard.writeText(t).then(ok,fb):fb();
+}
+async function shareDeck(d,asLink){
+  try{const code=await encodeDeck(d);copyText(asLink?location.href.split("#")[0]+"#deck="+code:code,asLink?"Link copiado (sem imagens).":"Código copiado (sem imagens).")}
+  catch(e){toast("Não foi possível gerar o código.")}
+}
+async function openCode(text){
+  try{const d=await decodeDeck(text);pendCode=d;$("#codeMsg").textContent="Adicionar o deck “"+d.name+"” ("+d.cards.length+" cartas) aos seus decks?";$("#dlgCode").showModal()}
+  catch(e){toast("Código inválido, grande demais ou não suportado por este navegador.")}
+}
+function checkHash(){
+  if(!/^#deck=/.test(location.hash))return;
+  const h=location.hash;try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}
+  openCode(h);
 }
 function copyTxt(){
   if(!table.length){toast("Sorteie primeiro.");return}
@@ -614,7 +840,7 @@ function renderChips(){
   const cats=[...new Set(sel().flatMap(d=>d.cards.map(c=>c.cat)))];
   [...filt].forEach(c=>{if(!cats.includes(c))filt.delete(c)});
   if(cats.length<2)return;
-  cats.forEach(c=>{const b=el("button","chip"+(filt.has(c)?" on":""),c);b.setAttribute("aria-pressed",filt.has(c));b.onclick=()=>{filt.has(c)?filt.delete(c):filt.add(c);renderChips()};box.append(b)});
+  cats.forEach(c=>{const b=el("button","chip"+(filt.has(c)?" on":""),c);b.setAttribute("aria-pressed",filt.has(c));b.onclick=()=>{filt.has(c)?filt.delete(c):filt.add(c);renderChips();renderMeta()};box.append(b)});
 }
 function syncCount(){$("#cnt").textContent=S.count;$("#bMin").disabled=S.count<=1;$("#bPlus").disabled=S.count>=8}
 function setCount(n){S.count=Math.min(8,Math.max(1,n));syncCount();save();showBacks()}
@@ -645,7 +871,7 @@ function renderEd(){
 function renderList(){
   const d=curD()||{cards:[]},list=$("#edList"),q=ed.q.toLowerCase();list.innerHTML="";
   const cs=d.cards.filter(c=>!q||(c.title+" "+c.cat).toLowerCase().includes(q));
-  cs.forEach(c=>{const b=el("button",c.id===ed.c?"sel":"",c.title||"(sem título)");b.onclick=()=>{ed.c=c.id;renderList();renderForm()};list.append(b)});
+  cs.forEach(c=>{const b=el("button",c.id===ed.c?"sel":"",(c.fav?"★ ":"")+(c.title||"(sem título)")+(c.off?" (fora)":""));b.onclick=()=>{ed.c=c.id;renderList();renderForm()};list.append(b)});
   if(!cs.length)list.append(el("p","empty",S.decks.length?(d.cards.length?"Nada encontrado.":"Deck vazio."):"Nenhum deck ainda."));
 }
 function renderPrev(c){
@@ -676,7 +902,8 @@ function renderForm(){
   const bu=el("button","","Subir na lista");bu.onclick=()=>mv(-1);
   const bn=el("button","","Descer na lista");bn.onclick=()=>mv(1);
   ar.append(bu,bn,bc,bd);
-  const fl=el("div","fields");fl.append(field("Título",t),field("Texto",x),row,el("label","","Imagem da carta"),ir,ar,dl);
+  const flag=(txt,k)=>{const l=el("label","chk"),i=el("input");i.type="checkbox";i.checked=!!c[k];i.onchange=()=>{c[k]=i.checked;mark();renderList()};l.append(i,document.createTextNode(txt));return l};
+  const fl=el("div","fields");fl.append(field("Título",t),field("Texto",x),row,flag(" Favorita (sai com mais frequência)","fav"),flag(" Fora do sorteio por enquanto","off"),el("label","","Imagem da carta"),ir,ar,dl);
   const pv=el("div");pv.id="prev";form.append(fl,pv);renderPrev(c);
 }
 $("#edQ").oninput=e=>{ed.q=e.target.value;renderList()};
@@ -702,7 +929,7 @@ $("#fileImg").onchange=e=>{
     };im.src=r.result};
   r.readAsDataURL(f);
 };
-const cleanDeck=(d,i)=>({id:String(d.id||"i"+i+Date.now()),name:String(d.name||"Deck "+(i+1)),cards:(Array.isArray(d.cards)?d.cards:[]).filter(c=>c&&typeof c==="object").map((c,j)=>({id:String(c.id||"c"+i+"_"+j+Date.now()),title:String(c.title||""),text:String(c.text||""),cat:String(c.cat||"Caos"),rar:RARS[c.rar]?c.rar:"comum",img:typeof c.img==="string"&&c.img.startsWith("data:image/")?c.img:""}))});
+const cleanDeck=(d,i)=>({id:String(d.id||"i"+i+Date.now()),name:String(d.name||"Deck "+(i+1)),cards:(Array.isArray(d.cards)?d.cards:[]).filter(c=>c&&typeof c==="object").map((c,j)=>({id:String(c.id||"c"+i+"_"+j+Date.now()),title:String(c.title||""),text:String(c.text||""),cat:String(c.cat||"Caos"),rar:RARS[c.rar]?c.rar:"comum",img:typeof c.img==="string"&&c.img.startsWith("data:image/")?c.img:"",fav:!!c.fav,off:!!c.off}))});
 $("#bExp").onclick=()=>{
   flush();const a=document.createElement("a");
   a.href=URL.createObjectURL(new Blob([JSON.stringify({versao:3,title:S.title,decks:S.decks,cfg:S.cfg,profiles:S.profiles},null,1)],{type:"application/json"}));
@@ -756,7 +983,7 @@ function renderSet(){
   const styl=()=>{c.mod=true;up()};
   const field=(lab,node)=>{const l=el("label","",lab);l.append(node);return l};
   const rng=(lab,k,min,max,step,u,sty)=>{const i=el("input");i.type="range";i.min=min;i.max=max;i.step=step;i.value=c[k];const l=el("label","",lab+": "+c[k]+u);i.oninput=()=>{c[k]=+i.value;l.firstChild.textContent=lab+": "+c[k]+u;sty?styl():up()};l.append(i);return l};
-  const chk=(lab,k)=>{const l=el("label","chk"),i=el("input");i.type="checkbox";i.checked=c[k];i.onchange=()=>{c[k]=i.checked;up();if(k==="snd"&&i.checked)blip(0)};l.append(i,document.createTextNode(lab));return l};
+  const chk=(lab,k)=>{const l=el("label","chk"),i=el("input");i.type="checkbox";i.checked=c[k];i.onchange=()=>{c[k]=i.checked;up();if(k==="snd"&&i.checked)sfx("reveal")};l.append(i,document.createTextNode(lab));return l};
   const ti=el("input");ti.type="text";ti.value=S.title;ti.oninput=()=>{S.title=ti.value;syncTitle();save()};
   prof=el("select");
   const g1=el("optgroup");g1.label="Perfis prontos";Object.keys(PROFILES).forEach(n=>{const o=el("option","",n);o.value="b:"+n;g1.append(o)});prof.append(g1);
@@ -775,6 +1002,8 @@ function renderSet(){
   COLORS.forEach(([k,n])=>{const i=el("input");i.type="color";i.value=c.colors[k];i.oninput=()=>{c.colors[k]=i.value;styl()};grid.append(field(n,i))});
   const fs=el("select");Object.entries(FONTS).forEach(([k,v])=>{const o=el("option","",v[0]);o.value=k;fs.append(o)});fs.value=c.font;fs.onchange=()=>{c.font=fs.value;styl()};
   const fcs=el("select");Object.entries(FACES).forEach(([k,n])=>{const o=el("option","",n);o.value=k;fcs.append(o)});fcs.value=c.face;fcs.onchange=()=>{c.face=fcs.value;styl()};
+  const spk=el("select");Object.entries(SFX).forEach(([k,v])=>{const o=el("option","",v.n);o.value=k;spk.append(o)});spk.value=c.pack;spk.onchange=()=>{c.pack=spk.value;save();sfx("rare")};
+  const fnum=el("input");fnum.type="number";fnum.min=3;fnum.max=60;fnum.value=c.finiteN;fnum.oninput=()=>{c.finiteN=Math.max(3,Math.min(60,Math.round(+fnum.value)||10));save()};
   const bg=el("div","bkgrid");
   Object.entries(BACKS).forEach(([k,v])=>{
     const o=el("button","bkopt"+(c.back===k?" on":""));o.setAttribute("aria-pressed",c.back===k);o.title=v[0];
@@ -814,8 +1043,9 @@ function renderSet(){
     el("h3","","Cartas"),field("Fundo da frente da carta",fcs),el("h3","","Verso das cartas"),bg,br,
     el("h3","","Fundo do site"),bgg,rng("Intensidade do fundo","bgi",0,100,5,"%",true),
     el("h3","","Aparência"),field("Fonte dos títulos",fs),rng("Tamanho da carta","cw",200,440,10,"px",true),
-    el("h3","","Animação e som"),chk(" Animações ligadas","anim"),rng("Duração da virada","flip",200,1600,50,"ms"),chk(" Som suave ao virar a carta","snd"),
+    el("h3","","Animação e som"),chk(" Animações ligadas","anim"),rng("Duração da virada","flip",200,1600,50,"ms"),chk(" Sons ligados","snd"),field("Pacote de sons",spk),
     el("h3","","Animações por raridade"),el("p","empty","Cada raridade pode ter uma entrada e um efeito diferentes. Use Testar para ver."),fxRows,pv,rng("Intensidade dos efeitos","fxn",50,200,10,"%"),
+    el("h3","","Modos de jogo"),field("Tamanho do baralho finito (sorteios)",fnum),chk(" Modo compacto (só cartas e controles essenciais)","compact"),
     el("h3","","Sorteio"),chk(" Percorrer o deck inteiro antes de repetir cartas","cycle"),chk(" Evitar repetir as cartas do sorteio anterior","norepeat"),chk(" Mostrar histórico","hist"),
     field("Trocas permitidas por sorteio (0 = ilimitado)",rr),
     el("p","empty","Chance de cada raridade (pesos relativos; 0 desliga a raridade):"),wr,
@@ -858,19 +1088,22 @@ function dl(name,obj){
 }
 function renderFiles(){
   const b=$("#filesBody");b.innerHTML="";
-  const item=(title,desc,file,payload,canAdd)=>{
+  const item=(title,desc,file,payload,canAdd,share)=>{
     const r=el("div","fitem"),t=el("div","ft"),a=el("div","row");
     t.append(el("strong","",title),el("span","empty",desc));
     const bd=el("button","","Baixar");bd.onclick=()=>{dl(file,payload);toast("Arquivo baixado.")};a.append(bd);
     if(canAdd){const ba=el("button","","Adicionar ao site");ba.onclick=()=>addDecks(payload.decks);a.append(ba)}
+    if(share){const bc=el("button","","Copiar código");bc.onclick=()=>shareDeck(payload.decks[0],false);const bl=el("button","","Copiar link");bl.onclick=()=>shareDeck(payload.decks[0],true);a.append(bc,bl)}
     r.append(t,a);return r;
   };
   const n=EXEMPLOS.reduce((x,d)=>x+d.cards.length,0);
   const slug=t=>t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\W+/g,"-").replace(/^-|-$/g,"")||"deck";
-  b.append(el("h3","","Decks prontos"),
+  const cr=el("div","row"),ci=el("input");ci.type="text";ci.placeholder="Cole um código ou link de deck";ci.setAttribute("aria-label","Código ou link de deck");
+  const cb=el("button","","Importar código");cb.onclick=()=>openCode(ci.value);cr.append(ci,cb);
+  b.append(el("h3","","Importar por código"),cr,el("h3","","Decks prontos"),
     item("Pacote completo",EXEMPLOS.length+" decks, "+n+" cartas","decks-exemplo.json",{versao:3,decks:EXEMPLOS},true));
   EXEMPLOS.forEach(d=>b.append(item(d.name,d.cards.length+" cartas","deck-"+slug(d.name)+".json",{versao:3,decks:[d]},true)));
-  if(S.decks.length){b.append(el("h3","","Seus decks"));S.decks.forEach(d=>b.append(item(d.name,d.cards.length+" cartas","deck-"+slug(d.name)+".json",{versao:3,decks:[d]},false)))}
+  if(S.decks.length){b.append(el("h3","","Seus decks"));S.decks.forEach(d=>b.append(item(d.name,d.cards.length+" cartas","deck-"+slug(d.name)+".json",{versao:3,decks:[d]},false,true)))}
   b.append(el("h3","","Seus dados"),
     item("Backup completo","Seus decks, perfis de estilo e configurações","decks-backup-"+new Date().toISOString().slice(0,10)+".json",{versao:3,title:S.title,decks:S.decks,cfg:S.cfg,profiles:S.profiles},false),
     el("p","empty","Para usar um arquivo baixado depois, vá em Editar decks e clique em Importar arquivo."));
@@ -912,10 +1145,10 @@ document.addEventListener("keydown",e=>{
   if(e.ctrlKey||e.metaKey||e.altKey||document.querySelector("dialog[open]")||/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)||document.activeElement.isContentEditable)return;
   const k=e.key.toLowerCase();
   if(e.code==="Space"){if(document.activeElement.tagName!=="BUTTON"){e.preventDefault();draw()}}
-  else if(k==="f")toggleFs();else if(k==="e")openEd();else if(k==="a")$("#bFiles").click();else if(k==="s")openSet();else if(k==="c")copyTxt();
+  else if(k==="f")toggleFs();else if(k==="e")openEd();else if(k==="a")$("#bFiles").click();else if(k==="u")undo();else if(k==="m"){S.cfg.compact=!S.cfg.compact;applyCfg();save()}else if(k==="s")openSet();else if(k==="c")copyTxt();
   else if(/^[1-8]$/.test(k))setCount(+k);
 });
-applyCfg();syncTitle();syncCount();renderDeckChips();renderChips();showBacks();renderHist();
+applyCfg();syncTitle();syncCount();renderDeckChips();renderChips();showBacks();renderHist();renderQuests();
 async function bootstrap(){
   if(localStorage.getItem(KEY))return;
   try{
@@ -925,6 +1158,15 @@ async function bootstrap(){
   }catch(e){}
 }
 bootstrap();
+$("#modeSel").onchange=e=>setMode(e.target.value);
+$("#bUndo").onclick=undo;
+$("#bSum").onclick=showSummary;
+$("#sumClose").onclick=()=>$("#dlgSum").close();
+$("#sumCopy").onclick=()=>copyText(summaryText(),"Resumo copiado.");
+$("#sumNew").onclick=()=>{$("#dlgSum").close();newSession()};
+$("#codeAdd").onclick=()=>{$("#dlgCode").close();if(pendCode)addDecks([pendCode]);pendCode=null};
+$("#codeCancel").onclick=()=>{$("#dlgCode").close();pendCode=null};
+addEventListener("hashchange",checkHash);checkHash();
 $("#ver").textContent="v"+APP_VERSION;
 if(S.notice)showNotice();
 </script>
