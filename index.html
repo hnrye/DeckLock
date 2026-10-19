@@ -228,6 +228,161 @@ body.compact main{padding-top:10px;gap:14px}
 body.compact header{padding:8px 20px 0}
 body.compact .title{font-size:1.2rem}
 @media(prefers-reduced-motion:reduce){.primary,.scene{animation:none!important}}
+
+/* ---------- Missões 2.0 ---------- */
+.scene.has-actions{margin-bottom:56px}
+.scene.has-actions .acc{display:none;position:absolute;top:calc(100% + 9px);bottom:auto;left:0;right:0;width:100%;min-height:42px;padding:8px 12px;z-index:4;opacity:1;transform:none;border:1px solid var(--gold);border-radius:9px;background:var(--gold);color:var(--onacc);font-weight:750;font-size:.9rem;letter-spacing:.01em;box-shadow:0 4px 18px #0005}
+.scene.live.has-actions .acc{display:block}
+.scene.has-actions .acc.enlisted{border-color:var(--line);background:var(--panel);color:var(--ink);box-shadow:none}
+.scene.has-actions .acc.resolved{border-color:var(--rare);background:color-mix(in srgb,var(--rare) 15%,var(--bg2));color:var(--ink)}
+.scene.has-actions .acc.missed{border-color:var(--leg);background:color-mix(in srgb,var(--leg) 15%,var(--bg2));color:var(--ink)}
+.scene.has-actions .rr{opacity:1;display:block;top:8px;right:8px;left:auto}
+.mission-board{width:min(960px,100%);background:color-mix(in srgb,var(--panel) 55%,var(--bg));border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:14px}
+.mission-board[hidden]{display:none}
+.board-head{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.board-head h2{margin:0;color:var(--gold);font-size:1.3rem}
+.board-head p{margin:3px 0 0;color:var(--mute);font-size:.87rem}
+.board-stats{display:flex;gap:6px;flex-wrap:wrap}
+.board-stats span{padding:4px 10px;border-radius:99px;border:1px solid var(--line);font-size:.78rem;background:var(--bg2)}
+.board-stats b{color:var(--gold)}
+.board-progress{height:7px;background:var(--bg2);border-radius:99px;overflow:hidden;border:1px solid var(--line)}
+.board-progress i{display:block;height:100%;width:0%;background:var(--rare);transition:width .22s}
+.board-toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.board-toolbar button{min-height:32px;padding:4px 12px;font-size:.82rem;border-radius:99px}
+.board-toolbar button[aria-pressed=true]{background:var(--gold);color:var(--onacc);border-color:var(--gold)}
+#quests{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:10px;margin:0;padding:0;list-style:none;max-height:500px;overflow:auto}
+.mission{background:var(--bg2);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:10px;padding:14px;display:grid;gap:10px;min-width:0}
+.mission.done{border-left-color:var(--rare)}.mission.dropped{border-left-color:var(--leg)}.mission.later{border-left-color:var(--mute)}
+.mission-top{display:flex;gap:8px;justify-content:space-between;align-items:start}
+.mission-title{font-family:var(--fh);font-size:1.08rem;line-height:1.3;color:var(--ink)}
+.mission-meta{color:var(--mute);font-size:.77rem}
+.mission-description{margin:0;color:var(--ink);font-size:.88rem;overflow-wrap:anywhere}
+.mission-status{flex:none;border:1px solid currentColor;padding:2px 7px;border-radius:99px;font-size:.69rem;line-height:1.5;color:var(--gold)}
+.mission.done .mission-status{color:var(--rare)}.mission.dropped .mission-status{color:var(--leg)}.mission.later .mission-status{color:var(--mute)}
+.mission-fields{display:grid;grid-template-columns:minmax(90px,1fr) minmax(90px,1.6fr);gap:9px}
+.mission-fields label{font-size:.73rem}
+.mission-fields input{font-size:.83rem;min-height:35px}
+.mission-actions{display:flex;gap:6px;flex-wrap:wrap}
+.mission-actions button{min-height:33px;font-size:.82rem;padding:5px 10px}
+.mission-actions .success{background:color-mix(in srgb,var(--rare) 28%,var(--bg2));border-color:var(--rare)}
+.mission-actions .fail{background:color-mix(in srgb,var(--leg) 17%,var(--bg2));border-color:var(--leg)}
+#questEmpty{margin:0;padding:15px;text-align:center;background:var(--bg2);border-radius:9px;color:var(--mute);font-size:.9rem}
+.mission-focus{outline:2px solid var(--gold);outline-offset:3px}
+#dlgSum{width:min(960px,96vw)}
+.sum-hero{display:grid;gap:8px}
+.sum-hero p{margin:0;color:var(--mute);font-size:.88rem}
+.sum-hero select{max-width:340px}
+.sum-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.sum-kpi{display:grid;gap:2px;background:var(--bg2);border:1px solid var(--line);padding:12px;border-radius:11px}
+.sum-kpi strong{font-family:var(--fh);font-size:clamp(1.3rem,4vw,2rem);line-height:1.15;color:var(--gold)}
+.sum-kpi span{color:var(--mute);font-size:.76rem}
+.sum-bar{background:var(--bg2);border:1px solid var(--line);height:11px;border-radius:99px;overflow:hidden;display:flex}
+.sum-bar span{height:100%;min-width:0}
+.sum-section{display:grid;gap:10px}
+.sum-section h3{margin:5px 0 0;color:var(--gold)}
+.sum-result{padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:var(--bg2);display:grid;gap:3px}
+.sum-result-top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.sum-result small{color:var(--mute)}
+.sum-result p{margin:0;font-size:.87rem;overflow-wrap:anywhere}
+.sum-pill{border:1px solid currentColor;border-radius:99px;padding:1px 8px;font-size:.73rem;color:var(--gold)}
+.sum-pill.done{color:var(--rare)}.sum-pill.dropped{color:var(--leg)}.sum-pill.later{color:var(--mute)}
+.sum-draw{border:1px solid var(--line);border-radius:9px;background:var(--bg2);padding:9px 11px}
+.sum-draw summary{cursor:pointer;display:flex;justify-content:space-between;gap:10px;align-items:center;list-style:none}
+.sum-draw summary::-webkit-details-marker{display:none}
+.sum-draw summary::before{content:'▸';color:var(--gold);margin-right:4px}
+.sum-draw[open] summary::before{content:'▾'}
+.sum-draw-list{margin:8px 0 0;padding:8px 0 0 18px;border-top:1px solid var(--line);display:grid;gap:4px;font-size:.85rem}
+.sum-draw-list em{font-style:normal;color:var(--mute);font-size:.78rem}
+.sum-empty{color:var(--mute);font-size:.88rem}
+#dlgSum .set{gap:16px}
+.match-fields{display:grid;grid-template-columns:minmax(160px,.8fr) minmax(210px,1.4fr);gap:10px;align-items:end}
+.match-fields label{font-size:.83rem}
+.match-fields strong{font-family:var(--fh);font-size:1.07rem;color:var(--gold)}
+@media(max-width:600px){.mission-board{padding:12px}.sum-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.mission-fields,.match-fields{grid-template-columns:1fr}.board-head{align-items:start}}
+@media(prefers-reduced-motion:reduce){.board-progress i{transition:none}}
+/* ---------- Experiência simples, acompanhamento opcional ---------- */
+.mission-board{display:block;width:min(740px,100%)}
+.mission-board>summary{display:flex;gap:10px;align-items:center;cursor:pointer;color:var(--gold);font-family:var(--fh);font-size:1rem;list-style:none;user-select:none}
+.mission-board>summary::-webkit-details-marker{display:none}
+.mission-board>summary::before{content:'▸';font:1rem system-ui,sans-serif;color:var(--mute)}
+.mission-board[open]>summary{margin-bottom:14px}
+.mission-board[open]>summary::before{content:'▾'}
+.mission-board>summary span{font:600 .8rem system-ui,sans-serif;border-radius:20px;padding:1px 8px;border:1px solid var(--line);color:var(--ink)}
+.mission-board>summary small{margin-left:auto;font:400 .76rem system-ui,sans-serif;color:var(--mute)}
+
+.mission-board{padding:14px;gap:10px}
+.mission{padding:11px;gap:8px}
+.mission-more{border-top:1px solid var(--line);padding-top:7px}
+.mission-more>summary{font-size:.75rem;color:var(--mute);cursor:pointer;user-select:none}
+.mission-more .mission-fields{margin-top:10px}
+.mission-more:not([open]) .mission-fields{display:none}
+
+[hidden]{display:none!important}
+main{gap:20px;padding-top:22px}
+.stage{gap:16px}
+.deck-choice{display:grid;gap:8px;justify-items:center;width:100%}
+.deck-label{color:var(--mute);font-size:.78rem;text-transform:uppercase;letter-spacing:.12em;margin:0;font-weight:650}
+#deckChips{gap:8px}
+#deckChips .chip{padding:6px 16px;min-height:38px}
+#table{gap:20px}
+.scene.has-actions{margin-bottom:0}
+.scene.has-actions .rr{opacity:0}
+.scene.has-actions:hover .rr,.scene.has-actions .rr:focus-visible{opacity:1}
+@media(hover:none){.scene.has-actions .rr{opacity:.95}}
+.simple-actions{flex-direction:column;align-items:center;gap:8px;width:100%}
+.simple-actions .primary{min-height:54px;min-width:min(300px,84vw);font-size:1.07rem}
+.subtle-action{border:0;background:transparent;color:var(--mute);min-height:32px;font-size:.85rem;padding:4px 12px}
+.subtle-action:hover{color:var(--ink)}
+.extras{width:min(640px,100%);border:1px solid color-mix(in srgb,var(--line) 85%,transparent);border-radius:11px;background:color-mix(in srgb,var(--bg2) 35%,var(--bg));}
+.extras>summary{list-style:none;cursor:pointer;text-align:center;color:var(--mute);font-size:.84rem;padding:10px 12px;user-select:none}
+.extras>summary::-webkit-details-marker{display:none}
+.extras>summary::before{content:'⚙';margin-right:8px;font-size:.9rem}
+.extras[open]>summary{border-bottom:1px solid var(--line);color:var(--ink)}
+#optionsHint{font-size:.75rem;color:var(--rare)}
+.extras-content{display:grid;gap:15px;padding:16px}
+.extras-row{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.extras .stepper{font-size:.85rem}
+.extras .stepper button{min-height:34px}
+.filter-options{display:grid;gap:7px;justify-items:start}
+.extras-label{font-size:.8rem;color:var(--mute)}
+#chips{justify-content:flex-start;gap:6px}
+#chips .chip{font-size:.8rem;padding:4px 10px;min-height:32px}
+.small-link{background:none;border:0;min-height:26px;padding:2px;color:var(--mute);text-decoration:underline;text-underline-offset:3px;font-size:.78rem}
+.tracking-toggle{display:flex;gap:11px;align-items:start;padding:12px;border:1px solid var(--line);border-radius:9px;color:var(--ink);cursor:pointer;background:var(--bg2)}
+.tracking-toggle input{width:18px;height:18px;flex:none;margin-top:3px;accent-color:var(--gold)}
+.tracking-toggle span{display:grid;gap:3px}
+.tracking-toggle strong{font-size:.9rem}
+.tracking-toggle small{color:var(--mute);font-size:.79rem;line-height:1.4}
+.extras .ctrl2{justify-content:flex-start}
+#qbox{margin-top:2px}
+.scene.has-actions.tracked{margin-bottom:37px}
+.scene.has-actions.tracked .acc{display:none;top:calc(100% + 7px);bottom:auto;min-height:30px;padding:4px 9px;border:1px solid var(--line);border-radius:7px;background:var(--bg2);color:var(--mute);font-size:.77rem;font-weight:500;box-shadow:none}
+.scene.has-actions.tracked.live .acc{display:block}
+.scene.has-actions.tracked .acc:hover{color:var(--ink);border-color:var(--gold)}
+#histbox{width:min(640px,100%);background:transparent;border:1px solid var(--line)}
+body:not(.tracking) #histbox,body:not(.tracking) #qbox{display:none!important}
+body:not(.tracking) #bSum{display:none!important}
+body:not(.tracking) .scene .acc{display:none!important}
+@media(max-width:600px){header{padding:8px 16px 2px;row-gap:4px}header .orn{display:none}main{padding:14px 12px 24px;gap:14px}.stage{gap:14px}.extras-content{padding:12px}.deck-choice{gap:7px}#table{gap:14px}#table .scene{width:min(var(--cw),78vw,270px)}.simple-actions .primary{min-width:min(300px,84vw)}.extras-row{gap:10px}}
+@media(prefers-reduced-motion:reduce){.simple-actions .primary{animation:none!important}}
+
+/* Ações essenciais permanecem sempre visíveis */
+.quick-count{display:flex;align-items:center;justify-content:center;gap:14px;color:var(--mute);font-size:.88rem}
+.quick-count .stepper{gap:9px}
+.quick-count .stepper button{min-width:42px;min-height:40px;padding:4px 11px;font-size:1.12rem;border-radius:9px}
+.quick-count .stepper b{font-size:1.03rem;color:var(--ink);min-width:2ch;font-variant-numeric:tabular-nums}
+.shortcut-help{width:min(640px,100%);color:var(--mute);font-size:.77rem}
+.shortcut-help>summary{list-style:none;cursor:pointer;text-align:center;padding:6px 8px;user-select:none}
+.shortcut-help>summary::-webkit-details-marker{display:none}
+.shortcut-help>summary::after{content:' ▾';font-size:.7rem}
+.shortcut-help[open]>summary::after{content:' ▴'}
+.shortcut-help>summary:hover{color:var(--ink)}
+.shortcut-preview{opacity:.85}
+.shortcut-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 12px;padding:12px;border-radius:9px;background:var(--bg2);border:1px solid var(--line)}
+.shortcut-grid span{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.shortcut-grid kbd{display:inline-block;min-width:23px;text-align:center;font:600 .75rem system-ui,sans-serif;color:var(--ink);border:1px solid var(--mute);border-radius:5px;padding:2px 5px}
+body.fs .shortcut-help{display:none}
+@media(max-width:600px){.quick-count{gap:10px}.quick-count .stepper button{min-width:44px;min-height:42px}.shortcut-preview{display:none}.shortcut-grid{grid-template-columns:repeat(2,minmax(0,1fr));font-size:.72rem;gap:10px}}
 </style>
 </head>
 <body>
@@ -246,28 +401,66 @@ body.compact .title{font-size:1.2rem}
 </header>
 <main id="main">
   <section class="stage">
-    <div class="chips" id="deckChips" aria-label="Decks"></div>
-    <div class="chips" id="chips" aria-label="Categorias"></div>
-    <div id="table"></div>
-    <div class="ctrl">
-      <div class="stepper"><span>Cartas por deck</span><button id="bMin" aria-label="Menos cartas">−</button><b id="cnt" aria-live="polite">1</b><button id="bPlus" aria-label="Mais cartas">+</button></div>
-      <button class="primary" id="bDraw">Sortear</button>
-      <button id="bCopy" title="Copiar o resultado (C)">Copiar</button>
+    <div class="deck-choice">
+      <p class="deck-label">Escolha um deck</p>
+      <div class="chips" id="deckChips" aria-label="Decks"></div>
     </div>
-    <div class="ctrl2">
-      <label class="modelab">Modo <select id="modeSel" aria-label="Modo de partida" title="Livre: sem regras. Clássico: sem trocas, cada carta vira missão. Caos: quantidade aleatória, raras mais frequentes, só 1 troca. Baralho finito: número limitado de sorteios, com resumo no fim."><option value="free">Livre</option><option value="classic">Clássico</option><option value="chaos">Caos</option><option value="finite">Baralho finito</option></select></label>
-      <button id="bUndo" class="linkbtn" hidden title="Desfazer o último sorteio (U)">Desfazer sorteio</button>
-      <button id="bSum" class="linkbtn" hidden>Resumo</button>
+    <div id="table" aria-label="Cartas sorteadas"></div>
+    <div class="ctrl simple-actions">
+      <div class="quick-count" aria-label="Quantidade de cartas por deck">
+        <span>Cartas por deck</span>
+        <div class="stepper"><button id="bMin" aria-label="Diminuir quantidade de cartas" title="Menos cartas">−</button><b id="cnt" aria-live="polite">1</b><button id="bPlus" aria-label="Aumentar quantidade de cartas" title="Mais cartas">+</button></div>
+      </div>
+      <button class="primary" id="bDraw">Sortear carta</button>
+      <button id="bCopy" class="subtle-action" title="Copiar o resultado (C)" hidden>Copiar carta</button>
     </div>
-    <p class="empty" id="finInfo" hidden></p>
-    <p class="empty" id="remain" hidden></p>
-    <p class="empty hint">Atalhos: espaço sorteia · 1 a 8 quantidade · F tela cheia · E editor · A arquivos · S configurações · C copiar · U desfazer · M modo compacto</p>
+    <details class="extras" id="moreOptions">
+      <summary>Mais opções <span id="optionsHint"></span></summary>
+      <div class="extras-content">
+        <div class="extras-row">
+          <label class="modelab">Modo <select id="modeSel" aria-label="Modo de sorteio" title="Livre: sorteio comum. Clássico: sem trocas. Caos: 1 a 3 cartas e chances maiores para raras. Baralho finito: limite de sorteios."><option value="free">Livre</option><option value="classic">Clássico</option><option value="chaos">Caos</option><option value="finite">Baralho finito</option></select></label>
+        </div>
+        <div class="filter-options">
+          <span class="extras-label">Categorias (opcional)</span>
+          <div class="chips" id="chips" aria-label="Categorias"></div>
+          <button id="bClearFilters" class="small-link" hidden>Limpar filtros</button>
+        </div>
+        <label class="tracking-toggle"><input id="trackToggle" type="checkbox"><span><strong>Acompanhar desafios</strong><small>Opcional: salvar missões, registrar resultados e consultar relatórios.</small></span></label>
+        <div class="ctrl2">
+          <button id="bUndo" class="linkbtn" hidden title="Desfazer o último sorteio (U)">Desfazer sorteio</button>
+          <button id="bSum" class="linkbtn" hidden>Ver relatório</button>
+        </div>
+        <p class="empty" id="finInfo" hidden></p>
+        <p class="empty" id="remain" hidden></p>
+      </div>
+    </details>
+    <details class="shortcut-help" id="shortcutHelp">
+      <summary>⌨ Atalhos de teclado <span class="shortcut-preview">· Espaço: sortear · 1–8: quantidade</span></summary>
+      <div class="shortcut-grid">
+        <span><kbd>Espaço</kbd> Sortear</span><span><kbd>1–8</kbd> Quantidade</span>
+        <span><kbd>C</kbd> Copiar</span><span><kbd>U</kbd> Desfazer</span>
+        <span><kbd>E</kbd> Editor</span><span><kbd>A</kbd> Arquivos</span>
+        <span><kbd>S</kbd> Configurações</span><span><kbd>F</kbd> Tela cheia</span>
+        <span><kbd>M</kbd> Modo compacto</span>
+      </div>
+    </details>
   </section>
-  <details class="histbox" id="qbox" open hidden>
-    <summary>Missões em andamento (<span id="qcount">0</span>)</summary>
+  <details class="mission-board" id="qbox" aria-label="Painel de missões" hidden>
+    <summary class="mission-board-summary">Desafios acompanhados <span id="qmini">0</span><small>Ver ou esconder</small></summary>
+    <div class="board-head">
+      <div><h2>Desafios acompanhados</h2><p>Marque o resultado quando terminar. Os detalhes são opcionais.</p></div>
+      <div class="board-stats" id="missionStats" aria-live="polite"></div>
+    </div>
+    <div class="board-progress" aria-label="Progresso das missões"><i id="missionProgress"></i></div>
+    <div class="board-toolbar" id="qfilters" aria-label="Filtrar missões">
+      <button data-qfilter="open" aria-pressed="true">Em aberto</button>
+      <button data-qfilter="resolved" aria-pressed="false">Finalizadas</button>
+      <button data-qfilter="all" aria-pressed="false">Todas</button>
+    </div>
     <ul id="quests"></ul>
+    <p id="questEmpty" hidden></p>
   </details>
-  <details class="histbox" id="histbox" open>
+  <details class="histbox" id="histbox">
     <summary>Últimos sorteios</summary>
     <ul id="hist"></ul>
     <p class="empty" id="histEmpty">Nenhum sorteio ainda.</p>
@@ -322,9 +515,9 @@ body.compact .title{font-size:1.2rem}
   <div class="set" id="filesBody"></div>
 </dialog>
 <dialog id="dlgSum" aria-label="Resumo da sessão">
-  <div class="top"><strong class="grow">Resumo da sessão</strong><button id="sumClose">Fechar</button></div>
+  <div class="top"><strong class="grow">Relatório de desafios</strong><button id="sumClose">Fechar</button></div>
   <div class="set" id="sumBody"></div>
-  <div class="top"><button id="sumCopy">Copiar resumo</button><button id="sumNew" class="primary">Nova sessão</button></div>
+  <div class="top"><button id="sumCopy">Copiar relatório</button><button id="sumDownload">Baixar .txt</button><span class="grow"></span><button id="sumNew" class="primary">Nova sessão</button></div>
 </dialog>
 <dialog id="dlgCode" aria-label="Deck compartilhado">
   <div class="top"><strong class="grow">Deck compartilhado</strong></div>
@@ -348,7 +541,7 @@ const PROFILES={
 "Rubi":{back:"plain",colors:{bg:"#140b0d",bg2:"#1e1013",panel:"#271519",ink:"#f1e3dc",mute:"#a58f88",gold:"#e0b060",rare:"#5ea8c8",leg:"#e8574a",line:"#4a2a30"}},
 "Claro":{back:"plain",colors:{bg:"#f2ede3",bg2:"#fbf8f1",panel:"#e7dfcf",ink:"#241d16",mute:"#6e6252",gold:"#a8741a",rare:"#1f7a8c",leg:"#b3341f",line:"#c9bca3"}}};
 const FONTS={serif:["Serifada","Georgia,'Times New Roman',serif"],sans:["Sem serifa","system-ui,sans-serif"],cond:["Condensada","'Arial Narrow',Bahnschrift,Impact,sans-serif"]};
-const DEF_CFG=()=>({profile:"b:Deadlock",mod:false,colors:{...PROFILES.Deadlock.colors},back:"plain",backImg:"",bgfx:"glow",face:"solid",bgi:100,font:"serif",cw:300,flip:700,anim:!matchMedia("(prefers-reduced-motion: reduce)").matches,snd:false,pack:"soft",finiteN:10,compact:false,fxn:100,fx:{comum:{in:"flip",fx:"none"},rara:{in:"rise",fx:"glow"},lendaria:{in:"spin",fx:"confetti"}},hist:true,norepeat:true,cycle:true,rr:0,w:{comum:60,rara:30,lendaria:10}});
+const DEF_CFG=()=>({profile:"b:Deadlock",mod:false,colors:{...PROFILES.Deadlock.colors},back:"plain",backImg:"",bgfx:"glow",face:"solid",bgi:100,font:"serif",cw:300,flip:700,anim:!matchMedia("(prefers-reduced-motion: reduce)").matches,snd:false,pack:"soft",finiteN:10,track:false,compact:false,fxn:100,fx:{comum:{in:"flip",fx:"none"},rara:{in:"rise",fx:"glow"},lendaria:{in:"spin",fx:"confetti"}},hist:true,norepeat:true,cycle:true,rr:0,w:{comum:60,rara:30,lendaria:10}});
 
 const DEF_DECKS=()=>EXEMPLOS.filter(d=>d.name==="Grupo"||d.name==="Heróis").map(d=>JSON.parse(JSON.stringify(d)));
 const EXEMPLOS=[{"id":"g","name":"Grupo","cards":[{"id":"g0","title":"Pick do colega","text":"Cada um joga o herói que o colega ao lado escolheu para você. Sem veto, sem troca.","cat":"Caos","rar":"comum","img":""},{"id":"g1","title":"Herói esquecido","text":"Todo mundo joga o herói que menos usou na conta. Se nunca jogou nenhum, vale qualquer um.","cat":"Caos","rar":"comum","img":""},{"id":"g2","title":"Sem arma","text":"Nenhum item de Arma na partida inteira. Só Vitalidade e Espírito.","cat":"Build","rar":"comum","img":""},{"id":"g3","title":"Categoria única","text":"Cada um escolhe uma categoria (Arma, Vitalidade ou Espírito) e só compra dela.","cat":"Build","rar":"comum","img":""},{"id":"g4","title":"Só passivos","text":"Nenhum item ativo na build. Se a luta depende de apertar um botão, ele não existe.","cat":"Build","rar":"rara","img":""},{"id":"g5","title":"Mão fechada","text":"Ninguém gasta souls antes do minuto 5. A primeira compra sai toda de uma vez.","cat":"Build","rar":"rara","img":""},{"id":"g6","title":"Sem zipline","text":"Zipline proibida. Quem chegar atrasado na luta, chegou a pé.","cat":"Handicap","rar":"comum","img":""},{"id":"g7","title":"Lane no corpo a corpo","text":"Até o minuto 5, só melee e habilidades. Tiro só depois disso.","cat":"Handicap","rar":"comum","img":""},{"id":"g8","title":"Minimapa desligado","text":"Ninguém olha o minimapa. Posição do inimigo só por callout no voz.","cat":"Handicap","rar":"rara","img":""},{"id":"g9","title":"Lane única","text":"O grupo todo na mesma lane até a primeira Guardian cair.","cat":"Objetivo","rar":"comum","img":""},{"id":"g10","title":"Prioridade Mid-Boss","text":"Assim que o Mid-Boss nascer, o grupo vai nele. Sem votação.","cat":"Objetivo","rar":"rara","img":""},{"id":"g11","title":"Urn do mais pobre","text":"Quem carrega a Soul Urn é sempre o jogador com menos souls do grupo.","cat":"Objetivo","rar":"rara","img":""},{"id":"g12","title":"Primeiros 5 no camp","text":"Ninguém fica em lane nos primeiros 5 minutos. Todo mundo no jungle.","cat":"Objetivo","rar":"comum","img":""},{"id":"g13","title":"Sem falar","text":"Sem voz até a primeira Guardian cair. Só pings e o chat de texto.","cat":"Comunicação","rar":"rara","img":""},{"id":"g14","title":"Só perguntas","text":"No voz, só vale falar em forma de pergunta. Afirmou, perdeu o turno de falar.","cat":"Comunicação","rar":"comum","img":""},{"id":"g15","title":"Sem nomes","text":"Não vale dizer nome de herói ou de item. Tem que descrever o que quer dizer.","cat":"Comunicação","rar":"rara","img":""},{"id":"g16","title":"Narrador morto","text":"Quem morreu narra a partida para o grupo até renascer.","cat":"Comunicação","rar":"comum","img":""},{"id":"g17","title":"Elogio obrigatório","text":"Depois de cada morte, o grupo elogia uma coisa que o inimigo fez bem. Sem ironia.","cat":"Comunicação","rar":"comum","img":""},{"id":"g18","title":"Líder rotativo","text":"A cada 5 minutos muda o líder. Só ele chama luta, objetivo e recuo.","cat":"Caos","rar":"comum","img":""},{"id":"g19","title":"Quem tem menos decide","text":"O jogador com menos kills decide para onde o grupo vai.","cat":"Caos","rar":"comum","img":""},{"id":"g20","title":"Aposta de kills","text":"Antes de começar, cada um crava quantas kills vai fazer. Quem errar por mais escolhe o herói por último na próxima.","cat":"Caos","rar":"rara","img":""},{"id":"g21","title":"Dado de tudo","text":"Rolem dado para herói, lane e categoria de item de cada um. Sem reclamar do resultado.","cat":"Caos","rar":"rara","img":""},{"id":"g22","title":"Duas cartas","text":"Sorteie mais uma carta e cumpram as duas ao mesmo tempo.","cat":"Caos","rar":"lendaria","img":""},{"id":"g23","title":"Sem arma, sem voz","text":"Nenhum item de Arma e ninguém fala no voz até o minuto 10.","cat":"Caos","rar":"lendaria","img":""},{"id":"g24","title":"Tudo no dado","text":"Herói, lane, itens permitidos e líder sorteados. O grupo só executa.","cat":"Caos","rar":"lendaria","img":""}]},{"id":"i","name":"Individual","cards":[{"id":"i0","title":"Sem tiro","text":"Só habilidades e melee até o minuto 8.","cat":"Handicap","rar":"comum","img":""},{"id":"i1","title":"Sem ultimate","text":"Não use a habilidade 4 até o minuto 15.","cat":"Handicap","rar":"comum","img":""},{"id":"i2","title":"Pé no chão","text":"Sem zipline para você nesta partida.","cat":"Handicap","rar":"comum","img":""},{"id":"i3","title":"Pacifista de tropa","text":"Tropas só morrem no melee.","cat":"Handicap","rar":"comum","img":""},{"id":"i4","title":"Parry sempre","text":"Tente parry em toda luta, acerte ou não.","cat":"Handicap","rar":"rara","img":""},{"id":"i5","title":"Sem ativos","text":"Nenhum item ativo na sua build.","cat":"Build","rar":"comum","img":""},{"id":"i6","title":"Só Espírito","text":"Só compra itens de Espírito.","cat":"Build","rar":"rara","img":""},{"id":"i7","title":"Zero Vitalidade","text":"Nenhum item de Vitalidade. Você vive do que tem.","cat":"Build","rar":"rara","img":""},{"id":"i8","title":"Compra só morto","text":"Só compra itens quando estiver morto.","cat":"Build","rar":"rara","img":""},{"id":"i9","title":"Callout de tudo","text":"Narre em voz alta o que você está fazendo, o tempo todo.","cat":"Comunicação","rar":"comum","img":""},{"id":"i10","title":"Sombra","text":"Fique sempre perto do jogador à sua esquerda.","cat":"Objetivo","rar":"comum","img":""},{"id":"i11","title":"Dono da Urn","text":"Você carrega a Soul Urn sempre que ela estiver disponível.","cat":"Objetivo","rar":"rara","img":""},{"id":"i12","title":"Herói do sorteio","text":"Joga o herói que o grupo sortear no deck de Heróis, sem reclamar.","cat":"Caos","rar":"lendaria","img":""}]},{"id":"h","name":"Heróis","cards":[{"id":"h0","title":"Abrams","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h1","title":"Apollo","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h2","title":"Bebop","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h3","title":"Billy","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h4","title":"Calico","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h5","title":"Celeste","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h6","title":"Doorman","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h7","title":"Drifter","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h8","title":"Dynamo","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h9","title":"Graves","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h10","title":"Grey Talon","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h11","title":"Haze","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h12","title":"Holliday","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h13","title":"Infernus","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h14","title":"Ivy","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h15","title":"Kelvin","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h16","title":"Lady Geist","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h17","title":"Lash","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h18","title":"McGinnis","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h19","title":"Mina","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h20","title":"Mirage","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h21","title":"Mo & Krill","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h22","title":"Paige","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h23","title":"Paradox","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h24","title":"Pocket","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h25","title":"Rem","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h26","title":"Seven","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h27","title":"Shiv","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h28","title":"Silver","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h29","title":"Sinclair","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h30","title":"Venator","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h31","title":"Victor","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h32","title":"Vindicta","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h33","title":"Viscous","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h34","title":"Vyper","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h35","title":"Warden","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h36","title":"Wraith","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h37","title":"Yamato","text":"","cat":"Herói","rar":"comum","img":""}]}];
@@ -356,16 +549,18 @@ const EXEMPLOS=[{"id":"g","name":"Grupo","cards":[{"id":"g0","title":"Pick do co
 const KEY="deadlock-deck-v3";
 /* Reset único: quem tem dados salvos sem "epoch" (versões antigas) volta ao início UMA vez.
    Os dados antigos são guardados em BKEY antes. Só aumente RESET_EPOCH se quiser forçar outro reset. */
-const RESET_EPOCH=2,APP_VERSION="1.2",BKEY="deadlock-deck-v3:backup";
+const RESET_EPOCH=2,APP_VERSION="1.4.2",BKEY="deadlock-deck-v3:backup";
 let resetNotice=null;
 /* Guarda os dados antigos numa chave própria desta atualização. Devolve a chave, ou null se não conseguiu. */
 function stashOld(raw){
+  // Nunca apagar o armazenamento principal para abrir espaço para o backup.
   const base=BKEY+":"+RESET_EPOCH;let k=base;
-  try{const b=localStorage.getItem(k);if(b!==null&&b!==raw)k=base+":"+Date.now()}catch(e){return null}
-  try{localStorage.setItem(k,raw);if(localStorage.getItem(k)===raw)return k}catch(e){}
-  try{localStorage.removeItem(KEY);localStorage.setItem(k,raw);if(localStorage.getItem(k)===raw)return k}catch(e){}
-  try{localStorage.setItem(KEY,raw)}catch(x){}
-  return null;
+  try{
+    const existing=localStorage.getItem(k);
+    if(existing!==null&&existing!==raw)k=base+":"+Date.now();
+    localStorage.setItem(k,raw);
+    return localStorage.getItem(k)===raw?k:null;
+  }catch(e){return null}
 }
 function listBackups(){
   const out=[];
@@ -394,22 +589,33 @@ const FACES={solid:"Liso",gradient:"Degradê suave"};
 const MODES={free:"Livre",classic:"Clássico",chaos:"Caos",finite:"Baralho finito"};
 const SFX={soft:{n:"Suave"},casino:{n:"Cassino"},type:{n:"Máquina de escrever"},magic:{n:"Magia de palco"},arcade:{n:"Arcade retrô"}};
 const normHist=h=>(Array.isArray(h)?h:[]).slice(0,12).map(e=>typeof e==="string"?{t:0,text:e,groups:[]}:(e&&typeof e==="object"&&Array.isArray(e.groups)?e:null)).filter(Boolean);
-const normSess=x=>x&&typeof x==="object"&&Array.isArray(x.draws)?{t0:+x.t0||Date.now(),mode:MODES[x.mode]?x.mode:"free",draws:x.draws.filter(e=>e&&Array.isArray(e.groups)).slice(-300)}:{t0:Date.now(),mode:"free",draws:[]};
-const normQuests=q=>(Array.isArray(q)?q:[]).filter(x=>x&&typeof x.title==="string"&&["active","later","done","dropped"].includes(x.st)).slice(-100).map(x=>({id:String(x.id||"q"+Math.random()),title:String(x.title).slice(0,120),text:String(x.text||"").slice(0,600),deck:String(x.deck||"").slice(0,60),rar:RARS[x.rar]?x.rar:"comum",st:x.st,t:+x.t||0,t2:+x.t2||0}));
+const sessionId=()=>"session-"+Date.now()+"-"+Math.random().toString(36).slice(2,8);
+const normSess=x=>x&&typeof x==="object"&&Array.isArray(x.draws)?{id:String(x.id||"legacy-"+(+x.t0||0)),t0:+x.t0||Date.now(),mode:MODES[x.mode]?x.mode:"free",result:["win","loss"].includes(x.result)?x.result:"",note:String(x.note||"").slice(0,250),draws:x.draws.filter(e=>e&&Array.isArray(e.groups)).slice(-300)}:{id:sessionId(),t0:Date.now(),mode:"free",result:"",note:"",draws:[]};
+const normQuests=q=>(Array.isArray(q)?q:[]).filter(x=>x&&typeof x.title==="string"&&["active","later","done","dropped"].includes(x.st)).slice(-250).map(x=>({id:String(x.id||"q"+Math.random()),sid:String(x.sid||""),source:String(x.source||""),title:String(x.title).slice(0,120),text:String(x.text||"").slice(0,600),deck:String(x.deck||"").slice(0,60),rar:RARS[x.rar]?x.rar:"comum",st:x.st,who:String(x.who||"Grupo").slice(0,60),note:String(x.note||"").slice(0,300),t:+x.t||0,t2:+x.t2||0}));
+const normArchive=a=>(Array.isArray(a)?a:[]).slice(-8).filter(x=>x&&x.sess&&Array.isArray(x.sess.draws)).map(x=>({sess:normSess(x.sess),endedAt:+x.endedAt||0,quests:normQuests(x.quests||[])}));
 const BGFX={plain:"Plano",glow:"Brilho suave",aurora:"Aurora",spot:"Holofote",gradient:"Degradê",vignette:"Vinheta",dots:"Pontos",grain:"Granulado",rays:"Raios"};
 const okImg=v=>typeof v==="string"&&v.startsWith("data:image/");
 function cleanColors(o){const d=DEF_CFG().colors,r={};for(const k in d)r[k]=/^#[0-9a-f]{6}$/i.test(o&&o[k])?o[k]:d[k];return r}
 function cleanCfg(c){
   const d=DEF_CFG();c=c&&typeof c==="object"?c:{};
-  const o={...d,...c,colors:cleanColors(c.colors),w:{...d.w,...c.w}};
+  const o={...d,...c,colors:cleanColors(c.colors),w:{...d.w}};
+  // Somente pesos numéricos finitos entre 0 e 100; 0 significa raridade desligada.
+  for(const k of Object.keys(RARS)){
+    const value=c.w&&c.w[k];
+    const n=typeof value==="number"?value:(typeof value==="string"&&value.trim()?Number(value):NaN);
+    o.w[k]=Number.isFinite(n)?Math.max(0,Math.min(100,n)):d.w[k];
+  }
   if(!BACKS[o.back])o.back=d.back;
   if(!okImg(o.backImg))o.backImg="";
   if(!FONTS[o.font])o.font="serif";
-  const fx={};for(const k of Object.keys(RARS)){const v=(c.fx&&c.fx[k])||d.fx[k];fx[k]={in:ENTRADAS[v.in]?v.in:d.fx[k].in,fx:EFEITOS[v.fx]?v.fx:d.fx[k].fx}}o.fx=fx;
+  const fx={};for(const k of Object.keys(RARS)){
+    const v=c.fx&&c.fx[k]&&typeof c.fx[k]==="object"?c.fx[k]:d.fx[k];
+    fx[k]={in:ENTRADAS[v.in]?v.in:d.fx[k].in,fx:EFEITOS[v.fx]?v.fx:d.fx[k].fx};
+  }o.fx=fx;
   if(!BGFX[o.bgfx])o.bgfx="glow";
   if(!FACES[o.face])o.face="solid";
   if(!SFX[o.pack])o.pack="soft";
-  o.finiteN=Math.min(60,Math.max(3,Math.round(+o.finiteN)||10));o.compact=!!o.compact;
+  o.finiteN=Math.min(60,Math.max(3,Math.round(+o.finiteN)||10));o.track=c.track===true;o.compact=!!o.compact;
   o.bgi=Math.min(100,Math.max(0,isNaN(+o.bgi)?100:+o.bgi));o.fxn=Math.min(200,Math.max(50,+o.fxn||100));
   o.cw=Math.min(440,Math.max(200,+o.cw||300));o.flip=Math.min(1600,Math.max(0,+o.flip||700));
   if(c.profile===undefined)o.profile=PROFILES[c.preset]?"b:"+c.preset:(c.preset===undefined?d.profile:"");
@@ -446,10 +652,11 @@ function load(first){
   s.cfg=cleanCfg(s.cfg);
   s.profiles=(Array.isArray(s.profiles)?s.profiles:[]).map(cleanProfile).filter(Boolean);
   s.title=["Deck do Caos \u00b7 Deadlock","Decklock"].includes(s.title)?"DeckLock":(s.title||"DeckLock");
-  s.active=(s.active||[]).filter(id=>s.decks.some(x=>x.id===id));
-  if(!s.active.length&&s.decks.length)s.active=[s.decks[0].id];
+  const hasActive=Array.isArray(s.active);
+  s.active=(hasActive?s.active:[]).filter(id=>s.decks.some(x=>x.id===id));
+  if(!hasActive&&s.decks.length)s.active=[s.decks[0].id];
   s.count=Math.min(8,Math.max(1,s.count||1));
-  s.hist=normHist(s.hist);s.quests=normQuests(s.quests);s.sess=normSess(s.sess);
+  s.hist=normHist(s.hist);s.quests=normQuests(s.quests);s.sess=normSess(s.sess);s.archives=normArchive(s.archives);
   s.mode=MODES[s.mode]?s.mode:"free";
   if(s.mode==="finite"){const f=s.fin;s.fin=f&&+f.total>0?{total:+f.total,left:Math.max(0,Math.min(+f.total,+f.left||0))}:{total:s.cfg.finiteN,left:s.cfg.finiteN}}else s.fin=null;
   s.epoch=RESET_EPOCH;s.ver=APP_VERSION;
@@ -489,11 +696,12 @@ function applyCfg(){
   for(const[k,v]of Object.entries(c.colors))r.setProperty("--"+k,v);
   r.setProperty("--cw",c.cw+"px");r.setProperty("--flip",(c.anim?c.flip:0)+"ms");
   r.setProperty("--fh",FONTS[c.font][1]);
-  r.setProperty("--bgi",c.bgi/100);document.documentElement.dataset.bg=c.bgfx;document.documentElement.dataset.face=c.face;document.body.classList.toggle("compact",!!c.compact);
+  r.setProperty("--bgi",c.bgi/100);document.documentElement.dataset.bg=c.bgfx;document.documentElement.dataset.face=c.face;document.body.classList.toggle("compact",!!c.compact);document.body.classList.toggle("tracking",!!c.track);
+  const trackCheck=$("#trackToggle");if(trackCheck)trackCheck.checked=!!c.track;
   r.setProperty("--onacc",lum(c.colors.gold)>.4?"#16110a":"#ffffff");
   r.colorScheme=lum(c.colors.bg)>.5?"light":"dark";
   document.querySelectorAll(".face.back").forEach(b=>paintBack(b,c.back,c.backImg));
-  $("#histbox").hidden=!c.hist;
+  $("#histbox").hidden=!c.hist||!c.track;
   requestAnimationFrame(fit);
 }
 const flipMs=()=>S.cfg.anim?S.cfg.flip:0;
@@ -521,15 +729,48 @@ function fillCard(f,c){
   if(c.img){const a=el("div","art"),i=new Image();i.src=c.img;i.alt="";a.append(i);f.append(a)}
   const b=el("div","body");b.append(el("h2","ct",c.title));if(c.text)b.append(el("p","tx",c.text));f.append(b);
 }
+function sourceFor(g,i,entry=curEntry){
+  return entry?(String(entry.uid||entry.t)+":"+String(g.deck?.id||g.deckId||g.name)+":"+i):"";
+}
+function questForSource(source){return source?sessionQuests().find(q=>q.source===source):null}
+function syncCardActions(){
+  document.querySelectorAll("#table .scene.has-actions").forEach(sc=>{
+    const btn=sc.querySelector(".acc"),rr=sc.querySelector(".rr"),q=questForSource(sc._source);
+    if(!btn)return;
+    btn.className="acc";
+    if(!q){btn.textContent="＋ Assumir desafio";btn.title="Adicionar às missões da sessão"}
+    else{
+      btn.classList.add(q.st==="done"?"resolved":q.st==="dropped"?"missed":"enlisted");
+      btn.textContent=q.st==="done"?"✓ Cumprida · Ver missão":q.st==="dropped"?"✕ Não cumprida · Ver":q.st==="later"?"◷ Pausada · Ver missão":"✓ Em andamento · Ver missão";
+      btn.title="Abrir a missão no painel";
+    }
+    if(rr){rr.disabled=busy||!!q||(!!rrLimit()&&rrUsed>=rrLimit());rr.title=q?"Remova a missão no painel antes de trocar a carta":"Sortear outra carta"}
+  });
+}
+function focusQuest(id){
+  questView="all";renderQuests();$("#qbox").open=true;
+  const item=[...document.querySelectorAll("#quests .mission")].find(li=>li.dataset.quest===id);
+  if(item){$("#qbox").scrollIntoView({behavior:"smooth",block:"start"});item.classList.add("mission-focus");setTimeout(()=>item.classList.remove("mission-focus"),1900)}
+}
 function cardEl(g,i,noRR){
   const c=g.cards[i],sc=el("div","scene"),cd=el("div","card"),b=el("div","face back"),f=el("div","face front");
   b.setAttribute("aria-hidden","true");paintBack(b,S.cfg.back,S.cfg.backImg);cd.append(b,f);sc.append(cd);
   if(c){fillCard(f,c);sc._g=g;sc._i=i;
-    if(!noRR&&S.mode!=="classic"){
-      const r=el("button","rr","↻ Trocar");r.title="Sortear outra carta no lugar desta";r.onclick=()=>reroll(sc);
-      const a=el("button","acc","✓ Aceitar");a.title="Guardar como missão em andamento";a.onclick=()=>{addQuest(sc._g,sc._g.cards[sc._i]);a.disabled=true;a.textContent="✓ Aceita"};
-      sc.append(r,a);
-    }}
+    if(!noRR){
+      sc.classList.add("has-actions");if(S.cfg.track)sc.classList.add("tracked");sc._source=sourceFor(g,i);
+      if(S.mode!=="classic"){
+        const r=el("button","rr","↻ Trocar");r.title="Sortear outra carta no lugar desta";r.onclick=()=>reroll(sc);sc.append(r);
+      }
+      const a=el("button","acc","＋ Assumir desafio");
+      a.onclick=()=>{
+        const q=questForSource(sc._source);
+        if(q){focusQuest(q.id);return}
+        const added=addQuest(sc._g,sc._g.cards[sc._i],false,sc._source);
+        if(added){toast("Missão assumida: "+added.title);syncCardActions()}
+      };
+      sc.append(a);
+    }
+  }
   return sc;
 }
 function build(groups){
@@ -552,32 +793,57 @@ function build(groups){
     g.cards.forEach((c,i)=>row.append(cardEl(g,i)));
     w.append(row);t.append(w);
   });
-  requestAnimationFrame(fit);
+  requestAnimationFrame(fit);syncCardActions();
 }
 function showBacks(){table=[];undoStack=[];build(sel().map(d=>({name:d.name,deck:d,cards:Array(S.mode==="chaos"?1:S.count).fill(null)})));renderMeta()}
+// Categoria e peso zero são restrições obrigatórias, inclusive nas trocas.
+const eligibleCards=d=>d.cards.filter(c=>!c.off&&(!filt.size||filt.has(c.cat))&&(S.cfg.w[c.rar]||0)>0);
 function wpick(pool){
-  const w=pool.map(c=>(S.cfg.w[c.rar]??30)*(c.fav?2:1)*(S.mode==="chaos"?({comum:1,rara:2,lendaria:3})[c.rar]||1:1)),t=w.reduce((a,b)=>a+b,0);
-  if(!t)return Math.floor(Math.random()*pool.length);
-  let r=Math.random()*t;for(let i=0;i<pool.length;i++){r-=w[i];if(r<=0)return i}
-  return pool.length-1;
+  if(!pool.length)return -1;
+  // Escolha a raridade primeiro, sem multiplicar seu peso pela quantidade de cartas.
+  const buckets=Object.keys(RARS).map(rar=>({
+    rar,cards:pool.map((c,i)=>({c,i})).filter(x=>x.c.rar===rar),
+    weight:(S.cfg.w[rar]||0)*(S.mode==="chaos"?({comum:1,rara:2,lendaria:3})[rar]:1)
+  })).filter(b=>b.cards.length&&b.weight>0);
+  const total=buckets.reduce((sum,b)=>sum+b.weight,0);
+  if(!total)return -1;
+  let r=Math.random()*total,bucket=buckets[buckets.length-1];
+  for(const b of buckets){r-=b.weight;if(r<0){bucket=b;break}}
+  const cardTotal=bucket.cards.reduce((sum,x)=>sum+(x.c.fav?2:1),0);
+  let choice=Math.random()*cardTotal;
+  for(const x of bucket.cards){choice-=x.c.fav?2:1;if(choice<0)return x.i}
+  return bucket.cards[bucket.cards.length-1].i;
 }
 function pickN(d,n){
   n=n||S.count;
-  const live=d.cards.filter(c=>!c.off),f=live.filter(c=>!filt.size||filt.has(c.cat));let pool=f.length?f:live;
+  let pool=eligibleCards(d);
   const u=used[d.id]||(used[d.id]=new Set()),cyc=S.cfg.cycle||S.mode==="finite";
   if(cyc){
     let r=pool.filter(c=>!u.has(c.id));
-    if(r.length<Math.min(n,pool.length)){pool.forEach(c=>u.delete(c.id));const r2=pool.filter(c=>!lastIds.has(c.id));r=r2.length>=Math.min(n,pool.length)?r2:pool}
+    if(r.length<Math.min(n,pool.length)){
+      pool.forEach(c=>u.delete(c.id));
+      const r2=pool.filter(c=>!lastIds.has(c.id));
+      r=r2.length>=Math.min(n,pool.length)?r2:pool;
+    }
     pool=r;
-  }else if(S.cfg.norepeat){const r=pool.filter(c=>!lastIds.has(c.id));if(r.length>=n)pool=r}
+  }else if(S.cfg.norepeat){
+    const r=pool.filter(c=>!lastIds.has(c.id));if(r.length>=Math.min(n,pool.length))pool=r;
+  }
   pool=[...pool];const out=[];
-  while(out.length<n&&pool.length)out.push(pool.splice(wpick(pool),1)[0]);
+  while(out.length<n&&pool.length){const index=wpick(pool);if(index<0)break;out.push(pool.splice(index,1)[0])}
   out.forEach(c=>u.add(c.id));return out;
 }
-function setBusy(b){busy=b;const d=$("#bDraw");d.textContent=b?"Sorteando…":"Sortear";d.setAttribute("aria-disabled",b)}
+function setBusy(b){
+  busy=b;const d=$("#bDraw");d.textContent=b?"Sorteando…":"Sortear carta";d.disabled=b;d.setAttribute("aria-disabled",b);
+  $("#modeSel").disabled=b;
+  if(b){$("#bMin").disabled=true;$("#bPlus").disabled=true}
+  else syncCount();
+  document.querySelectorAll("#deckChips button,#chips button").forEach(x=>x.disabled=b);
+}
 function updateRR(){
   const l=rrLimit();
   document.querySelectorAll(".rr").forEach(r=>{r.disabled=!!l&&rrUsed>=l;r.textContent=l?"↻ Trocar ("+Math.max(0,l-rrUsed)+")":"↻ Trocar"});
+  syncCardActions();
 }
 function reveal(sc,delay,i){
   setTimeout(()=>{
@@ -621,24 +887,30 @@ async function draw(){
   if(busy)return;
   const ds=sel();
   if(!ds.length){toast(S.decks.length?"Selecione ao menos um deck.":"Nenhum deck ainda. Carregue um arquivo ou crie um deck.");return}
-  if(!ds.some(d=>d.cards.some(c=>!c.off))){toast("Os decks selecionados estão vazios ou sem cartas ativas.");return}
-  if(S.mode==="finite"&&S.fin&&S.fin.left<=0){showSummary();return}
+  const selectable=ds.filter(d=>eligibleCards(d).length);
+  if(!selectable.length){toast("Nenhuma carta disponível nos decks, categorias e raridades selecionados.");return}
+  if(S.mode==="finite"&&S.fin&&S.fin.left<=0){
+    if(S.cfg.track){showSummary();return}
+    S.fin={total:S.cfg.finiteN,left:S.cfg.finiteN};used={};lastIds=new Set();toast("Baralho renovado. Novo ciclo iniciado.");
+  }
   setBusy(true);rrUsed=0;sfx("shuffle");
   const snap=snapshot();curSnap=snap;
   const n=S.mode==="chaos"?1+Math.floor(Math.random()*3):S.count;
-  const picks=ds.map(d=>({name:d.name,deck:d,cards:pickN(d,n)}));
+  const picks=selectable.map(d=>({name:d.name,deck:d,cards:pickN(d,n)}));
   const ups=[...document.querySelectorAll("#table .card.up")];
   if(ups.length){
     ups.forEach(c=>c.classList.remove("up"));
     document.querySelectorAll(".scene.live").forEach(s=>s.classList.remove("live"));
     await sleep(flipMs()+80);
   }
-  const entry={t:Date.now(),mode:S.mode,groups:picks.map(p=>({name:p.name,cards:p.cards.map(c=>({id:c.id,title:c.title,rar:c.rar,cat:c.cat,swaps:[]}))}))};
-  curEntry=entry;S.hist.unshift(entry);S.hist=S.hist.slice(0,12);S.sess.draws.push(entry);S.sess.draws=S.sess.draws.slice(-300);
+  const entry={uid:"draw-"+Date.now()+"-"+Math.random().toString(36).slice(2,7),t:Date.now(),mode:S.mode,groups:picks.map(p=>({name:p.name,deckId:p.deck.id,cards:p.cards.map(c=>({id:c.id,title:c.title,rar:c.rar,cat:c.cat,swaps:[]}))}))};
+  curEntry=entry;
+  if(S.cfg.track){S.hist.unshift(entry);S.hist=S.hist.slice(0,12);S.sess.draws.push(entry);S.sess.draws=S.sess.draws.slice(-300)}
   if(S.mode==="finite"&&S.fin)S.fin.left--;
   lastIds=new Set(picks.flatMap(p=>p.cards.map(c=>c.id)));
   build(picks);table=picks;
-  if(S.mode==="classic")picks.forEach(g=>g.cards.forEach(c=>addQuest(g,c,true)));
+  if(S.cfg.track&&S.mode==="classic")picks.forEach(g=>g.cards.forEach((c,i)=>addQuest(g,c,true,sourceFor(g,i))));
+  syncCardActions();renderQuests();
   undoStack.push(snap);undoStack=undoStack.slice(-20);
   void $("#table").offsetWidth;await sleep(40);
   const sc=[...document.querySelectorAll("#table .scene")],gap=S.cfg.anim?110:0;
@@ -646,28 +918,28 @@ async function draw(){
   updateRR();save();renderHist();renderMeta();
   $("#live").textContent="Sorteado: "+entryText(entry);
   await sleep(sc.length*gap+flipMs());setBusy(false);
-  if(S.mode==="finite"&&S.fin&&S.fin.left<=0){await sleep(1400);showSummary()}
+  if(S.mode==="finite"&&S.fin&&S.fin.left<=0&&S.cfg.track){await sleep(1000);showSummary()}
 }
 async function reroll(sc){
   if(busy)return;
   if(S.mode==="classic"){toast("No modo Clássico a carta sorteada vale.");return}
   const lim=rrLimit();if(lim&&rrUsed>=lim){toast("Limite de trocas atingido.");return}
   const g=sc._g,i=sc._i;
+  if(questForSource(sc._source)){toast("Remova a missão no painel antes de trocar esta carta.");return}
   const shown=new Set(table.flatMap(t=>t.cards.map(c=>c.id)));
-  const ok=c=>!c.off&&!shown.has(c.id)&&(!filt.size||filt.has(c.cat));
+  const ok=c=>!c.off&&!shown.has(c.id)&&(!filt.size||filt.has(c.cat))&&(S.cfg.w[c.rar]||0)>0;
   const cyc=S.cfg.cycle||S.mode==="finite",u=used[g.deck.id]||(used[g.deck.id]=new Set());
   let pool=g.deck.cards.filter(c=>ok(c)&&(!cyc||!u.has(c.id)));
   if(!pool.length)pool=g.deck.cards.filter(ok);
-  if(!pool.length)pool=g.deck.cards.filter(c=>!c.off&&!shown.has(c.id));
-  if(!pool.length){toast("Não há outra carta disponível neste deck.");return}
+  if(!pool.length){toast("Não há outra carta disponível nesta categoria e raridade.");return}
   setBusy(true);rrUsed++;updateRR();
   const cd=sc.querySelector(".card");cd.classList.remove("up");await sleep(flipMs()+80);
-  const c=pool[wpick(pool)];g.cards[i]=c;
+  const index=wpick(pool);if(index<0){setBusy(false);toast("Nenhuma raridade disponível.");return}
+  const c=pool[index];g.cards[i]=c;
   const gi=table.indexOf(g),ec=curEntry&&curEntry.groups[gi]&&curEntry.groups[gi].cards[i];
   if(ec){(ec.swaps=ec.swaps||[]).push(ec.title);ec.id=c.id;ec.title=c.title;ec.rar=c.rar;ec.cat=c.cat}
   u.add(c.id);lastIds=new Set(table.flatMap(t=>t.cards.map(x=>x.id)));
-  const ab=sc.querySelector(".acc");if(ab){ab.disabled=false;ab.textContent="✓ Aceitar"}
-  fillCard(sc.querySelector(".front"),c);fit();void cd.offsetWidth;reveal(sc,0,0);
+  fillCard(sc.querySelector(".front"),c);fit();void cd.offsetWidth;reveal(sc,0,0);syncCardActions();
   save();renderHist();renderMeta();
   $("#live").textContent="Nova carta: "+c.title;
   await sleep(flipMs());setBusy(false);
@@ -687,68 +959,189 @@ function undo(){
     requestAnimationFrame(()=>document.querySelectorAll("#table .card").forEach(c=>{c.style.transition=""}));
     updateRR();
   }else{const keep=undoStack;showBacks();undoStack=keep}
-  save();renderHist();renderQuests();renderMeta();toast("Último sorteio desfeito.");
+  save();renderHist();renderQuests();renderMeta();syncCardActions();toast("Último sorteio desfeito.");
 }
-/* ----- modos, sessão, resumo ----- */
+/* ----- modos, sessões, missões e relatório ----- */
+let questView="open",summarySelected="current";
+const sessionQuests=()=>S.quests.filter(q=>q.sid?q.sid===S.sess.id:q.t>=S.sess.t0);
+const currentPending=()=>sessionQuests().filter(q=>q.st==="active"||q.st==="later");
+const isFinal=q=>q.st==="done"||q.st==="dropped";
+const statusLabel=st=>({active:"Em andamento",later:"Pausada",done:"Cumprida",dropped:"Não cumprida"})[st]||"Não assumida";
+const shortClock=t=>t?new Date(t).toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}):"";
+const matchLabel=result=>result==="win"?"Vitória":result==="loss"?"Derrota":"Não informado";
 function renderMeta(){
   $("#modeSel").value=S.mode;
   $("#bUndo").hidden=!undoStack.length||S.mode==="classic";
-  $("#bSum").hidden=!S.sess.draws.length;
+  $("#bSum").hidden=!S.cfg.track||(!S.sess.draws.length&&!sessionQuests().length&&!S.archives.length);
+  $("#bSum").textContent="Ver relatório";
+  $("#bCopy").hidden=!table.some(g=>g.cards.some(Boolean));
+  $("#optionsHint").textContent=[filt.size?filt.size+" filtro(s)":"",S.cfg.track?"acompanhamento ligado":""].filter(Boolean).join(" · ");
+  $("#bClearFilters").hidden=!filt.size;
   const fin=$("#finInfo");fin.hidden=S.mode!=="finite"||!S.fin;
   if(!fin.hidden)fin.textContent="Baralho: "+S.fin.left+" de "+S.fin.total+" sorteios restantes";
   const rm=$("#remain"),ds=sel();
-  if((S.cfg.cycle||S.mode==="finite")&&ds.length){
+  if((S.cfg.cycle||S.mode==="finite")&&ds.length&&$("#moreOptions").open){
     rm.hidden=false;
-    rm.textContent="Restantes no ciclo: "+ds.map(d=>{const live=d.cards.filter(c=>!c.off&&(!filt.size||filt.has(c.cat))),u=used[d.id]||new Set();return d.name+" "+live.filter(c=>!u.has(c.id)).length+"/"+live.length}).join(" · ");
+    rm.textContent="Restantes no ciclo: "+ds.map(d=>{const live=eligibleCards(d),u=used[d.id]||new Set();return d.name+" "+live.filter(c=>!u.has(c.id)).length+"/"+live.length}).join(" · ");
   }else rm.hidden=true;
 }
-function newSession(){
-  S.sess={t0:Date.now(),mode:S.mode,draws:[]};used={};lastIds=new Set();curEntry=null;
-  S.fin=S.mode==="finite"?{total:S.cfg.finiteN,left:S.cfg.finiteN}:null;
-  save();showBacks();
+function archiveCurrent(){
+  const qs=sessionQuests();if(!S.sess.draws.length&&!qs.length)return;
+  const snapshot={sess:JSON.parse(JSON.stringify(S.sess)),endedAt:Date.now(),quests:JSON.parse(JSON.stringify(qs))};
+  snapshot.sess.draws=snapshot.sess.draws.slice(-150);
+  S.archives.push(snapshot);S.archives=S.archives.slice(-8);
 }
-function setMode(m){if(!MODES[m]||m===S.mode)return;S.mode=m;newSession();toast("Modo: "+MODES[m]+".")}
-function summaryData(){
-  const cards=S.sess.draws.flatMap(e=>e.groups.flatMap(g=>g.cards.map(c=>({...c,deck:g.name}))));
+function newSession(){
+  archiveCurrent();
+  S.sess={id:sessionId(),t0:Date.now(),mode:S.mode,result:"",note:"",draws:[]};used={};lastIds=new Set();curEntry=null;curSnap=null;rrUsed=0;
+  S.fin=S.mode==="finite"?{total:S.cfg.finiteN,left:S.cfg.finiteN}:null;
+  undoStack=[];questView="open";summarySelected="current";
+  save();showBacks();renderQuests();renderMeta();
+}
+function setMode(m){
+  if(busy||!MODES[m]||m===S.mode)return;
+  if(currentPending().length&&!confirm("Há missões em aberto. Encerrar a sessão atual e arquivar esses resultados para mudar de modo?")){$("#modeSel").value=S.mode;return}
+  S.mode=m;newSession();toast("Modo: "+MODES[m]+". Sessão anterior arquivada.");
+}
+function summaryContext(){
+  if(summarySelected==="current")return{sess:S.sess,quests:sessionQuests(),endedAt:Date.now(),current:true};
+  const a=S.archives.find(x=>x.sess.id===summarySelected);
+  return a?{...a,current:false}:{sess:S.sess,quests:sessionQuests(),endedAt:Date.now(),current:true};
+}
+function summaryData(ctx=summaryContext()){
+  const cards=ctx.sess.draws.flatMap(e=>e.groups.flatMap(g=>g.cards.map(c=>({...c,deck:g.name}))));
   const byR={comum:0,rara:0,lendaria:0};cards.forEach(c=>{if(c.rar in byR)byR[c.rar]++});
-  const qs=S.quests.filter(q=>Math.max(q.t,q.t2)>=S.sess.t0);
-  return{draws:S.sess.draws.length,cards,byR,swaps:cards.reduce((n,c)=>n+(c.swaps?c.swaps.length:0),0),
-    done:qs.filter(q=>q.st==="done").length,dropped:qs.filter(q=>q.st==="dropped").length,open:S.quests.filter(q=>q.st==="active"||q.st==="later").length};
+  const qs=ctx.quests||[],done=qs.filter(q=>q.st==="done").length,dropped=qs.filter(q=>q.st==="dropped").length;
+  const active=qs.filter(q=>q.st==="active").length,later=qs.filter(q=>q.st==="later").length;
+  const resolved=done+dropped;
+  return{draws:ctx.sess.draws.length,cards,byR,swaps:cards.reduce((n,c)=>n+(c.swaps?.length||0),0),
+    accepted:qs.length,done,dropped,active,later,resolved,rate:resolved?Math.round(done/resolved*100):null};
 }
 function summaryText(){
-  const d=summaryData(),mins=Math.max(1,Math.round((Date.now()-S.sess.t0)/60000));
-  return S.title+" · "+MODES[S.sess.mode]+"\n"+d.draws+" sorteio(s), "+d.cards.length+" carta(s), "+d.swaps+" troca(s), "+mins+" min\nComuns "+d.byR.comum+" · Raras "+d.byR.rara+" · Lendárias "+d.byR.lendaria+"\nMissões: "+d.done+" concluída(s), "+d.dropped+" abandonada(s)\n\n"+S.sess.draws.map((e,i)=>(i+1)+". "+entryText(e)).join("\n");
+  const ctx=summaryContext(),d=summaryData(ctx),mins=Math.max(1,Math.round(((ctx.endedAt||Date.now())-ctx.sess.t0)/60000));
+  const lines=[S.title+" — Relatório da sessão",MODES[ctx.sess.mode]+" · "+new Date(ctx.sess.t0).toLocaleString("pt-BR"),
+    d.draws+" sorteios · "+d.cards.length+" cartas · "+d.swaps+" trocas · "+mins+" min",
+    "Desafios: "+d.accepted+" assumidos · "+d.done+" cumpridos · "+d.dropped+" não cumpridos · "+(d.active+d.later)+" pendentes",
+    "Aproveitamento (entre finalizados): "+(d.rate===null?"sem resultados":d.rate+"%"),
+    "Raridades: "+d.byR.comum+" comuns, "+d.byR.rara+" raras, "+d.byR.lendaria+" lendárias",
+    "Resultado da partida: "+matchLabel(ctx.sess.result),...(ctx.sess.note?["Observações gerais: "+ctx.sess.note]:[]),"", "MISSÕES"];
+  if(!ctx.quests.length)lines.push("Nenhuma missão assumida.");
+  ctx.quests.forEach((q,i)=>{lines.push((i+1)+". ["+statusLabel(q.st)+"] "+q.title+" — "+q.deck+" — "+(q.who||"Grupo"));if(q.text)lines.push("   Regra: "+q.text);if(q.note)lines.push("   Nota: "+q.note)});
+  lines.push("","SORTEIOS");
+  if(!ctx.sess.draws.length)lines.push("Nenhum sorteio.");
+  ctx.sess.draws.forEach((e,i)=>lines.push((i+1)+". "+shortClock(e.t)+" · "+entryText(e)));
+  return lines.join("\n");
 }
-function showSummary(){
-  const d=summaryData(),b=$("#sumBody");b.innerHTML="";
-  const mins=Math.max(1,Math.round((Date.now()-S.sess.t0)/60000));
-  b.append(el("p","empty",MODES[S.sess.mode]+" · "+d.draws+" sorteio(s) · "+d.cards.length+" carta(s) · "+d.swaps+" troca(s) · "+mins+" min"));
-  const bars=el("div","sbars");
-  Object.entries(RARS).forEach(([k,n])=>{const row=el("div","sbar"),i=el("i","s-"+k);i.style.width=(d.cards.length?Math.round(d.byR[k]/d.cards.length*100):0)+"%";row.append(el("span","",n+": "+d.byR[k]),i);bars.append(row)});
-  b.append(bars,el("p","empty","Missões: "+d.done+" concluída(s), "+d.dropped+" abandonada(s), "+d.open+" em aberto."));
-  if(S.sess.draws.length){const ol=el("ol","tl");S.sess.draws.forEach(e=>ol.append(el("li","",entryText(e))));b.append(el("h3","","Linha do tempo"),ol)}
-  else b.append(el("p","empty","Nenhum sorteio nesta sessão ainda."));
-  $("#dlgSum").showModal();
+function summaryPill(st){const b=el("span","sum-pill "+(st||""),statusLabel(st));return b}
+function renderSummary(){
+  const ctx=summaryContext(),d=summaryData(ctx),b=$("#sumBody");b.innerHTML="";
+  const hero=el("div","sum-hero"),lab=el("label","","Selecionar sessão"),pick=el("select");pick.id="sumSession";
+  const opts=[{id:"current",text:"Sessão atual · "+new Date(S.sess.t0).toLocaleString("pt-BR")},...S.archives.slice().reverse().map((a,i)=>({id:a.sess.id,text:"Anterior #"+(i+1)+" · "+new Date(a.sess.t0).toLocaleString("pt-BR")}))];
+  opts.forEach(o=>{const n=el("option","",o.text);n.value=o.id;pick.append(n)});
+  pick.value=summarySelected;pick.onchange=()=>{summarySelected=pick.value;renderSummary()};lab.append(pick);
+  const info=el("p","",MODES[ctx.sess.mode]+" · "+d.draws+" sorteio(s) · "+d.cards.length+" carta(s) · "+d.swaps+" troca(s) · "+Math.max(1,Math.round(((ctx.endedAt||Date.now())-ctx.sess.t0)/60000))+" min");
+  hero.append(lab,info);
+  const resultRow=el("div","match-fields"),resultLab=el("label","","Resultado da partida");
+  if(ctx.current){
+    const result=el("select");result.id="sumResult";
+    [["","Não informado"],["win","Vitória"],["loss","Derrota"]].forEach(([value,label])=>{const opt=el("option","",label);opt.value=value;result.append(opt)});
+    result.value=ctx.sess.result||"";result.onchange=()=>{S.sess.result=result.value;save()};resultLab.append(result);
+    const noteLab=el("label","","Observação da partida"),note=el("input");note.type="text";note.id="sumNote";note.maxLength=250;note.value=ctx.sess.note||"";note.placeholder="Ex.: partida difícil, virada incrível...";
+    note.oninput=()=>{S.sess.note=note.value;save()};noteLab.append(note);resultRow.append(resultLab,noteLab);
+  }else{
+    resultLab.append(el("strong","",matchLabel(ctx.sess.result)));resultRow.append(resultLab);
+    if(ctx.sess.note){const note=el("p","sum-empty","Observação: "+ctx.sess.note);resultRow.append(note)}
+  }
+  hero.append(resultRow);b.append(hero);
+  const grid=el("div","sum-grid");
+  [[d.accepted,"Desafios assumidos"],[d.done,"Cumpridos"],[d.dropped,"Não cumpridos"],[d.rate===null?"—":d.rate+"%","Sucesso nos finalizados"]].forEach(([v,l])=>{const k=el("div","sum-kpi");k.append(el("strong","",String(v)),el("span","",l));grid.append(k)});
+  b.append(grid);
+  const count=el("p","sum-empty",d.active+" em andamento · "+d.later+" pausadas · "+Math.max(0,d.cards.length-d.accepted)+" cartas sem missão assumida");
+  const bar=el("div","sum-bar");bar.setAttribute("aria-label",d.accepted?d.done+" cumpridas, "+d.dropped+" não cumpridas, "+(d.active+d.later)+" em aberto":"Nenhuma missão assumida");
+  [[d.done,"var(--rare)"],[d.dropped,"var(--leg)"],[d.active+d.later,"var(--gold)" ]].forEach(([n,col])=>{if(n){const part=el("span");part.style.width=(n/d.accepted*100)+"%";part.style.background=col;bar.append(part)}});
+  b.append(count,bar);
+  const rar=el("div","sbars");Object.entries(RARS).forEach(([k,label])=>{const row=el("div","sbar"),i=el("i","s-"+k);i.style.width=(d.cards.length?Math.round(d.byR[k]/d.cards.length*100):0)+"%";row.append(el("span","",label+": "+d.byR[k]),i);rar.append(row)});
+  const secR=el("section","sum-section");secR.append(el("h3","","Cartas sorteadas por raridade"),rar);b.append(secR);
+  const secQ=el("section","sum-section");secQ.append(el("h3","","Resultados dos desafios"));
+  if(!ctx.quests.length)secQ.append(el("p","sum-empty","Nenhuma carta foi assumida como missão nesta sessão."));
+  ctx.quests.slice().sort((a,b)=>a.t-b.t).forEach(q=>{
+    const li=el("div","sum-result"),top=el("div","sum-result-top"),head=el("strong","",q.title);
+    top.append(head,summaryPill(q.st));li.append(top,el("small","",q.deck+" · "+(q.who||"Grupo")+" · "+shortClock(q.t)));
+    if(q.text)li.append(el("p","",q.text));if(q.note)li.append(el("p","","Nota: "+q.note));secQ.append(li);
+  });b.append(secQ);
+  const secD=el("section","sum-section");secD.append(el("h3","","Linha do tempo de sorteios"));
+  if(!ctx.sess.draws.length)secD.append(el("p","sum-empty","Nenhum sorteio nesta sessão."));
+  ctx.sess.draws.forEach((e,i)=>{
+    const box=el("details","sum-draw"),head=el("summary"),title=el("strong","","#"+(i+1)+" · "+shortClock(e.t)),subtitle=el("small","",e.groups.reduce((n,g)=>n+g.cards.length,0)+" carta(s)");head.append(title,subtitle);box.append(head);
+    const items=el("ul","sum-draw-list");e.groups.forEach(g=>g.cards.forEach((c,j)=>{
+      const li=el("li"),key=String(e.uid||e.t)+":"+String(g.deckId||g.name)+":"+j,q=ctx.quests.find(x=>x.source===key);
+      li.append(document.createTextNode((e.groups.length>1?g.name+" · ":"")+c.title+" "),el("em","","— "+(q?statusLabel(q.st):"Não assumida")));items.append(li);
+    }));box.append(items);secD.append(box);
+  });b.append(secD);
+  $("#sumNew").disabled=!ctx.current;
+  $("#sumNew").title=ctx.current?"Arquivar a sessão atual e começar outra":"Selecione a sessão atual para começar outra";
+}
+function showSummary(id="current"){
+  summarySelected=id;renderSummary();if(!$("#dlgSum").open)$("#dlgSum").showModal();
 }
 /* ----- missões ----- */
-function addQuest(g,c,auto){
-  const q={id:"q"+Date.now()+Math.random().toString(36).slice(2,6),title:c.title,text:c.text||"",deck:g.name,rar:c.rar,st:"active",t:Date.now(),t2:0};
-  S.quests.push(q);S.quests=S.quests.slice(-100);
-  if(auto&&curSnap)curSnap.questIds.push(q.id);
-  save();renderQuests();return q;
+function addQuest(g,c,auto=false,source=""){
+  if(!S.cfg.track)return null;
+  if(source&&questForSource(source))return null;
+  const q={id:"q"+Date.now()+Math.random().toString(36).slice(2,7),sid:S.sess.id,source,
+    title:c.title,text:c.text||"",deck:g.name,rar:c.rar,st:"active",who:"Grupo",note:"",t:Date.now(),t2:0};
+  S.quests.push(q);S.quests=S.quests.slice(-250);
+  if(curSnap&&source&&source.startsWith(String(curEntry?.uid||curEntry?.t)+":"))curSnap.questIds.push(q.id);
+  save();renderQuests();renderMeta();syncCardActions();return q;
 }
-function setQ(q,st){q.st=st;q.t2=Date.now();save();renderQuests();renderMeta();if(st==="done"){sfx("quest");toast("Missão concluída.")}}
+function setQ(q,st){
+  if(!["active","later","done","dropped"].includes(st))return;
+  q.st=st;q.t2=Date.now();save();renderQuests();renderMeta();syncCardActions();
+  if($("#dlgSum").open&&summarySelected==="current")renderSummary();
+  if(st==="done"){sfx("quest");toast("Missão cumprida: "+q.title)}
+  if(st==="dropped")toast("Resultado registrado: missão não cumprida.");
+}
+function removeQuest(q){
+  if(isFinal(q)&&!confirm("Excluir este resultado do relatório da sessão?"))return;
+  const i=S.quests.indexOf(q);if(i<0)return;
+  S.quests.splice(i,1);
+  save();renderQuests();renderMeta();syncCardActions();
+  toast("Missão removida.","Desfazer",()=>{S.quests.splice(Math.min(i,S.quests.length),0,q);save();renderQuests();renderMeta();syncCardActions()});
+}
 function renderQuests(){
-  const act=S.quests.filter(q=>q.st==="active"||q.st==="later"),ul=$("#quests");ul.innerHTML="";
-  $("#qbox").hidden=!act.length;$("#qcount").textContent=S.quests.filter(q=>q.st==="active").length;
-  act.forEach(q=>{
-    const li=el("li","q"+(q.st==="later"?" later":"")),tx=el("div","qt"),bs=el("div","row");
-    tx.append(el("strong","",q.title),el("span","empty",q.deck+(q.st==="later"?" · para depois":"")));
-    const b1=el("button","","Concluir"),b2=el("button","",q.st==="later"?"Retomar":"Depois"),b3=el("button","danger","Abandonar");
-    b1.onclick=()=>setQ(q,"done");b2.onclick=()=>setQ(q,q.st==="later"?"active":"later");b3.onclick=()=>setQ(q,"dropped");
-    bs.append(b1,b2,b3);li.append(tx,bs);ul.append(li);
+  const qs=sessionQuests(),open=qs.filter(q=>!isFinal(q)),done=qs.filter(q=>q.st==="done"),fail=qs.filter(q=>q.st==="dropped");
+  const board=$("#qbox"),ul=$("#quests"),stats=$("#missionStats");ul.innerHTML="";stats.innerHTML="";
+  board.hidden=!S.cfg.track||!qs.length;
+  $("#qmini").textContent=qs.length;
+  [[open.length,"Em aberto"],[done.length,"Cumpridas"],[fail.length,"Falhas"]].forEach(([n,label])=>{const pill=el("span");pill.append(el("b","",n+" "),document.createTextNode(label));stats.append(pill)});
+  $("#missionProgress").style.width=qs.length?((done.length+fail.length)/qs.length*100)+"%":"0%";
+  for(const b of document.querySelectorAll("#qfilters button"))b.setAttribute("aria-pressed",b.dataset.qfilter===questView);
+  const visible=qs.filter(q=>questView==="all"||(questView==="open"?!isFinal(q):isFinal(q)));
+  visible.slice().sort((a,b)=>{if(a.st==="active"&&b.st!=="active")return -1;if(b.st==="active"&&a.st!=="active")return 1;return b.t-a.t}).forEach(q=>{
+    const li=el("li","mission "+q.st);li.dataset.quest=q.id;
+    const head=el("div","mission-top"),txt=el("div"),title=el("strong","mission-title",q.title);
+    txt.append(title,el("div","mission-meta",q.deck+" · "+RARS[q.rar]+" · "+shortClock(q.t)));
+    head.append(txt,el("span","mission-status",statusLabel(q.st)));li.append(head);
+    if(q.text)li.append(el("p","mission-description",q.text));
+    const fields=el("div","mission-fields");
+    const mk=(name,key,placeholder)=>{
+      const lab=el("label","",name),input=el("input");input.type="text";input.value=q[key]||"";input.placeholder=placeholder;input.maxLength=key==="who"?60:300;
+      input.oninput=()=>{q[key]=input.value;save()};lab.append(input);return lab;
+    };
+    fields.append(mk("Responsável","who","Grupo"),mk("Observação (opcional)","note","Ex.: vitória, MVP, detalhe..."));
+    const extra=el("details","mission-extra");extra.append(el("summary","","Responsável e anotação (opcional)"),fields);
+    const actions=el("div","mission-actions"),act=(label,cls,fn)=>{const b=el("button",cls,label);b.onclick=fn;actions.append(b)};
+    if(!isFinal(q)){
+      act("✓ Cumpriu","success",()=>setQ(q,"done"));act("✕ Não cumpriu","fail",()=>setQ(q,"dropped"));
+      act(q.st==="later"?"Retomar":"Pausar","",()=>setQ(q,q.st==="later"?"active":"later"));
+    }else act("↶ Reabrir","",()=>setQ(q,"active"));
+    act("Remover","",()=>removeQuest(q));li.append(actions,extra);ul.append(li);
   });
+  const empty=$("#questEmpty");empty.hidden=visible.length>0;
+  if(!visible.length)empty.textContent=questView==="open"?(qs.length?"Tudo resolvido! Veja as missões em Finalizadas ou abra o relatório.":"Nenhuma missão assumida. Use “Assumir desafio” nas cartas sorteadas."):questView==="resolved"?"Nenhuma missão finalizada ainda.":"Nenhuma missão nesta sessão.";
+  syncCardActions();
 }
+for(const b of document.querySelectorAll("#qfilters button"))b.onclick=()=>{questView=b.dataset.qfilter;renderQuests()};
 /* ----- sons ----- */
 const PACKS={
  soft:{reveal:[[420,.16,"triangle",.07]],rare:[[520,.14,"triangle",.07],[780,.22,"triangle",.07,.1]],shuffle:[[300,.05,"triangle",.04],[340,.05,"triangle",.04,.06]],quest:[[520,.1,"triangle",.07],[660,.1,"triangle",.07,.1],[880,.2,"triangle",.07,.2]]},
@@ -824,26 +1217,26 @@ function copyTxt(){
 }
 function renderHist(){
   const ul=$("#hist");ul.innerHTML="";$("#histEmpty").hidden=S.hist.length>0;$("#bHistClear").hidden=!S.hist.length;
-  S.hist.forEach(h=>ul.append(el("li","",h)));
+  S.hist.forEach(h=>ul.append(el("li","",entryText(h))));
 }
 function renderDeckChips(){
   const box=$("#deckChips");box.innerHTML="";
   S.decks.forEach(d=>{
     const on=S.active.includes(d.id),b=el("button","chip"+(on?" on":""),d.name+" · "+d.cards.length);
     b.setAttribute("aria-pressed",on);
-    b.onclick=()=>{S.active=on?S.active.filter(x=>x!==d.id):[...S.active,d.id];save();renderDeckChips();renderChips();showBacks()};
-    box.append(b);
+    b.onclick=()=>{if(busy)return;S.active=on?S.active.filter(x=>x!==d.id):[...S.active,d.id];save();renderDeckChips();renderChips();showBacks()};
+    b.disabled=busy;box.append(b);
   });
 }
 function renderChips(){
   const box=$("#chips");box.innerHTML="";
   const cats=[...new Set(sel().flatMap(d=>d.cards.map(c=>c.cat)))];
   [...filt].forEach(c=>{if(!cats.includes(c))filt.delete(c)});
-  if(cats.length<2)return;
-  cats.forEach(c=>{const b=el("button","chip"+(filt.has(c)?" on":""),c);b.setAttribute("aria-pressed",filt.has(c));b.onclick=()=>{filt.has(c)?filt.delete(c):filt.add(c);renderChips();renderMeta()};box.append(b)});
+  if(cats.length<2){renderMeta();return;}
+  cats.forEach(c=>{const b=el("button","chip"+(filt.has(c)?" on":""),c);b.setAttribute("aria-pressed",filt.has(c));b.disabled=busy;b.onclick=()=>{if(busy)return;filt.has(c)?filt.delete(c):filt.add(c);renderChips();renderMeta()};box.append(b)});
 }
 function syncCount(){$("#cnt").textContent=S.count;$("#bMin").disabled=S.count<=1;$("#bPlus").disabled=S.count>=8}
-function setCount(n){S.count=Math.min(8,Math.max(1,n));syncCount();save();showBacks()}
+function setCount(n){if(busy)return;S.count=Math.min(8,Math.max(1,n));syncCount();save();showBacks()}
 function refreshAll(){renderDeckChips();renderChips();showBacks()}
 
 /* ---------- Editor ---------- */
@@ -851,11 +1244,15 @@ const curD=()=>S.decks.find(d=>d.id===ed.d)||S.decks[0]||null;
 const curC=()=>curD()?.cards.find(c=>c.id===ed.c);
 const mark=()=>{ed.dirty=true;save()};
 function withUndo(msg,fn){
-  const s=JSON.stringify({d:S.decks,a:S.active,t:S.title});
+  const s=JSON.stringify({d:S.decks,a:S.active,t:S.title,cfg:S.cfg,profiles:S.profiles,sess:S.sess,quests:S.quests,archives:S.archives,hist:S.hist,mode:S.mode,fin:S.fin});
   fn();mark();if(!$("#dlg").open){ed.dirty=false;refreshAll()}
   toast(msg,"Desfazer",()=>{
-    const o=JSON.parse(s);S.decks=o.d;S.active=o.a;S.title=o.t;syncTitle();
-    ed.d=S.decks[0]?.id||null;ed.c=S.decks[0]?.cards[0]?.id;mark();renderEd();if(!$("#dlg").open){ed.dirty=false;refreshAll()}
+    const o=JSON.parse(s);S.decks=o.d;S.active=o.a;S.title=o.t;
+    S.cfg=cleanCfg(o.cfg);S.profiles=o.profiles.map(cleanProfile).filter(Boolean);
+    S.sess=normSess(o.sess);S.quests=normQuests(o.quests);S.archives=normArchive(o.archives);S.hist=normHist(o.hist);S.mode=MODES[o.mode]?o.mode:"free";S.fin=o.fin;
+    applyCfg();syncTitle();renderQuests();renderMeta();renderHist();
+    ed.d=S.decks[0]?.id||null;ed.c=S.decks[0]?.cards[0]?.id;mark();renderEd();
+    if(!$("#dlg").open){ed.dirty=false;refreshAll()}
   });
 }
 function openEd(){const d=curD();ed.d=d?d.id:null;ed.c=d?.cards[0]?.id;ed.q="";$("#edQ").value="";renderEd();$("#dlg").showModal()}
@@ -897,7 +1294,7 @@ function renderForm(){
   const ar=el("div","row");
   const bc=el("button","","Duplicar");bc.onclick=()=>{const n={...c,id:"n"+Date.now(),title:c.title+" (cópia)"};d.cards.splice(d.cards.indexOf(c)+1,0,n);ed.c=n.id;mark();renderEd();toast("Carta duplicada.")};
   const bd=el("button","danger","Excluir carta");
-  bd.onclick=()=>withUndo("Carta excluída.",()=>{const i=d.cards.indexOf(c);d.cards.splice(i,1);ed.c=d.cards[Math.min(i,d.cards.length-1)]?.id;renderEd()});
+  bd.onclick=()=>{if(!confirm("Excluir a carta ‘"+c.title+"’?"))return;withUndo("Carta excluída.",()=>{const i=d.cards.indexOf(c);d.cards.splice(i,1);ed.c=d.cards[Math.min(i,d.cards.length-1)]?.id;renderEd()})};
   const mv=dir=>{const i=d.cards.indexOf(c),j=i+dir;if(j<0||j>=d.cards.length)return;[d.cards[i],d.cards[j]]=[d.cards[j],d.cards[i]];mark();renderList()};
   const bu=el("button","","Subir na lista");bu.onclick=()=>mv(-1);
   const bn=el("button","","Descer na lista");bn.onclick=()=>mv(1);
@@ -911,11 +1308,11 @@ $("#edDeck").onchange=e=>{ed.d=e.target.value;ed.c=curD().cards[0]?.id;renderEd(
 $("#bDNew").onclick=()=>{const n=prompt("Nome do novo deck:");if(!n||!n.trim())return;const d={id:"u"+Date.now(),name:n.trim(),cards:[]};S.decks.push(d);ed.d=d.id;ed.c=null;mark();renderEd()};
 $("#bDRen").onclick=()=>{const d=curD();if(!d)return;const n=prompt("Novo nome do deck:",d.name);if(!n||!n.trim())return;d.name=n.trim();mark();renderEd()};
 $("#bDDel").onclick=()=>{
-  const d=curD();if(!d)return;
+  const d=curD();if(!d||!confirm("Excluir o deck ‘"+d.name+"’ e suas "+d.cards.length+" cartas?"))return;
   withUndo("Deck '"+d.name+"' excluído.",()=>{S.decks=S.decks.filter(x=>x!==d);S.active=S.active.filter(id=>id!==d.id);if(!S.active.length&&S.decks.length)S.active=[S.decks[0].id];ed.d=S.decks[0]?.id||null;ed.c=S.decks[0]?.cards[0]?.id;renderEd()});
 };
 $("#bAdd").onclick=()=>{const d=curD();if(!d){toast("Crie um deck primeiro.");return}const c={id:"n"+Date.now(),title:"Nova carta",text:"Descreva a regra aqui.",cat:d.cards[0]?.cat||"Caos",rar:"comum",img:""};d.cards.push(c);ed.c=c.id;ed.q="";$("#edQ").value="";mark();renderEd()};
-$("#bReset").onclick=()=>{if(!S.decks.length){toast("Não há decks para remover.");return}withUndo("Todos os decks removidos.",()=>{S.decks=[];S.active=[];ed.d=null;ed.c=null;renderEd()})};
+$("#bReset").onclick=()=>{if(!S.decks.length){toast("Não há decks para remover.");return}if(!confirm("Remover TODOS os "+S.decks.length+" decks? Você poderá desfazer por alguns segundos."))return;withUndo("Todos os decks removidos.",()=>{S.decks=[];S.active=[];ed.d=null;ed.c=null;renderEd()})};
 $("#fileImg").onchange=e=>{
   const f=e.target.files[0];e.target.value="";if(!f)return;
   const r=new FileReader();
@@ -929,18 +1326,29 @@ $("#fileImg").onchange=e=>{
     };im.src=r.result};
   r.readAsDataURL(f);
 };
+const fullBackup=()=>({versao:3,title:S.title,decks:S.decks,cfg:S.cfg,profiles:S.profiles,sess:S.sess,quests:S.quests,archives:S.archives,hist:S.hist,mode:S.mode});
 const cleanDeck=(d,i)=>({id:String(d.id||"i"+i+Date.now()),name:String(d.name||"Deck "+(i+1)),cards:(Array.isArray(d.cards)?d.cards:[]).filter(c=>c&&typeof c==="object").map((c,j)=>({id:String(c.id||"c"+i+"_"+j+Date.now()),title:String(c.title||""),text:String(c.text||""),cat:String(c.cat||"Caos"),rar:RARS[c.rar]?c.rar:"comum",img:typeof c.img==="string"&&c.img.startsWith("data:image/")?c.img:"",fav:!!c.fav,off:!!c.off}))});
 $("#bExp").onclick=()=>{
   flush();const a=document.createElement("a");
-  a.href=URL.createObjectURL(new Blob([JSON.stringify({versao:3,title:S.title,decks:S.decks,cfg:S.cfg,profiles:S.profiles},null,1)],{type:"application/json"}));
+  a.href=URL.createObjectURL(new Blob([JSON.stringify(fullBackup(),null,1)],{type:"application/json"}));
   a.download="decks-deadlock-"+new Date().toISOString().slice(0,10)+".json";a.click();URL.revokeObjectURL(a.href);toast("Tudo salvo em arquivo.");
 };
 $("#bImp").onclick=()=>$("#fileJson").click();
 function applyPayload(j){
+  // Deck isolado inicia sessão nova; backup completo restaura também as missões e relatórios.
+  if(j.sess&&Array.isArray(j.quests)){
+    S.sess=normSess(j.sess);S.quests=normQuests(j.quests);S.archives=normArchive(j.archives);S.hist=normHist(j.hist);
+    S.mode=MODES[j.mode]?j.mode:S.sess.mode;
+  }else{
+    archiveCurrent();S.sess=normSess(null);S.quests=[];S.hist=[];S.mode="free";
+  }
+  used={};lastIds=new Set();curEntry=null;curSnap=null;undoStack=[];
+  S.fin=S.mode==="finite"?{total:S.cfg.finiteN,left:S.cfg.finiteN}:null;
   S.decks=j.decks.map(cleanDeck);if(j.title)S.title=String(j.title);
   if(Array.isArray(j.profiles))S.profiles=j.profiles.map(cleanProfile).filter(Boolean);
   if(j.cfg)S.cfg=cleanCfg(j.cfg);
-  S.active=[S.decks[0].id];applyCfg();syncTitle();ed.d=S.decks[0].id;ed.c=S.decks[0].cards[0]?.id;
+  S.active=S.decks.length?[S.decks[0].id]:[];
+  applyCfg();syncTitle();syncCount();renderHist();renderQuests();ed.d=S.decks[0]?.id||null;ed.c=S.decks[0]?.cards[0]?.id;
 }
 function mergeDecks(list){
   const st=Date.now();
@@ -1032,9 +1440,16 @@ function renderSet(){
     row.append(el("strong","",rn),field("Entrada",sIn),field("Efeito",sFx),tb);fxRows.append(row);
   });
   const rr=el("input");rr.type="number";rr.min=0;rr.max=20;rr.value=c.rr;rr.oninput=()=>{c.rr=Math.max(0,Math.min(20,+rr.value||0));save()};
-  const kb=Math.round((localStorage.getItem(KEY)||"").length*2/1024);
+  let kb=0;try{kb=Math.round((localStorage.getItem(KEY)||"").length*2/1024)}catch(e){}
   const wp=el("button","danger","Apagar todos os dados e voltar ao início");
-  wp.onclick=()=>{if(!confirm("Isso apaga TODOS os seus decks, perfis e configurações neste navegador e volta ao estado inicial. Uma cópia fica guardada na aba Arquivos (Backups automáticos). Continuar?"))return;wiping=true;clearTimeout(st);try{stashOld(JSON.stringify(S));localStorage.removeItem(KEY)}catch(e){}location.reload()};
+  wp.onclick=()=>{
+    if(!confirm("Isso apaga TODOS os seus decks, perfis e configurações neste navegador e volta ao estado inicial. Um backup será criado ANTES da exclusão. Continuar?"))return;
+    flush();const backup=stashOld(JSON.stringify(S));
+    if(!backup){toast("Não foi possível salvar o backup. Nenhum dado foi apagado. Exporte o arquivo manualmente.");return}
+    wiping=true;clearTimeout(st);
+    try{localStorage.removeItem(KEY);location.reload()}
+    catch(e){wiping=false;toast("Falha ao apagar os dados. Seus decks foram preservados.")}
+  };
   const rs=el("button","","Restaurar configurações padrão");rs.onclick=()=>{const p=S.cfg.profile;S.cfg=DEF_CFG();applyCfg();save();renderSet()};
   b.append(el("h3","","Título"),field("Título do site (também dá para clicar nele no topo)",ti),
     el("h3","","Perfis de estilo"),field("Perfil",prof),pr,
@@ -1105,7 +1520,7 @@ function renderFiles(){
   EXEMPLOS.forEach(d=>b.append(item(d.name,d.cards.length+" cartas","deck-"+slug(d.name)+".json",{versao:3,decks:[d]},true)));
   if(S.decks.length){b.append(el("h3","","Seus decks"));S.decks.forEach(d=>b.append(item(d.name,d.cards.length+" cartas","deck-"+slug(d.name)+".json",{versao:3,decks:[d]},false,true)))}
   b.append(el("h3","","Seus dados"),
-    item("Backup completo","Seus decks, perfis de estilo e configurações","decks-backup-"+new Date().toISOString().slice(0,10)+".json",{versao:3,title:S.title,decks:S.decks,cfg:S.cfg,profiles:S.profiles},false),
+    item("Backup completo","Decks, configurações, missões e relatórios de sessões","decks-backup-"+new Date().toISOString().slice(0,10)+".json",fullBackup(),false),
     el("p","empty","Para usar um arquivo baixado depois, vá em Editar decks e clique em Importar arquivo."));
   const bks=listBackups();
   if(bks.length){
@@ -1153,17 +1568,32 @@ async function bootstrap(){
   if(localStorage.getItem(KEY))return;
   try{
     const r=await fetch("decks.json",{cache:"no-store"});if(!r.ok)return;
-    const j=await r.json();if(!Array.isArray(j.decks)||!j.decks.length||localStorage.getItem(KEY)||ed.dirty)return;
-    applyPayload(j);syncCount();refreshAll();renderHist();
+    const j=await r.json();if(!Array.isArray(j.decks)||!j.decks.length||localStorage.getItem(KEY)||ed.dirty||busy)return;
+    applyPayload(j);syncCount();refreshAll();renderHist();save();
   }catch(e){}
 }
 bootstrap();
 $("#modeSel").onchange=e=>setMode(e.target.value);
+$("#trackToggle").onchange=e=>{
+  if(busy){e.target.checked=!!S.cfg.track;return}
+  S.cfg.track=!!e.target.checked;
+  applyCfg();save();
+  document.querySelectorAll("#table .scene.has-actions").forEach(sc=>sc.classList.toggle("tracked",S.cfg.track));
+  renderQuests();renderHist();renderMeta();
+  toast(S.cfg.track?"Acompanhamento ativado para os próximos sorteios.":"Acompanhamento desligado. Agora é só sortear.");
+};
+$("#bClearFilters").onclick=()=>{filt.clear();renderChips();renderMeta();toast("Filtros removidos.")};
+$("#moreOptions").addEventListener("toggle",()=>renderMeta());
 $("#bUndo").onclick=undo;
-$("#bSum").onclick=showSummary;
+$("#bSum").onclick=()=>showSummary();
 $("#sumClose").onclick=()=>$("#dlgSum").close();
-$("#sumCopy").onclick=()=>copyText(summaryText(),"Resumo copiado.");
-$("#sumNew").onclick=()=>{$("#dlgSum").close();newSession()};
+$("#sumCopy").onclick=()=>copyText(summaryText(),"Relatório copiado.");
+$("#sumDownload").onclick=()=>{const txt=summaryText(),a=document.createElement("a"),url=URL.createObjectURL(new Blob([txt],{type:"text/plain;charset=utf-8"}));a.href=url;a.download="decklock-relatorio-"+new Date(summaryContext().sess.t0).toISOString().slice(0,10)+".txt";a.click();setTimeout(()=>URL.revokeObjectURL(url),1500)};
+$("#sumNew").onclick=()=>{
+  if(!summaryContext().current)return;
+  if(currentPending().length&&!confirm("Existem "+currentPending().length+" missão(ões) pendente(s). Arquivar a sessão mesmo assim e iniciar outra?"))return;
+  $("#dlgSum").close();newSession();toast("Nova sessão iniciada. A anterior está no relatório.");
+};
 $("#codeAdd").onclick=()=>{$("#dlgCode").close();if(pendCode)addDecks([pendCode]);pendCode=null};
 $("#codeCancel").onclick=()=>{$("#dlgCode").close();pendCode=null};
 addEventListener("hashchange",checkHash);checkHash();
