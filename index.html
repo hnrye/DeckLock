@@ -201,7 +201,10 @@ header .title{grid-area:t}header .orn{grid-area:o;justify-self:center}
 .linkbtn{min-height:30px;padding:2px 12px;font-size:.85rem;margin:6px 0 2px}
 #ver{position:fixed;right:10px;bottom:5px;font:.64rem/1 system-ui,sans-serif;color:var(--mute);opacity:.32;pointer-events:none;user-select:none;z-index:1}
 body.fs #ver{display:none}
-#dlgNotice{width:min(480px,92vw)}
+#dlgNotice{width:min(380px,90vw)}
+#dlgNotice .set{text-align:center;padding:28px 24px}
+#dlgNotice .row{justify-content:center}
+#noticeMsg{margin:0;font-size:1.15rem}
 @media(prefers-reduced-motion:reduce){.primary,.scene{animation:none!important}}
 </style>
 </head>
@@ -243,9 +246,8 @@ body.fs #ver{display:none}
 <div id="live" class="sr" aria-live="polite"></div>
 <div id="ver"></div>
 <dialog id="dlgNotice" aria-label="Atualização">
-  <div class="top"><strong class="grow">Atualização</strong></div>
-  <div class="set"><p id="noticeMsg"></p>
-    <div class="row"><button class="primary" id="noticeOk">OK</button><button id="noticeBk">Baixar backup</button></div></div>
+  <div class="set"><p id="noticeMsg">O DeckLock foi atualizado.</p>
+    <div class="row"><button class="primary" id="noticeOk">OK</button></div></div>
 </dialog>
 
 <dialog id="dlg" aria-label="Editor de decks">
@@ -849,7 +851,7 @@ function toggleFs(){
   requestAnimationFrame(fit);
 }
 document.addEventListener("fullscreenchange",()=>{if(!document.fullscreenElement&&isFs())toggleFs()});
-for(const d of document.querySelectorAll("dialog"))d.addEventListener("click",e=>{if(e.target===d)d.close()});
+for(const d of document.querySelectorAll("dialog"))d.addEventListener("click",e=>{if(e.target===d&&d.id!=="dlgNotice")d.close()});
 function dl(name,obj){
   const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(obj,null,1)],{type:"application/json"}));
   a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500);
@@ -888,19 +890,14 @@ function renderFiles(){
 }
 $("#bFiles").onclick=()=>{renderFiles();$("#dlgF").showModal()};
 $("#bFClose").onclick=()=>$("#dlgF").close();
-function showNotice(){
-  const n=S.notice;if(!n)return;
-  $("#noticeMsg").textContent="O DeckLock foi atualizado para a versão "+(n.ver||APP_VERSION)+" e voltou ao estado inicial, com os decks Grupo e Heróis e o verso liso. Seus dados anteriores foram guardados automaticamente neste navegador.";
-  $("#dlgNotice").showModal();
-}
-$("#noticeOk").onclick=()=>$("#dlgNotice").close();
-$("#noticeBk").onclick=()=>{
+function showNotice(){if(S.notice)$("#dlgNotice").showModal()}
+$("#noticeOk").onclick=()=>{
   const n=S.notice;let old=null;
   try{old=JSON.parse(localStorage.getItem(n&&n.key))}catch(e){}
-  if(!old||!Array.isArray(old.decks)){toast("Não há backup para baixar.");return}
-  dl("decklock-backup-"+new Date().toISOString().slice(0,10)+".json",{versao:3,title:old.title,decks:old.decks,cfg:old.cfg,profiles:old.profiles});
-  toast("Backup baixado.");
+  if(old&&Array.isArray(old.decks))dl("decklock-backup-"+new Date().toISOString().slice(0,10)+".json",{versao:3,title:old.title,decks:old.decks,cfg:old.cfg,profiles:old.profiles});
+  $("#dlgNotice").close();
 };
+$("#dlgNotice").addEventListener("cancel",e=>e.preventDefault());
 $("#dlgNotice").addEventListener("close",()=>{if(S.notice){S.notice=null;save()}});
 $("#bHistClear").onclick=()=>{S.hist=[];save();renderHist()};
 $("#bEdit").onclick=openEd;
