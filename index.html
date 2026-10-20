@@ -6,7 +6,7 @@
 <title>DeckLock</title>
 <meta name="description" content="Sorteador de cartas de desafio para partidas de Deadlock, com decks editáveis.">
 <meta name="theme-color" content="#222021">
-<meta name="decklock-version" content="1.9.1">
+<meta name="decklock-version" content="1.9.2">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="DeckLock">
@@ -473,6 +473,82 @@ body.fs #shareResult{display:none!important}
 #deckChips .deck-entry .deck-star{color:var(--ink)}
 #deckChips button:focus-visible,#chips button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 @media(max-width:600px){#deckChips .chip,#chips .chip{min-height:42px}#deckChips .deck-entry .deck-star{min-width:42px;min-height:42px}}
+
+/* DeckLock v1.9.2 — acabamento visual discreto. Mantém os temas e estados existentes. */
+/* Ação primária sempre tem prioridade visual; o compartilhamento fica identificável. */
+.draw-action-row{gap:12px}
+.share-results>summary.share-icon{
+  border-color:color-mix(in srgb,var(--mute) 65%,var(--line));
+  background:color-mix(in srgb,var(--bg2) 48%,var(--bg));
+  color:var(--ink);
+  box-shadow:0 2px 9px #0002;
+  transition:background .15s,border-color .15s,color .15s,box-shadow .15s;
+}
+.share-results[aria-disabled="true"]>summary.share-icon{
+  opacity:.64;
+  color:var(--mute);
+  border-color:var(--line);
+  box-shadow:none;
+}
+.share-results:not([aria-disabled="true"])>summary.share-icon:hover,
+.share-results[open]>summary.share-icon{
+  background:var(--panel);border-color:var(--gold);color:var(--gold);
+  box-shadow:0 3px 12px #0004;
+}
+.share-results>summary.share-icon:focus-visible{
+  outline:2px solid var(--gold);outline-offset:3px;
+}
+.share-result-actions{z-index:20;box-shadow:0 12px 30px #0009}
+.share-result-actions button{white-space:nowrap}
+/* Controles secundários mais calmos, mas com retorno perceptível ao interagir. */
+.extras,.shortcut-grid{box-shadow:0 2px 12px #0001}
+.extras>summary,.shortcut-help>summary{
+  transition:background .15s,color .15s;
+  border-radius:inherit;
+}
+.extras>summary:hover,.shortcut-help>summary:hover{background:color-mix(in srgb,var(--panel) 20%,transparent);color:var(--ink)}
+.extras>summary:focus-visible,.shortcut-help>summary:focus-visible,
+.mission-board>summary:focus-visible,.settings-group>summary:focus-visible{
+  outline:2px solid var(--gold);outline-offset:2px;
+}
+.shortcut-help:not([open])>summary{padding:7px 10px}
+/* A carta continua sendo a protagonista, com separação visual contida. */
+.scene .face{box-shadow:0 12px 30px #0004}
+.front .ct{letter-spacing:-.015em}
+.front .meta{gap:8px}
+.front .meta>*{min-width:0;overflow-wrap:anywhere}
+.deck-choice{gap:9px}
+#deckChips .deck-entry,.chip.on{transition:border-color .15s,background .15s}
+/* Diálogos: título e Fechar continuam visíveis durante a rolagem. */
+dialog{max-height:92dvh;overscroll-behavior:contain}
+dialog>.top:first-child{
+  position:sticky;top:0;z-index:15;
+  background:var(--bg);
+  box-shadow:0 3px 12px #0003;
+}
+dialog>.top:first-child strong{line-height:1.3}
+dialog .top button{flex-shrink:0}
+dialog .ed-list button:focus-visible{outline-offset:-2px}
+/* Mensagens não obstruem o botão de sorteio e permanecem legíveis. */
+#toast{z-index:100;box-shadow:0 8px 25px #0007;line-height:1.35;text-wrap:pretty;text-align:center}
+@media(max-width:600px){
+  .scene .face{box-shadow:0 9px 23px #0004}
+  .draw-action-row{gap:8px}
+  .extras>summary{padding-block:12px}
+  .shortcut-help>summary{min-height:36px}
+  dialog{width:calc(100% - 20px);max-height:calc(100dvh - 28px)}
+  dialog>.top{gap:7px;padding:11px 12px}
+  dialog>.top:first-child{gap:8px}
+  dialog>.top:first-child strong{flex-basis:100%;font-size:1rem}
+  dialog>.top:first-child button{font-size:.85rem;min-height:38px;padding:7px 11px}
+  #dlg>.top:nth-child(2){gap:7px}
+  #dlg>.top:nth-child(2) button{font-size:.84rem;padding:6px 10px;min-height:38px}
+  #dlg>.top:nth-child(2) #bReset{margin-left:auto}
+  #toast{bottom:calc(18px + env(safe-area-inset-bottom));max-width:calc(100vw - 28px)}
+}
+@media(prefers-reduced-motion:reduce){
+  .share-results>summary.share-icon,.extras>summary,.shortcut-help>summary{transition:none!important}
+}
 </style>
 </head>
 <body>
@@ -547,7 +623,7 @@ body.fs #shareResult{display:none!important}
         <p class="empty" id="remain" hidden></p>
       </div>
     </details>
-    <details class="shortcut-help" id="shortcutHelp" open>
+    <details class="shortcut-help" id="shortcutHelp">
       <summary>⌨ Atalhos de teclado <span class="shortcut-preview">· Espaço: sortear · 1–8: quantidade</span></summary>
       <div class="shortcut-grid">
         <span><kbd>Espaço</kbd> Sortear</span><span><kbd>1–8</kbd> Quantidade</span>
@@ -667,7 +743,7 @@ const EXEMPLOS=[{"id":"g","name":"Grupo","cards":[{"id":"g0","title":"Pick do co
 const KEY="deadlock-deck-v3";
 /* Reset único: quem tem dados salvos sem "epoch" (versões antigas) volta ao início UMA vez.
    Os dados antigos são guardados em BKEY antes. Só aumente RESET_EPOCH se quiser forçar outro reset. */
-const RESET_EPOCH=2,APP_VERSION="1.9.1",BKEY="deadlock-deck-v3:backup";
+const RESET_EPOCH=2,APP_VERSION="1.9.2",BKEY="deadlock-deck-v3:backup";
 let resetNotice=null;
 /* Guarda os dados antigos numa chave própria desta atualização. Devolve a chave, ou null se não conseguiu. */
 function stashOld(raw){
