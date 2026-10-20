@@ -6,6 +6,7 @@
 <title>DeckLock</title>
 <meta name="description" content="Sorteador de cartas de desafio para partidas de Deadlock, com decks editáveis.">
 <meta name="theme-color" content="#222021">
+<meta name="decklock-version" content="1.9.1">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="DeckLock">
@@ -439,6 +440,7 @@ body.quick-draw .scene{animation:none!important}
 .share-results>summary.share-icon{display:grid;place-items:center;width:44px;height:44px;min-height:44px;padding:0;margin:0 auto;border:1px solid transparent;border-radius:10px;color:var(--mute);transition:color .15s,background .15s,border-color .15s}
 .share-results>summary.share-icon:hover,.share-results[open]>summary.share-icon{background:var(--panel);border-color:var(--line);color:var(--ink)}
 .share-results>summary.share-icon svg{display:block;pointer-events:none}
+.share-results[aria-disabled="true"]>summary{opacity:.45;cursor:not-allowed}
 .share-results[open]>summary{color:var(--ink)}
 .share-result-actions{position:absolute;top:calc(100% + 8px);right:0;display:flex;gap:7px;flex-wrap:wrap;justify-content:center;padding:8px;width:max-content;max-width:min(420px,90vw);border:1px solid var(--line);border-radius:11px;background:var(--bg2);box-shadow:0 8px 22px #0004}
 .share-result-actions button{font-size:.79rem;min-height:36px;padding:5px 10px}
@@ -504,7 +506,7 @@ body.fs #shareResult{display:none!important}
       </div>
       <div class="draw-action-row">
         <button class="primary" id="bDraw">Sortear carta</button>
-        <details class="share-results" id="shareResult" hidden>
+        <details class="share-results" id="shareResult" aria-disabled="true">
         <summary class="subtle-action share-icon" title="Compartilhar resultado" aria-label="Compartilhar resultado" aria-controls="shareResultActions">
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.7 10.6 6.6-4.2m-6.6 7 6.6 4.2"/></svg>
         </summary>
@@ -665,7 +667,7 @@ const EXEMPLOS=[{"id":"g","name":"Grupo","cards":[{"id":"g0","title":"Pick do co
 const KEY="deadlock-deck-v3";
 /* Reset único: quem tem dados salvos sem "epoch" (versões antigas) volta ao início UMA vez.
    Os dados antigos são guardados em BKEY antes. Só aumente RESET_EPOCH se quiser forçar outro reset. */
-const RESET_EPOCH=2,APP_VERSION="1.9.0",BKEY="deadlock-deck-v3:backup";
+const RESET_EPOCH=2,APP_VERSION="1.9.1",BKEY="deadlock-deck-v3:backup";
 let resetNotice=null;
 /* Guarda os dados antigos numa chave própria desta atualização. Devolve a chave, ou null se não conseguiu. */
 function stashOld(raw){
@@ -1191,7 +1193,9 @@ function renderMeta(){
   $("#bUndo").hidden=!undoStack.length||S.mode==="classic";
   $("#bSum").hidden=!S.cfg.track||(!S.sess.draws.length&&!sessionQuests().length&&!S.archives.length);
   $("#bSum").textContent="Ver relatório";
-  $("#shareResult").hidden=!table.some(g=>g.cards.some(Boolean));
+  const canShare=table.some(g=>g.cards.some(Boolean));
+  $("#shareResult").setAttribute("aria-disabled",String(!canShare));
+  if(!canShare)$("#shareResult").open=false;
   $("#shareDeckOptions").hidden=sel().length!==1||!sel()[0].cards.length;
   $("#optionsHint").textContent=[filt.size?filt.size+" filtro(s)":"",S.cfg.track?"acompanhamento ligado":""].filter(Boolean).join(" · ");
   $("#bClearFilters").hidden=!filt.size;
@@ -2010,6 +2014,8 @@ if("IntersectionObserver" in window){
   },{threshold:0.15});
   mobileObserver.observe($("#bDraw"));
 }
+$("#shareResult").querySelector("summary").addEventListener("click",e=>{if($("#shareResult").getAttribute("aria-disabled")==="true"){e.preventDefault();toast("Sorteie uma carta antes de compartilhar.")}});
+$("#shareResult").addEventListener("toggle",()=>{if($("#shareResult").open&&$("#shareResult").getAttribute("aria-disabled")==="true")$("#shareResult").open=false});
 $("#bCopy").onclick=()=>{copyTxt();$("#shareResult").open=false};
 $("#bCopyImage").onclick=()=>exportResultImage(true);
 $("#bSaveImage").onclick=()=>exportResultImage(false);
@@ -2071,6 +2077,31 @@ $("#sumNew").onclick=()=>{
 $("#codeAdd").onclick=()=>{$("#dlgCode").close();if(pendCode)addDecks([pendCode]);pendCode=null};
 $("#codeCancel").onclick=()=>{$("#dlgCode").close();pendCode=null};
 addEventListener("hashchange",checkHash);checkHash();
+// Consulta leve à página publicada quando a aba volta a ficar ativa.
+// Não remove dados locais, não aumenta RESET_EPOCH e nunca recarrega sem consentimento.
+let lastVersionCheck=0,checkingVersion=false,versionPrompted=false;
+async function checkPublishedVersion(){
+  if(checkingVersion||versionPrompted||!/^https?:$/.test(location.protocol)||document.hidden)return;
+  if(Date.now()-lastVersionCheck<5*60*1000)return;
+  lastVersionCheck=Date.now();checkingVersion=true;
+  try{
+    const url=new URL(location.pathname,location.origin);
+    url.searchParams.set("_decklock_check",String(Date.now()));
+    const res=await fetch(url.toString(),{cache:"no-store",credentials:"same-origin"});
+    if(!res.ok)return;
+    const html=await res.text();
+    const match=html.match(/<meta\s+name=["']decklock-version["']\s+content=["']([^"']+)["']/i);
+    if(!match||match[1]===APP_VERSION)return;
+    versionPrompted=true;
+    toast("Nova versão do DeckLock disponível (v"+match[1]+"). Seus decks e configurações serão preservados.","Atualizar",()=>{
+      if(ed.dirty&&!confirm("Há alterações não salvas no editor. Atualizar mesmo assim?"))return;
+      flush();location.reload();
+    },30000);
+  }catch(e){/* Offline: continuar normalmente. */}
+  finally{checkingVersion=false}
+}
+addEventListener("pageshow",()=>{void checkPublishedVersion()});
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)void checkPublishedVersion()});
 $("#ver").textContent="v"+APP_VERSION;
 if(S.notice)showNotice();
 </script>
