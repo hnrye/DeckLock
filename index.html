@@ -6,7 +6,7 @@
 <title>DeckLock</title>
 <meta name="description" content="Sorteador de cartas de desafio para partidas de Deadlock, com decks editáveis.">
 <meta name="theme-color" content="#222021">
-<meta name="decklock-version" content="1.9.2">
+<meta name="decklock-version" content="1.9.3">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="DeckLock">
@@ -743,9 +743,26 @@ const EXEMPLOS=[{"id":"g","name":"Grupo","cards":[{"id":"g0","title":"Pick do co
 const KEY="deadlock-deck-v3";
 /* Reset único: quem tem dados salvos sem "epoch" (versões antigas) volta ao início UMA vez.
    Os dados antigos são guardados em BKEY antes. Só aumente RESET_EPOCH se quiser forçar outro reset. */
-const RESET_EPOCH=2,APP_VERSION="1.9.2",BKEY="deadlock-deck-v3:backup";
+const RESET_EPOCH=2,APP_VERSION="1.9.3",BKEY="deadlock-deck-v3:backup";
 let resetNotice=null;
 /* Guarda os dados antigos numa chave própria desta atualização. Devolve a chave, ou null se não conseguiu. */
+const AUTO_KEEP=5,AUTO_RE=/^deadlock-deck-v3:backup:auto:\d+$/;
+/* Backups de rotina (antes de importar/substituir ou excluir decks): só os mais recentes são mantidos.
+   Os backups do reset de versão e do "Apagar todos os dados" nunca são removidos automaticamente. */
+const autoBackups=()=>listBackups().filter(k=>AUTO_RE.test(k)).sort((a,b)=>Number(b.split(":")[3])-Number(a.split(":")[3]));
+function pruneAuto(keep){autoBackups().slice(keep).forEach(k=>{try{localStorage.removeItem(k)}catch(e){}})}
+function stashAuto(raw){
+  pruneAuto(AUTO_KEEP-1);
+  const k=BKEY+":auto:"+Date.now();
+  for(;;){
+    try{localStorage.setItem(k,raw);if(localStorage.getItem(k)===raw)return k;try{localStorage.removeItem(k)}catch(e){}return null}
+    catch(e){
+      // Sem espaço: libera só o backup de rotina mais antigo e tenta de novo.
+      const oldest=autoBackups().pop();if(!oldest)return null;
+      try{localStorage.removeItem(oldest)}catch(x){return null}
+    }
+  }
+}
 function stashOld(raw){
   // Nunca apagar o armazenamento principal para abrir espaço para o backup.
   const base=BKEY+":"+RESET_EPOCH;let k=base;
@@ -904,7 +921,7 @@ function flush(){
 function backupBeforeReplace(){
   // Uma substituição de decks pode ser desfeita até mesmo após atualizar a página.
   try{
-    const raw=JSON.stringify(S),key=stashOld(raw);
+    const raw=JSON.stringify(S),key=stashAuto(raw);
     if(key)return true;
   }catch(e){}
   return confirm("Não foi possível criar um backup automático. Exporte seus dados em Arquivos antes de substituir. Continuar mesmo assim?");
@@ -1753,11 +1770,11 @@ $("#bDNew").onclick=()=>{const n=prompt("Nome do novo deck:");if(!n||!n.trim())r
 $("#bDRen").onclick=()=>{const d=curD();if(!d)return;const n=prompt("Novo nome do deck:",d.name);if(!n||!n.trim())return;d.name=n.trim();mark();renderEd()};
 $("#bDDel").onclick=()=>{
   const d=curD();if(!d||!confirm("Excluir o deck ‘"+d.name+"’ e suas "+d.cards.length+" cartas?"))return;
-  if(!stashOld(JSON.stringify(S))){toast("Não foi possível criar um backup. Exporte seus dados antes de excluir.");return}
+  if(!stashAuto(JSON.stringify(S))){toast("Não foi possível criar um backup. Exporte seus dados antes de excluir.");return}
   withUndo("Deck '"+d.name+"' excluído.",()=>{S.decks=S.decks.filter(x=>x!==d);S.active=S.active.filter(id=>id!==d.id);if(!S.active.length&&S.decks.length)S.active=[S.decks[0].id];ed.d=S.decks[0]?.id||null;ed.c=S.decks[0]?.cards[0]?.id;renderEd()});
 };
 $("#bAdd").onclick=()=>{const d=curD();if(!d){toast("Crie um deck primeiro.");return}const c={id:"n"+Date.now()+Math.random().toString(36).slice(2,7),title:"Nova carta",text:"Descreva a regra aqui.",cat:d.cards[0]?.cat||"Caos",rar:"comum",img:""};d.cards.push(c);ed.c=c.id;ed.q="";$("#edQ").value="";mark();renderEd()};
-$("#bReset").onclick=()=>{if(!S.decks.length){toast("Não há decks para remover.");return}if(!confirm("Remover TODOS os "+S.decks.length+" decks? Você poderá desfazer por alguns segundos."))return;if(!stashOld(JSON.stringify(S))){toast("Não foi possível criar um backup. Exporte seus dados antes de excluir.");return}withUndo("Todos os decks removidos.",()=>{S.decks=[];S.active=[];ed.d=null;ed.c=null;renderEd()})};
+$("#bReset").onclick=()=>{if(!S.decks.length){toast("Não há decks para remover.");return}if(!confirm("Remover TODOS os "+S.decks.length+" decks? Você poderá desfazer por alguns segundos."))return;if(!stashAuto(JSON.stringify(S))){toast("Não foi possível criar um backup. Exporte seus dados antes de excluir.");return}withUndo("Todos os decks removidos.",()=>{S.decks=[];S.active=[];ed.d=null;ed.c=null;renderEd()})};
 $("#fileImg").onchange=e=>{
   const f=e.target.files[0];e.target.value="";if(!f||!acceptablePicture(f))return;
   const r=new FileReader();
@@ -2156,6 +2173,7 @@ addEventListener("hashchange",checkHash);checkHash();
 // Consulta leve à página publicada quando a aba volta a ficar ativa.
 // Não remove dados locais, não aumenta RESET_EPOCH e nunca recarrega sem consentimento.
 let lastVersionCheck=0,checkingVersion=false,versionPrompted=false;
+const verCmp=(a,b)=>{const x=String(a).split(".").map(n=>parseInt(n,10)||0),y=String(b).split(".").map(n=>parseInt(n,10)||0);for(let i=0;i<Math.max(x.length,y.length);i++){const d=(x[i]||0)-(y[i]||0);if(d)return d>0?1:-1}return 0};
 async function checkPublishedVersion(){
   if(checkingVersion||versionPrompted||!/^https?:$/.test(location.protocol)||document.hidden)return;
   if(Date.now()-lastVersionCheck<5*60*1000)return;
@@ -2167,7 +2185,7 @@ async function checkPublishedVersion(){
     if(!res.ok)return;
     const html=await res.text();
     const match=html.match(/<meta\s+name=["']decklock-version["']\s+content=["']([^"']+)["']/i);
-    if(!match||match[1]===APP_VERSION)return;
+    if(!match||verCmp(match[1],APP_VERSION)<=0)return;
     versionPrompted=true;
     toast("Nova versão do DeckLock disponível (v"+match[1]+"). Seus decks e configurações serão preservados.","Atualizar",()=>{
       if(ed.dirty&&!confirm("Há alterações não salvas no editor. Atualizar mesmo assim?"))return;
