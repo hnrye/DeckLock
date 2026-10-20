@@ -6,8 +6,12 @@
 <title>DeckLock</title>
 <meta name="description" content="Sorteador de cartas de desafio para partidas de Deadlock, com decks editáveis.">
 <meta name="theme-color" content="#222021">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="DeckLock">
 <meta property="og:title" content="DeckLock">
 <meta property="og:description" content="Sorteador de cartas de desafio para partidas de Deadlock, com decks editáveis.">
+<meta name="twitter:card" content="summary">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23222021'/%3E%3Ccircle cx='16' cy='16' r='11' fill='none' stroke='%23efdebf' stroke-width='2'/%3E%3Cpath d='M6 16Q16 8 26 16Q16 24 6 16Z' fill='%23efdebf'/%3E%3Ccircle cx='16' cy='16' r='3.5' fill='%23222021'/%3E%3C/svg%3E">
 <style>
 :root{--bg:#222021;--bg2:#2f4442;--panel:#3f5d4d;--ink:#efdebf;--mute:#86a995;--gold:#efdebf;--rare:#8fb59f;--leg:#d98a5c;--line:#3f5d4d;--onacc:#16110a;--cw:300px;--flip:700ms;--fh:Georgia,"Times New Roman",serif}
@@ -17,10 +21,7 @@ body{background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,sans-serif;mi
 h1,h2,.ct,.title,h3{font-family:var(--fh)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 header{display:flex;flex-direction:column;align-items:center;gap:12px;padding:20px 24px 16px;border-bottom:1px solid var(--line);text-align:center}
-.title{margin:0;font-size:clamp(1.5rem,4vw,2.3rem);font-weight:700;letter-spacing:.02em;color:var(--gold);text-align:center;max-width:min(900px,94vw);padding:2px 10px;border-radius:6px;cursor:text;overflow-wrap:anywhere;text-shadow:0 2px 20px color-mix(in srgb,var(--gold) 30%,transparent)}
-.title:empty::before{content:attr(data-ph);color:var(--mute)}
-.title:hover{text-decoration:underline dotted color-mix(in srgb,var(--gold) 55%,transparent);text-underline-offset:9px}
-.title:focus{text-decoration:none;outline:none;box-shadow:0 2px 0 0 var(--gold)}
+.title{margin:0;font-size:clamp(1.5rem,4vw,2.3rem);font-weight:700;letter-spacing:.02em;color:var(--gold);text-align:center;max-width:min(900px,94vw);padding:2px 10px;border-radius:6px;cursor:default;overflow-wrap:anywhere;text-shadow:0 2px 20px color-mix(in srgb,var(--gold) 30%,transparent)}
 button,select,input{transition:border-color .15s,background .15s,transform .1s,opacity .2s}
 button,select{font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 14px;cursor:pointer;min-height:40px}
 button:hover:not(:disabled){border-color:var(--gold)}
@@ -383,6 +384,93 @@ body:not(.tracking) .scene .acc{display:none!important}
 .shortcut-grid kbd{display:inline-block;min-width:23px;text-align:center;font:600 .75rem system-ui,sans-serif;color:var(--ink);border:1px solid var(--mute);border-radius:5px;padding:2px 5px}
 body.fs .shortcut-help{display:none}
 @media(max-width:600px){.quick-count{gap:10px}.quick-count .stepper button{min-width:44px;min-height:42px}.shortcut-preview{display:none}.shortcut-grid{grid-template-columns:repeat(2,minmax(0,1fr));font-size:.72rem;gap:10px}}
+/* ---------- Etapa 1: refinamentos sem alterar a identidade visual ---------- */
+/* Títulos mais legíveis sem cortar descrições extensas. */
+.front .ct{overflow-wrap:anywhere;text-wrap:balance;hyphens:auto}
+.front .tx{overflow-wrap:anywhere;text-wrap:pretty;hyphens:auto;line-height:1.45}
+.front .body{scrollbar-width:thin;scrollbar-color:var(--mute) transparent;overscroll-behavior:contain}
+.front .body:focus-visible{outline:2px solid var(--rare);outline-offset:-3px}
+/* Organiza todos os ajustes existentes em grupos expansíveis. */
+#setBody{gap:10px}
+.settings-group{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:color-mix(in srgb,var(--bg2) 24%,var(--bg))}
+.settings-group>summary{list-style:none;cursor:pointer;padding:13px 15px;display:flex;align-items:center;justify-content:space-between;gap:12px;font-weight:650;color:var(--ink);font-size:.96rem;user-select:none}
+.settings-group>summary::-webkit-details-marker{display:none}
+.settings-group>summary::after{content:'+';font:500 1.3rem system-ui,sans-serif;color:var(--mute)}
+.settings-group[open]>summary{border-bottom:1px solid var(--line);color:var(--gold)}
+.settings-group[open]>summary::after{content:'−'}
+.settings-content{padding:14px;display:grid;gap:11px;align-content:start;min-width:0}
+.settings-content>h3{margin:11px 0 0}
+.settings-content>h3:first-child{margin-top:0}
+.settings-group:focus-within{border-color:color-mix(in srgb,var(--gold) 60%,var(--line))}
+.quick-toggle{display:flex;gap:10px;align-items:center;cursor:pointer;color:var(--ink);font-size:.87rem}
+.quick-toggle input{width:18px;height:18px;accent-color:var(--gold);flex:none}
+.quick-toggle small{display:block;color:var(--mute);font-size:.76rem;line-height:1.4}
+/* O atalho de sorteio aparece no celular apenas quando o botão principal não está visível. */
+#mobileDraw{display:none}
+@media(min-width:601px) and (max-width:760px){.ctrl.simple-actions{position:static;bottom:auto;padding:0;background:none}}
+@media(max-width:600px){
+  /* O controle principal ocupa seu lugar natural; só o atalho flutuante aparece fora da tela. */
+  .ctrl.simple-actions{position:static;bottom:auto;z-index:auto;padding:0;background:none}
+  body{padding-bottom:env(safe-area-inset-bottom)}
+  #mobileDraw{position:fixed;bottom:calc(12px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);width:min(310px,calc(100vw - 32px));z-index:18;min-height:52px;box-shadow:0 8px 28px #000b;display:none}
+  body.show-mobile-draw #mobileDraw{display:block}
+  body.show-mobile-draw main{padding-bottom:90px}
+  body:has(dialog[open]) #mobileDraw,body.fs #mobileDraw{display:none!important}
+  .simple-actions .primary{width:min(320px,90vw)}
+}
+body.quick-draw .scene{animation:none!important}
+/* Etapa 2 — ações de compartilhamento ficam secundárias. */
+.deck-tools{width:min(450px,100%);display:flex;align-items:center;justify-content:center;gap:12px}
+.deck-tools[hidden]{display:none!important}
+.deck-tools input{max-width:270px;min-height:38px;font-size:.87rem}
+.deck-tools-note{color:var(--mute);font-size:.74rem;white-space:nowrap}
+#deckChips .deck-entry{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:99px;min-height:38px;background:var(--panel);max-width:100%}
+#deckChips .deck-entry .chip{border:0;background:transparent;min-width:0;overflow-wrap:anywhere}
+#deckChips .deck-entry .chip.on{background:color-mix(in srgb,var(--gold) 18%,var(--bg2));border-radius:99px 0 0 99px}
+#deckChips .deck-entry .deck-star{background:transparent;border:0;border-left:1px solid var(--line);min-height:34px;min-width:34px;padding:3px 8px;color:var(--mute);font-size:1.08rem}
+#deckChips .deck-entry .deck-star.on{color:var(--gold)}
+#deckChips .deck-entry .deck-star:focus-visible{outline-offset:1px}
+#deckChips .deck-no-results{color:var(--mute);font-size:.85rem}
+.draw-action-row{display:flex;justify-content:center;align-items:center;gap:10px;max-width:100%;min-width:0}
+.draw-action-row .primary{min-width:min(300px,calc(100vw - 116px));max-width:100%}
+.share-results{position:relative;z-index:12;text-align:center;flex:none}
+.share-results>summary{list-style:none;cursor:pointer;user-select:none}
+.share-results>summary::-webkit-details-marker{display:none}
+.share-results>summary.share-icon{display:grid;place-items:center;width:44px;height:44px;min-height:44px;padding:0;margin:0 auto;border:1px solid transparent;border-radius:10px;color:var(--mute);transition:color .15s,background .15s,border-color .15s}
+.share-results>summary.share-icon:hover,.share-results[open]>summary.share-icon{background:var(--panel);border-color:var(--line);color:var(--ink)}
+.share-results>summary.share-icon svg{display:block;pointer-events:none}
+.share-results[open]>summary{color:var(--ink)}
+.share-result-actions{position:absolute;top:calc(100% + 8px);right:0;display:flex;gap:7px;flex-wrap:wrap;justify-content:center;padding:8px;width:max-content;max-width:min(420px,90vw);border:1px solid var(--line);border-radius:11px;background:var(--bg2);box-shadow:0 8px 22px #0004}
+.share-result-actions button{font-size:.79rem;min-height:36px;padding:5px 10px}
+.share-deck-options{display:grid;gap:7px;padding:10px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.share-deck-options[hidden]{display:none!important}
+.share-deck-row{display:flex;gap:8px;flex-wrap:wrap}
+.share-deck-row button{min-height:34px;padding:5px 12px;font-size:.8rem}
+.share-deck-options small{font-size:.74rem;color:var(--mute)}
+body.fs #shareResult{display:none!important}
+@media(max-width:600px){.simple-actions .draw-action-row .primary{width:min(300px,calc(100vw - 112px));min-width:0;padding-inline:16px}}
+@media(max-width:480px){.deck-tools{flex-wrap:wrap;gap:4px}.deck-tools-note{font-size:.68rem}.share-result-actions{flex-direction:column;align-items:stretch;width:min(290px,90vw)}}
+@media(prefers-reduced-motion:reduce){
+ #mobileDraw{transition:none!important}
+ .scene,.scene[class*="fx-"],.card,dialog[open],dialog[open]::backdrop,.primary{animation:none!important;transition:none!important}
+ .scene.live:hover,.chip:hover,.primary:hover:not([aria-disabled=true]){transform:none}
+}
+@media(max-width:480px){
+ /* Todos os controles essenciais cabem e continuam fáceis de tocar. */
+ .shortcut-grid span{white-space:normal;min-width:0;overflow-wrap:anywhere}
+ .draw-action-row{gap:6px;width:min(100%,350px)}
+ .draw-action-row .primary{flex:1;min-width:0;width:auto;max-width:calc(100% - 50px);padding-inline:12px;font-size:.96rem}
+ .share-results>summary.share-icon{width:44px;height:44px}
+ .share-result-actions{right:0}
+ .stepper button,.ibtn{touch-action:manipulation}
+ .scene.live:hover{transform:none}
+ .front .body{overscroll-behavior:contain}
+}
+/* Acessibilidade discreta: melhor leitura e alvos de toque, sem novos controles. */
+#deckChips .chip:not(.on),#chips .chip:not(.on){color:color-mix(in srgb,var(--ink) 85%,var(--mute))}
+#deckChips .deck-entry .deck-star{color:var(--ink)}
+#deckChips button:focus-visible,#chips button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+@media(max-width:600px){#deckChips .chip,#chips .chip{min-height:42px}#deckChips .deck-entry .deck-star{min-width:42px;min-height:42px}}
 </style>
 </head>
 <body>
@@ -392,7 +480,7 @@ body.fs .shortcut-help{display:none}
     <button class="ibtn" id="bEdit" aria-label="Editar decks" data-tip="Editar decks (E)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2.5 2.5 0 0 0-3.5-3.5L4.5 16.5V20z"/><path d="M14 7l3 3"/></svg></button>
     <button class="ibtn" id="bFiles" aria-label="Arquivos" data-tip="Arquivos (A)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg></button>
   </div>
-  <h1 class="title" id="title" contenteditable="true" spellcheck="false" role="textbox" aria-label="Título do site (editável)" title="Clique para editar o título" data-ph="Título do site"></h1>
+  <h1 class="title" id="title">DeckLock</h1>
   <div class="hr">
     <button class="ibtn" id="bSet" aria-label="Configurações" data-tip="Configurações (S)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.88 9.87 L21.86 10.31 L21.86 13.69 L18.88 14.13 L18.37 15.36 L20.17 17.77 L17.77 20.17 L15.36 18.37 L14.13 18.88 L13.69 21.86 L10.31 21.86 L9.87 18.88 L8.64 18.37 L6.23 20.17 L3.83 17.77 L5.63 15.36 L5.12 14.13 L2.14 13.69 L2.14 10.31 L5.12 9.87 L5.63 8.64 L3.83 6.23 L6.23 3.83 L8.64 5.63 L9.87 5.12 L10.31 2.14 L13.69 2.14 L14.13 5.12 L15.36 5.63 L17.77 3.83 L20.17 6.23 L18.37 8.64Z"/><circle cx="12" cy="12" r="3"/></svg></button>
     <button class="ibtn" id="bFs" aria-label="Tela cheia" aria-pressed="false" data-tip="Tela cheia (F)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
@@ -403,16 +491,30 @@ body.fs .shortcut-help{display:none}
   <section class="stage">
     <div class="deck-choice">
       <p class="deck-label">Escolha um deck</p>
-      <div class="chips" id="deckChips" aria-label="Decks"></div>
+      <div class="deck-tools" id="deckTools" hidden>
+        <input id="deckSearch" type="search" placeholder="Buscar deck…" aria-label="Buscar deck">
+        <span class="deck-tools-note">☆ Favoritos primeiro</span>
+      </div>
+      <div class="chips" id="deckChips" role="group" aria-label="Escolha os decks para sortear"></div>
     </div>
-    <div id="table" aria-label="Cartas sorteadas"></div>
+    <div id="table" role="region" aria-label="Cartas sorteadas"></div>
     <div class="ctrl simple-actions">
       <div class="quick-count" aria-label="Quantidade de cartas por deck">
-        <span>Cartas por deck</span>
         <div class="stepper"><button id="bMin" aria-label="Diminuir quantidade de cartas" title="Menos cartas">−</button><b id="cnt" aria-live="polite">1</b><button id="bPlus" aria-label="Aumentar quantidade de cartas" title="Mais cartas">+</button></div>
       </div>
-      <button class="primary" id="bDraw">Sortear carta</button>
-      <button id="bCopy" class="subtle-action" title="Copiar o resultado (C)" hidden>Copiar carta</button>
+      <div class="draw-action-row">
+        <button class="primary" id="bDraw">Sortear carta</button>
+        <details class="share-results" id="shareResult" hidden>
+        <summary class="subtle-action share-icon" title="Compartilhar resultado" aria-label="Compartilhar resultado" aria-controls="shareResultActions">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.7 10.6 6.6-4.2m-6.6 7 6.6 4.2"/></svg>
+        </summary>
+        <div class="share-result-actions" id="shareResultActions">
+          <button id="bCopy" type="button" title="Copiar texto (C)">Copiar texto</button>
+          <button id="bCopyImage" type="button">Copiar imagem</button>
+          <button id="bSaveImage" type="button">Baixar PNG</button>
+        </div>
+        </details>
+      </div>
     </div>
     <details class="extras" id="moreOptions">
       <summary>Mais opções <span id="optionsHint"></span></summary>
@@ -420,11 +522,20 @@ body.fs .shortcut-help{display:none}
         <div class="extras-row">
           <label class="modelab">Modo <select id="modeSel" aria-label="Modo de sorteio" title="Livre: sorteio comum. Clássico: sem trocas. Caos: 1 a 3 cartas e chances maiores para raras. Baralho finito: limite de sorteios."><option value="free">Livre</option><option value="classic">Clássico</option><option value="chaos">Caos</option><option value="finite">Baralho finito</option></select></label>
         </div>
+        <div class="share-deck-options" id="shareDeckOptions" hidden>
+          <span class="extras-label">Compartilhar deck selecionado</span>
+          <div class="share-deck-row">
+            <button type="button" id="bShareLink">Copiar link</button>
+            <button type="button" id="bShareCode">Copiar código</button>
+          </div>
+          <small>O link permite adicionar este deck em outro navegador. Imagens não são incluídas.</small>
+        </div>
         <div class="filter-options">
           <span class="extras-label">Categorias (opcional)</span>
-          <div class="chips" id="chips" aria-label="Categorias"></div>
+          <div class="chips" id="chips" role="group" aria-label="Filtrar categorias"></div>
           <button id="bClearFilters" class="small-link" hidden>Limpar filtros</button>
         </div>
+        <label class="quick-toggle"><input id="quickToggle" type="checkbox"><span><strong>Sorteio rápido</strong><small>Revela as cartas sem esperar pelas animações. Desligado por padrão.</small></span></label>
         <label class="tracking-toggle"><input id="trackToggle" type="checkbox"><span><strong>Acompanhar desafios</strong><small>Opcional: salvar missões, registrar resultados e consultar relatórios.</small></span></label>
         <div class="ctrl2">
           <button id="bUndo" class="linkbtn" hidden title="Desfazer o último sorteio (U)">Desfazer sorteio</button>
@@ -445,6 +556,7 @@ body.fs .shortcut-help{display:none}
       </div>
     </details>
   </section>
+  <button class="primary" id="mobileDraw" type="button" aria-label="Sortear cartas">Sortear carta</button>
   <details class="mission-board" id="qbox" aria-label="Painel de missões" hidden>
     <summary class="mission-board-summary">Desafios acompanhados <span id="qmini">0</span><small>Ver ou esconder</small></summary>
     <div class="board-head">
@@ -469,7 +581,7 @@ body.fs .shortcut-help{display:none}
 </main>
 <footer>Projeto de fã, sem vínculo com a Valve. Deadlock é marca da Valve Corporation.</footer>
 <button id="bFsExit" class="fsx" aria-label="Sair da tela cheia">✕ Sair</button>
-<div id="live" class="sr" aria-live="polite"></div>
+<div id="live" class="sr" role="status" aria-live="polite" aria-atomic="true"></div>
 <div id="ver"></div>
 <dialog id="dlgNotice" aria-label="Atualização">
   <div class="set"><p id="noticeMsg">O DeckLock foi atualizado.</p>
@@ -523,12 +635,16 @@ body.fs .shortcut-help{display:none}
   <div class="top"><strong class="grow">Deck compartilhado</strong></div>
   <div class="set"><p id="codeMsg"></p><div class="row"><button class="primary" id="codeAdd">Adicionar</button><button id="codeCancel">Cancelar</button></div></div>
 </dialog>
-<div id="toast" popover="manual" role="status"></div>
+<div id="toast" popover="manual" role="status" aria-live="polite" aria-atomic="true"></div>
 
 <script>
 const $=s=>document.querySelector(s);
 const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+function announce(message){
+  // Status persistente para leitores de tela; não acrescenta texto à interface.
+  const live=$("#live");if(live)live.textContent=message;
+}
 const CATS=["Geral","Handicap","Build","Objetivo","Comunicação","Caos","Individual","Herói"];
 const RARS={comum:"Comum",rara:"Rara",lendaria:"Lendária"};
 const COLORS=[["bg","Fundo"],["bg2","Fundo secundário"],["panel","Painéis"],["ink","Texto"],["mute","Texto suave"],["gold","Destaque"],["rare","Carta rara"],["leg","Carta lendária"],["line","Bordas"]];
@@ -541,7 +657,7 @@ const PROFILES={
 "Rubi":{back:"plain",colors:{bg:"#140b0d",bg2:"#1e1013",panel:"#271519",ink:"#f1e3dc",mute:"#a58f88",gold:"#e0b060",rare:"#5ea8c8",leg:"#e8574a",line:"#4a2a30"}},
 "Claro":{back:"plain",colors:{bg:"#f2ede3",bg2:"#fbf8f1",panel:"#e7dfcf",ink:"#241d16",mute:"#6e6252",gold:"#a8741a",rare:"#1f7a8c",leg:"#b3341f",line:"#c9bca3"}}};
 const FONTS={serif:["Serifada","Georgia,'Times New Roman',serif"],sans:["Sem serifa","system-ui,sans-serif"],cond:["Condensada","'Arial Narrow',Bahnschrift,Impact,sans-serif"]};
-const DEF_CFG=()=>({profile:"b:Deadlock",mod:false,colors:{...PROFILES.Deadlock.colors},back:"plain",backImg:"",bgfx:"glow",face:"solid",bgi:100,font:"serif",cw:300,flip:700,anim:!matchMedia("(prefers-reduced-motion: reduce)").matches,snd:false,pack:"soft",finiteN:10,track:false,compact:false,fxn:100,fx:{comum:{in:"flip",fx:"none"},rara:{in:"rise",fx:"glow"},lendaria:{in:"spin",fx:"confetti"}},hist:true,norepeat:true,cycle:true,rr:0,w:{comum:60,rara:30,lendaria:10}});
+const DEF_CFG=()=>({profile:"b:Deadlock",mod:false,colors:{...PROFILES.Deadlock.colors},back:"plain",backImg:"",bgfx:"glow",face:"solid",bgi:100,font:"serif",cw:300,flip:700,anim:!matchMedia("(prefers-reduced-motion: reduce)").matches,snd:true,pack:"soft",finiteN:10,track:false,quick:false,compact:false,fxn:100,fx:{comum:{in:"flip",fx:"none"},rara:{in:"rise",fx:"glow"},lendaria:{in:"spin",fx:"confetti"}},hist:true,norepeat:true,cycle:true,rr:0,w:{comum:60,rara:30,lendaria:10}});
 
 const DEF_DECKS=()=>EXEMPLOS.filter(d=>d.name==="Grupo"||d.name==="Heróis").map(d=>JSON.parse(JSON.stringify(d)));
 const EXEMPLOS=[{"id":"g","name":"Grupo","cards":[{"id":"g0","title":"Pick do colega","text":"Cada um joga o herói que o colega ao lado escolheu para você. Sem veto, sem troca.","cat":"Caos","rar":"comum","img":""},{"id":"g1","title":"Herói esquecido","text":"Todo mundo joga o herói que menos usou na conta. Se nunca jogou nenhum, vale qualquer um.","cat":"Caos","rar":"comum","img":""},{"id":"g2","title":"Sem arma","text":"Nenhum item de Arma na partida inteira. Só Vitalidade e Espírito.","cat":"Build","rar":"comum","img":""},{"id":"g3","title":"Categoria única","text":"Cada um escolhe uma categoria (Arma, Vitalidade ou Espírito) e só compra dela.","cat":"Build","rar":"comum","img":""},{"id":"g4","title":"Só passivos","text":"Nenhum item ativo na build. Se a luta depende de apertar um botão, ele não existe.","cat":"Build","rar":"rara","img":""},{"id":"g5","title":"Mão fechada","text":"Ninguém gasta souls antes do minuto 5. A primeira compra sai toda de uma vez.","cat":"Build","rar":"rara","img":""},{"id":"g6","title":"Sem zipline","text":"Zipline proibida. Quem chegar atrasado na luta, chegou a pé.","cat":"Handicap","rar":"comum","img":""},{"id":"g7","title":"Lane no corpo a corpo","text":"Até o minuto 5, só melee e habilidades. Tiro só depois disso.","cat":"Handicap","rar":"comum","img":""},{"id":"g8","title":"Minimapa desligado","text":"Ninguém olha o minimapa. Posição do inimigo só por callout no voz.","cat":"Handicap","rar":"rara","img":""},{"id":"g9","title":"Lane única","text":"O grupo todo na mesma lane até a primeira Guardian cair.","cat":"Objetivo","rar":"comum","img":""},{"id":"g10","title":"Prioridade Mid-Boss","text":"Assim que o Mid-Boss nascer, o grupo vai nele. Sem votação.","cat":"Objetivo","rar":"rara","img":""},{"id":"g11","title":"Urn do mais pobre","text":"Quem carrega a Soul Urn é sempre o jogador com menos souls do grupo.","cat":"Objetivo","rar":"rara","img":""},{"id":"g12","title":"Primeiros 5 no camp","text":"Ninguém fica em lane nos primeiros 5 minutos. Todo mundo no jungle.","cat":"Objetivo","rar":"comum","img":""},{"id":"g13","title":"Sem falar","text":"Sem voz até a primeira Guardian cair. Só pings e o chat de texto.","cat":"Comunicação","rar":"rara","img":""},{"id":"g14","title":"Só perguntas","text":"No voz, só vale falar em forma de pergunta. Afirmou, perdeu o turno de falar.","cat":"Comunicação","rar":"comum","img":""},{"id":"g15","title":"Sem nomes","text":"Não vale dizer nome de herói ou de item. Tem que descrever o que quer dizer.","cat":"Comunicação","rar":"rara","img":""},{"id":"g16","title":"Narrador morto","text":"Quem morreu narra a partida para o grupo até renascer.","cat":"Comunicação","rar":"comum","img":""},{"id":"g17","title":"Elogio obrigatório","text":"Depois de cada morte, o grupo elogia uma coisa que o inimigo fez bem. Sem ironia.","cat":"Comunicação","rar":"comum","img":""},{"id":"g18","title":"Líder rotativo","text":"A cada 5 minutos muda o líder. Só ele chama luta, objetivo e recuo.","cat":"Caos","rar":"comum","img":""},{"id":"g19","title":"Quem tem menos decide","text":"O jogador com menos kills decide para onde o grupo vai.","cat":"Caos","rar":"comum","img":""},{"id":"g20","title":"Aposta de kills","text":"Antes de começar, cada um crava quantas kills vai fazer. Quem errar por mais escolhe o herói por último na próxima.","cat":"Caos","rar":"rara","img":""},{"id":"g21","title":"Dado de tudo","text":"Rolem dado para herói, lane e categoria de item de cada um. Sem reclamar do resultado.","cat":"Caos","rar":"rara","img":""},{"id":"g22","title":"Duas cartas","text":"Sorteie mais uma carta e cumpram as duas ao mesmo tempo.","cat":"Caos","rar":"lendaria","img":""},{"id":"g23","title":"Sem arma, sem voz","text":"Nenhum item de Arma e ninguém fala no voz até o minuto 10.","cat":"Caos","rar":"lendaria","img":""},{"id":"g24","title":"Tudo no dado","text":"Herói, lane, itens permitidos e líder sorteados. O grupo só executa.","cat":"Caos","rar":"lendaria","img":""}]},{"id":"i","name":"Individual","cards":[{"id":"i0","title":"Sem tiro","text":"Só habilidades e melee até o minuto 8.","cat":"Handicap","rar":"comum","img":""},{"id":"i1","title":"Sem ultimate","text":"Não use a habilidade 4 até o minuto 15.","cat":"Handicap","rar":"comum","img":""},{"id":"i2","title":"Pé no chão","text":"Sem zipline para você nesta partida.","cat":"Handicap","rar":"comum","img":""},{"id":"i3","title":"Pacifista de tropa","text":"Tropas só morrem no melee.","cat":"Handicap","rar":"comum","img":""},{"id":"i4","title":"Parry sempre","text":"Tente parry em toda luta, acerte ou não.","cat":"Handicap","rar":"rara","img":""},{"id":"i5","title":"Sem ativos","text":"Nenhum item ativo na sua build.","cat":"Build","rar":"comum","img":""},{"id":"i6","title":"Só Espírito","text":"Só compra itens de Espírito.","cat":"Build","rar":"rara","img":""},{"id":"i7","title":"Zero Vitalidade","text":"Nenhum item de Vitalidade. Você vive do que tem.","cat":"Build","rar":"rara","img":""},{"id":"i8","title":"Compra só morto","text":"Só compra itens quando estiver morto.","cat":"Build","rar":"rara","img":""},{"id":"i9","title":"Callout de tudo","text":"Narre em voz alta o que você está fazendo, o tempo todo.","cat":"Comunicação","rar":"comum","img":""},{"id":"i10","title":"Sombra","text":"Fique sempre perto do jogador à sua esquerda.","cat":"Objetivo","rar":"comum","img":""},{"id":"i11","title":"Dono da Urn","text":"Você carrega a Soul Urn sempre que ela estiver disponível.","cat":"Objetivo","rar":"rara","img":""},{"id":"i12","title":"Herói do sorteio","text":"Joga o herói que o grupo sortear no deck de Heróis, sem reclamar.","cat":"Caos","rar":"lendaria","img":""}]},{"id":"h","name":"Heróis","cards":[{"id":"h0","title":"Abrams","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h1","title":"Apollo","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h2","title":"Bebop","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h3","title":"Billy","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h4","title":"Calico","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h5","title":"Celeste","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h6","title":"Doorman","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h7","title":"Drifter","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h8","title":"Dynamo","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h9","title":"Graves","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h10","title":"Grey Talon","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h11","title":"Haze","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h12","title":"Holliday","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h13","title":"Infernus","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h14","title":"Ivy","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h15","title":"Kelvin","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h16","title":"Lady Geist","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h17","title":"Lash","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h18","title":"McGinnis","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h19","title":"Mina","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h20","title":"Mirage","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h21","title":"Mo & Krill","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h22","title":"Paige","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h23","title":"Paradox","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h24","title":"Pocket","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h25","title":"Rem","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h26","title":"Seven","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h27","title":"Shiv","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h28","title":"Silver","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h29","title":"Sinclair","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h30","title":"Venator","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h31","title":"Victor","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h32","title":"Vindicta","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h33","title":"Viscous","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h34","title":"Vyper","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h35","title":"Warden","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h36","title":"Wraith","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h37","title":"Yamato","text":"","cat":"Herói","rar":"comum","img":""}]}];
@@ -549,7 +665,7 @@ const EXEMPLOS=[{"id":"g","name":"Grupo","cards":[{"id":"g0","title":"Pick do co
 const KEY="deadlock-deck-v3";
 /* Reset único: quem tem dados salvos sem "epoch" (versões antigas) volta ao início UMA vez.
    Os dados antigos são guardados em BKEY antes. Só aumente RESET_EPOCH se quiser forçar outro reset. */
-const RESET_EPOCH=2,APP_VERSION="1.4.2",BKEY="deadlock-deck-v3:backup";
+const RESET_EPOCH=2,APP_VERSION="1.9.0",BKEY="deadlock-deck-v3:backup";
 let resetNotice=null;
 /* Guarda os dados antigos numa chave própria desta atualização. Devolve a chave, ou null se não conseguiu. */
 function stashOld(raw){
@@ -567,7 +683,13 @@ function listBackups(){
   try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k===BKEY||(k&&k.startsWith(BKEY+":")))out.push(k)}}catch(e){}
   return out.sort();
 }
-const backupLabel=k=>k===BKEY?"1":(k.split(":")[2]||"?");
+const backupLabel=k=>{
+  const parts=k.split(":");
+  if(parts.length<4)return "versão "+(parts[2]||"antiga");
+  const n=Number(parts[3]);
+  return Number.isFinite(n)&&n>0?new Date(n).toLocaleString("pt-BR"):"automático";
+};
+const backupFilename=k=>"decklock-backup-"+k.replace(/[^a-z0-9-]/gi,"-")+".json";
 
 function eyeSvg(){
   const spoke='<path d="M161 175h24"/><path d="M196 158.6Q187 170 185 175Q187 180 196 191.4"/>';
@@ -594,7 +716,25 @@ const normSess=x=>x&&typeof x==="object"&&Array.isArray(x.draws)?{id:String(x.id
 const normQuests=q=>(Array.isArray(q)?q:[]).filter(x=>x&&typeof x.title==="string"&&["active","later","done","dropped"].includes(x.st)).slice(-250).map(x=>({id:String(x.id||"q"+Math.random()),sid:String(x.sid||""),source:String(x.source||""),title:String(x.title).slice(0,120),text:String(x.text||"").slice(0,600),deck:String(x.deck||"").slice(0,60),rar:RARS[x.rar]?x.rar:"comum",st:x.st,who:String(x.who||"Grupo").slice(0,60),note:String(x.note||"").slice(0,300),t:+x.t||0,t2:+x.t2||0}));
 const normArchive=a=>(Array.isArray(a)?a:[]).slice(-8).filter(x=>x&&x.sess&&Array.isArray(x.sess.draws)).map(x=>({sess:normSess(x.sess),endedAt:+x.endedAt||0,quests:normQuests(x.quests||[])}));
 const BGFX={plain:"Plano",glow:"Brilho suave",aurora:"Aurora",spot:"Holofote",gradient:"Degradê",vignette:"Vinheta",dots:"Pontos",grain:"Granulado",rays:"Raios"};
-const okImg=v=>typeof v==="string"&&v.startsWith("data:image/");
+// Imagens importadas ficam locais. Restringir a formatos raster e tamanho razoável
+// evita dados gigantes e strings injetadas em url() no verso customizado.
+const MAX_IMAGE_DATA=3_000_000;
+const okImg=v=>typeof v==="string"&&v.length<=MAX_IMAGE_DATA&&
+  /^data:image\/(?:png|jpeg|jpg|webp|gif);base64,[a-z0-9+/=]+$/i.test(v);
+const MAX_JSON_FILE=8_000_000,MAX_IMAGE_FILE=12_000_000;
+function acceptablePicture(f){
+  if(!f||f.size>MAX_IMAGE_FILE){toast("Imagem muito grande. Escolha uma imagem de até 12 MB.");return false}
+  if(!["image/png","image/jpeg","image/webp","image/gif"].includes(f.type)){
+    toast("Formato não suportado. Use PNG, JPG, WebP ou GIF.");return false
+  }
+  return true;
+}
+function imageDimensionsOk(img){
+  if(!img.width||!img.height||img.width*img.height>24_000_000){
+    toast("Resolução muito alta. Escolha uma imagem com até 24 megapixels.");return false
+  }
+  return true;
+}
 function cleanColors(o){const d=DEF_CFG().colors,r={};for(const k in d)r[k]=/^#[0-9a-f]{6}$/i.test(o&&o[k])?o[k]:d[k];return r}
 function cleanCfg(c){
   const d=DEF_CFG();c=c&&typeof c==="object"?c:{};
@@ -615,7 +755,7 @@ function cleanCfg(c){
   if(!BGFX[o.bgfx])o.bgfx="glow";
   if(!FACES[o.face])o.face="solid";
   if(!SFX[o.pack])o.pack="soft";
-  o.finiteN=Math.min(60,Math.max(3,Math.round(+o.finiteN)||10));o.track=c.track===true;o.compact=!!o.compact;
+  o.finiteN=Math.min(60,Math.max(3,Math.round(+o.finiteN)||10));o.track=c.track===true;o.quick=c.quick===true;o.compact=!!o.compact;
   o.bgi=Math.min(100,Math.max(0,isNaN(+o.bgi)?100:+o.bgi));o.fxn=Math.min(200,Math.max(50,+o.fxn||100));
   o.cw=Math.min(440,Math.max(200,+o.cw||300));o.flip=Math.min(1600,Math.max(0,+o.flip||700));
   if(c.profile===undefined)o.profile=PROFILES[c.preset]?"b:"+c.preset:(c.preset===undefined?d.profile:"");
@@ -649,9 +789,11 @@ function load(first){
     else if(!s)s=null;
   }
   if(!s||!Array.isArray(s.decks))s={decks:DEF_DECKS()};
+  s.decks=cleanImportedDecks(s.decks);
   s.cfg=cleanCfg(s.cfg);
   s.profiles=(Array.isArray(s.profiles)?s.profiles:[]).map(cleanProfile).filter(Boolean);
-  s.title=["Deck do Caos \u00b7 Deadlock","Decklock"].includes(s.title)?"DeckLock":(s.title||"DeckLock");
+  s.deckFavs=(Array.isArray(s.deckFavs)?s.deckFavs:[]).filter(id=>typeof id==="string"&&s.decks.some(d=>d.id===id));
+  s.title="DeckLock";
   const hasActive=Array.isArray(s.active);
   s.active=(hasActive?s.active:[]).filter(id=>s.decks.some(x=>x.id===id));
   if(!hasActive&&s.decks.length)s.active=[s.decks[0].id];
@@ -672,13 +814,27 @@ function restoreBackup(key){
     location.reload();
   }catch(e){wiping=false;toast("Não foi possível restaurar o backup.")}
 }
-let st,wiping=false;
+let st,wiping=false,saveFailed=false;
 function save(){clearTimeout(st);st=setTimeout(flush,250)}
-function flush(){clearTimeout(st);if(wiping)return;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast("Armazenamento cheio. Salve tudo em arquivo e use imagens menores.")}}
+function flush(){
+  clearTimeout(st);if(wiping)return;
+  try{localStorage.setItem(KEY,JSON.stringify(S));saveFailed=false}
+  catch(e){
+    if(!saveFailed){saveFailed=true;toast("Não foi possível salvar no navegador. Exporte um backup em Arquivos.",null,null,9000)}
+  }
+}
+function backupBeforeReplace(){
+  // Uma substituição de decks pode ser desfeita até mesmo após atualizar a página.
+  try{
+    const raw=JSON.stringify(S),key=stashOld(raw);
+    if(key)return true;
+  }catch(e){}
+  return confirm("Não foi possível criar um backup automático. Exporte seus dados em Arquivos antes de substituir. Continuar mesmo assim?");
+}
 addEventListener("beforeunload",flush);
 document.addEventListener("visibilitychange",()=>{if(document.hidden)flush()});
 addEventListener("storage",e=>{
-  if(e.key!==KEY||!e.newValue||busy||document.querySelector("dialog[open]"))return;
+  if(e.key!==KEY||!e.newValue||busy||ed.dirty||document.querySelector("dialog[open]"))return;
   try{S=load();applyCfg();syncTitle();syncCount();refreshAll();renderHist();renderQuests()}catch(x){}
 });
 function toast(m,label,fn,ms){
@@ -694,24 +850,41 @@ function lum(h){const n=parseInt(h.slice(1),16),f=v=>{v/=255;return v<=.03928?v/
 function applyCfg(){
   const c=S.cfg,r=document.documentElement.style;
   for(const[k,v]of Object.entries(c.colors))r.setProperty("--"+k,v);
-  r.setProperty("--cw",c.cw+"px");r.setProperty("--flip",(c.anim?c.flip:0)+"ms");
+  r.setProperty("--cw",c.cw+"px");r.setProperty("--flip",flipMs()+"ms");
   r.setProperty("--fh",FONTS[c.font][1]);
-  r.setProperty("--bgi",c.bgi/100);document.documentElement.dataset.bg=c.bgfx;document.documentElement.dataset.face=c.face;document.body.classList.toggle("compact",!!c.compact);document.body.classList.toggle("tracking",!!c.track);
+  r.setProperty("--bgi",c.bgi/100);document.documentElement.dataset.bg=c.bgfx;document.documentElement.dataset.face=c.face;document.body.classList.toggle("compact",!!c.compact);document.body.classList.toggle("tracking",!!c.track);document.body.classList.toggle("quick-draw",!!c.quick);
   const trackCheck=$("#trackToggle");if(trackCheck)trackCheck.checked=!!c.track;
+  const quickCheck=$("#quickToggle");if(quickCheck)quickCheck.checked=!!c.quick;
   r.setProperty("--onacc",lum(c.colors.gold)>.4?"#16110a":"#ffffff");
   r.colorScheme=lum(c.colors.bg)>.5?"light":"dark";
   document.querySelectorAll(".face.back").forEach(b=>paintBack(b,c.back,c.backImg));
   $("#histbox").hidden=!c.hist||!c.track;
   requestAnimationFrame(fit);
 }
-const flipMs=()=>S.cfg.anim?S.cfg.flip:0;
-function fit(){
-  document.querySelectorAll(".body").forEach(b=>{
-    b.style.fontSize="";let fs=parseFloat(getComputedStyle(b).fontSize)||14;
-    while(b.scrollHeight>b.clientHeight+1&&fs>8){fs-=.5;b.style.fontSize=fs+"px"}
+const reducedMotion=matchMedia("(prefers-reduced-motion: reduce)");
+const animationEnabled=()=>S.cfg.anim&&!S.cfg.quick&&!reducedMotion.matches;
+const flipMs=()=>animationEnabled()?S.cfg.flip:0;
+function fit(root=document){
+  // requestAnimationFrame passa um timestamp; nesses casos ajustar todas as cartas.
+  if(!root?.querySelectorAll)root=document;
+  root.querySelectorAll(".body").forEach(b=>{
+    b.style.fontSize="";
+    if(b.scrollHeight>b.clientHeight+1){
+      // Busca binária: menos recálculos de layout em cartas com textos longos.
+      let low=12,high=parseFloat(getComputedStyle(b).fontSize)||14;
+      for(let n=0;n<7&&high-low>.5;n++){
+        const mid=Math.round((low+high)/2*2)/2;
+        b.style.fontSize=mid+"px";
+        if(b.scrollHeight>b.clientHeight+1)high=mid;else low=mid;
+      }
+      b.style.fontSize=low+"px";
+    }
+    // Texto extenso continua rolável; nunca reduzimos abaixo de 12 px.
+    b.tabIndex=b.scrollHeight>b.clientHeight+1?0:-1;
   });
 }
 let rt;addEventListener("resize",()=>{clearTimeout(rt);rt=setTimeout(fit,150)});
+if(reducedMotion.addEventListener)reducedMotion.addEventListener("change",applyCfg);
 let ac;
 function blip(i=0){
   if(!S.cfg.snd)return;
@@ -726,7 +899,7 @@ const sel=()=>S.decks.filter(d=>S.active.includes(d.id));
 function fillCard(f,c){
   f.className="face front r-"+c.rar+(c.img?"":" noimg");f.innerHTML="";
   const m=el("div","meta");m.append(el("span","",c.cat),el("span","",RARS[c.rar]||c.rar));f.append(m);
-  if(c.img){const a=el("div","art"),i=new Image();i.src=c.img;i.alt="";a.append(i);f.append(a)}
+  if(c.img){const a=el("div","art"),i=new Image();i.decoding="async";i.loading="lazy";i.src=c.img;i.alt="";a.append(i);f.append(a)}
   const b=el("div","body");b.append(el("h2","ct",c.title));if(c.text)b.append(el("p","tx",c.text));f.append(b);
 }
 function sourceFor(g,i,entry=curEntry){
@@ -744,7 +917,16 @@ function syncCardActions(){
       btn.textContent=q.st==="done"?"✓ Cumprida · Ver missão":q.st==="dropped"?"✕ Não cumprida · Ver":q.st==="later"?"◷ Pausada · Ver missão":"✓ Em andamento · Ver missão";
       btn.title="Abrir a missão no painel";
     }
-    if(rr){rr.disabled=busy||!!q||(!!rrLimit()&&rrUsed>=rrLimit());rr.title=q?"Remova a missão no painel antes de trocar a carta":"Sortear outra carta"}
+    const current=sc._g?.cards?.[sc._i];
+    if(current){
+      sc.setAttribute("role","group");
+      sc.setAttribute("aria-label",current.title+" — deck "+sc._g.name);
+    }
+    if(rr){
+      rr.disabled=busy||!!q||(!!rrLimit()&&rrUsed>=rrLimit());
+      rr.title=q?"Remova a missão no painel antes de trocar a carta":"Sortear outra carta";
+      if(current)rr.setAttribute("aria-label","Trocar "+current.title+" do deck "+sc._g.name);
+    }
   });
 }
 function focusQuest(id){
@@ -798,6 +980,9 @@ function build(groups){
 function showBacks(){table=[];undoStack=[];build(sel().map(d=>({name:d.name,deck:d,cards:Array(S.mode==="chaos"?1:S.count).fill(null)})));renderMeta()}
 // Categoria e peso zero são restrições obrigatórias, inclusive nas trocas.
 const eligibleCards=d=>d.cards.filter(c=>!c.off&&(!filt.size||filt.has(c.cat))&&(S.cfg.w[c.rar]||0)>0);
+// A mesma identificação de carta pode existir em decks diferentes.
+const cardKey=(deckId,cardId)=>JSON.stringify([deckId,cardId]);
+const lastDrawKey=(deck,card)=>cardKey(deck.id,card.id);
 function wpick(pool){
   if(!pool.length)return -1;
   // Escolha a raridade primeiro, sem multiplicar seu peso pela quantidade de cartas.
@@ -815,30 +1000,43 @@ function wpick(pool){
   return bucket.cards[bucket.cards.length-1].i;
 }
 function pickN(d,n){
-  n=n||S.count;
-  let pool=eligibleCards(d);
+  const available=eligibleCards(d);
+  const target=Math.min(Math.max(1,Math.min(8,Math.floor(n||S.count))),available.length);
   const u=used[d.id]||(used[d.id]=new Set()),cyc=S.cfg.cycle||S.mode==="finite";
-  if(cyc){
-    let r=pool.filter(c=>!u.has(c.id));
-    if(r.length<Math.min(n,pool.length)){
-      pool.forEach(c=>u.delete(c.id));
-      const r2=pool.filter(c=>!lastIds.has(c.id));
-      r=r2.length>=Math.min(n,pool.length)?r2:pool;
+  const out=[],selected=new Set();
+  while(out.length<target){
+    // Consome primeiro todas as cartas ainda não usadas no ciclo.
+    let pool=available.filter(c=>!selected.has(c.id)&&(!cyc||!u.has(c.id)));
+    if(cyc&&!pool.length){
+      // Reinicia o ciclo apenas após esgotar as cartas restantes.
+      available.forEach(c=>u.delete(c.id));
+      pool=available.filter(c=>!selected.has(c.id));
+      if(S.cfg.norepeat){
+        const fresh=pool.filter(c=>!lastIds.has(lastDrawKey(d,c)));
+        if(fresh.length>=target-out.length)pool=fresh;
+      }
+    }else if(!cyc&&S.cfg.norepeat){
+      const fresh=pool.filter(c=>!lastIds.has(lastDrawKey(d,c)));
+      if(fresh.length>=target-out.length)pool=fresh;
     }
-    pool=r;
-  }else if(S.cfg.norepeat){
-    const r=pool.filter(c=>!lastIds.has(c.id));if(r.length>=Math.min(n,pool.length))pool=r;
+    if(!pool.length)break;
+    const index=wpick(pool);if(index<0)break;
+    const card=pool[index];out.push(card);selected.add(card.id);u.add(card.id);
   }
-  pool=[...pool];const out=[];
-  while(out.length<n&&pool.length){const index=wpick(pool);if(index<0)break;out.push(pool.splice(index,1)[0])}
-  out.forEach(c=>u.add(c.id));return out;
+  return out;
 }
 function setBusy(b){
-  busy=b;const d=$("#bDraw");d.textContent=b?"Sorteando…":"Sortear carta";d.disabled=b;d.setAttribute("aria-disabled",b);
+  busy=b;
+  if(b)document.querySelectorAll(".fxl").forEach(x=>{try{x.hidePopover()}catch(e){}x.remove()});
+  for(const d of [$("#bDraw"),$("#mobileDraw")]){
+    d.textContent=b?"Sorteando…":drawLabel();d.disabled=b;d.setAttribute("aria-disabled",b);
+  }
   $("#modeSel").disabled=b;
   if(b){$("#bMin").disabled=true;$("#bPlus").disabled=true}
   else syncCount();
   document.querySelectorAll("#deckChips button,#chips button").forEach(x=>x.disabled=b);
+  // Reabilitar as trocas ao terminar o sorteio; antes elas podiam continuar bloqueadas.
+  if(!b)syncCardActions();
 }
 function updateRR(){
   const l=rrLimit();
@@ -847,22 +1045,28 @@ function updateRR(){
 }
 function reveal(sc,delay,i){
   setTimeout(()=>{
+    if(!sc.isConnected||!sc._g?.cards?.[sc._i])return;
     const cfg=S.cfg,rar=sc._g.cards[sc._i].rar,f=(cfg.fx&&cfg.fx[rar])||{in:"flip",fx:"none"};
-    if(cfg.anim&&f.in!=="flip"){
+    if(animationEnabled()&&f.in!=="flip"){
       const cl="fx-"+f.in;sc.classList.add(cl);
       sc.addEventListener("animationend",function h(e){if(e.target===sc&&e.animationName===cl){sc.classList.remove(cl);sc.removeEventListener("animationend",h)}});
     }
     sc.querySelector(".card").classList.add("up");sc.classList.add("live");sfx(rar==="comum"?"reveal":"rare",i);
-    if(cfg.anim&&f.fx!=="none")setTimeout(()=>{(f.fx==="burst"?["glow","sparks","flash"]:[f.fx]).forEach(k=>effect(sc,k,rar))},flipMs()*.55);
+    if(animationEnabled()&&f.fx!=="none")setTimeout(()=>{
+      if(!sc.isConnected||!animationEnabled())return;
+      (f.fx==="burst"?["glow","sparks","flash"]:[f.fx]).forEach(k=>effect(sc,k,rar));
+    },flipMs()*.55);
   },delay);
 }
 function effect(sc,kind,rar){
-  if(!sc.isConnected)return;
-  const R=sc.getBoundingClientRect(),cx=R.left+R.width/2,cy=R.top+R.height/2,k=S.cfg.fxn/100;
+  if(!sc.isConnected||!animationEnabled())return;
+  // Limite de camadas simultâneas para sorteios de muitos decks/cartas.
+  if(document.querySelectorAll(".fxl").length>=4)return;
+  const R=sc.getBoundingClientRect(),cx=R.left+R.width/2,cy=R.top+R.height/2,k=(S.cfg.fxn/100)*(matchMedia("(max-width: 600px)").matches ? 0.65 : 1);
   const col=rar==="lendaria"?"var(--leg)":rar==="rara"?"var(--rare)":"var(--gold)";
   const L=el("div","fxl");L.setAttribute("popover","manual");document.body.append(L);
   try{L.showPopover()}catch(e){}
-  const add=(css,kf,opt)=>{const d=el("i");d.style.cssText=css;L.append(d);d.animate(kf,{fill:"forwards",...opt})};
+  const add=(css,kf,opt)=>{const d=el("i");d.style.cssText=css;L.append(d);if(d.animate)d.animate(kf,{fill:"forwards",...opt})};
   const rnd=(a,b)=>a+Math.random()*(b-a);let life=1800;
   if(kind==="glow"){for(let n=0;n<3;n++)add(`left:${cx}px;top:${cy}px;width:${R.width}px;height:${R.width}px;border:3px solid ${col};border-radius:50%;box-shadow:0 0 30px ${col}`,[{transform:"translate(-50%,-50%) scale(.3)",opacity:.9},{transform:"translate(-50%,-50%) scale(2.6)",opacity:0}],{duration:1000,delay:n*180,easing:"ease-out"});life=2000}
   else if(kind==="sparks"){for(let n=0,m=Math.round(28*k);n<m;n++){const a=rnd(0,6.283),d=rnd(90,300);add(`left:${cx}px;top:${cy}px;width:7px;height:7px;background:${col};border-radius:50%;box-shadow:0 0 10px ${col}`,[{transform:"translate(-50%,-50%) scale(1)",opacity:1},{transform:`translate(calc(-50% + ${Math.cos(a)*d}px),calc(-50% + ${Math.sin(a)*d+60}px)) scale(.1)`,opacity:0}],{duration:rnd(700,1200),easing:"cubic-bezier(.1,.7,.3,1)"})}}
@@ -886,38 +1090,50 @@ function snapshot(){
 async function draw(){
   if(busy)return;
   const ds=sel();
-  if(!ds.length){toast(S.decks.length?"Selecione ao menos um deck.":"Nenhum deck ainda. Carregue um arquivo ou crie um deck.");return}
+  if(!ds.length){
+    toast(S.decks.length?"Selecione um deck acima para sortear.":"Você ainda não tem decks. Crie um deck ou importe um arquivo.");return;
+  }
   const selectable=ds.filter(d=>eligibleCards(d).length);
-  if(!selectable.length){toast("Nenhuma carta disponível nos decks, categorias e raridades selecionados.");return}
+  if(!selectable.length){
+    const hasActive=ds.some(d=>d.cards.some(c=>!c.off));
+    const hasWeighted=ds.some(d=>d.cards.some(c=>!c.off&&(S.cfg.w[c.rar]||0)>0));
+    if(filt.size&&hasWeighted){
+      toast("Nenhuma carta corresponde aos filtros atuais.","Limpar filtros",()=>{filt.clear();renderChips();renderMeta()});
+    }else if(hasActive){
+      toast("Nenhuma raridade disponível. Confira os pesos em Configurações.");
+    }else toast("Os decks selecionados não têm cartas ativas. Confira o editor.");
+    return;
+  }
+  if(S.mode==="finite"&&S.fin&&S.fin.left<=0&&S.cfg.track){showSummary();return}
+  // O desfazer também precisa recuperar o baralho anterior à renovação.
+  const snap=snapshot();curSnap=snap;
   if(S.mode==="finite"&&S.fin&&S.fin.left<=0){
-    if(S.cfg.track){showSummary();return}
     S.fin={total:S.cfg.finiteN,left:S.cfg.finiteN};used={};lastIds=new Set();toast("Baralho renovado. Novo ciclo iniciado.");
   }
   setBusy(true);rrUsed=0;sfx("shuffle");
-  const snap=snapshot();curSnap=snap;
   const n=S.mode==="chaos"?1+Math.floor(Math.random()*3):S.count;
   const picks=selectable.map(d=>({name:d.name,deck:d,cards:pickN(d,n)}));
   const ups=[...document.querySelectorAll("#table .card.up")];
   if(ups.length){
     ups.forEach(c=>c.classList.remove("up"));
     document.querySelectorAll(".scene.live").forEach(s=>s.classList.remove("live"));
-    await sleep(flipMs()+80);
+    await sleep(flipMs()+(S.cfg.quick?0:24));
   }
   const entry={uid:"draw-"+Date.now()+"-"+Math.random().toString(36).slice(2,7),t:Date.now(),mode:S.mode,groups:picks.map(p=>({name:p.name,deckId:p.deck.id,cards:p.cards.map(c=>({id:c.id,title:c.title,rar:c.rar,cat:c.cat,swaps:[]}))}))};
   curEntry=entry;
   if(S.cfg.track){S.hist.unshift(entry);S.hist=S.hist.slice(0,12);S.sess.draws.push(entry);S.sess.draws=S.sess.draws.slice(-300)}
   if(S.mode==="finite"&&S.fin)S.fin.left--;
-  lastIds=new Set(picks.flatMap(p=>p.cards.map(c=>c.id)));
+  lastIds=new Set(picks.flatMap(p=>p.cards.map(c=>lastDrawKey(p.deck,c))));
   build(picks);table=picks;
   if(S.cfg.track&&S.mode==="classic")picks.forEach(g=>g.cards.forEach((c,i)=>addQuest(g,c,true,sourceFor(g,i))));
   syncCardActions();renderQuests();
   undoStack.push(snap);undoStack=undoStack.slice(-20);
-  void $("#table").offsetWidth;await sleep(40);
-  const sc=[...document.querySelectorAll("#table .scene")],gap=S.cfg.anim?110:0;
+  void $("#table").offsetWidth;if(!S.cfg.quick)await sleep(16);
+  const sc=[...document.querySelectorAll("#table .scene")],gap=animationEnabled()?110:0;
   sc.forEach((s,i)=>reveal(s,i*gap,i));
   updateRR();save();renderHist();renderMeta();
-  $("#live").textContent="Sorteado: "+entryText(entry);
-  await sleep(sc.length*gap+flipMs());setBusy(false);
+  announce("Sorteio concluído: "+entryText(entry));
+  if(animationEnabled())await sleep(sc.length*gap+flipMs());setBusy(false);
   if(S.mode==="finite"&&S.fin&&S.fin.left<=0&&S.cfg.track){await sleep(1000);showSummary()}
 }
 async function reroll(sc){
@@ -926,22 +1142,23 @@ async function reroll(sc){
   const lim=rrLimit();if(lim&&rrUsed>=lim){toast("Limite de trocas atingido.");return}
   const g=sc._g,i=sc._i;
   if(questForSource(sc._source)){toast("Remova a missão no painel antes de trocar esta carta.");return}
-  const shown=new Set(table.flatMap(t=>t.cards.map(c=>c.id)));
+  // Só impede duplicatas dentro do próprio deck; outros decks são independentes.
+  const shown=new Set(g.cards.map(c=>c.id));
   const ok=c=>!c.off&&!shown.has(c.id)&&(!filt.size||filt.has(c.cat))&&(S.cfg.w[c.rar]||0)>0;
   const cyc=S.cfg.cycle||S.mode==="finite",u=used[g.deck.id]||(used[g.deck.id]=new Set());
   let pool=g.deck.cards.filter(c=>ok(c)&&(!cyc||!u.has(c.id)));
   if(!pool.length)pool=g.deck.cards.filter(ok);
   if(!pool.length){toast("Não há outra carta disponível nesta categoria e raridade.");return}
   setBusy(true);rrUsed++;updateRR();
-  const cd=sc.querySelector(".card");cd.classList.remove("up");await sleep(flipMs()+80);
+  const cd=sc.querySelector(".card");cd.classList.remove("up");await sleep(flipMs()+(S.cfg.quick?0:24));
   const index=wpick(pool);if(index<0){setBusy(false);toast("Nenhuma raridade disponível.");return}
   const c=pool[index];g.cards[i]=c;
   const gi=table.indexOf(g),ec=curEntry&&curEntry.groups[gi]&&curEntry.groups[gi].cards[i];
   if(ec){(ec.swaps=ec.swaps||[]).push(ec.title);ec.id=c.id;ec.title=c.title;ec.rar=c.rar;ec.cat=c.cat}
-  u.add(c.id);lastIds=new Set(table.flatMap(t=>t.cards.map(x=>x.id)));
-  fillCard(sc.querySelector(".front"),c);fit();void cd.offsetWidth;reveal(sc,0,0);syncCardActions();
+  u.add(c.id);lastIds=new Set(table.flatMap(t=>t.cards.map(x=>lastDrawKey(t.deck,x))));
+  fillCard(sc.querySelector(".front"),c);fit(sc);void cd.offsetWidth;reveal(sc,0,0);syncCardActions();
   save();renderHist();renderMeta();
-  $("#live").textContent="Nova carta: "+c.title;
+  announce("Carta trocada no deck "+g.name+". Nova carta: "+c.title);
   await sleep(flipMs());setBusy(false);
 }
 function undo(){
@@ -959,7 +1176,7 @@ function undo(){
     requestAnimationFrame(()=>document.querySelectorAll("#table .card").forEach(c=>{c.style.transition=""}));
     updateRR();
   }else{const keep=undoStack;showBacks();undoStack=keep}
-  save();renderHist();renderQuests();renderMeta();syncCardActions();toast("Último sorteio desfeito.");
+  save();renderHist();renderQuests();renderMeta();syncCardActions();announce("Último sorteio desfeito. Resultado anterior restaurado.");toast("Último sorteio desfeito.");
 }
 /* ----- modos, sessões, missões e relatório ----- */
 let questView="open",summarySelected="current";
@@ -974,7 +1191,8 @@ function renderMeta(){
   $("#bUndo").hidden=!undoStack.length||S.mode==="classic";
   $("#bSum").hidden=!S.cfg.track||(!S.sess.draws.length&&!sessionQuests().length&&!S.archives.length);
   $("#bSum").textContent="Ver relatório";
-  $("#bCopy").hidden=!table.some(g=>g.cards.some(Boolean));
+  $("#shareResult").hidden=!table.some(g=>g.cards.some(Boolean));
+  $("#shareDeckOptions").hidden=sel().length!==1||!sel()[0].cards.length;
   $("#optionsHint").textContent=[filt.size?filt.size+" filtro(s)":"",S.cfg.track?"acompanhamento ligado":""].filter(Boolean).join(" · ");
   $("#bClearFilters").hidden=!filt.size;
   const fin=$("#finInfo");fin.hidden=S.mode!=="finite"||!S.fin;
@@ -1192,8 +1410,16 @@ async function decodeDeck(code){
   return{id:"s"+st,name:cl(o.n,60).trim()||"Deck importado",cards:o.c.map((a,i)=>{a=Array.isArray(a)?a:[];return{id:"s"+st+"_"+i,title:cl(a[0],120),text:cl(a[1],600),cat:cl(a[2],40)||"Geral",rar:RARS[a[3]]?a[3]:"comum",img:"",fav:!!a[4],off:false}})};
 }
 function copyText(t,msg){
-  const ok=()=>toast(msg||"Copiado."),fb=()=>{const a=el("textarea");a.value=t;document.body.append(a);a.select();try{document.execCommand("copy");ok()}catch(e){toast("Não foi possível copiar.")}a.remove()};
-  navigator.clipboard?navigator.clipboard.writeText(t).then(ok,fb):fb();
+  const ok=()=>toast(msg||"Copiado.");
+  const fb=()=>{
+    const a=el("textarea");a.value=t;a.style.position="fixed";a.style.opacity="0";
+    document.body.append(a);a.focus();a.select();
+    let copied=false;try{copied=document.execCommand("copy")}catch(e){}
+    a.remove();
+    if(copied)ok();else toast("Não foi possível copiar neste navegador.");
+  };
+  if(navigator.clipboard?.writeText)navigator.clipboard.writeText(t).then(ok,fb);
+  else fb();
 }
 async function shareDeck(d,asLink){
   try{const code=await encodeDeck(d);copyText(asLink?location.href.split("#")[0]+"#deck="+code:code,asLink?"Link copiado (sem imagens).":"Código copiado (sem imagens).")}
@@ -1209,33 +1435,171 @@ function checkHash(){
   openCode(h);
 }
 function copyTxt(){
-  if(!table.length){toast("Sorteie primeiro.");return}
-  const t=table.map(g=>(table.length>1?"["+g.name+"]\n":"")+g.cards.map(c=>"• "+c.title+(c.text?" — "+c.text:"")).join("\n")).join("\n\n");
-  const ok=()=>toast("Sorteio copiado.");
-  const fb=()=>{const a=el("textarea");a.value=t;document.body.append(a);a.select();try{document.execCommand("copy");ok()}catch(e){toast("Não foi possível copiar.")}a.remove()};
-  navigator.clipboard?navigator.clipboard.writeText(t).then(ok,fb):fb();
+  if(!table.some(g=>g.cards.some(Boolean))){toast("Sorteie primeiro.");return}
+  const t=table.map(g=>(table.length>1?"["+g.name+"]\n":"")+g.cards.filter(Boolean).map(c=>"• "+c.title+(c.text?" — "+c.text:"")).join("\n")).join("\n\n");
+  copyText(t,"Sorteio copiado.");
+}
+/* Imagem do resultado: Canvas puro, sem bibliotecas ou serviços externos. */
+function roundedRect(ctx,x,y,w,h,r){
+  r=Math.min(r,w/2,h/2);ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();
+}
+function wrapCanvasLines(ctx,text,maxWidth,maxLines){
+  const lines=[];const paras=String(text||"").split(/\n/);
+  for(const para of paras){
+    if(!para.trim()){lines.push("");continue}
+    let line="";
+    for(const word of para.split(/\s+/)){
+      const trial=line?line+" "+word:word;
+      if(ctx.measureText(trial).width<=maxWidth){line=trial;continue}
+      if(line){lines.push(line);line=""}
+      let piece="";
+      for(const ch of word){if(piece&&ctx.measureText(piece+ch).width>maxWidth){lines.push(piece);piece=""}piece+=ch}
+      line=piece;
+    }
+    if(line)lines.push(line);
+  }
+  if(lines.length>maxLines){const out=lines.slice(0,maxLines),last=out.length-1;while(out[last]&&ctx.measureText(out[last]+"…").width>maxWidth)out[last]=out[last].slice(0,-1);out[last]+="…";return out}
+  return lines;
+}
+function imageOnCanvas(src){return new Promise(resolve=>{
+  if(!src||!src.startsWith("data:image/")){resolve(null);return}
+  const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>resolve(null);img.src=src;
+})}
+async function drawSharedCard(ctx,c,x,y,w,h,colors){
+  const rarColors={comum:colors.gold,rara:colors.rare,lendaria:colors.leg};
+  const accent=rarColors[c.rar]||colors.gold,p=36;
+  ctx.save();roundedRect(ctx,x,y,w,h,24);ctx.clip();ctx.fillStyle=colors.bg2;ctx.fillRect(x,y,w,h);
+  ctx.strokeStyle=accent;ctx.lineWidth=7;roundedRect(ctx,x+4,y+4,w-8,h-8,23);ctx.stroke();
+  ctx.strokeStyle=colors.gold;ctx.globalAlpha=.25;ctx.lineWidth=2;roundedRect(ctx,x+16,y+16,w-32,h-32,16);ctx.stroke();ctx.globalAlpha=1;
+  ctx.fillStyle=colors.mute;ctx.font='500 23px system-ui,sans-serif';ctx.textBaseline='alphabetic';
+  ctx.textAlign='left';ctx.fillText(String(c.cat||"Geral").slice(0,24),x+p,y+65);
+  ctx.textAlign='right';ctx.fillStyle=accent;ctx.fillText((RARS[c.rar]||"Comum").toUpperCase(),x+w-p,y+65);
+  ctx.strokeStyle=colors.line;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x+7,y+84);ctx.lineTo(x+w-7,y+84);ctx.stroke();
+  let bodyTop=y+100;
+  const img=await imageOnCanvas(c.img);
+  if(img){
+    const top=y+88,ih=Math.round(h*.37),scale=Math.max((w-14)/img.width,ih/img.height),dw=img.width*scale,dh=img.height*scale;
+    ctx.save();ctx.beginPath();ctx.rect(x+7,top,w-14,ih);ctx.clip();ctx.drawImage(img,x+(w-dw)/2,top+(ih-dh)/2,dw,dh);ctx.restore();
+    ctx.strokeStyle=accent;ctx.beginPath();ctx.moveTo(x+7,top+ih);ctx.lineTo(x+w-7,top+ih);ctx.stroke();bodyTop=top+ih+34;
+  }
+  const available=h-(bodyTop-y)-35,innerW=w-p*2;
+  const serif=getComputedStyle(document.documentElement).getPropertyValue('--fh').trim()||'Georgia,serif';
+  let best=null;
+  for(let titleSize=(img?53:65);titleSize>=28;titleSize-=2){
+    ctx.font=`700 ${titleSize}px ${serif}`;const tLines=wrapCanvasLines(ctx,c.title,innerW,4);
+    const titleHeight=tLines.length*titleSize*1.16;
+    for(let textSize=(img?30:36);textSize>=22;textSize-=2){
+      ctx.font=`${textSize}px system-ui,sans-serif`;
+      const description=wrapCanvasLines(ctx,c.text,innerW,24);
+      const height=titleHeight+(description.length?22+description.length*textSize*1.34:0);
+      if(height<=available){best={titleSize,textSize,tLines,description,height};break}
+    }
+    if(best)break;
+  }
+  if(!best){const titleSize=28,textSize=22;ctx.font=`700 ${titleSize}px ${serif}`;
+    const tLines=wrapCanvasLines(ctx,c.title,innerW,4);ctx.font=`${textSize}px system-ui,sans-serif`;
+    const description=wrapCanvasLines(ctx,c.text,innerW,Math.max(1,Math.floor((available-tLines.length*titleSize*1.16-22)/(textSize*1.34))));
+    best={titleSize,textSize,tLines,description,height:tLines.length*titleSize*1.16+22+description.length*textSize*1.34};
+  }
+  let cy=bodyTop+(img?0:Math.max(0,(available-best.height)/2));
+  ctx.textAlign='left';ctx.fillStyle=accent;ctx.font=`700 ${best.titleSize}px ${serif}`;ctx.textBaseline='top';
+  for(const line of best.tLines){ctx.fillText(line,x+p,cy);cy+=best.titleSize*1.16}
+  cy+=best.description.length?22:0;ctx.fillStyle=colors.ink;ctx.font=`${best.textSize}px system-ui,sans-serif`;
+  for(const line of best.description){ctx.fillText(line,x+p,cy);cy+=best.textSize*1.34}
+  ctx.restore();
+}
+async function resultPng(){
+  const cards=table.flatMap(g=>g.cards.filter(Boolean));if(!cards.length)throw new Error("sem cartas");
+  const multiple=cards.length>1,cols=multiple?Math.min(3,cards.length):1;
+  const w=multiple?510:720,h=Math.round(w*7/5),gap=multiple?18:0,pad=multiple?26:0;
+  const rows=Math.ceil(cards.length/cols),canvas=document.createElement("canvas");
+  canvas.width=cols*w+(cols+1)*gap+pad*2;canvas.height=rows*h+(rows+1)*gap+pad*2;
+  const ctx=canvas.getContext("2d");if(!ctx)throw new Error("Canvas indisponível");
+  const colors={};for(const k of ["bg","bg2","gold","rare","leg","mute","ink","line"]){colors[k]=getComputedStyle(document.documentElement).getPropertyValue("--"+k).trim()||getComputedStyle(document.documentElement).getPropertyValue('--ink').trim()}
+  ctx.fillStyle=colors.bg;ctx.fillRect(0,0,canvas.width,canvas.height);
+  for(let i=0;i<cards.length;i++)await drawSharedCard(ctx,cards[i],pad+gap+(i%cols)*(w+gap),pad+gap+Math.floor(i/cols)*(h+gap),w,h,colors);
+  return new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(new Error("PNG indisponível")),"image/png"));
+}
+async function exportResultImage(copy){
+  const b=copy?$("#bCopyImage"):$("#bSaveImage"),before=b.textContent;b.disabled=true;b.textContent="Preparando…";
+  try{
+    if(copy){
+      if(!navigator.clipboard?.write||typeof ClipboardItem==="undefined")throw new Error("clipboard-indisponivel");
+      const png=resultPng();await navigator.clipboard.write([new ClipboardItem({"image/png":png})]);toast("Imagem copiada. Cole no Discord ou WhatsApp.");
+    }else{
+      const png=await resultPng(),url=URL.createObjectURL(png),a=document.createElement("a");a.href=url;a.download="decklock-cartas.png";a.click();setTimeout(()=>URL.revokeObjectURL(url),3000);toast("Imagem PNG salva.");
+    }
+    $("#shareResult").open=false;
+  }catch(e){toast(copy?"Não foi possível copiar a imagem neste navegador. Use ‘Baixar PNG’.":"Não foi possível gerar a imagem.")}
+  finally{b.disabled=false;b.textContent=before}
 }
 function renderHist(){
   const ul=$("#hist");ul.innerHTML="";$("#histEmpty").hidden=S.hist.length>0;$("#bHistClear").hidden=!S.hist.length;
   S.hist.forEach(h=>ul.append(el("li","",entryText(h))));
 }
+let deckQuery="";
 function renderDeckChips(){
   const box=$("#deckChips");box.innerHTML="";
-  S.decks.forEach(d=>{
+  const many=S.decks.length>=5,tools=$("#deckTools");tools.hidden=!many;
+  const term=deckQuery.trim().toLocaleLowerCase("pt-BR");
+  const decks=S.decks.filter(d=>!term||d.name.toLocaleLowerCase("pt-BR").includes(term));
+  if(many)decks.sort((a,b)=>Number(S.deckFavs.includes(b.id))-Number(S.deckFavs.includes(a.id)));
+  if(!decks.length){
+    const clear=el("button","small-link","Limpar busca");
+    clear.type="button";clear.onclick=()=>{deckQuery="";$("#deckSearch").value="";renderDeckChips();$("#deckSearch").focus()};
+    box.append(el("span","deck-no-results","Nenhum deck encontrado."),clear);return;
+  }
+  decks.forEach(d=>{
     const on=S.active.includes(d.id),b=el("button","chip"+(on?" on":""),d.name+" · "+d.cards.length);
-    b.setAttribute("aria-pressed",on);
-    b.onclick=()=>{if(busy)return;S.active=on?S.active.filter(x=>x!==d.id):[...S.active,d.id];save();renderDeckChips();renderChips();showBacks()};
-    b.disabled=busy;box.append(b);
+    b.type="button";b.dataset.deckId=d.id;b.setAttribute("aria-pressed",on);
+    b.onclick=()=>{
+      if(busy)return;
+      const restoreFocus=document.activeElement===b;
+      S.active=on?S.active.filter(x=>x!==d.id):[...S.active,d.id];
+      save();renderDeckChips();renderChips();showBacks();
+      if(restoreFocus)[...box.querySelectorAll("button[data-deck-id]")].find(x=>x.dataset.deckId===d.id)?.focus({preventScroll:true});
+    };
+    b.disabled=busy;
+    if(!many){box.append(b);return}
+    const wrap=el("span","deck-entry"),star=el("button","deck-star"+(S.deckFavs.includes(d.id)?" on":""),S.deckFavs.includes(d.id)?"★":"☆");
+    star.type="button";star.dataset.favoriteDeckId=d.id;star.disabled=busy;
+    star.setAttribute("aria-label",(S.deckFavs.includes(d.id)?"Remover dos favoritos: ":"Favoritar deck: ")+d.name);
+    star.setAttribute("aria-pressed",S.deckFavs.includes(d.id));
+    star.title=S.deckFavs.includes(d.id)?"Remover dos favoritos":"Adicionar aos favoritos";
+    star.onclick=()=>{
+      if(busy)return;
+      const restoreFocus=document.activeElement===star;
+      S.deckFavs=S.deckFavs.includes(d.id)?S.deckFavs.filter(id=>id!==d.id):[...S.deckFavs,d.id];
+      save();renderDeckChips();
+      if(restoreFocus)[...box.querySelectorAll("button[data-favorite-deck-id]")].find(x=>x.dataset.favoriteDeckId===d.id)?.focus({preventScroll:true});
+    };
+    wrap.append(b,star);box.append(wrap);
   });
 }
+$("#deckSearch").oninput=e=>{deckQuery=e.target.value;renderDeckChips()};
 function renderChips(){
   const box=$("#chips");box.innerHTML="";
   const cats=[...new Set(sel().flatMap(d=>d.cards.map(c=>c.cat)))];
   [...filt].forEach(c=>{if(!cats.includes(c))filt.delete(c)});
   if(cats.length<2){renderMeta();return;}
-  cats.forEach(c=>{const b=el("button","chip"+(filt.has(c)?" on":""),c);b.setAttribute("aria-pressed",filt.has(c));b.disabled=busy;b.onclick=()=>{if(busy)return;filt.has(c)?filt.delete(c):filt.add(c);renderChips();renderMeta()};box.append(b)});
+  cats.forEach(c=>{
+    const b=el("button","chip"+(filt.has(c)?" on":""),c);
+    b.type="button";b.dataset.category=c;b.setAttribute("aria-pressed",filt.has(c));b.disabled=busy;
+    b.onclick=()=>{
+      if(busy)return;
+      const restoreFocus=document.activeElement===b;
+      filt.has(c)?filt.delete(c):filt.add(c);renderChips();renderMeta();
+      if(restoreFocus)[...box.querySelectorAll("button[data-category]")].find(x=>x.dataset.category===c)?.focus({preventScroll:true});
+    };
+    box.append(b);
+  });
 }
-function syncCount(){$("#cnt").textContent=S.count;$("#bMin").disabled=S.count<=1;$("#bPlus").disabled=S.count>=8}
+const drawLabel=()=>S.mode==="chaos"||S.count===1?"Sortear carta":"Sortear cartas";
+function syncCount(){
+  $("#cnt").textContent=S.count;
+  $("#bMin").disabled=busy||S.count<=1;$("#bPlus").disabled=busy||S.count>=8;
+  if(!busy){$("#bDraw").textContent=drawLabel();$("#mobileDraw").textContent=drawLabel()}
+}
 function setCount(n){if(busy)return;S.count=Math.min(8,Math.max(1,n));syncCount();save();showBacks()}
 function refreshAll(){renderDeckChips();renderChips();showBacks()}
 
@@ -1244,10 +1608,10 @@ const curD=()=>S.decks.find(d=>d.id===ed.d)||S.decks[0]||null;
 const curC=()=>curD()?.cards.find(c=>c.id===ed.c);
 const mark=()=>{ed.dirty=true;save()};
 function withUndo(msg,fn){
-  const s=JSON.stringify({d:S.decks,a:S.active,t:S.title,cfg:S.cfg,profiles:S.profiles,sess:S.sess,quests:S.quests,archives:S.archives,hist:S.hist,mode:S.mode,fin:S.fin});
+  const s=JSON.stringify({d:S.decks,a:S.active,t:S.title,fav:S.deckFavs,cfg:S.cfg,profiles:S.profiles,sess:S.sess,quests:S.quests,archives:S.archives,hist:S.hist,mode:S.mode,fin:S.fin});
   fn();mark();if(!$("#dlg").open){ed.dirty=false;refreshAll()}
   toast(msg,"Desfazer",()=>{
-    const o=JSON.parse(s);S.decks=o.d;S.active=o.a;S.title=o.t;
+    const o=JSON.parse(s);S.decks=o.d;S.active=o.a;S.title=o.t;S.deckFavs=o.fav||[];
     S.cfg=cleanCfg(o.cfg);S.profiles=o.profiles.map(cleanProfile).filter(Boolean);
     S.sess=normSess(o.sess);S.quests=normQuests(o.quests);S.archives=normArchive(o.archives);S.hist=normHist(o.hist);S.mode=MODES[o.mode]?o.mode:"free";S.fin=o.fin;
     applyCfg();syncTitle();renderQuests();renderMeta();renderHist();
@@ -1292,7 +1656,7 @@ function renderForm(){
   const br=el("button","","Remover imagem");br.disabled=!c.img;br.onclick=()=>{c.img="";mark();renderForm()};
   ir.append(bi,br);
   const ar=el("div","row");
-  const bc=el("button","","Duplicar");bc.onclick=()=>{const n={...c,id:"n"+Date.now(),title:c.title+" (cópia)"};d.cards.splice(d.cards.indexOf(c)+1,0,n);ed.c=n.id;mark();renderEd();toast("Carta duplicada.")};
+  const bc=el("button","","Duplicar");bc.onclick=()=>{const n={...c,id:"n"+Date.now()+Math.random().toString(36).slice(2,7),title:c.title+" (cópia)"};d.cards.splice(d.cards.indexOf(c)+1,0,n);ed.c=n.id;mark();renderEd();toast("Carta duplicada.")};
   const bd=el("button","danger","Excluir carta");
   bd.onclick=()=>{if(!confirm("Excluir a carta ‘"+c.title+"’?"))return;withUndo("Carta excluída.",()=>{const i=d.cards.indexOf(c);d.cards.splice(i,1);ed.c=d.cards[Math.min(i,d.cards.length-1)]?.id;renderEd()})};
   const mv=dir=>{const i=d.cards.indexOf(c),j=i+dir;if(j<0||j>=d.cards.length)return;[d.cards[i],d.cards[j]]=[d.cards[j],d.cards[i]];mark();renderList()};
@@ -1305,49 +1669,86 @@ function renderForm(){
 }
 $("#edQ").oninput=e=>{ed.q=e.target.value;renderList()};
 $("#edDeck").onchange=e=>{ed.d=e.target.value;ed.c=curD().cards[0]?.id;renderEd()};
-$("#bDNew").onclick=()=>{const n=prompt("Nome do novo deck:");if(!n||!n.trim())return;const d={id:"u"+Date.now(),name:n.trim(),cards:[]};S.decks.push(d);ed.d=d.id;ed.c=null;mark();renderEd()};
+$("#bDNew").onclick=()=>{const n=prompt("Nome do novo deck:");if(!n||!n.trim())return;const d={id:"u"+Date.now()+Math.random().toString(36).slice(2,7),name:n.trim(),cards:[]};S.decks.push(d);ed.d=d.id;ed.c=null;mark();renderEd()};
 $("#bDRen").onclick=()=>{const d=curD();if(!d)return;const n=prompt("Novo nome do deck:",d.name);if(!n||!n.trim())return;d.name=n.trim();mark();renderEd()};
 $("#bDDel").onclick=()=>{
   const d=curD();if(!d||!confirm("Excluir o deck ‘"+d.name+"’ e suas "+d.cards.length+" cartas?"))return;
+  if(!stashOld(JSON.stringify(S))){toast("Não foi possível criar um backup. Exporte seus dados antes de excluir.");return}
   withUndo("Deck '"+d.name+"' excluído.",()=>{S.decks=S.decks.filter(x=>x!==d);S.active=S.active.filter(id=>id!==d.id);if(!S.active.length&&S.decks.length)S.active=[S.decks[0].id];ed.d=S.decks[0]?.id||null;ed.c=S.decks[0]?.cards[0]?.id;renderEd()});
 };
-$("#bAdd").onclick=()=>{const d=curD();if(!d){toast("Crie um deck primeiro.");return}const c={id:"n"+Date.now(),title:"Nova carta",text:"Descreva a regra aqui.",cat:d.cards[0]?.cat||"Caos",rar:"comum",img:""};d.cards.push(c);ed.c=c.id;ed.q="";$("#edQ").value="";mark();renderEd()};
-$("#bReset").onclick=()=>{if(!S.decks.length){toast("Não há decks para remover.");return}if(!confirm("Remover TODOS os "+S.decks.length+" decks? Você poderá desfazer por alguns segundos."))return;withUndo("Todos os decks removidos.",()=>{S.decks=[];S.active=[];ed.d=null;ed.c=null;renderEd()})};
+$("#bAdd").onclick=()=>{const d=curD();if(!d){toast("Crie um deck primeiro.");return}const c={id:"n"+Date.now()+Math.random().toString(36).slice(2,7),title:"Nova carta",text:"Descreva a regra aqui.",cat:d.cards[0]?.cat||"Caos",rar:"comum",img:""};d.cards.push(c);ed.c=c.id;ed.q="";$("#edQ").value="";mark();renderEd()};
+$("#bReset").onclick=()=>{if(!S.decks.length){toast("Não há decks para remover.");return}if(!confirm("Remover TODOS os "+S.decks.length+" decks? Você poderá desfazer por alguns segundos."))return;if(!stashOld(JSON.stringify(S))){toast("Não foi possível criar um backup. Exporte seus dados antes de excluir.");return}withUndo("Todos os decks removidos.",()=>{S.decks=[];S.active=[];ed.d=null;ed.c=null;renderEd()})};
 $("#fileImg").onchange=e=>{
-  const f=e.target.files[0];e.target.value="";if(!f)return;
+  const f=e.target.files[0];e.target.value="";if(!f||!acceptablePicture(f))return;
   const r=new FileReader();
   r.onerror=()=>toast("Não foi possível ler a imagem.");
   r.onload=()=>{const im=new Image();
     im.onerror=()=>toast("Arquivo de imagem inválido.");
     im.onload=()=>{
-      const s=Math.min(1,480/im.width),cv=document.createElement("canvas");cv.width=Math.round(im.width*s);cv.height=Math.round(im.height*s);
-      cv.getContext("2d").drawImage(im,0,0,cv.width,cv.height);
-      const c=curC();if(!c)return;c.img=cv.toDataURL("image/jpeg",.8);mark();renderForm();toast("Imagem aplicada.");
+      if(!imageDimensionsOk(im))return;
+      try{
+        const s=Math.min(1,480/im.width),cv=document.createElement("canvas");cv.width=Math.round(im.width*s);cv.height=Math.round(im.height*s);
+        cv.getContext("2d").drawImage(im,0,0,cv.width,cv.height);
+        const c=curC();if(!c)return;
+        const data=cv.toDataURL("image/jpeg",.8);
+        if(!okImg(data)){toast("A imagem excede o limite de armazenamento. Use uma imagem menor.");return}
+        c.img=data;mark();renderForm();toast("Imagem aplicada.");
+      }catch(e){toast("Não foi possível processar a imagem.")}
     };im.src=r.result};
   r.readAsDataURL(f);
 };
-const fullBackup=()=>({versao:3,title:S.title,decks:S.decks,cfg:S.cfg,profiles:S.profiles,sess:S.sess,quests:S.quests,archives:S.archives,hist:S.hist,mode:S.mode});
-const cleanDeck=(d,i)=>({id:String(d.id||"i"+i+Date.now()),name:String(d.name||"Deck "+(i+1)),cards:(Array.isArray(d.cards)?d.cards:[]).filter(c=>c&&typeof c==="object").map((c,j)=>({id:String(c.id||"c"+i+"_"+j+Date.now()),title:String(c.title||""),text:String(c.text||""),cat:String(c.cat||"Caos"),rar:RARS[c.rar]?c.rar:"comum",img:typeof c.img==="string"&&c.img.startsWith("data:image/")?c.img:"",fav:!!c.fav,off:!!c.off}))});
+// Backup portátil: inclui até as preferências de quantidade, decks ativos e baralho finito.
+const fullBackup=()=>({versao:3,title:S.title,decks:S.decks,active:S.active,count:S.count,
+  deckFavs:S.deckFavs,cfg:S.cfg,profiles:S.profiles,sess:S.sess,quests:S.quests,
+  archives:S.archives,hist:S.hist,mode:S.mode,fin:S.fin});
+function cleanDeck(d,i){
+  d=d&&typeof d==="object"?d:{};
+  const seen=new Set();
+  return{id:String(d.id||"i"+i+Date.now()),name:String(d.name||"Deck "+(i+1)),
+    cards:(Array.isArray(d.cards)?d.cards:[]).filter(c=>c&&typeof c==="object").map((c,j)=>{
+      const base=String(c.id||"c"+i+"_"+j+Date.now());let id=base,extra=1;
+      while(seen.has(id))id=base+"_"+extra++;
+      seen.add(id);
+      return{id,title:String(c.title||""),text:String(c.text||""),cat:String(c.cat||"Caos"),rar:RARS[c.rar]?c.rar:"comum",img:okImg(c.img)?c.img:"",fav:!!c.fav,off:!!c.off};
+    })};
+}
+function cleanImportedDecks(list){
+  const seen=new Set();
+  return list.map(cleanDeck).map(d=>{
+    const base=d.id;let id=base,extra=1;
+    while(seen.has(id))id=base+"_"+extra++;
+    seen.add(id);d.id=id;return d;
+  });
+}
 $("#bExp").onclick=()=>{
   flush();const a=document.createElement("a");
   a.href=URL.createObjectURL(new Blob([JSON.stringify(fullBackup(),null,1)],{type:"application/json"}));
-  a.download="decks-deadlock-"+new Date().toISOString().slice(0,10)+".json";a.click();URL.revokeObjectURL(a.href);toast("Tudo salvo em arquivo.");
+  a.download="decks-deadlock-"+new Date().toISOString().slice(0,10)+".json";a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1500);toast("Tudo salvo em arquivo.");
 };
 $("#bImp").onclick=()=>$("#fileJson").click();
 function applyPayload(j){
-  // Deck isolado inicia sessão nova; backup completo restaura também as missões e relatórios.
-  if(j.sess&&Array.isArray(j.quests)){
+  // Deck isolado inicia sessão nova; backup completo restaura também os controles e relatórios.
+  const complete=!!(j.sess&&Array.isArray(j.quests));
+  if(complete){
     S.sess=normSess(j.sess);S.quests=normQuests(j.quests);S.archives=normArchive(j.archives);S.hist=normHist(j.hist);
     S.mode=MODES[j.mode]?j.mode:S.sess.mode;
   }else{
     archiveCurrent();S.sess=normSess(null);S.quests=[];S.hist=[];S.mode="free";
   }
   used={};lastIds=new Set();curEntry=null;curSnap=null;undoStack=[];
-  S.fin=S.mode==="finite"?{total:S.cfg.finiteN,left:S.cfg.finiteN}:null;
-  S.decks=j.decks.map(cleanDeck);if(j.title)S.title=String(j.title);
+  S.decks=cleanImportedDecks(j.decks);S.deckFavs=(Array.isArray(j.deckFavs)?j.deckFavs:[]).filter(id=>S.decks.some(d=>d.id===id));
+  deckQuery="";$("#deckSearch").value="";S.title="DeckLock";
   if(Array.isArray(j.profiles))S.profiles=j.profiles.map(cleanProfile).filter(Boolean);
   if(j.cfg)S.cfg=cleanCfg(j.cfg);
-  S.active=S.decks.length?[S.decks[0].id]:[];
+  S.active=complete&&Array.isArray(j.active)
+    ?j.active.filter(id=>S.decks.some(d=>d.id===id))
+    :(S.decks.length?[S.decks[0].id]:[]);
+  if(complete&&Number.isFinite(+j.count))S.count=Math.min(8,Math.max(1,Math.round(+j.count)));
+  const f=j.fin;
+  S.fin=S.mode==="finite"?(complete&&f&&Number.isFinite(+f.total)&&+f.total>0
+    ?{total:+f.total,left:Math.max(0,Math.min(+f.total,Number(f.left)||0))}
+    :{total:S.cfg.finiteN,left:S.cfg.finiteN}):null;
   applyCfg();syncTitle();syncCount();renderHist();renderQuests();ed.d=S.decks[0]?.id||null;ed.c=S.decks[0]?.cards[0]?.id;
 }
 function mergeDecks(list){
@@ -1358,8 +1759,18 @@ function addDecks(list){
   withUndo(list.length+" deck(s) adicionado(s).",()=>{const m=mergeDecks(list);S.decks.push(...m);if(!S.active.length)S.active=[m[0].id];ed.d=m[0].id;ed.c=m[0].cards[0]?.id;renderEd()});
 }
 function runImport(j,mode){
+  if(!j||typeof j!=="object")throw new Error("format");
+  const ds=Array.isArray(j.decks)?j.decks:null;
+  // Limites altos para decks normais, mas protegem de arquivos malformados
+  // capazes de travar o navegador durante a importação.
+  if(ds&&(ds.length>150||ds.some(d=>!d||!Array.isArray(d.cards)||d.cards.length>2000)||
+      ds.reduce((n,d)=>n+d.cards.length,0)>8000))throw new Error("limit");
+  if(Array.isArray(j.decks)&&j.decks.length===0)throw new Error("empty");
   const list=Array.isArray(j.decks)&&j.decks.length?j.decks:null;
-  if(list&&mode==="replace")withUndo("Carregado: "+list.length+" deck(s).",()=>{applyPayload(j);renderEd()});
+  if(list&&mode==="replace"){
+    if(!backupBeforeReplace())return;
+    withUndo("Carregado: "+list.length+" deck(s).",()=>{applyPayload(j);renderEd()});
+  }
   else if(list)addDecks(list);
   else{
     const cards=Array.isArray(j)?j:j.deck;if(!Array.isArray(cards)||!cards.length)throw 0;
@@ -1369,14 +1780,27 @@ function runImport(j,mode){
 let pend=null;
 $("#fileJson").onchange=e=>{
   const f=e.target.files[0];e.target.value="";if(!f)return;
-  f.text().then(t=>{try{
-    const j=JSON.parse(t);
-    if(Array.isArray(j.decks)&&j.decks.length&&S.decks.length){
-      pend=j;
-      $("#impMsg").textContent="O arquivo tem "+j.decks.length+" deck(s): "+j.decks.map(d=>String(d&&d.name||"sem nome")).join(", ").slice(0,160)+". O que fazer?";
-      $("#dlgImp").showModal();
-    }else runImport(j,"replace");
-  }catch(err){toast("Arquivo inválido. Use um .json salvo por este site.")}});
+  if(f.size>MAX_JSON_FILE){toast("Arquivo JSON muito grande. O limite de importação é 8 MB.");return}
+  f.text().then(t=>{
+    let j;
+    try{j=JSON.parse(t)}catch(e){toast("O arquivo não é um JSON válido. Verifique o arquivo selecionado.");return}
+    try{
+      // Validar antes de abrir o diálogo, não apenas após escolher um botão.
+      if(j&&Array.isArray(j.decks)){
+        if(j.decks.length>150||j.decks.some(d=>!d||!Array.isArray(d.cards)||d.cards.length>2000)||
+           j.decks.reduce((n,d)=>n+d.cards.length,0)>8000)throw new Error("limit");
+      }
+      if(j&&Array.isArray(j.decks)&&j.decks.length&&S.decks.length){
+        pend=j;
+        $("#impMsg").textContent="O arquivo tem "+j.decks.length+" deck(s): "+j.decks.map(d=>String(d&&d.name||"sem nome")).join(", ").slice(0,160)+". O que fazer?";
+        $("#dlgImp").showModal();
+      }else runImport(j,"replace");
+    }catch(err){
+      toast(err.message==="empty"?"O arquivo não contém decks para importar.":
+        err.message==="limit"?"Arquivo com decks ou cartas demais para importar com segurança.":
+        "Formato de arquivo não reconhecido. Importe um backup JSON do DeckLock.");
+    }
+  }).catch(()=>toast("Não foi possível ler o arquivo. Tente selecioná-lo novamente."));
 };
 $("#impAdd").onclick=()=>{$("#dlgImp").close();if(pend)runImport(pend,"add");pend=null};
 $("#impRep").onclick=()=>{$("#dlgImp").close();if(pend)runImport(pend,"replace");pend=null};
@@ -1385,6 +1809,30 @@ $("#bClose").onclick=()=>$("#dlg").close();
 $("#dlg").addEventListener("close",()=>{if(ed.dirty){ed.dirty=false;refreshAll();renderHist()}});
 
 /* ---------- Configurações ---------- */
+/* Reagrupa as configurações sem alterar seus valores ou controles. */
+const settingsOpen={visual:true,draw:false,animation:false,data:false};
+function organizeSettings(root){
+  const catalog=[
+    {id:"visual",name:"Aparência e estilo",heads:["Perfis de estilo","Cores","Cartas","Verso das cartas","Fundo do site","Aparência"]},
+    {id:"draw",name:"Sorteio e modos de jogo",heads:["Modos de jogo","Sorteio"]},
+    {id:"animation",name:"Animações e sons",heads:["Animação e som","Animações por raridade"]},
+    {id:"data",name:"Dados e segurança",heads:["Dados"]}
+  ];
+  const sections={};let current=null;
+  for(const node of [...root.children]){
+    if(node.tagName==="H3")current=node.textContent;
+    if(!current)continue;
+    (sections[current]||(sections[current]=[])).push(node);
+  }
+  root.replaceChildren();
+  for(const cat of catalog){
+    const d=el("details","settings-group"),summary=el("summary","",cat.name),content=el("div","settings-content");
+    cat.heads.forEach(h=>(sections[h]||[]).forEach(node=>content.append(node)));
+    d.append(summary,content);d.open=!!settingsOpen[cat.id];
+    d.addEventListener("toggle",()=>{settingsOpen[cat.id]=d.open});
+    root.append(d);
+  }
+}
 function renderSet(){
   const b=$("#setBody");b.innerHTML="";const c=S.cfg;let prof;
   const up=()=>{applyCfg();save()};
@@ -1392,7 +1840,6 @@ function renderSet(){
   const field=(lab,node)=>{const l=el("label","",lab);l.append(node);return l};
   const rng=(lab,k,min,max,step,u,sty)=>{const i=el("input");i.type="range";i.min=min;i.max=max;i.step=step;i.value=c[k];const l=el("label","",lab+": "+c[k]+u);i.oninput=()=>{c[k]=+i.value;l.firstChild.textContent=lab+": "+c[k]+u;sty?styl():up()};l.append(i);return l};
   const chk=(lab,k)=>{const l=el("label","chk"),i=el("input");i.type="checkbox";i.checked=c[k];i.onchange=()=>{c[k]=i.checked;up();if(k==="snd"&&i.checked)sfx("reveal")};l.append(i,document.createTextNode(lab));return l};
-  const ti=el("input");ti.type="text";ti.value=S.title;ti.oninput=()=>{S.title=ti.value;syncTitle();save()};
   prof=el("select");
   const g1=el("optgroup");g1.label="Perfis prontos";Object.keys(PROFILES).forEach(n=>{const o=el("option","",n);o.value="b:"+n;g1.append(o)});prof.append(g1);
   if(S.profiles.length){const g2=el("optgroup");g2.label="Meus perfis";S.profiles.forEach(p=>{const o=el("option","",p.name);o.value=p.id;g2.append(o)});prof.append(g2)}
@@ -1451,8 +1898,7 @@ function renderSet(){
     catch(e){wiping=false;toast("Falha ao apagar os dados. Seus decks foram preservados.")}
   };
   const rs=el("button","","Restaurar configurações padrão");rs.onclick=()=>{const p=S.cfg.profile;S.cfg=DEF_CFG();applyCfg();save();renderSet()};
-  b.append(el("h3","","Título"),field("Título do site (também dá para clicar nele no topo)",ti),
-    el("h3","","Perfis de estilo"),field("Perfil",prof),pr,
+  b.append(el("h3","","Perfis de estilo"),field("Perfil",prof),pr,
     el("p","empty",c.mod?"O estilo foi alterado em relação ao perfil escolhido. Use 'Atualizar perfil' ou 'Salvar estilo atual como perfil' para guardar.":"Um perfil guarda cores, fonte, tamanho da carta e verso."),
     el("h3","","Cores"),grid,
     el("h3","","Cartas"),field("Fundo da frente da carta",fcs),el("h3","","Verso das cartas"),bg,br,
@@ -1465,17 +1911,24 @@ function renderSet(){
     field("Trocas permitidas por sorteio (0 = ilimitado)",rr),
     el("p","empty","Chance de cada raridade (pesos relativos; 0 desliga a raridade):"),wr,
     el("h3","","Dados"),el("p","empty","Uso do armazenamento do navegador: cerca de "+kb+" KB de ~5000 KB. Imagens ocupam mais espaço. Faça backup com 'Salvar tudo em arquivo'. Para publicar seus decks como padrão do site no GitHub, exporte o arquivo e renomeie para decks.json."),rs,wp);
+  organizeSettings(b);
 }
 $("#fileBack").onchange=e=>{
-  const f=e.target.files[0];e.target.value="";if(!f)return;
+  const f=e.target.files[0];e.target.value="";if(!f||!acceptablePicture(f))return;
   const r=new FileReader();
   r.onerror=()=>toast("Não foi possível ler a imagem.");
   r.onload=()=>{const im=new Image();
     im.onerror=()=>toast("Arquivo de imagem inválido.");
-    im.onload=()=>{const s=Math.min(1,560/im.width),cv=document.createElement("canvas");cv.width=Math.round(im.width*s);cv.height=Math.round(im.height*s);
-      cv.getContext("2d").drawImage(im,0,0,cv.width,cv.height);
-      S.cfg.backImg=cv.toDataURL("image/jpeg",.85);S.cfg.back="custom";S.cfg.mod=true;applyCfg();save();if($("#dlgS").open)renderSet();toast("Verso aplicado.")};
-    im.src=r.result};
+    im.onload=()=>{
+      if(!imageDimensionsOk(im))return;
+      try{
+        const s=Math.min(1,560/im.width),cv=document.createElement("canvas");cv.width=Math.round(im.width*s);cv.height=Math.round(im.height*s);
+        cv.getContext("2d").drawImage(im,0,0,cv.width,cv.height);
+        const data=cv.toDataURL("image/jpeg",.85);
+        if(!okImg(data)){toast("A imagem excede o limite de armazenamento. Use uma imagem menor.");return}
+        S.cfg.backImg=data;S.cfg.back="custom";S.cfg.mod=true;applyCfg();save();if($("#dlgS").open)renderSet();toast("Verso aplicado.");
+      }catch(e){toast("Não foi possível processar a imagem.")}
+    };im.src=r.result};
   r.readAsDataURL(f);
 };
 const openSet=()=>{renderSet();$("#dlgS").showModal()};
@@ -1484,11 +1937,7 @@ $("#bSClose").onclick=()=>$("#dlgS").close();
 
 /* ---------- Geral ---------- */
 const T=$("#title");
-function syncTitle(){if(T.textContent!==S.title)T.textContent=S.title;document.title=S.title||"Deck"}
-T.addEventListener("input",()=>{S.title=T.textContent;document.title=S.title||"Deck";save()});
-T.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key==="Escape"){e.preventDefault();T.blur()}});
-T.addEventListener("paste",e=>{e.preventDefault();document.execCommand("insertText",false,((e.clipboardData||window.clipboardData).getData("text")||"").replace(/\s+/g," "))});
-T.addEventListener("blur",()=>{S.title=T.textContent.trim()||"DeckLock";if(T.textContent!==S.title)T.textContent=S.title;document.title=S.title;save()});
+function syncTitle(){S.title="DeckLock";if(T.textContent!==S.title)T.textContent=S.title;document.title=S.title}
 const isFs=()=>document.body.classList.contains("fs");
 function toggleFs(){
   const on=!isFs();document.body.classList.toggle("fs",on);$("#bFs").setAttribute("aria-pressed",on);
@@ -1528,7 +1977,10 @@ function renderFiles(){
     bks.forEach(k=>{
       let old=null;try{old=JSON.parse(localStorage.getItem(k))}catch(e){}
       if(!old||!Array.isArray(old.decks))return;
-      const it=item("Antes da atualização "+backupLabel(k),old.decks.length+" deck(s), guardados automaticamente neste navegador","decklock-backup-"+backupLabel(k)+".json",{versao:3,title:old.title,decks:old.decks,cfg:old.cfg,profiles:old.profiles},true);
+      const it=item("Backup "+backupLabel(k),old.decks.length+" deck(s), guardados automaticamente neste navegador",backupFilename(k),
+        {versao:3,title:old.title,decks:old.decks,active:old.active,count:old.count,deckFavs:old.deckFavs,
+        cfg:old.cfg,profiles:old.profiles,sess:old.sess,quests:old.quests,archives:old.archives,
+        hist:old.hist,mode:old.mode,fin:old.fin},true);
       const row=it.querySelector(".row");
       const br=el("button","","Restaurar tudo");br.onclick=()=>{if(confirm("Voltar a estes dados? Os dados atuais serão substituídos. Baixe um backup antes se quiser guardá-los."))restoreBackup(k)};
       const bx=el("button","danger","Apagar");bx.onclick=()=>{if(confirm("Apagar de vez este backup?")){try{localStorage.removeItem(k)}catch(e){}renderFiles()}};
@@ -1550,7 +2002,21 @@ $("#dlgNotice").addEventListener("close",()=>{if(S.notice){S.notice=null;save()}
 $("#bHistClear").onclick=()=>{S.hist=[];save();renderHist()};
 $("#bEdit").onclick=openEd;
 $("#bDraw").onclick=draw;
-$("#bCopy").onclick=copyTxt;
+$("#mobileDraw").onclick=draw;
+// A ação fixa aparece somente quando a ação principal está fora da tela em dispositivos pequenos.
+if("IntersectionObserver" in window){
+  const mobileObserver=new IntersectionObserver(entries=>{
+    document.body.classList.toggle("show-mobile-draw",!entries[0].isIntersecting);
+  },{threshold:0.15});
+  mobileObserver.observe($("#bDraw"));
+}
+$("#bCopy").onclick=()=>{copyTxt();$("#shareResult").open=false};
+$("#bCopyImage").onclick=()=>exportResultImage(true);
+$("#bSaveImage").onclick=()=>exportResultImage(false);
+const selectedShareDeck=()=>sel().length===1?sel()[0]:null;
+$("#bShareLink").onclick=()=>{const d=selectedShareDeck();if(d)shareDeck(d,true)};
+$("#bShareCode").onclick=()=>{const d=selectedShareDeck();if(d)shareDeck(d,false)};
+document.addEventListener("click",e=>{const menu=$("#shareResult");if(menu.open&&!menu.contains(e.target))menu.open=false});
 $("#bMin").onclick=()=>setCount(S.count-1);
 $("#bPlus").onclick=()=>setCount(S.count+1);
 $("#bFs").onclick=toggleFs;
@@ -1559,14 +2025,18 @@ document.addEventListener("keydown",e=>{
   if(e.key==="Escape"&&isFs()&&!document.fullscreenElement&&!document.querySelector("dialog[open]"))return toggleFs();
   if(e.ctrlKey||e.metaKey||e.altKey||document.querySelector("dialog[open]")||/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)||document.activeElement.isContentEditable)return;
   const k=e.key.toLowerCase();
-  if(e.code==="Space"){if(document.activeElement.tagName!=="BUTTON"){e.preventDefault();draw()}}
+  if(e.code==="Space"){
+    // Fora dos controles: sortear. Em botões, links, sumários e áreas roláveis,
+    // preservar a ação nativa do teclado (sem sortear acidentalmente).
+    if(document.activeElement===document.body||document.activeElement===document.documentElement){e.preventDefault();draw()}
+  }
   else if(k==="f")toggleFs();else if(k==="e")openEd();else if(k==="a")$("#bFiles").click();else if(k==="u")undo();else if(k==="m"){S.cfg.compact=!S.cfg.compact;applyCfg();save()}else if(k==="s")openSet();else if(k==="c")copyTxt();
   else if(/^[1-8]$/.test(k))setCount(+k);
 });
 applyCfg();syncTitle();syncCount();renderDeckChips();renderChips();showBacks();renderHist();renderQuests();
 async function bootstrap(){
-  if(localStorage.getItem(KEY))return;
   try{
+    if(localStorage.getItem(KEY))return;
     const r=await fetch("decks.json",{cache:"no-store"});if(!r.ok)return;
     const j=await r.json();if(!Array.isArray(j.decks)||!j.decks.length||localStorage.getItem(KEY)||ed.dirty||busy)return;
     applyPayload(j);syncCount();refreshAll();renderHist();save();
@@ -1574,6 +2044,10 @@ async function bootstrap(){
 }
 bootstrap();
 $("#modeSel").onchange=e=>setMode(e.target.value);
+$("#quickToggle").onchange=e=>{
+  S.cfg.quick=!!e.target.checked;
+  applyCfg();save();
+};
 $("#trackToggle").onchange=e=>{
   if(busy){e.target.checked=!!S.cfg.track;return}
   S.cfg.track=!!e.target.checked;
