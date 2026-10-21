@@ -6,7 +6,7 @@
 <title>DeckLock</title>
 <meta name="description" content="Sorteador de cartas de desafio para partidas de Deadlock, com decks editáveis.">
 <meta name="theme-color" content="#222021">
-<meta name="decklock-version" content="1.9.3">
+<meta name="decklock-version" content="1.9.5">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="DeckLock">
@@ -203,9 +203,9 @@ header .title{grid-area:t}header .orn{grid-area:o;justify-self:center}
 .linkbtn{min-height:30px;padding:2px 12px;font-size:.85rem;margin:6px 0 2px}
 #ver{position:fixed;right:10px;bottom:5px;font:.64rem/1 system-ui,sans-serif;color:var(--mute);opacity:.32;pointer-events:none;user-select:none;z-index:1}
 body.fs #ver{display:none}
-#dlgNotice{width:min(380px,90vw)}
-#dlgNotice .set{text-align:center;padding:28px 24px}
-#dlgNotice .row{justify-content:center}
+#dlgNotice,#dlgIntro{width:min(400px,90vw)}
+#dlgNotice .set,#dlgIntro .set{text-align:center;padding:28px 24px}
+#dlgNotice .row,#dlgIntro .row{justify-content:center}
 #noticeMsg{margin:0;font-size:1.15rem}
 .acc{display:none;position:absolute;top:8px;left:8px;z-index:3;padding:2px 10px;min-height:30px;font-size:.8rem;background:color-mix(in srgb,var(--bg) 85%,transparent);opacity:0}
 .scene.live .acc{display:block}.scene:hover .acc,.acc:focus-visible{opacity:1}
@@ -435,13 +435,13 @@ body.quick-draw .scene{animation:none!important}
 .draw-action-row{display:flex;justify-content:center;align-items:center;gap:10px;max-width:100%;min-width:0}
 .draw-action-row .primary{min-width:min(300px,calc(100vw - 116px));max-width:100%}
 .share-results{position:relative;z-index:12;text-align:center;flex:none}
-.share-results>summary{list-style:none;cursor:pointer;user-select:none}
-.share-results>summary::-webkit-details-marker{display:none}
-.share-results>summary.share-icon{display:grid;place-items:center;width:44px;height:44px;min-height:44px;padding:0;margin:0 auto;border:1px solid transparent;border-radius:10px;color:var(--mute);transition:color .15s,background .15s,border-color .15s}
-.share-results>summary.share-icon:hover,.share-results[open]>summary.share-icon{background:var(--panel);border-color:var(--line);color:var(--ink)}
-.share-results>summary.share-icon svg{display:block;pointer-events:none}
-.share-results[aria-disabled="true"]>summary{opacity:.45;cursor:not-allowed}
-.share-results[open]>summary{color:var(--ink)}
+.share-results>.share-icon{list-style:none;cursor:pointer;user-select:none}
+.share-results>.share-icon::-webkit-details-marker{display:none}
+.share-results>.share-icon{display:grid;place-items:center;width:44px;height:44px;min-height:44px;padding:0;margin:0 auto;border:1px solid transparent;border-radius:10px;color:var(--mute);transition:color .15s,background .15s,border-color .15s}
+.share-results>.share-icon:hover,.share-results.menu-open>.share-icon{background:var(--panel);border-color:var(--line);color:var(--ink)}
+.share-results>.share-icon svg{display:block;pointer-events:none}
+.share-results.is-disabled>.share-icon{opacity:.45;cursor:not-allowed}
+.share-results.menu-open>.share-icon{color:var(--ink)}
 .share-result-actions{position:absolute;top:calc(100% + 8px);right:0;display:flex;gap:7px;flex-wrap:wrap;justify-content:center;padding:8px;width:max-content;max-width:min(420px,90vw);border:1px solid var(--line);border-radius:11px;background:var(--bg2);box-shadow:0 8px 22px #0004}
 .share-result-actions button{font-size:.79rem;min-height:36px;padding:5px 10px}
 .share-deck-options{display:grid;gap:7px;padding:10px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
@@ -462,7 +462,7 @@ body.fs #shareResult{display:none!important}
  .shortcut-grid span{white-space:normal;min-width:0;overflow-wrap:anywhere}
  .draw-action-row{gap:6px;width:min(100%,350px)}
  .draw-action-row .primary{flex:1;min-width:0;width:auto;max-width:calc(100% - 50px);padding-inline:12px;font-size:.96rem}
- .share-results>summary.share-icon{width:44px;height:44px}
+ .share-results>.share-icon{width:44px;height:44px}
  .share-result-actions{right:0}
  .stepper button,.ibtn{touch-action:manipulation}
  .scene.live:hover{transform:none}
@@ -477,25 +477,25 @@ body.fs #shareResult{display:none!important}
 /* DeckLock v1.9.2 — acabamento visual discreto. Mantém os temas e estados existentes. */
 /* Ação primária sempre tem prioridade visual; o compartilhamento fica identificável. */
 .draw-action-row{gap:12px}
-.share-results>summary.share-icon{
+.share-results>.share-icon{
   border-color:color-mix(in srgb,var(--mute) 65%,var(--line));
   background:color-mix(in srgb,var(--bg2) 48%,var(--bg));
   color:var(--ink);
   box-shadow:0 2px 9px #0002;
   transition:background .15s,border-color .15s,color .15s,box-shadow .15s;
 }
-.share-results[aria-disabled="true"]>summary.share-icon{
+.share-results.is-disabled>.share-icon{
   opacity:.64;
   color:var(--mute);
   border-color:var(--line);
   box-shadow:none;
 }
-.share-results:not([aria-disabled="true"])>summary.share-icon:hover,
-.share-results[open]>summary.share-icon{
+.share-results:not(.is-disabled)>.share-icon:hover,
+.share-results.menu-open>.share-icon{
   background:var(--panel);border-color:var(--gold);color:var(--gold);
   box-shadow:0 3px 12px #0004;
 }
-.share-results>summary.share-icon:focus-visible{
+.share-results>.share-icon:focus-visible{
   outline:2px solid var(--gold);outline-offset:3px;
 }
 .share-result-actions{z-index:20;box-shadow:0 12px 30px #0009}
@@ -547,8 +547,23 @@ dialog .ed-list button:focus-visible{outline-offset:-2px}
   #toast{bottom:calc(18px + env(safe-area-inset-bottom));max-width:calc(100vw - 28px)}
 }
 @media(prefers-reduced-motion:reduce){
-  .share-results>summary.share-icon,.extras>summary,.shortcut-help>summary{transition:none!important}
+  .share-results>.share-icon,.extras>summary,.shortcut-help>summary{transition:none!important}
 }
+/* Compartilhar: botão nativo evita inconsistências de <details>/<summary> no Firefox. */
+.share-results>.share-icon{appearance:none;-webkit-appearance:none;display:grid!important;place-items:center;flex:none}
+.share-results>.share-icon:disabled{opacity:.64;cursor:default}
+.share-results .share-result-actions[hidden]{display:none!important}
+.share-results.menu-open>.share-icon{border-color:var(--gold);color:var(--gold)}
+
+/* DeckLock v1.9.5 — seletor de idioma junto às configurações. */
+.lang-picker{position:relative;display:inline-flex;flex:none;z-index:35}
+.lang-menu{position:absolute;right:0;top:calc(100% + 9px);z-index:50;min-width:175px;padding:6px;display:grid;gap:3px;background:var(--bg2);border:1px solid var(--line);border-radius:12px;box-shadow:0 14px 36px #0009;text-align:left}
+.lang-menu[hidden]{display:none!important}
+.lang-menu button{width:100%;min-height:40px;border:0;background:transparent;border-radius:7px;text-align:left;font-size:.88rem;padding:8px 11px;color:var(--ink)}
+.lang-menu button:hover,.lang-menu button:focus-visible{background:var(--panel)}
+.lang-menu button[aria-pressed="true"]{background:color-mix(in srgb,var(--gold) 15%,var(--bg2));color:var(--gold);font-weight:700}
+.lang-menu button[aria-pressed="true"]::after{content:"✓";float:right}
+@media(max-width:480px){.hr{gap:5px}.lang-menu{min-width:166px}}
 </style>
 </head>
 <body>
@@ -560,6 +575,16 @@ dialog .ed-list button:focus-visible{outline-offset:-2px}
   </div>
   <h1 class="title" id="title">DeckLock</h1>
   <div class="hr">
+    <div class="lang-picker" id="langPicker">
+      <button class="ibtn" id="bLanguage" type="button" aria-label="Idioma" title="Idioma" data-tip="Idioma" aria-haspopup="true" aria-expanded="false" aria-controls="langMenu"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c-3 3.6-3 14.4 0 18M12 3c3 3.6 3 14.4 0 18M5.5 6.5h13M5.5 17.5h13"/></svg></button>
+      <div class="lang-menu" id="langMenu" hidden role="group" aria-label="Idioma do site">
+        <button type="button" data-lang="pt-BR" lang="pt-BR">Português</button>
+        <button type="button" data-lang="en" lang="en">English</button>
+        <button type="button" data-lang="es" lang="es">Español</button>
+        <button type="button" data-lang="fr" lang="fr">Français</button>
+        <button type="button" data-lang="de" lang="de">Deutsch</button>
+      </div>
+    </div>
     <button class="ibtn" id="bSet" aria-label="Configurações" data-tip="Configurações (S)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.88 9.87 L21.86 10.31 L21.86 13.69 L18.88 14.13 L18.37 15.36 L20.17 17.77 L17.77 20.17 L15.36 18.37 L14.13 18.88 L13.69 21.86 L10.31 21.86 L9.87 18.88 L8.64 18.37 L6.23 20.17 L3.83 17.77 L5.63 15.36 L5.12 14.13 L2.14 13.69 L2.14 10.31 L5.12 9.87 L5.63 8.64 L3.83 6.23 L6.23 3.83 L8.64 5.63 L9.87 5.12 L10.31 2.14 L13.69 2.14 L14.13 5.12 L15.36 5.63 L17.77 3.83 L20.17 6.23 L18.37 8.64Z"/><circle cx="12" cy="12" r="3"/></svg></button>
     <button class="ibtn" id="bFs" aria-label="Tela cheia" aria-pressed="false" data-tip="Tela cheia (F)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
   </div>
@@ -582,16 +607,16 @@ dialog .ed-list button:focus-visible{outline-offset:-2px}
       </div>
       <div class="draw-action-row">
         <button class="primary" id="bDraw">Sortear carta</button>
-        <details class="share-results" id="shareResult" aria-disabled="true">
-        <summary class="subtle-action share-icon" title="Compartilhar resultado" aria-label="Compartilhar resultado" aria-controls="shareResultActions">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.7 10.6 6.6-4.2m-6.6 7 6.6 4.2"/></svg>
-        </summary>
-        <div class="share-result-actions" id="shareResultActions">
-          <button id="bCopy" type="button" title="Copiar texto (C)">Copiar texto</button>
-          <button id="bCopyImage" type="button">Copiar imagem</button>
-          <button id="bSaveImage" type="button">Baixar PNG</button>
+        <div class="share-results" id="shareResult">
+          <button type="button" class="subtle-action share-icon" id="bShareToggle" title="Compartilhar resultado" aria-label="Compartilhar resultado" aria-haspopup="true" aria-expanded="false" aria-controls="shareResultActions" disabled>
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.7 10.6 6.6-4.2m-6.6 7 6.6 4.2"/></svg>
+          </button>
+          <div class="share-result-actions" id="shareResultActions" hidden>
+            <button id="bCopy" type="button" title="Copiar texto (C)">Copiar texto</button>
+            <button id="bCopyImage" type="button">Copiar imagem</button>
+            <button id="bSaveImage" type="button">Baixar PNG</button>
+          </div>
         </div>
-        </details>
       </div>
     </div>
     <details class="extras" id="moreOptions">
@@ -662,8 +687,16 @@ dialog .ed-list button:focus-visible{outline-offset:-2px}
 <div id="live" class="sr" role="status" aria-live="polite" aria-atomic="true"></div>
 <div id="ver"></div>
 <dialog id="dlgNotice" aria-label="Atualização">
-  <div class="set"><p id="noticeMsg">O DeckLock foi atualizado.</p>
-    <div class="row"><button class="primary" id="noticeOk">OK</button></div></div>
+  <div class="set"><p id="noticeMsg">DeckLock atualizado. As configurações foram reiniciadas e um backup da versão anterior foi salvo em Arquivos.</p>
+    <div class="row"><button class="primary" id="noticeOk" type="button">OK</button></div></div>
+</dialog>
+<dialog id="dlgIntro" aria-labelledby="introTitle">
+  <div class="set">
+    <h2 id="introTitle" style="margin:0;color:var(--gold)">Bem-vindo ao DeckLock!</h2>
+    <p style="margin:0">Escolha um deck e clique em <strong>Sortear carta</strong>. Você também pode criar seus próprios decks no editor.</p>
+    <label class="chk" style="justify-content:center"><input type="checkbox" id="introDontShow"> Não mostrar novamente</label>
+    <div class="row" style="justify-content:center"><button class="primary" id="introOk" type="button">OK</button></div>
+  </div>
 </dialog>
 
 <dialog id="dlg" aria-label="Editor de decks">
@@ -727,7 +760,7 @@ const CATS=["Geral","Handicap","Build","Objetivo","Comunicação","Caos","Indivi
 const RARS={comum:"Comum",rara:"Rara",lendaria:"Lendária"};
 const COLORS=[["bg","Fundo"],["bg2","Fundo secundário"],["panel","Painéis"],["ink","Texto"],["mute","Texto suave"],["gold","Destaque"],["rare","Carta rara"],["leg","Carta lendária"],["line","Bordas"]];
 const PROFILES={
-"Deadlock":{back:"plain",colors:{bg:"#222021",bg2:"#2f4442",panel:"#3f5d4d",ink:"#efdebf",mute:"#86a995",gold:"#efdebf",rare:"#8fb59f",leg:"#d98a5c",line:"#3f5d4d"}},
+"Deadlock":{back:"plain",bgfx:"vignette",colors:{bg:"#222021",bg2:"#2f4442",panel:"#3f5d4d",ink:"#efdebf",mute:"#86a995",gold:"#efdebf",rare:"#8fb59f",leg:"#d98a5c",line:"#3f5d4d"}},
 "Deadlock Creme":{back:"plain",colors:{bg:"#efdebf",bg2:"#f6ecd6",panel:"#e2d1ae",ink:"#222021",mute:"#44614f",gold:"#3f5d4d",rare:"#2f6b66",leg:"#a8442a",line:"#bfae8b"}},
 "Âmbar quente":{back:"stripes",colors:{bg:"#14100f",bg2:"#1e1715",panel:"#241b18",ink:"#f0e4cf",mute:"#a8967c",gold:"#d4a24a",rare:"#6aa9d8",leg:"#e0553d",line:"#4a3a2c"}},
 "Safira":{back:"diamonds",colors:{bg:"#0b1020",bg2:"#121a30",panel:"#18223c",ink:"#e6ecf7",mute:"#8b9ab8",gold:"#5aa2ff",rare:"#7ad1c2",leg:"#ff6b8b",line:"#2a3a5e"}},
@@ -735,7 +768,7 @@ const PROFILES={
 "Rubi":{back:"plain",colors:{bg:"#140b0d",bg2:"#1e1013",panel:"#271519",ink:"#f1e3dc",mute:"#a58f88",gold:"#e0b060",rare:"#5ea8c8",leg:"#e8574a",line:"#4a2a30"}},
 "Claro":{back:"plain",colors:{bg:"#f2ede3",bg2:"#fbf8f1",panel:"#e7dfcf",ink:"#241d16",mute:"#6e6252",gold:"#a8741a",rare:"#1f7a8c",leg:"#b3341f",line:"#c9bca3"}}};
 const FONTS={serif:["Serifada","Georgia,'Times New Roman',serif"],sans:["Sem serifa","system-ui,sans-serif"],cond:["Condensada","'Arial Narrow',Bahnschrift,Impact,sans-serif"]};
-const DEF_CFG=()=>({profile:"b:Deadlock",mod:false,colors:{...PROFILES.Deadlock.colors},back:"plain",backImg:"",bgfx:"glow",face:"solid",bgi:100,font:"serif",cw:300,flip:700,anim:!matchMedia("(prefers-reduced-motion: reduce)").matches,snd:true,pack:"soft",finiteN:10,track:false,quick:false,compact:false,fxn:100,fx:{comum:{in:"flip",fx:"none"},rara:{in:"rise",fx:"glow"},lendaria:{in:"spin",fx:"confetti"}},hist:true,norepeat:true,cycle:true,rr:0,w:{comum:60,rara:30,lendaria:10}});
+const DEF_CFG=()=>({profile:"b:Deadlock",mod:false,colors:{...PROFILES.Deadlock.colors},back:"plain",backImg:"",bgfx:"vignette",face:"solid",bgi:100,font:"serif",cw:300,flip:700,anim:!matchMedia("(prefers-reduced-motion: reduce)").matches,snd:true,pack:"soft",finiteN:10,track:false,quick:false,compact:false,fxn:100,fx:{comum:{in:"flip",fx:"none"},rara:{in:"rise",fx:"glow"},lendaria:{in:"spin",fx:"confetti"}},hist:true,norepeat:true,cycle:true,rr:0,w:{comum:60,rara:30,lendaria:10}});
 
 const DEF_DECKS=()=>EXEMPLOS.filter(d=>d.name==="Grupo"||d.name==="Heróis").map(d=>JSON.parse(JSON.stringify(d)));
 const EXEMPLOS=[{"id":"g","name":"Grupo","cards":[{"id":"g0","title":"Pick do colega","text":"Cada um joga o herói que o colega ao lado escolheu para você. Sem veto, sem troca.","cat":"Caos","rar":"comum","img":""},{"id":"g1","title":"Herói esquecido","text":"Todo mundo joga o herói que menos usou na conta. Se nunca jogou nenhum, vale qualquer um.","cat":"Caos","rar":"comum","img":""},{"id":"g2","title":"Sem arma","text":"Nenhum item de Arma na partida inteira. Só Vitalidade e Espírito.","cat":"Build","rar":"comum","img":""},{"id":"g3","title":"Categoria única","text":"Cada um escolhe uma categoria (Arma, Vitalidade ou Espírito) e só compra dela.","cat":"Build","rar":"comum","img":""},{"id":"g4","title":"Só passivos","text":"Nenhum item ativo na build. Se a luta depende de apertar um botão, ele não existe.","cat":"Build","rar":"rara","img":""},{"id":"g5","title":"Mão fechada","text":"Ninguém gasta souls antes do minuto 5. A primeira compra sai toda de uma vez.","cat":"Build","rar":"rara","img":""},{"id":"g6","title":"Sem zipline","text":"Zipline proibida. Quem chegar atrasado na luta, chegou a pé.","cat":"Handicap","rar":"comum","img":""},{"id":"g7","title":"Lane no corpo a corpo","text":"Até o minuto 5, só melee e habilidades. Tiro só depois disso.","cat":"Handicap","rar":"comum","img":""},{"id":"g8","title":"Minimapa desligado","text":"Ninguém olha o minimapa. Posição do inimigo só por callout no voz.","cat":"Handicap","rar":"rara","img":""},{"id":"g9","title":"Lane única","text":"O grupo todo na mesma lane até a primeira Guardian cair.","cat":"Objetivo","rar":"comum","img":""},{"id":"g10","title":"Prioridade Mid-Boss","text":"Assim que o Mid-Boss nascer, o grupo vai nele. Sem votação.","cat":"Objetivo","rar":"rara","img":""},{"id":"g11","title":"Urn do mais pobre","text":"Quem carrega a Soul Urn é sempre o jogador com menos souls do grupo.","cat":"Objetivo","rar":"rara","img":""},{"id":"g12","title":"Primeiros 5 no camp","text":"Ninguém fica em lane nos primeiros 5 minutos. Todo mundo no jungle.","cat":"Objetivo","rar":"comum","img":""},{"id":"g13","title":"Sem falar","text":"Sem voz até a primeira Guardian cair. Só pings e o chat de texto.","cat":"Comunicação","rar":"rara","img":""},{"id":"g14","title":"Só perguntas","text":"No voz, só vale falar em forma de pergunta. Afirmou, perdeu o turno de falar.","cat":"Comunicação","rar":"comum","img":""},{"id":"g15","title":"Sem nomes","text":"Não vale dizer nome de herói ou de item. Tem que descrever o que quer dizer.","cat":"Comunicação","rar":"rara","img":""},{"id":"g16","title":"Narrador morto","text":"Quem morreu narra a partida para o grupo até renascer.","cat":"Comunicação","rar":"comum","img":""},{"id":"g17","title":"Elogio obrigatório","text":"Depois de cada morte, o grupo elogia uma coisa que o inimigo fez bem. Sem ironia.","cat":"Comunicação","rar":"comum","img":""},{"id":"g18","title":"Líder rotativo","text":"A cada 5 minutos muda o líder. Só ele chama luta, objetivo e recuo.","cat":"Caos","rar":"comum","img":""},{"id":"g19","title":"Quem tem menos decide","text":"O jogador com menos kills decide para onde o grupo vai.","cat":"Caos","rar":"comum","img":""},{"id":"g20","title":"Aposta de kills","text":"Antes de começar, cada um crava quantas kills vai fazer. Quem errar por mais escolhe o herói por último na próxima.","cat":"Caos","rar":"rara","img":""},{"id":"g21","title":"Dado de tudo","text":"Rolem dado para herói, lane e categoria de item de cada um. Sem reclamar do resultado.","cat":"Caos","rar":"rara","img":""},{"id":"g22","title":"Duas cartas","text":"Sorteie mais uma carta e cumpram as duas ao mesmo tempo.","cat":"Caos","rar":"lendaria","img":""},{"id":"g23","title":"Sem arma, sem voz","text":"Nenhum item de Arma e ninguém fala no voz até o minuto 10.","cat":"Caos","rar":"lendaria","img":""},{"id":"g24","title":"Tudo no dado","text":"Herói, lane, itens permitidos e líder sorteados. O grupo só executa.","cat":"Caos","rar":"lendaria","img":""}]},{"id":"i","name":"Individual","cards":[{"id":"i0","title":"Sem tiro","text":"Só habilidades e melee até o minuto 8.","cat":"Handicap","rar":"comum","img":""},{"id":"i1","title":"Sem ultimate","text":"Não use a habilidade 4 até o minuto 15.","cat":"Handicap","rar":"comum","img":""},{"id":"i2","title":"Pé no chão","text":"Sem zipline para você nesta partida.","cat":"Handicap","rar":"comum","img":""},{"id":"i3","title":"Pacifista de tropa","text":"Tropas só morrem no melee.","cat":"Handicap","rar":"comum","img":""},{"id":"i4","title":"Parry sempre","text":"Tente parry em toda luta, acerte ou não.","cat":"Handicap","rar":"rara","img":""},{"id":"i5","title":"Sem ativos","text":"Nenhum item ativo na sua build.","cat":"Build","rar":"comum","img":""},{"id":"i6","title":"Só Espírito","text":"Só compra itens de Espírito.","cat":"Build","rar":"rara","img":""},{"id":"i7","title":"Zero Vitalidade","text":"Nenhum item de Vitalidade. Você vive do que tem.","cat":"Build","rar":"rara","img":""},{"id":"i8","title":"Compra só morto","text":"Só compra itens quando estiver morto.","cat":"Build","rar":"rara","img":""},{"id":"i9","title":"Callout de tudo","text":"Narre em voz alta o que você está fazendo, o tempo todo.","cat":"Comunicação","rar":"comum","img":""},{"id":"i10","title":"Sombra","text":"Fique sempre perto do jogador à sua esquerda.","cat":"Objetivo","rar":"comum","img":""},{"id":"i11","title":"Dono da Urn","text":"Você carrega a Soul Urn sempre que ela estiver disponível.","cat":"Objetivo","rar":"rara","img":""},{"id":"i12","title":"Herói do sorteio","text":"Joga o herói que o grupo sortear no deck de Heróis, sem reclamar.","cat":"Caos","rar":"lendaria","img":""}]},{"id":"h","name":"Heróis","cards":[{"id":"h0","title":"Abrams","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h1","title":"Apollo","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h2","title":"Bebop","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h3","title":"Billy","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h4","title":"Calico","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h5","title":"Celeste","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h6","title":"Doorman","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h7","title":"Drifter","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h8","title":"Dynamo","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h9","title":"Graves","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h10","title":"Grey Talon","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h11","title":"Haze","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h12","title":"Holliday","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h13","title":"Infernus","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h14","title":"Ivy","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h15","title":"Kelvin","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h16","title":"Lady Geist","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h17","title":"Lash","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h18","title":"McGinnis","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h19","title":"Mina","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h20","title":"Mirage","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h21","title":"Mo & Krill","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h22","title":"Paige","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h23","title":"Paradox","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h24","title":"Pocket","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h25","title":"Rem","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h26","title":"Seven","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h27","title":"Shiv","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h28","title":"Silver","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h29","title":"Sinclair","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h30","title":"Venator","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h31","title":"Victor","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h32","title":"Vindicta","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h33","title":"Viscous","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h34","title":"Vyper","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h35","title":"Warden","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h36","title":"Wraith","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h37","title":"Yamato","text":"","cat":"Herói","rar":"comum","img":""}]}];
@@ -743,8 +776,19 @@ const EXEMPLOS=[{"id":"g","name":"Grupo","cards":[{"id":"g0","title":"Pick do co
 const KEY="deadlock-deck-v3";
 /* Reset único: quem tem dados salvos sem "epoch" (versões antigas) volta ao início UMA vez.
    Os dados antigos são guardados em BKEY antes. Só aumente RESET_EPOCH se quiser forçar outro reset. */
-const RESET_EPOCH=2,APP_VERSION="1.9.3",BKEY="deadlock-deck-v3:backup";
-let resetNotice=null;
+const RESET_EPOCH=3,APP_VERSION="1.9.5",BKEY="deadlock-deck-v3:backup";
+// Reset único de estados criados antes da v1.9.4. Futuras atualizações não reiniciam
+// os dados sem uma migração explícita; o backup deve ser confirmado antes do reset.
+const RESET_BEFORE_VERSION="1.9.4",INTRO_KEY="deadlock-deck-v3:intro-hidden";
+function compareVersions(a,b){
+  const x=String(a||"0").split(".").map(n=>Number(n)||0);
+  const y=String(b||"0").split(".").map(n=>Number(n)||0);
+  for(let i=0;i<Math.max(x.length,y.length);i++){
+    if((x[i]||0)!==(y[i]||0))return(x[i]||0)>(y[i]||0)?1:-1;
+  }
+  return 0;
+}
+let resetNotice=null,resetBackupFailed=false;
 /* Guarda os dados antigos numa chave própria desta atualização. Devolve a chave, ou null se não conseguiu. */
 const AUTO_KEEP=5,AUTO_RE=/^deadlock-deck-v3:backup:auto:\d+$/;
 /* Backups de rotina (antes de importar/substituir ou excluir decks): só os mais recentes são mantidos.
@@ -878,10 +922,10 @@ function load(first){
   let s=null,raw=null,did=false,bk=null;
   try{raw=localStorage.getItem(KEY)}catch(e){}
   if(raw){try{s=JSON.parse(raw)}catch(e){s=null}}
-  if(first&&raw&&(!s||typeof s!=="object"||(s.epoch||0)<RESET_EPOCH)){
+  if(first&&raw&&(!s||typeof s!=="object"||(s.epoch||0)<RESET_EPOCH||compareVersions(s.ver,RESET_BEFORE_VERSION)<0)){
     bk=stashOld(raw);
     if(bk){s=null;did=true}
-    else if(!s)s=null;
+    else {resetBackupFailed=true;if(!s)s=null}
   }
   if(!s||!Array.isArray(s.decks))s={decks:DEF_DECKS()};
   s.decks=cleanImportedDecks(s.decks);
@@ -896,15 +940,16 @@ function load(first){
   s.hist=normHist(s.hist);s.quests=normQuests(s.quests);s.sess=normSess(s.sess);s.archives=normArchive(s.archives);
   s.mode=MODES[s.mode]?s.mode:"free";
   if(s.mode==="finite"){const f=s.fin;s.fin=f&&+f.total>0?{total:+f.total,left:Math.max(0,Math.min(+f.total,+f.left||0))}:{total:s.cfg.finiteN,left:s.cfg.finiteN}}else s.fin=null;
-  s.epoch=RESET_EPOCH;s.ver=APP_VERSION;
-  if(did){s.notice={key:bk,ver:APP_VERSION};resetNotice=true;try{localStorage.setItem(KEY,JSON.stringify(s))}catch(e){}}
+  // Não marcar como migrado se não foi possível preservar o estado anterior.
+  if(!resetBackupFailed){s.epoch=RESET_EPOCH;s.ver=APP_VERSION}
+  if(did){s.notice={type:"update",key:bk,ver:APP_VERSION};resetNotice=true;try{localStorage.setItem(KEY,JSON.stringify(s))}catch(e){}}
   return s;
 }
 function restoreBackup(key){
   try{
     const raw=localStorage.getItem(key);if(!raw)throw 0;
     const o=JSON.parse(raw);if(!o||!Array.isArray(o.decks))throw 0;
-    o.epoch=RESET_EPOCH;delete o.notice;wiping=true;clearTimeout(st);
+    o.epoch=RESET_EPOCH;o.ver=APP_VERSION;delete o.notice;wiping=true;clearTimeout(st);
     localStorage.setItem(KEY,JSON.stringify(o));
     location.reload();
   }catch(e){wiping=false;toast("Não foi possível restaurar o backup.")}
@@ -993,9 +1038,10 @@ function blip(i=0){
 const sel=()=>S.decks.filter(d=>S.active.includes(d.id));
 function fillCard(f,c){
   f.className="face front r-"+c.rar+(c.img?"":" noimg");f.innerHTML="";
-  const m=el("div","meta");m.append(el("span","",c.cat),el("span","",RARS[c.rar]||c.rar));f.append(m);
+  const shown=typeof localizedExampleCard==="function"?localizedExampleCard(c):c;
+  const m=el("div","meta");m.append(el("span","",shown.cat),el("span","",RARS[c.rar]||c.rar));f.append(m);
   if(c.img){const a=el("div","art"),i=new Image();i.decoding="async";i.loading="lazy";i.src=c.img;i.alt="";a.append(i);f.append(a)}
-  const b=el("div","body");b.append(el("h2","ct",c.title));if(c.text)b.append(el("p","tx",c.text));f.append(b);
+  const b=el("div","body");b.append(el("h2","ct",shown.title));if(shown.text)b.append(el("p","tx",shown.text));f.append(b);
 }
 function sourceFor(g,i,entry=curEntry){
   return entry?(String(entry.uid||entry.t)+":"+String(g.deck?.id||g.deckId||g.name)+":"+i):"";
@@ -1177,7 +1223,7 @@ async function testFx(rk,pv){
 }
 let curEntry=null,undoStack=[],curSnap=null,pendCode=null;
 const rrLimit=()=>S.mode==="chaos"?1:S.cfg.rr;
-const entryText=e=>e.text||e.groups.map(g=>(e.groups.length>1?g.name+": ":"")+g.cards.map(c=>c.title).join(", ")).join("  |  ");
+const entryText=e=>e.text||e.groups.map(g=>(e.groups.length>1?g.name+": ":"")+g.cards.map(c=>typeof localizedExampleTitle==="function"?localizedExampleTitle(c):c.title).join(", ")).join("  |  ");
 function snapshot(){
   const cp={};for(const k in used)cp[k]=[...used[k]];
   return{table:table.map(g=>({name:g.name,deck:g.deck,cards:[...g.cards]})),used:cp,last:[...lastIds],hist:S.hist.slice(),sess:S.sess.draws.slice(),fin:S.fin?{...S.fin}:null,cur:curEntry,questIds:[],up:!!document.querySelector("#table .card.up")};
@@ -1287,8 +1333,9 @@ function renderMeta(){
   $("#bSum").hidden=!S.cfg.track||(!S.sess.draws.length&&!sessionQuests().length&&!S.archives.length);
   $("#bSum").textContent="Ver relatório";
   const canShare=table.some(g=>g.cards.some(Boolean));
-  $("#shareResult").setAttribute("aria-disabled",String(!canShare));
-  if(!canShare)$("#shareResult").open=false;
+  $("#bShareToggle").disabled=!canShare;
+  $("#shareResult").classList.toggle("is-disabled",!canShare);
+  if(!canShare)closeShareMenu();
   $("#shareDeckOptions").hidden=sel().length!==1||!sel()[0].cards.length;
   $("#optionsHint").textContent=[filt.size?filt.size+" filtro(s)":"",S.cfg.track?"acompanhamento ligado":""].filter(Boolean).join(" · ");
   $("#bClearFilters").hidden=!filt.size;
@@ -1519,7 +1566,8 @@ function copyText(t,msg){
   else fb();
 }
 async function shareDeck(d,asLink){
-  try{const code=await encodeDeck(d);copyText(asLink?location.href.split("#")[0]+"#deck="+code:code,asLink?"Link copiado (sem imagens).":"Código copiado (sem imagens).")}
+  try{const localized=typeof localizedExampleCard==="function"?{...d,cards:d.cards.map(c=>localizedExampleCard(c))}:d;
+    const code=await encodeDeck(localized);copyText(asLink?location.href.split("#")[0]+"#deck="+code:code,asLink?"Link copiado (sem imagens).":"Código copiado (sem imagens).")}
   catch(e){toast("Não foi possível gerar o código.")}
 }
 async function openCode(text){
@@ -1533,7 +1581,7 @@ function checkHash(){
 }
 function copyTxt(){
   if(!table.some(g=>g.cards.some(Boolean))){toast("Sorteie primeiro.");return}
-  const t=table.map(g=>(table.length>1?"["+g.name+"]\n":"")+g.cards.filter(Boolean).map(c=>"• "+c.title+(c.text?" — "+c.text:"")).join("\n")).join("\n\n");
+  const t=table.map(g=>(table.length>1?"["+g.name+"]\n":"")+g.cards.filter(Boolean).map(c=>{const shown=typeof localizedExampleCard==="function"?localizedExampleCard(c):c;return "• "+shown.title+(shown.text?" — "+shown.text:"")}).join("\n")).join("\n\n");
   copyText(t,"Sorteio copiado.");
 }
 /* Imagem do resultado: Canvas puro, sem bibliotecas ou serviços externos. */
@@ -1606,7 +1654,7 @@ async function drawSharedCard(ctx,c,x,y,w,h,colors){
   ctx.restore();
 }
 async function resultPng(){
-  const cards=table.flatMap(g=>g.cards.filter(Boolean));if(!cards.length)throw new Error("sem cartas");
+  const cards=table.flatMap(g=>g.cards.filter(Boolean)).map(c=>typeof localizedExampleCard==="function"?localizedExampleCard(c):c);if(!cards.length)throw new Error("sem cartas");
   const multiple=cards.length>1,cols=multiple?Math.min(3,cards.length):1;
   const w=multiple?510:720,h=Math.round(w*7/5),gap=multiple?18:0,pad=multiple?26:0;
   const rows=Math.ceil(cards.length/cols),canvas=document.createElement("canvas");
@@ -1626,7 +1674,7 @@ async function exportResultImage(copy){
     }else{
       const png=await resultPng(),url=URL.createObjectURL(png),a=document.createElement("a");a.href=url;a.download="decklock-cartas.png";a.click();setTimeout(()=>URL.revokeObjectURL(url),3000);toast("Imagem PNG salva.");
     }
-    $("#shareResult").open=false;
+    closeShareMenu();
   }catch(e){toast(copy?"Não foi possível copiar a imagem neste navegador. Use ‘Baixar PNG’.":"Não foi possível gerar a imagem.")}
   finally{b.disabled=false;b.textContent=before}
 }
@@ -1729,7 +1777,7 @@ function renderEd(){
 function renderList(){
   const d=curD()||{cards:[]},list=$("#edList"),q=ed.q.toLowerCase();list.innerHTML="";
   const cs=d.cards.filter(c=>!q||(c.title+" "+c.cat).toLowerCase().includes(q));
-  cs.forEach(c=>{const b=el("button",c.id===ed.c?"sel":"",(c.fav?"★ ":"")+(c.title||"(sem título)")+(c.off?" (fora)":""));b.onclick=()=>{ed.c=c.id;renderList();renderForm()};list.append(b)});
+  cs.forEach(c=>{const b=el("button",c.id===ed.c?"sel":"",(c.fav?"★ ":"")+(typeof localizedExampleTitle==="function"?localizedExampleTitle(c):(c.title||"(sem título)"))+(c.off?" (fora)":""));b.onclick=()=>{ed.c=c.id;renderList();renderForm()};list.append(b)});
   if(!cs.length)list.append(el("p","empty",S.decks.length?(d.cards.length?"Nada encontrado.":"Deck vazio."):"Nenhum deck ainda."));
 }
 function renderPrev(c){
@@ -2042,7 +2090,7 @@ function toggleFs(){
   requestAnimationFrame(fit);
 }
 document.addEventListener("fullscreenchange",()=>{if(!document.fullscreenElement&&isFs())toggleFs()});
-for(const d of document.querySelectorAll("dialog"))d.addEventListener("click",e=>{if(e.target===d&&d.id!=="dlgNotice")d.close()});
+for(const d of document.querySelectorAll("dialog"))d.addEventListener("click",e=>{if(e.target===d&&!(["dlgNotice","dlgIntro"].includes(d.id)))d.close()});
 function dl(name,obj){
   const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(obj,null,1)],{type:"application/json"}));
   a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500);
@@ -2087,15 +2135,22 @@ function renderFiles(){
 }
 $("#bFiles").onclick=()=>{renderFiles();$("#dlgF").showModal()};
 $("#bFClose").onclick=()=>$("#dlgF").close();
-function showNotice(){if(S.notice)$("#dlgNotice").showModal()}
-$("#noticeOk").onclick=()=>{
-  const n=S.notice;let old=null;
-  try{old=JSON.parse(localStorage.getItem(n&&n.key))}catch(e){}
-  if(old&&Array.isArray(old.decks))dl("decklock-backup-"+new Date().toISOString().slice(0,10)+".json",{versao:3,title:old.title,decks:old.decks,cfg:old.cfg,profiles:old.profiles});
-  $("#dlgNotice").close();
-};
+function showIntro(){
+  let hidden=false;try{hidden=localStorage.getItem(INTRO_KEY)==="1"}catch(e){}
+  if(!hidden&&!$("#dlgIntro").open){$("#introDontShow").checked=false;$("#dlgIntro").showModal()}
+}
+function showNotice(){
+  if(S.notice){$("#noticeMsg").textContent="DeckLock atualizado para v"+APP_VERSION+". Configurações reiniciadas. Seu backup foi salvo em Arquivos.";$("#dlgNotice").showModal()}
+  else showIntro();
+}
+$("#noticeOk").onclick=()=>$("#dlgNotice").close();
 $("#dlgNotice").addEventListener("cancel",e=>e.preventDefault());
-$("#dlgNotice").addEventListener("close",()=>{if(S.notice){S.notice=null;save()}});
+$("#dlgNotice").addEventListener("close",()=>{if(S.notice){S.notice=null;flush()}showIntro()});
+$("#introOk").onclick=()=>{
+  if($( "#introDontShow").checked){try{localStorage.setItem(INTRO_KEY,"1")}catch(e){}}
+  $("#dlgIntro").close();
+};
+$("#dlgIntro").addEventListener("cancel",e=>e.preventDefault());
 $("#bHistClear").onclick=()=>{S.hist=[];save();renderHist()};
 $("#bEdit").onclick=openEd;
 $("#bDraw").onclick=draw;
@@ -2107,20 +2162,30 @@ if("IntersectionObserver" in window){
   },{threshold:0.15});
   mobileObserver.observe($("#bDraw"));
 }
-$("#shareResult").querySelector("summary").addEventListener("click",e=>{if($("#shareResult").getAttribute("aria-disabled")==="true"){e.preventDefault();toast("Sorteie uma carta antes de compartilhar.")}});
-$("#shareResult").addEventListener("toggle",()=>{if($("#shareResult").open&&$("#shareResult").getAttribute("aria-disabled")==="true")$("#shareResult").open=false});
-$("#bCopy").onclick=()=>{copyTxt();$("#shareResult").open=false};
+function closeShareMenu(){
+  $("#shareResultActions").hidden=true;
+  $("#bShareToggle").setAttribute("aria-expanded","false");
+  $("#shareResult").classList.remove("menu-open");
+}
+$("#bShareToggle").onclick=()=>{
+  if($("#bShareToggle").disabled)return;
+  const menu=$("#shareResultActions");menu.hidden=!menu.hidden;
+  $("#bShareToggle").setAttribute("aria-expanded",String(!menu.hidden));
+  $("#shareResult").classList.toggle("menu-open",!menu.hidden);
+};
+$("#bCopy").onclick=()=>{copyTxt();closeShareMenu()};
 $("#bCopyImage").onclick=()=>exportResultImage(true);
 $("#bSaveImage").onclick=()=>exportResultImage(false);
 const selectedShareDeck=()=>sel().length===1?sel()[0]:null;
 $("#bShareLink").onclick=()=>{const d=selectedShareDeck();if(d)shareDeck(d,true)};
 $("#bShareCode").onclick=()=>{const d=selectedShareDeck();if(d)shareDeck(d,false)};
-document.addEventListener("click",e=>{const menu=$("#shareResult");if(menu.open&&!menu.contains(e.target))menu.open=false});
+document.addEventListener("click",e=>{if(!$("#shareResult").contains(e.target))closeShareMenu()});
 $("#bMin").onclick=()=>setCount(S.count-1);
 $("#bPlus").onclick=()=>setCount(S.count+1);
 $("#bFs").onclick=toggleFs;
 $("#bFsExit").onclick=toggleFs;
 document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"&&!$("#shareResultActions").hidden){closeShareMenu();$("#bShareToggle").focus();return}
   if(e.key==="Escape"&&isFs()&&!document.fullscreenElement&&!document.querySelector("dialog[open]"))return toggleFs();
   if(e.ctrlKey||e.metaKey||e.altKey||document.querySelector("dialog[open]")||/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)||document.activeElement.isContentEditable)return;
   const k=e.key.toLowerCase();
@@ -2171,9 +2236,9 @@ $("#codeAdd").onclick=()=>{$("#dlgCode").close();if(pendCode)addDecks([pendCode]
 $("#codeCancel").onclick=()=>{$("#dlgCode").close();pendCode=null};
 addEventListener("hashchange",checkHash);checkHash();
 // Consulta leve à página publicada quando a aba volta a ficar ativa.
-// Não remove dados locais, não aumenta RESET_EPOCH e nunca recarrega sem consentimento.
+// Consulta a versão remota sem apagar dados; a migração é feita apenas na versão nova.
 let lastVersionCheck=0,checkingVersion=false,versionPrompted=false;
-const verCmp=(a,b)=>{const x=String(a).split(".").map(n=>parseInt(n,10)||0),y=String(b).split(".").map(n=>parseInt(n,10)||0);for(let i=0;i<Math.max(x.length,y.length);i++){const d=(x[i]||0)-(y[i]||0);if(d)return d>0?1:-1}return 0};
+const verCmp=compareVersions;
 async function checkPublishedVersion(){
   if(checkingVersion||versionPrompted||!/^https?:$/.test(location.protocol)||document.hidden)return;
   if(Date.now()-lastVersionCheck<5*60*1000)return;
@@ -2187,9 +2252,13 @@ async function checkPublishedVersion(){
     const match=html.match(/<meta\s+name=["']decklock-version["']\s+content=["']([^"']+)["']/i);
     if(!match||verCmp(match[1],APP_VERSION)<=0)return;
     versionPrompted=true;
-    toast("Nova versão do DeckLock disponível (v"+match[1]+"). Seus decks e configurações serão preservados.","Atualizar",()=>{
+    toast("Nova versão do DeckLock disponível (v"+match[1]+").","Atualizar",()=>{
       if(ed.dirty&&!confirm("Há alterações não salvas no editor. Atualizar mesmo assim?"))return;
-      flush();location.reload();
+      flush();
+      const fresh=new URL(location.href);
+      fresh.searchParams.set("_decklock_version",match[1]);
+      fresh.searchParams.set("_decklock_refresh",String(Date.now()));
+      location.replace(fresh.toString());
     },30000);
   }catch(e){/* Offline: continuar normalmente. */}
   finally{checkingVersion=false}
@@ -2197,7 +2266,181 @@ async function checkPublishedVersion(){
 addEventListener("pageshow",()=>{void checkPublishedVersion()});
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)void checkPublishedVersion()});
 $("#ver").textContent="v"+APP_VERSION;
-if(S.notice)showNotice();
+if(resetBackupFailed){
+  setTimeout(()=>toast("Não foi possível salvar o backup automático. Seus dados antigos foram mantidos. Exporte-os em Arquivos antes de continuar.",null,null,12000),300);
+}else showNotice();
+</script>
+<script>
+/* DeckLock v1.9.5: traduções apenas na interface; dados pessoais continuam intactos. */
+const LANGUAGE_KEY="deadlock-deck-v3:language";
+const LANG_INDEX={"pt-BR":-1,en:0,es:1,fr:2,de:3};
+const LANG_LOCALES={"pt-BR":"pt-BR",en:"en",es:"es",fr:"fr",de:"de"};
+const LANGUAGE_STRINGS={"Idioma":["Language","Idioma","Langue","Sprache"],"Idioma do site":["Website language","Idioma del sitio","Langue du site","Sprache der Website"],"Escolha um deck":["Choose a deck","Elige un mazo","Choisissez un paquet","Deck auswählen"],"Buscar deck…":["Search decks…","Buscar mazo…","Rechercher un paquet…","Deck suchen…"],"☆ Favoritos primeiro":["☆ Favorites first","☆ Favoritos primero","☆ Favoris en premier","☆ Favoriten zuerst"],"Buscar deck":["Search decks","Buscar mazos","Rechercher des paquets","Decks suchen"],"Escolha os decks para sortear":["Select decks to draw from","Elige los mazos para sortear","Choisissez les paquets à tirer","Decks zum Ziehen auswählen"],"Cartas sorteadas":["Drawn cards","Cartas sorteadas","Cartes tirées","Gezogene Karten"],"Quantidade de cartas por deck":["Number of cards per deck","Cantidad de cartas por mazo","Nombre de cartes par paquet","Anzahl Karten pro Deck"],"Diminuir quantidade de cartas":["Decrease card count","Reducir cantidad de cartas","Diminuer le nombre de cartes","Kartenanzahl verringern"],"Aumentar quantidade de cartas":["Increase card count","Aumentar cantidad de cartas","Augmenter le nombre de cartes","Kartenanzahl erhöhen"],"Menos cartas":["Fewer cards","Menos cartas","Moins de cartes","Weniger Karten"],"Mais cartas":["More cards","Más cartas","Plus de cartes","Mehr Karten"],"Sortear carta":["Draw a card","Sacar una carta","Tirer une carte","Karte ziehen"],"Sortear cartas":["Draw cards","Sacar cartas","Tirer des cartes","Karten ziehen"],"Sortear":["Draw","Sortear","Tirer","Ziehen"],"Sorteando…":["Drawing…","Sorteando…","Tirage en cours…","Ziehe Karten…"],"Compartilhar resultado":["Share result","Compartir resultado","Partager le résultat","Ergebnis teilen"],"Copiar texto":["Copy text","Copiar texto","Copier le texte","Text kopieren"],"Copiar imagem":["Copy image","Copiar imagen","Copier l’image","Bild kopieren"],"Baixar PNG":["Download PNG","Descargar PNG","Télécharger PNG","PNG herunterladen"],"Mais opções":["More options","Más opciones","Plus d’options","Weitere Optionen"],"Modo":["Mode","Modo","Mode","Modus"],"Modo de sorteio":["Draw mode","Modo de sorteo","Mode de tirage","Ziehmodus"],"Livre":["Free","Libre","Libre","Frei"],"Clássico":["Classic","Clásico","Classique","Klassisch"],"Caos":["Chaos","Caos","Chaos","Chaos"],"Baralho finito":["Limited deck","Mazo limitado","Paquet limité","Begrenztes Deck"],"Compartilhar deck selecionado":["Share selected deck","Compartir mazo seleccionado","Partager le paquet choisi","Ausgewähltes Deck teilen"],"Copiar link":["Copy link","Copiar enlace","Copier le lien","Link kopieren"],"Copiar código":["Copy code","Copiar código","Copier le code","Code kopieren"],"O link permite adicionar este deck em outro navegador. Imagens não são incluídas.":["Use the link to add this deck in another browser. Images are not included.","Usa el enlace para añadir este mazo en otro navegador. Las imágenes no se incluyen.","Le lien permet d’ajouter ce paquet dans un autre navigateur. Les images ne sont pas incluses.","Über den Link kann das Deck in einem anderen Browser hinzugefügt werden. Bilder werden nicht übertragen."],"Categorias (opcional)":["Categories (optional)","Categorías (opcional)","Catégories (facultatif)","Kategorien (optional)"],"Filtrar categorias":["Filter categories","Filtrar categorías","Filtrer les catégories","Kategorien filtern"],"Limpar filtros":["Clear filters","Borrar filtros","Effacer les filtres","Filter zurücksetzen"],"Sorteio rápido":["Quick draw","Sorteo rápido","Tirage rapide","Schnellziehung"],"Revela as cartas sem esperar pelas animações. Desligado por padrão.":["Reveals cards without waiting for animations. Off by default.","Revela las cartas sin esperar animaciones. Desactivado por defecto.","Révèle les cartes sans attendre les animations. Désactivé par défaut.","Zeigt Karten ohne Animationen an. Standardmäßig aus."],"Acompanhar desafios":["Track challenges","Seguir desafíos","Suivre les défis","Herausforderungen verfolgen"],"Opcional: salvar missões, registrar resultados e consultar relatórios.":["Optional: save missions, record results and view reports.","Opcional: guarda misiones, registra resultados y consulta informes.","Facultatif : sauvegardez les missions, notez les résultats et consultez les rapports.","Optional: Missionen speichern, Ergebnisse erfassen und Berichte ansehen."],"Desfazer sorteio":["Undo draw","Deshacer sorteo","Annuler le tirage","Ziehung rückgängig"],"Ver relatório":["View report","Ver informe","Voir le rapport","Bericht anzeigen"],"Atalhos de teclado":["Keyboard shortcuts","Atajos de teclado","Raccourcis clavier","Tastenkürzel"],"Espaço":["Space","Espacio","Espace","Leertaste"],"Quantidade":["Quantity","Cantidad","Quantité","Anzahl"],"Copiar":["Copy","Copiar","Copier","Kopieren"],"Desfazer":["Undo","Deshacer","Annuler","Rückgängig"],"Editor":["Editor","Editor","Éditeur","Editor"],"Arquivos":["Files","Archivos","Fichiers","Dateien"],"Configurações":["Settings","Configuración","Paramètres","Einstellungen"],"Tela cheia":["Fullscreen","Pantalla completa","Plein écran","Vollbild"],"Modo compacto":["Compact mode","Modo compacto","Mode compact","Kompaktmodus"],"Editar decks":["Edit decks","Editar mazos","Modifier les paquets","Decks bearbeiten"],"Arquivos (A)":["Files (A)","Archivos (A)","Fichiers (A)","Dateien (A)"],"Editar decks (E)":["Edit decks (E)","Editar mazos (E)","Modifier les paquets (E)","Decks bearbeiten (E)"],"Configurações (S)":["Settings (S)","Configuración (S)","Paramètres (S)","Einstellungen (S)"],"Tela cheia (F)":["Fullscreen (F)","Pantalla completa (F)","Plein écran (F)","Vollbild (F)"],"Sair da tela cheia":["Exit fullscreen","Salir de pantalla completa","Quitter le plein écran","Vollbild verlassen"],"✕ Sair":["✕ Exit","✕ Salir","✕ Quitter","✕ Schließen"],"Desafios acompanhados":["Tracked challenges","Desafíos seguidos","Défis suivis","Verfolgte Herausforderungen"],"Ver ou esconder":["Show or hide","Mostrar u ocultar","Afficher ou masquer","Ein- oder ausblenden"],"Marque o resultado quando terminar. Os detalhes são opcionais.":["Mark your result when done. Details are optional.","Marca el resultado al terminar. Los detalles son opcionales.","Indiquez le résultat à la fin. Les détails sont facultatifs.","Ergebnis nach Abschluss markieren. Details sind optional."],"Progresso das missões":["Mission progress","Progreso de misiones","Progression des missions","Missionsfortschritt"],"Filtrar missões":["Filter missions","Filtrar misiones","Filtrer les missions","Missionen filtern"],"Em aberto":["Open","Pendientes","En cours","Offen"],"Finalizadas":["Completed","Finalizadas","Terminées","Abgeschlossen"],"Todas":["All","Todas","Toutes","Alle"],"Últimos sorteios":["Recent draws","Últimos sorteos","Derniers tirages","Letzte Ziehungen"],"Nenhum sorteio ainda.":["No draws yet.","Aún no hay sorteos.","Aucun tirage pour le moment.","Noch keine Ziehungen."],"Limpar histórico":["Clear history","Borrar historial","Effacer l’historique","Verlauf löschen"],"Projeto de fã, sem vínculo com a Valve. Deadlock é marca da Valve Corporation.":["Fan project, not affiliated with Valve. Deadlock is a trademark of Valve Corporation.","Proyecto de fans sin relación con Valve. Deadlock es una marca de Valve Corporation.","Projet de fans sans affiliation avec Valve. Deadlock est une marque de Valve Corporation.","Fanprojekt ohne Verbindung zu Valve. Deadlock ist eine Marke der Valve Corporation."],"Atualização":["Update","Actualización","Mise à jour","Aktualisierung"],"Bem-vindo ao DeckLock!":["Welcome to DeckLock!","¡Bienvenido a DeckLock!","Bienvenue sur DeckLock !","Willkommen bei DeckLock!"],"Escolha um deck e clique em":["Choose a deck and click","Elige un mazo y pulsa","Choisissez un paquet et cliquez sur","Wähle ein Deck und klicke auf"],". Você também pode criar seus próprios decks no editor.":[". You can also create your own decks in the editor.",". También puedes crear tus propios mazos en el editor.",". Vous pouvez aussi créer vos propres paquets dans l’éditeur.",". Im Editor kannst du auch eigene Decks erstellen."],"Não mostrar novamente":["Don't show again","No volver a mostrar","Ne plus afficher","Nicht mehr anzeigen"],"Editor de decks":["Deck editor","Editor de mazos","Éditeur de paquets","Deck-Editor"],"Salvar tudo em arquivo":["Save everything to file","Guardar todo en archivo","Tout enregistrer dans un fichier","Alles als Datei speichern"],"Importar arquivo":["Import file","Importar archivo","Importer un fichier","Datei importieren"],"Fechar":["Close","Cerrar","Fermer","Schließen"],"Deck":["Deck","Mazo","Paquet","Deck"],"Novo deck":["New deck","Nuevo mazo","Nouveau paquet","Neues Deck"],"Renomear":["Rename","Renombrar","Renommer","Umbenennen"],"Excluir deck":["Delete deck","Eliminar mazo","Supprimer le paquet","Deck löschen"],"Nova carta":["New card","Nueva carta","Nouvelle carte","Neue Karte"],"Remover todos os decks":["Remove all decks","Eliminar todos los mazos","Supprimer tous les paquets","Alle Decks entfernen"],"Buscar carta…":["Search cards…","Buscar carta…","Rechercher une carte…","Karte suchen…"],"Buscar carta":["Search cards","Buscar cartas","Rechercher des cartes","Karten suchen"],"Adicionar aos meus decks":["Add to my decks","Añadir a mis mazos","Ajouter à mes paquets","Zu meinen Decks hinzufügen"],"Substituir tudo":["Replace everything","Reemplazar todo","Tout remplacer","Alles ersetzen"],"Cancelar":["Cancel","Cancelar","Annuler","Abbrechen"],"Relatório de desafios":["Challenge report","Informe de desafíos","Rapport des défis","Herausforderungsbericht"],"Copiar relatório":["Copy report","Copiar informe","Copier le rapport","Bericht kopieren"],"Baixar .txt":["Download .txt","Descargar .txt","Télécharger .txt","TXT herunterladen"],"Nova sessão":["New session","Nueva sesión","Nouvelle session","Neue Sitzung"],"Deck compartilhado":["Shared deck","Mazo compartido","Paquet partagé","Geteiltes Deck"],"Adicionar":["Add","Añadir","Ajouter","Hinzufügen"],"Importar por código":["Import by code","Importar por código","Importer par code","Per Code importieren"],"Decks prontos":["Ready-made decks","Mazos preparados","Paquets prêts à l’emploi","Fertige Decks"],"Pacote completo":["Full collection","Paquete completo","Collection complète","Gesamtpaket"],"Seus decks":["Your decks","Tus mazos","Vos paquets","Deine Decks"],"Seus dados":["Your data","Tus datos","Vos données","Deine Daten"],"Backup completo":["Full backup","Copia completa","Sauvegarde complète","Vollständiges Backup"],"Backups automáticos":["Automatic backups","Copias automáticas","Sauvegardes automatiques","Automatische Backups"],"Baixar":["Download","Descargar","Télécharger","Herunterladen"],"Adicionar ao site":["Add to site","Añadir al sitio","Ajouter au site","Zur Website hinzufügen"],"Restaurar tudo":["Restore all","Restaurar todo","Tout restaurer","Alles wiederherstellen"],"Apagar":["Delete","Borrar","Supprimer","Löschen"],"Código ou link de deck":["Deck code or link","Código o enlace de mazo","Code ou lien du paquet","Deck-Code oder -Link"],"Cole um código ou link de deck":["Paste a deck code or link","Pega un código o enlace de mazo","Collez un code ou un lien de paquet","Deck-Code oder Link einfügen"],"Importar código":["Import code","Importar código","Importer le code","Code importieren"],"Para usar um arquivo baixado depois, vá em Editar decks e clique em Importar arquivo.":["To use a downloaded file later, open Edit decks and click Import file.","Para usar después un archivo descargado, abre Editar mazos y pulsa Importar archivo.","Pour utiliser un fichier téléchargé, ouvrez Modifier les paquets et cliquez sur Importer un fichier.","Um eine heruntergeladene Datei zu nutzen, öffne Decks bearbeiten und wähle Datei importieren."],"Perfis de estilo":["Style profiles","Perfiles de estilo","Profils de style","Stilprofile"],"Perfil":["Profile","Perfil","Profil","Profil"],"Perfis prontos":["Built-in profiles","Perfiles predeterminados","Profils prédéfinis","Voreingestellte Profile"],"Meus perfis":["My profiles","Mis perfiles","Mes profils","Meine Profile"],"Personalizado":["Custom","Personalizado","Personnalisé","Benutzerdefiniert"],"Salvar estilo atual como perfil":["Save current style as profile","Guardar estilo actual como perfil","Enregistrer le style actuel comme profil","Aktuellen Stil als Profil speichern"],"Atualizar perfil":["Update profile","Actualizar perfil","Mettre le profil à jour","Profil aktualisieren"],"Excluir":["Delete","Eliminar","Supprimer","Löschen"],"Cores":["Colors","Colores","Couleurs","Farben"],"Cartas":["Cards","Cartas","Cartes","Karten"],"Fundo da frente da carta":["Card front background","Fondo del frente de la carta","Fond du recto de la carte","Vorderseitenhintergrund"],"Verso das cartas":["Card backs","Reverso de las cartas","Dos des cartes","Kartenrückseiten"],"Fundo do site":["Site background","Fondo del sitio","Fond du site","Website-Hintergrund"],"Aparência":["Appearance","Apariencia","Apparence","Darstellung"],"Animação e som":["Animation and sound","Animación y sonido","Animation et son","Animation und Ton"],"Animações por raridade":["Animations by rarity","Animaciones por rareza","Animations par rareté","Animationen nach Seltenheit"],"Modos de jogo":["Game modes","Modos de juego","Modes de jeu","Spielmodi"],"Sorteio":["Drawing","Sorteo","Tirage","Ziehung"],"Dados":["Data","Datos","Données","Daten"],"Sorteio e modos de jogo":["Drawing and game modes","Sorteo y modos de juego","Tirage et modes de jeu","Ziehung und Spielmodi"],"Animações e sons":["Animations and sounds","Animaciones y sonidos","Animations et sons","Animationen und Töne"],"Dados e segurança":["Data and security","Datos y seguridad","Données et sécurité","Daten und Sicherheit"],"Fundo":["Background","Fondo","Fond","Hintergrund"],"Fundo secundário":["Secondary background","Fondo secundario","Fond secondaire","Sekundärer Hintergrund"],"Painéis":["Panels","Paneles","Panneaux","Bedienfelder"],"Texto":["Text","Texto","Texte","Text"],"Texto suave":["Muted text","Texto tenue","Texte discret","Dezenter Text"],"Destaque":["Highlight","Destacado","Accent","Akzent"],"Carta rara":["Rare card","Carta rara","Carte rare","Seltene Karte"],"Carta lendária":["Legendary card","Carta legendaria","Carte légendaire","Legendäre Karte"],"Bordas":["Borders","Bordes","Bordures","Rahmen"],"Fonte dos títulos":["Heading font","Fuente de títulos","Police des titres","Überschriftenschrift"],"Tamanho da carta":["Card size","Tamaño de carta","Taille de la carte","Kartengröße"],"Intensidade do fundo":["Background intensity","Intensidad del fondo","Intensité du fond","Hintergrundintensität"],"Intensidade dos efeitos":["Effect intensity","Intensidad de efectos","Intensité des effets","Effektintensität"],"Animações ligadas":["Animations enabled","Animaciones activadas","Animations activées","Animationen aktiviert"],"Duração da virada":["Flip duration","Duración del giro","Durée du retournement","Dauer des Umdrehens"],"Sons ligados":["Sound enabled","Sonidos activados","Sons activés","Ton aktiviert"],"Pacote de sons":["Sound pack","Paquete de sonidos","Pack sonore","Soundpaket"],"Entrada":["Entrance","Entrada","Entrée","Eingang"],"Efeito":["Effect","Efecto","Effet","Effekt"],"Testar":["Test","Probar","Tester","Testen"],"Tamanho do baralho finito (sorteios)":["Limited-deck size (draws)","Tamaño de mazo limitado (sorteos)","Taille du paquet limité (tirages)","Größe des begrenzten Decks (Ziehungen)"],"Modo compacto (só cartas e controles essenciais)":["Compact mode (cards and essential controls only)","Modo compacto (solo cartas y controles esenciales)","Mode compact (cartes et commandes essentielles)","Kompaktmodus (nur Karten und wichtige Bedienelemente)"],"Percorrer o deck inteiro antes de repetir cartas":["Go through the whole deck before repeating cards","Recorrer todo el mazo antes de repetir cartas","Parcourir tout le paquet avant de répéter des cartes","Ganzes Deck durchlaufen, bevor Karten wiederholt werden"],"Evitar repetir as cartas do sorteio anterior":["Avoid repeating cards from the previous draw","Evitar repetir cartas del sorteo anterior","Éviter de répéter les cartes du tirage précédent","Karten der letzten Ziehung nicht wiederholen"],"Mostrar histórico":["Show history","Mostrar historial","Afficher l’historique","Verlauf anzeigen"],"Trocas permitidas por sorteio (0 = ilimitado)":["Rerolls allowed per draw (0 = unlimited)","Cambios permitidos por sorteo (0 = ilimitado)","Échanges autorisés par tirage (0 = illimité)","Erlaubte Neuziehungen pro Runde (0 = unbegrenzt)"],"Chance de cada raridade (pesos relativos; 0 desliga a raridade):":["Chance per rarity (relative weights; 0 disables rarity):","Probabilidad por rareza (pesos relativos; 0 desactiva la rareza):","Chance par rareté (poids relatifs ; 0 désactive la rareté) :","Chance pro Seltenheit (relative Gewichte; 0 deaktiviert die Seltenheit):"],"Peso Comum":["Common weight","Peso común","Poids commun","Gewichtung Gewöhnlich"],"Peso Rara":["Rare weight","Peso rara","Poids rare","Gewichtung Selten"],"Peso Lendária":["Legendary weight","Peso legendaria","Poids légendaire","Gewichtung Legendär"],"Comum":["Common","Común","Commune","Gewöhnlich"],"Rara":["Rare","Rara","Rare","Selten"],"Lendária":["Legendary","Legendaria","Légendaire","Legendär"],"Geral":["General","General","Général","Allgemein"],"Handicap":["Handicap","Desventaja","Handicap","Handicap"],"Build":["Build","Build","Build","Build"],"Objetivo":["Objective","Objetivo","Objectif","Ziel"],"Comunicação":["Communication","Comunicación","Communication","Kommunikation"],"Individual":["Solo","Individual","Individuel","Einzel"],"Herói":["Hero","Héroe","Héros","Held"],"Liso":["Plain","Liso","Uni","Einfarbig"],"Olho":["Eye","Ojo","Œil","Auge"],"Listras":["Stripes","Rayas","Rayures","Streifen"],"Losangos":["Diamonds","Rombos","Losanges","Rauten"],"Raios":["Rays","Rayos","Rayons","Strahlen"],"Losango":["Diamond","Rombo","Losange","Raute"],"Imagem":["Image","Imagen","Image","Bild"],"Plano":["Plain","Plano","Uni","Einfarbig"],"Brilho suave":["Soft glow","Brillo suave","Lueur douce","Sanftes Leuchten"],"Aurora":["Aurora","Aurora","Aurore","Aurora"],"Holofote":["Spotlight","Foco","Projecteur","Scheinwerfer"],"Degradê":["Gradient","Degradado","Dégradé","Farbverlauf"],"Vinheta":["Vignette","Viñeta","Vignette","Vignette"],"Pontos":["Dots","Puntos","Points","Punkte"],"Granulado":["Grain","Granulado","Grain","Körnung"],"Serifada":["Serif","Con serifa","Avec empattement","Serifenschrift"],"Sem serifa":["Sans-serif","Sin serifa","Sans empattement","Serifenlos"],"Condensada":["Condensed","Condensada","Condensée","Schmal"],"Giro duplo":["Double spin","Giro doble","Double rotation","Doppeldrehung"],"Subir":["Rise","Subir","Monter","Aufsteigen"],"Cair com quique":["Drop and bounce","Caer y rebotar","Tomber avec rebond","Fallen und abprallen"],"Zoom":["Zoom","Zoom","Zoom","Zoom"],"Deslizar":["Slide","Deslizar","Glisser","Hereingleiten"],"Tremer":["Shake","Temblar","Secouer","Zittern"],"Inclinar 3D":["3D tilt","Inclinar 3D","Inclinaison 3D","3D-Neigung"],"Nenhum":["None","Ninguno","Aucun","Keiner"],"Ondas de luz":["Light waves","Ondas de luz","Ondes lumineuses","Lichtwellen"],"Faíscas":["Sparks","Chispas","Étincelles","Funken"],"Confete":["Confetti","Confeti","Confettis","Konfetti"],"Clarão":["Flash","Destello","Éclair","Blitz"],"Chuva de brilho":["Sparkle rain","Lluvia brillante","Pluie d’étincelles","Glitzerregen"],"Explosão (tudo junto)":["Burst (all together)","Explosión (todo junto)","Explosion (tout ensemble)","Explosion (alles zusammen)"],"Virar (padrão)":["Flip (default)","Girar (predeterminado)","Retourner (défaut)","Umdrehen (Standard)"],"Suave":["Soft","Suave","Doux","Sanft"],"Cassino":["Casino","Casino","Casino","Casino"],"Máquina de escrever":["Typewriter","Máquina de escribir","Machine à écrire","Schreibmaschine"],"Magia de palco":["Stage magic","Magia escénica","Magie de scène","Bühnenmagie"],"Arcade retrô":["Retro arcade","Arcade retro","Arcade rétro","Retro-Arcade"],"Enviar imagem para o verso":["Upload back image","Subir imagen de reverso","Importer une image pour le dos","Bild für Kartenrückseite hochladen"],"Trocar imagem do verso":["Change back image","Cambiar imagen del reverso","Changer l’image du dos","Rückseitenbild ändern"],"Remover imagem do verso":["Remove back image","Quitar imagen del reverso","Supprimer l’image du dos","Rückseitenbild entfernen"],"Restaurar configurações padrão":["Restore default settings","Restaurar configuración predeterminada","Restaurer les paramètres par défaut","Standardeinstellungen wiederherstellen"],"Apagar todos os dados e voltar ao início":["Erase all data and reset","Borrar todos los datos y reiniciar","Effacer toutes les données et réinitialiser","Alle Daten löschen und zurücksetzen"],"Um perfil guarda cores, fonte, tamanho da carta e verso.":["A profile saves colors, font, card size and back.","Un perfil guarda colores, fuente, tamaño de carta y reverso.","Un profil enregistre les couleurs, la police, la taille et le dos des cartes.","Ein Profil speichert Farben, Schrift, Kartengröße und Rückseite."],"O estilo foi alterado em relação ao perfil escolhido. Use 'Atualizar perfil' ou 'Salvar estilo atual como perfil' para guardar.":["Style differs from the selected profile. Use Update profile or Save current style as profile to keep it.","El estilo difiere del perfil elegido. Usa Actualizar perfil o Guardar estilo actual como perfil.","Le style diffère du profil choisi. Utilisez Mettre le profil à jour ou Enregistrer le style actuel comme profil.","Der Stil wurde geändert. Nutze Profil aktualisieren oder Aktuellen Stil als Profil speichern."],"Cada raridade pode ter uma entrada e um efeito diferentes. Use Testar para ver.":["Each rarity can have a different entrance and effect. Select Test to preview.","Cada rareza puede tener una entrada y un efecto distintos. Usa Probar.","Chaque rareté peut avoir une entrée et un effet différents. Utilisez Tester.","Jede Seltenheit kann eine andere Animation und einen anderen Effekt haben. Mit Testen ansehen."],"Título":["Title","Título","Titre","Titel"],"Categoria":["Category","Categoría","Catégorie","Kategorie"],"Raridade":["Rarity","Rareza","Rareté","Seltenheit"],"Escolher imagem":["Choose image","Elegir imagen","Choisir une image","Bild auswählen"],"Remover imagem":["Remove image","Quitar imagen","Supprimer l’image","Bild entfernen"],"Duplicar":["Duplicate","Duplicar","Dupliquer","Duplizieren"],"Excluir carta":["Delete card","Eliminar carta","Supprimer la carte","Karte löschen"],"Subir na lista":["Move up","Subir en la lista","Monter dans la liste","Nach oben"],"Descer na lista":["Move down","Bajar en la lista","Descendre dans la liste","Nach unten"],"Favorita (sai com mais frequência)":["Favorite (appears more often)","Favorita (aparece con más frecuencia)","Favorite (sort plus souvent)","Favorit (erscheint häufiger)"],"Fora do sorteio por enquanto":["Exclude from draws for now","Excluir del sorteo por ahora","Exclure des tirages pour le moment","Vorübergehend nicht ziehen"],"Imagem da carta":["Card image","Imagen de la carta","Image de la carte","Kartenbild"],"Descreva a regra aqui.":["Describe the rule here.","Describe la regla aquí.","Décrivez la règle ici.","Beschreibe hier die Regel."],"Nada encontrado.":["No results found.","No se encontraron resultados.","Aucun résultat.","Keine Ergebnisse."],"Deck vazio.":["Empty deck.","Mazo vacío.","Paquet vide.","Leeres Deck."],"Nenhum deck ainda.":["No decks yet.","Aún no hay mazos.","Aucun paquet pour le moment.","Noch keine Decks."],"Selecione ou crie uma carta.":["Select or create a card.","Selecciona o crea una carta.","Choisissez ou créez une carte.","Karte auswählen oder erstellen."],"Crie um deck ou carregue um arquivo para começar.":["Create a deck or import a file to get started.","Crea un mazo o importa un archivo para empezar.","Créez un paquet ou importez un fichier pour commencer.","Erstelle ein Deck oder importiere eine Datei."],"Nenhum deck por aqui ainda":["No decks here yet","Aún no hay mazos aquí","Aucun paquet ici pour le moment","Hier gibt es noch keine Decks"],"Carregar arquivo":["Load file","Cargar archivo","Charger un fichier","Datei laden"],"Criar deck":["Create deck","Crear mazo","Créer un paquet","Deck erstellen"],"Selecione ao menos um deck.":["Select at least one deck.","Selecciona al menos un mazo.","Choisissez au moins un paquet.","Wähle mindestens ein Deck."],"Trocar":["Reroll","Cambiar","Changer","Neu ziehen"],"↻ Trocar":["↻ Reroll","↻ Cambiar","↻ Changer","↻ Neu ziehen"],"＋ Assumir desafio":["＋ Accept challenge","＋ Aceptar desafío","＋ Accepter le défi","＋ Herausforderung annehmen"],"Missão cumprida":["Mission completed","Misión cumplida","Mission réussie","Mission abgeschlossen"],"Cumprida":["Completed","Cumplida","Réussie","Erfüllt"],"Não cumprida":["Failed","No cumplida","Non réussie","Nicht erfüllt"],"Em andamento":["In progress","En curso","En cours","In Bearbeitung"],"Pausada":["Paused","Pausada","En pause","Pausiert"],"Cumpridas":["Completed","Cumplidas","Réussies","Erfüllt"],"Falhas":["Failed","Fallidas","Échecs","Fehlgeschlagen"],"Responsável":["Assigned to","Responsable","Responsable","Verantwortlich"],"Observação (opcional)":["Note (optional)","Nota (opcional)","Note (facultative)","Notiz (optional)"],"Responsável e anotação (opcional)":["Assigned to and note (optional)","Responsable y nota (opcional)","Responsable et note (facultatif)","Zuständig und Notiz (optional)"],"✓ Cumpriu":["✓ Completed","✓ Cumplido","✓ Réussi","✓ Erfüllt"],"✕ Não cumpriu":["✕ Failed","✕ No cumplido","✕ Échec","✕ Nicht erfüllt"],"Retomar":["Resume","Reanudar","Reprendre","Fortsetzen"],"Pausar":["Pause","Pausar","Mettre en pause","Pausieren"],"↶ Reabrir":["↶ Reopen","↶ Reabrir","↶ Rouvrir","↶ Wieder öffnen"],"Remover":["Remove","Quitar","Supprimer","Entfernen"],"Não assumida":["Not accepted","No aceptada","Non acceptée","Nicht angenommen"],"Nenhuma missão assumida.":["No missions accepted.","No se aceptaron misiones.","Aucune mission acceptée.","Keine Missionen angenommen."],"Sessão atual":["Current session","Sesión actual","Session actuelle","Aktuelle Sitzung"],"Selecionar sessão":["Select session","Seleccionar sesión","Sélectionner une session","Sitzung auswählen"],"Resultado da partida":["Match result","Resultado de partida","Résultat de la partie","Spielergebnis"],"Não informado":["Not specified","No indicado","Non renseigné","Nicht angegeben"],"Vitória":["Victory","Victoria","Victoire","Sieg"],"Derrota":["Defeat","Derrota","Défaite","Niederlage"],"Observação da partida":["Match notes","Nota de partida","Note sur la partie","Spielnotizen"],"Desafios assumidos":["Accepted challenges","Desafíos aceptados","Défis acceptés","Angenommene Herausforderungen"],"Cumpridos":["Completed","Cumplidos","Réussis","Erfüllt"],"Não cumpridos":["Failed","No cumplidos","Non réussis","Nicht erfüllt"],"Sucesso nos finalizados":["Success rate","Éxito en finalizados","Taux de réussite","Erfolgsquote"],"Cartas sorteadas por raridade":["Cards by rarity","Cartas por rareza","Cartes par rareté","Karten nach Seltenheit"],"Resultados dos desafios":["Challenge results","Resultados de desafíos","Résultats des défis","Herausforderungsergebnisse"],"Linha do tempo de sorteios":["Draw timeline","Cronología de sorteos","Historique des tirages","Ziehungsverlauf"],"Nenhuma carta foi assumida como missão nesta sessão.":["No cards accepted as missions in this session.","No hay cartas aceptadas como misiones en esta sesión.","Aucune carte acceptée comme mission dans cette session.","In dieser Sitzung wurden keine Karten als Mission angenommen."],"Nenhum sorteio nesta sessão.":["No draws in this session.","No hay sorteos en esta sesión.","Aucun tirage dans cette session.","Keine Ziehungen in dieser Sitzung."],"Nenhuma missão finalizada ainda.":["No completed missions yet.","Aún no hay misiones finalizadas.","Aucune mission terminée pour le moment.","Noch keine abgeschlossenen Missionen."],"Nenhuma missão nesta sessão.":["No missions in this session.","No hay misiones en esta sesión.","Aucune mission dans cette session.","Keine Missionen in dieser Sitzung."],"Não foi possível copiar neste navegador.":["Could not copy in this browser.","No se pudo copiar en este navegador.","Copie impossible dans ce navigateur.","Kopieren in diesem Browser nicht möglich."],"Copiado.":["Copied.","Copiado.","Copié.","Kopiert."],"Sorteio copiado.":["Draw copied.","Sorteo copiado.","Tirage copié.","Ziehung kopiert."],"Imagem copiada. Cole no Discord ou WhatsApp.":["Image copied. Paste into Discord or WhatsApp.","Imagen copiada. Pégala en Discord o WhatsApp.","Image copiée. Collez-la dans Discord ou WhatsApp.","Bild kopiert. In Discord oder WhatsApp einfügen."],"Imagem PNG salva.":["PNG saved.","PNG guardado.","PNG enregistré.","PNG gespeichert."],"Não foi possível copiar a imagem neste navegador. Use ‘Baixar PNG’.":["Could not copy the image in this browser. Use Download PNG.","No se pudo copiar la imagen. Usa Descargar PNG.","Impossible de copier l’image. Utilisez Télécharger PNG.","Bild konnte nicht kopiert werden. Bitte PNG herunterladen."],"Não foi possível gerar a imagem.":["Could not generate the image.","No se pudo generar la imagen.","Impossible de générer l’image.","Bild konnte nicht erstellt werden."],"Preparando…":["Preparing…","Preparando…","Préparation…","Wird vorbereitet…"],"Sorteie primeiro.":["Draw a card first.","Primero saca una carta.","Tirez d’abord une carte.","Ziehe zuerst eine Karte."],"Selecione um deck acima para sortear.":["Select a deck above to draw from.","Elige un mazo arriba para sortear.","Choisissez un paquet ci-dessus.","Wähle oben ein Deck aus."],"Você ainda não tem decks. Crie um deck ou importe um arquivo.":["You have no decks yet. Create one or import a file.","Aún no tienes mazos. Crea uno o importa un archivo.","Vous n’avez pas encore de paquets. Créez-en un ou importez un fichier.","Du hast noch keine Decks. Erstelle eines oder importiere eine Datei."],"Os decks selecionados não têm cartas ativas. Confira o editor.":["Selected decks have no active cards. Check the editor.","Los mazos seleccionados no tienen cartas activas. Revisa el editor.","Les paquets choisis n’ont aucune carte active. Vérifiez l’éditeur.","Die gewählten Decks enthalten keine aktiven Karten. Bitte im Editor prüfen."],"Nenhuma raridade disponível. Confira os pesos em Configurações.":["No rarity available. Check the weights in Settings.","No hay rarezas disponibles. Revisa los pesos en Configuración.","Aucune rareté disponible. Vérifiez les poids dans Paramètres.","Keine Seltenheit verfügbar. Prüfe die Gewichtung in Einstellungen."],"Nenhuma carta corresponde aos filtros atuais.":["No cards match the current filters.","No hay cartas que coincidan con los filtros.","Aucune carte ne correspond aux filtres.","Keine Karte passt zu den Filtern."],"Nenhuma raridade disponível.":["No rarity available.","No hay rarezas disponibles.","Aucune rareté disponible.","Keine Seltenheit verfügbar."],"Filtros removidos.":["Filters cleared.","Filtros borrados.","Filtres effacés.","Filter zurückgesetzt."],"Último sorteio desfeito.":["Last draw undone.","Último sorteo deshecho.","Dernier tirage annulé.","Letzte Ziehung rückgängig gemacht."],"No modo Clássico a carta sorteada vale.":["No rerolls in Classic mode.","En modo Clásico no se puede cambiar la carta.","En mode Classique, la carte tirée est définitive.","Im klassischen Modus bleibt die gezogene Karte."],"Limite de trocas atingido.":["Reroll limit reached.","Límite de cambios alcanzado.","Limite de changements atteinte.","Limit für Neuziehungen erreicht."],"Remova a missão no painel antes de trocar esta carta.":["Remove the mission from the panel before rerolling this card.","Quita la misión del panel antes de cambiar esta carta.","Retirez la mission du panneau avant de changer cette carte.","Entferne zuerst die Mission, bevor du diese Karte neu ziehst."],"Não há outra carta disponível nesta categoria e raridade.":["No other card is available in this category and rarity.","No hay otra carta de esta categoría y rareza.","Aucune autre carte dans cette catégorie et rareté.","Keine weitere Karte dieser Kategorie und Seltenheit verfügbar."],"Baralho renovado. Novo ciclo iniciado.":["Deck refreshed. New cycle started.","Mazo renovado. Nuevo ciclo iniciado.","Paquet renouvelé. Nouveau cycle lancé.","Deck erneuert. Neuer Durchlauf gestartet."],"Acompanhamento ativado para os próximos sorteios.":["Tracking enabled for future draws.","Seguimiento activado para los próximos sorteos.","Suivi activé pour les prochains tirages.","Verfolgung für künftige Ziehungen aktiviert."],"Acompanhamento desligado. Agora é só sortear.":["Tracking disabled. Just draw cards.","Seguimiento desactivado. Ya puedes sortear.","Suivi désactivé. Il suffit de tirer des cartes.","Verfolgung deaktiviert. Einfach Karten ziehen."],"Nova sessão iniciada. A anterior está no relatório.":["New session started. The previous one is in the report.","Nueva sesión iniciada. La anterior está en el informe.","Nouvelle session commencée. La précédente est dans le rapport.","Neue Sitzung begonnen. Die vorherige steht im Bericht."],"Relatório copiado.":["Report copied.","Informe copiado.","Rapport copié.","Bericht kopiert."],"Arquivo baixado.":["File downloaded.","Archivo descargado.","Fichier téléchargé.","Datei heruntergeladen."],"Código copiado (sem imagens).":["Code copied (without images).","Código copiado (sin imágenes).","Code copié (sans images).","Code kopiert (ohne Bilder)."],"Link copiado (sem imagens).":["Link copied (without images).","Enlace copiado (sin imágenes).","Lien copié (sans images).","Link kopiert (ohne Bilder)."],"Não foi possível gerar o código.":["Could not generate the code.","No se pudo generar el código.","Impossible de générer le code.","Code konnte nicht erzeugt werden."],"Código inválido, grande demais ou não suportado por este navegador.":["Invalid code, too large or not supported by this browser.","Código inválido, demasiado grande o no compatible.","Code invalide, trop volumineux ou non pris en charge.","Ungültiger, zu großer oder nicht unterstützter Code."],"Não foi possível restaurar o backup.":["Could not restore the backup.","No se pudo restaurar la copia.","Impossible de restaurer la sauvegarde.","Backup konnte nicht wiederhergestellt werden."],"Não foi possível salvar no navegador. Exporte um backup em Arquivos.":["Unable to save in this browser. Export a backup under Files.","No se pudo guardar. Exporta una copia en Archivos.","Impossible d’enregistrer. Exportez une sauvegarde sous Fichiers.","Speichern fehlgeschlagen. Exportiere ein Backup unter Dateien."],"O estilo foi alterado em relação ao perfil escolhido.":["The style differs from the selected profile.","El estilo difiere del perfil seleccionado.","Le style diffère du profil choisi.","Der Stil weicht vom gewählten Profil ab."],"Perfil salvo.":["Profile saved.","Perfil guardado.","Profil enregistré.","Profil gespeichert."],"Perfil atualizado.":["Profile updated.","Perfil actualizado.","Profil mis à jour.","Profil aktualisiert."],"Perfil excluído.":["Profile deleted.","Perfil eliminado.","Profil supprimé.","Profil gelöscht."],"Verso aplicado.":["Card back applied.","Reverso aplicado.","Dos de carte appliqué.","Kartenrückseite angewendet."],"Imagem aplicada.":["Image applied.","Imagen aplicada.","Image appliquée.","Bild angewendet."],"Carta duplicada.":["Card duplicated.","Carta duplicada.","Carte dupliquée.","Karte dupliziert."],"Carta excluída.":["Card deleted.","Carta eliminada.","Carte supprimée.","Karte gelöscht."],"Todos os decks removidos.":["All decks removed.","Todos los mazos eliminados.","Tous les paquets supprimés.","Alle Decks entfernt."],"Não foi possível processar a imagem.":["Could not process the image.","No se pudo procesar la imagen.","Impossible de traiter l’image.","Bild konnte nicht verarbeitet werden."],"Imagem muito grande. Escolha uma imagem de até 12 MB.":["Image too large. Choose an image under 12 MB.","Imagen demasiado grande. Elige una imagen de hasta 12 MB.","Image trop volumineuse. Choisissez une image de 12 Mo maximum.","Bild zu groß. Bitte ein Bild bis 12 MB wählen."],"Formato não suportado. Use PNG, JPG, WebP ou GIF.":["Unsupported format. Use PNG, JPG, WebP or GIF.","Formato no compatible. Usa PNG, JPG, WebP o GIF.","Format non pris en charge. Utilisez PNG, JPG, WebP ou GIF.","Nicht unterstütztes Format. PNG, JPG, WebP oder GIF verwenden."],"Resolução muito alta. Escolha uma imagem com até 24 megapixels.":["Resolution too high. Choose an image under 24 megapixels.","Resolución demasiado alta. Elige una imagen de hasta 24 megapíxeles.","Résolution trop élevée. Choisissez une image de 24 mégapixels maximum.","Auflösung zu hoch. Bitte höchstens 24 Megapixel verwenden."],"A imagem excede o limite de armazenamento. Use uma imagem menor.":["Image exceeds storage limits. Use a smaller image.","La imagen excede el límite de almacenamiento. Usa una más pequeña.","L’image dépasse la limite de stockage. Utilisez-en une plus petite.","Bild überschreitet das Speicherlimit. Bitte kleineres Bild wählen."],"Não foi possível ler a imagem.":["Could not read the image.","No se pudo leer la imagen.","Impossible de lire l’image.","Bild konnte nicht gelesen werden."],"Arquivo de imagem inválido.":["Invalid image file.","Archivo de imagen inválido.","Fichier image invalide.","Ungültige Bilddatei."],"Atualizar":["Update","Actualizar","Mettre à jour","Aktualisieren"],"Nova versão do DeckLock disponível":["New DeckLock version available","Nueva versión de DeckLock disponible","Nouvelle version de DeckLock disponible","Neue DeckLock-Version verfügbar"],"Nome do novo deck:":["New deck name:","Nombre del nuevo mazo:","Nom du nouveau paquet :","Name des neuen Decks:"],"Novo nome do deck:":["New deck name:","Nuevo nombre del mazo:","Nouveau nom du paquet :","Neuer Deckname:"],"Nome do perfil:":["Profile name:","Nombre del perfil:","Nom du profil :","Profilname:"],"Novo nome:":["New name:","Nuevo nombre:","Nouveau nom :","Neuer Name:"],"Apagar de vez este backup?":["Permanently delete this backup?","¿Borrar esta copia definitivamente?","Supprimer définitivement cette sauvegarde ?","Dieses Backup endgültig löschen?"],"Grupo":["Group","Grupo","Groupe","Gruppe"],"Heróis":["Heroes","Héroes","Héros","Helden"],"Aparência e estilo":["Appearance and style","Apariencia y estilo","Apparence et style","Aussehen und Stil"],"⌨ Atalhos de teclado":["⌨ Keyboard shortcuts","⌨ Atajos de teclado","⌨ Raccourcis clavier","⌨ Tastenkürzel"],"· Espaço: sortear · 1–8: quantidade":["· Space: draw · 1–8: quantity","· Espacio: sortear · 1–8: cantidad","· Espace : tirer · 1–8 : quantité","· Leertaste: ziehen · 1–8: Anzahl"],"Degradê suave":["Soft gradient","Degradado suave","Dégradé doux","Sanfter Farbverlauf"],"Decks, configurações, missões e relatórios de sessões":["Decks, settings, missions and session reports","Mazos, ajustes, misiones e informes de sesiones","Paquets, réglages, missions et rapports de session","Decks, Einstellungen, Missionen und Sitzungsberichte"],"O DeckLock foi atualizado.":["DeckLock has been updated.","DeckLock se ha actualizado.","DeckLock a été mis à jour.","DeckLock wurde aktualisiert."],"Perfis":["Profiles","Perfiles","Profils","Profile"],"Deadlock Creme":["Deadlock Cream","Deadlock Crema","Deadlock Crème","Deadlock Creme"],"Âmbar quente":["Warm amber","Ámbar cálido","Ambre chaud","Warmes Bernstein"],"Safira":["Sapphire","Zafiro","Saphir","Saphir"],"Esmeralda":["Emerald","Esmeralda","Émeraude","Smaragd"],"Rubi":["Ruby","Rubí","Rubis","Rubin"],"Claro":["Light","Claro","Clair","Hell"],"Grupos":["Groups","Grupos","Groupes","Gruppen"],"Lista":["List","Lista","Liste","Liste"],"Foram encontrados":["Found","Se encontraron","Résultats trouvés","Gefunden"],"Resumo":["Summary","Resumen","Résumé","Zusammenfassung"],"Sair":["Exit","Salir","Quitter","Verlassen"],"Novo perfil":["New profile","Nuevo perfil","Nouveau profil","Neues Profil"],"Escolha uma imagem":["Choose an image","Elige una imagen","Choisir une image","Bild auswählen"],"Trocar imagem":["Change image","Cambiar imagen","Changer l’image","Bild ändern"],"Adicionar aos decks":["Add to decks","Añadir a mazos","Ajouter aux paquets","Zu Decks hinzufügen"],"Decks, categorias e raridades":["Decks, categories and rarities","Mazos, categorías y rarezas","Paquets, catégories et raretés","Decks, Kategorien und Seltenheiten"],"Modo:":["Mode:","Modo:","Mode :","Modus:"],"OK":["OK","OK","OK","OK"],"Nenhum deck encontrado.":["No decks found.","No se encontraron mazos.","Aucun paquet trouvé.","Keine Decks gefunden."],"Limpar busca":["Clear search","Borrar búsqueda","Effacer la recherche","Suche zurücksetzen"],"Favoritar deck:":["Favorite deck:","Marcar mazo favorito:","Mettre le paquet en favori :","Deck favorisieren:"],"Remover dos favoritos:":["Remove favorite:","Quitar de favoritos:","Retirer des favoris :","Aus Favoriten entfernen:"],"Adicionar aos favoritos":["Add to favorites","Añadir a favoritos","Ajouter aux favoris","Zu Favoriten hinzufügen"],"Remover dos favoritos":["Remove from favorites","Quitar de favoritos","Retirer des favoris","Aus Favoriten entfernen"],"Sortear outra carta no lugar desta":["Draw another card instead","Sacar otra carta en su lugar","Tirer une autre carte à la place","Stattdessen eine andere Karte ziehen"],"Adicionar às missões da sessão":["Add to session missions","Añadir a misiones de sesión","Ajouter aux missions de session","Zu Sitzungsmissionen hinzufügen"],"Abrir a missão no painel":["Open mission panel","Abrir panel de misión","Ouvrir le panneau des missions","Missionsbereich öffnen"],"Use o botão para sortear.":["Use the button to draw.","Usa el botón para sortear.","Utilisez le bouton pour tirer.","Ziehe mit der Schaltfläche eine Karte."],"Nova versão disponível.":["New version available.","Nueva versión disponible.","Nouvelle version disponible.","Neue Version verfügbar."],"Voltar a estes dados? Os dados atuais serão substituídos. Baixe um backup antes se quiser guardá-los.":["Restore this backup? Current data will be replaced. Download a backup first if you want to keep it.","¿Volver a estos datos? Se reemplazarán los actuales. Descarga una copia antes si deseas guardarlos.","Restaurer ces données ? Les données actuelles seront remplacées. Téléchargez une sauvegarde d’abord si besoin.","Dieses Backup wiederherstellen? Aktuelle Daten werden ersetzt. Sichere sie vorher bei Bedarf."],"Há missões em aberto. Encerrar a sessão atual e arquivar esses resultados para mudar de modo?":["There are open missions. End this session and archive results to change modes?","Hay misiones pendientes. ¿Finalizar la sesión y archivar resultados para cambiar de modo?","Des missions sont en cours. Terminer cette session et archiver les résultats pour changer de mode ?","Es gibt offene Missionen. Sitzung beenden und Ergebnisse für den Moduswechsel archivieren?"],"Isso apaga TODOS os seus decks, perfis e configurações neste navegador e volta ao estado inicial. Um backup será criado ANTES da exclusão. Continuar?":["This deletes ALL decks, profiles and settings in this browser and restores defaults. A backup will be created FIRST. Continue?","Esto borra TODOS los mazos, perfiles y ajustes de este navegador. ANTES se creará una copia. ¿Continuar?","Cela supprime TOUS les paquets, profils et réglages de ce navigateur. Une sauvegarde sera créée AVANT. Continuer ?","Damit werden ALLE Decks, Profile und Einstellungen dieses Browsers gelöscht. VORHER wird ein Backup erstellt. Fortfahren?"],"Não foi possível salvar o backup. Nenhum dado foi apagado. Exporte o arquivo manualmente.":["Could not save backup. No data was deleted. Export your file manually.","No se pudo guardar la copia. No se borraron datos. Exporta el archivo manualmente.","Impossible de sauvegarder. Rien n’a été supprimé. Exportez le fichier manuellement.","Backup konnte nicht gespeichert werden. Es wurden keine Daten gelöscht. Bitte manuell exportieren."],"Não foi possível salvar o backup automático. Seus dados antigos foram mantidos. Exporte-os em Arquivos antes de continuar.":["Automatic backup failed. Your previous data was kept. Export it under Files before continuing.","Falló la copia automática. Se conservaron tus datos. Expórtalos en Archivos antes de seguir.","Échec de la sauvegarde automatique. Vos données sont conservées. Exportez-les dans Fichiers.","Automatisches Backup fehlgeschlagen. Deine alten Daten wurden behalten. Bitte unter Dateien exportieren."],"Falha ao apagar os dados. Seus decks foram preservados.":["Could not erase data. Your decks were preserved.","No se pudieron borrar los datos. Tus mazos están a salvo.","Impossible d’effacer les données. Vos paquets sont conservés.","Daten konnten nicht gelöscht werden. Deine Decks wurden behalten."],"Não foi possível criar um backup automático. Exporte seus dados em Arquivos antes de substituir. Continuar mesmo assim?":["Automatic backup failed. Export your data under Files before replacing it. Continue anyway?","No se pudo crear una copia automática. Exporta tus datos en Archivos antes de reemplazarlos. ¿Continuar?","Sauvegarde automatique impossible. Exportez vos données dans Fichiers avant le remplacement. Continuer quand même ?","Automatisches Backup fehlgeschlagen. Exportiere deine Daten unter Dateien vor dem Ersetzen. Trotzdem fortfahren?"],"Não foi possível criar um backup. Exporte seus dados antes de excluir.":["Could not create a backup. Export your data before deleting.","No se pudo crear una copia. Exporta los datos antes de borrar.","Sauvegarde impossible. Exportez vos données avant de supprimer.","Backup konnte nicht erstellt werden. Exportiere die Daten vor dem Löschen."],"Uso do armazenamento do navegador:":["Browser storage use:","Uso de almacenamiento del navegador:","Espace de stockage du navigateur :","Browserspeicherbelegung:"],"Imagens ocupam mais espaço.":["Images take up more space.","Las imágenes ocupan más espacio.","Les images prennent plus de place.","Bilder benötigen mehr Speicher."],"Faça backup com 'Salvar tudo em arquivo'.":["Back up using Save everything to file.","Haz una copia con Guardar todo en archivo.","Créez une sauvegarde avec Tout enregistrer dans un fichier.","Backup über Alles als Datei speichern erstellen."],"Para publicar seus decks como padrão do site no GitHub, exporte o arquivo e renomeie para decks.json.":["To publish your decks as website defaults on GitHub, export the file and rename it decks.json.","Para publicar tus mazos predeterminados en GitHub, exporta y renombra el archivo decks.json.","Pour publier vos paquets par défaut sur GitHub, exportez le fichier et renommez-le decks.json.","Um deine Decks als Standard auf GitHub zu veröffentlichen, exportiere die Datei als decks.json."],"Acompanhamento ligado":["Tracking enabled","Seguimiento activado","Suivi activé","Verfolgung aktiviert"],"acompanhamento ligado":["tracking enabled","seguimiento activado","suivi activé","Verfolgung aktiviert"],"filtro(s)":["filter(s)","filtro(s)","filtre(s)","Filter"],"Baralho:":["Deck:","Mazo:","Paquet :","Deck:"],"Restantes no ciclo:":["Remaining in cycle:","Restantes del ciclo:","Restant dans le cycle :","Noch im Durchlauf:"],"Sorteio concluído:":["Draw completed:","Sorteo completado:","Tirage terminé :","Ziehung abgeschlossen:"],"Carta trocada no deck":["Card rerolled in deck","Carta cambiada en mazo","Carte changée dans le paquet","Karte in Deck neu gezogen"],"Nova carta:":["New card:","Nueva carta:","Nouvelle carte :","Neue Karte:"],"Missão assumida:":["Mission accepted:","Misión aceptada:","Mission acceptée :","Mission angenommen:"],"Missão removida.":["Mission removed.","Misión eliminada.","Mission supprimée.","Mission entfernt."],"Resultado registrado: missão não cumprida.":["Result recorded: mission failed.","Resultado registrado: misión no cumplida.","Résultat enregistré : mission non réussie.","Ergebnis erfasst: Mission nicht erfüllt."],"Modo compacto (M)":["Compact mode (M)","Modo compacto (M)","Mode compact (M)","Kompaktmodus (M)"],"Nenhum resultado":["No results","Sin resultados","Aucun résultat","Keine Ergebnisse"]};
+const CARD_LANGUAGES={"g0":[["Teammate's pick","Everyone plays the hero picked for them by the teammate next to them. No vetoes, no swaps."],["Elección del compañero","Cada uno juega el héroe elegido por su compañero de al lado. Sin vetos ni cambios."],["Choix du voisin","Chacun joue le héros choisi par son voisin. Pas de veto ni de changement."],["Wahl des Mitspielers","Jeder spielt den Helden, den der Nachbar auswählt. Kein Veto, kein Wechsel."]],"g1":[["Forgotten hero","Everyone plays the hero they have used least. If they have never played anyone, any hero is allowed."],["Héroe olvidado","Todos juegan el héroe que menos han usado. Si nunca usaron ninguno, vale cualquiera."],["Héros oublié","Tout le monde joue son héros le moins utilisé. Sinon, n'importe lequel convient."],["Vergessener Held","Alle spielen den am seltensten genutzten Helden. Wer keinen hat, wählt frei."]],"g2":[["No weapon items","No Weapon items all match. Only Vitality and Spirit items."],["Sin armas","Sin objetos de Arma durante toda la partida. Solo Vitalidad y Espíritu."],["Sans armes","Aucun objet d'Arme pendant la partie. Uniquement Vitalité et Esprit."],["Keine Waffenitems","Im gesamten Match keine Waffenitems. Nur Vitalität und Geist."]],"g3":[["One item category","Each player picks one category (Weapon, Vitality or Spirit) and buys only from it."],["Categoría única","Cada jugador elige una categoría (Arma, Vitalidad o Espíritu) y compra solo esa."],["Catégorie unique","Chaque joueur choisit Arme, Vitalité ou Esprit et n'achète que cette catégorie."],["Nur eine Kategorie","Jeder wählt Waffe, Vitalität oder Geist und kauft nur daraus."]],"g4":[["Passives only","No active items in your build. If a fight needs a button, that button does not exist."],["Solo pasivos","Nada de objetos activos. Si la pelea depende de pulsar un botón, ese botón no existe."],["Passifs seulement","Pas d'objets actifs. Si un combat exige un bouton, ce bouton n'existe pas."],["Nur Passive","Keine aktiven Items. Braucht ein Kampf einen Knopf, gibt es ihn nicht."]],"g5":[["Save your souls","Nobody spends souls before minute 5. Make the first purchase all at once."],["Manos quietas","Nadie gasta souls antes del minuto 5. La primera compra se hace de golpe."],["Économies forcées","Personne ne dépense d'âmes avant 5 minutes. Premier achat en une fois."],["Souls sparen","Bis Minute 5 gibt niemand Souls aus. Der erste Einkauf kommt auf einmal."]],"g6":[["No zipline","Zipline is banned. If you're late to a fight, you came on foot."],["Sin tirolina","Tirolina prohibida. Si llegas tarde a la pelea, llegaste andando."],["Sans tyrolienne","Tyrolienne interdite. Si vous arrivez en retard, c'est à pied."],["Keine Zipline","Zipline verboten. Wer zu spät zum Kampf kommt, ist gelaufen."]],"g7":[["Melee laning","Until minute 5, only melee and abilities. Shooting starts afterward."],["Línea cuerpo a cuerpo","Hasta el minuto 5, solo cuerpo a cuerpo y habilidades. Disparos después."],["Lane au corps à corps","Jusqu'à 5 minutes, uniquement mêlée et compétences. Tirs ensuite."],["Nahkampf-Lane","Bis Minute 5 nur Nahkampf und Fähigkeiten. Danach darf geschossen werden."]],"g8":[["No minimap","Nobody checks the minimap. Enemy positions only via voice callouts."],["Sin minimapa","Nadie mira el minimapa. Posición enemiga solo por voz."],["Sans mini-carte","Interdiction de regarder la mini-carte. Positions ennemies annoncées à la voix."],["Keine Minikarte","Niemand schaut auf die Minikarte. Gegnerpositionen nur per Voice-Call."]],"g9":[["One lane","The entire team stays in the same lane until the first Guardian falls."],["Una sola línea","Todo el grupo va por la misma línea hasta que caiga el primer Guardián."],["Une seule lane","Toute l'équipe reste sur la même lane jusqu'à la chute du premier Gardien."],["Eine Lane","Das ganze Team bleibt auf einer Lane, bis der erste Guardian fällt."]],"g10":[["Mid-Boss first","As soon as Mid-Boss spawns, the team heads there. No vote."],["Prioridad Mid-Boss","En cuanto aparece el Mid-Boss, todos van a por él. Sin votar."],["Priorité Mid-Boss","Dès l'apparition du Mid-Boss, l'équipe y va. Sans vote."],["Mid-Boss zuerst","Sobald der Mid-Boss spawnt, geht das Team hin. Keine Abstimmung."]],"g11":[["Poorest player carries","The player with the fewest souls always carries the Soul Urn."],["Urna del más pobre","Quien tenga menos souls lleva siempre la urna."],["Urne du plus pauvre","Le joueur ayant le moins d'âmes transporte toujours l'urne."],["Urne für den Ärmsten","Der Spieler mit den wenigsten Souls trägt immer die Urne."]],"g12":[["First 5 in jungle","Nobody stays in lane for the first 5 minutes. Everyone goes jungle."],["Primeros 5 en jungla","Nadie se queda en línea los primeros 5 minutos. Todos a la jungla."],["5 premières minutes dans la jungle","Personne sur la lane avant 5 minutes. Tout le monde en jungle."],["Erste 5 im Jungle","In den ersten 5 Minuten geht niemand auf die Lane. Alle junglen."]],"g13":[["No talking","No voice until the first Guardian falls. Only pings and text chat."],["Sin hablar","Sin voz hasta que caiga el primer Guardián. Solo pings y chat."],["Silence radio","Pas de voix avant la chute du premier Gardien. Pings et texte uniquement."],["Redeverbot","Kein Voicechat bis zum ersten gefallenen Guardian. Nur Pings und Text."]],"g14":[["Questions only","On voice chat, speak only in questions. A statement means you skip your next turn."],["Solo preguntas","Por voz, solo se permite hablar con preguntas. Si afirmas algo, pierdes tu turno."],["Questions seulement","À l'oral, parlez uniquement sous forme de questions. Une affirmation vous fait passer un tour."],["Nur Fragen","Im Voicechat darf nur gefragt werden. Wer etwas behauptet, setzt eine Runde aus."]],"g15":[["No names","You cannot say hero or item names. Describe what you mean."],["Sin nombres","No se pueden decir nombres de héroes ni objetos. Hay que describirlos."],["Pas de noms","Interdiction de nommer héros ou objets. Il faut les décrire."],["Keine Namen","Keine Helden- oder Itemnamen nennen. Alles umschreiben."]],"g16":[["Dead narrator","Whoever dies narrates the match until respawning."],["Narrador muerto","Quien muere narra la partida hasta reaparecer."],["Narrateur mort","Le joueur mort commente la partie jusqu'à sa réapparition."],["Toter Kommentator","Wer stirbt, kommentiert das Match bis zum Respawn."]],"g17":[["Mandatory compliment","After each death, the team compliments something the enemy did well. No sarcasm."],["Elogio obligatorio","Tras cada muerte, el grupo elogia algo que hizo bien el enemigo. Sin ironía."],["Compliment obligatoire","Après chaque mort, l'équipe félicite un adversaire. Sans ironie."],["Pflichtkompliment","Nach jedem Tod lobt das Team eine gute Aktion des Gegners. Ohne Ironie."]],"g18":[["Rotating leader","Every 5 minutes the leader changes. Only they call fights, objectives and retreats."],["Líder rotativo","Cada 5 minutos cambia el líder. Solo él decide peleas, objetivos y retiradas."],["Chef tournant","Le chef change toutes les 5 minutes. Lui seul lance combats, objectifs et replis."],["Wechselnder Anführer","Alle 5 Minuten wechselt der Anführer. Nur er ruft Kämpfe, Ziele und Rückzug aus."]],"g19":[["Fewest kills decides","The player with the fewest kills decides where the team goes."],["Decide el que menos tiene","Quien tenga menos bajas decide adónde va el grupo."],["Le moins de kills décide","Le joueur avec le moins de kills décide où va l'équipe."],["Wenigste Kills entscheiden","Der Spieler mit den wenigsten Kills bestimmt das nächste Ziel."]],"g20":[["Kill prediction","Before the match, everyone predicts their kills. Whoever misses by most picks their hero last next game."],["Apuesta de bajas","Antes de jugar, cada uno predice sus bajas. Quien más falle elige héroe el último en la próxima."],["Pari sur les kills","Avant la partie, chacun annonce ses kills. Le plus éloigné choisit son héros en dernier la prochaine fois."],["Kill-Wette","Vor dem Match tippt jeder seine Kills. Wer am weitesten danebenliegt, wählt nächstes Mal zuletzt."]],"g21":[["Roll for everything","Roll dice for each player's hero, lane and item category. No complaints."],["Todo al dado","Tirad dados para héroe, línea y categoría de objetos. Sin quejas."],["Tout aux dés","Tirez aux dés héros, lane et catégorie d'objets. Aucune plainte."],["Alles würfeln","Helden, Lane und Itemkategorie werden ausgewürfelt. Keine Beschwerden."]],"g22":[["Two cards","Draw one more card and follow both rules at the same time."],["Dos cartas","Sortea otra carta y cumplid las dos a la vez."],["Deux cartes","Tirez une carte de plus et appliquez les deux règles ensemble."],["Zwei Karten","Ziehe eine weitere Karte und erfülle beide gleichzeitig."]],"g23":[["No weapons, no voice","No Weapon items and no voice chat until minute 10."],["Sin armas ni voz","Nada de objetos de Arma ni voz hasta el minuto 10."],["Sans armes ni voix","Aucun objet d'Arme ni voix avant 10 minutes."],["Keine Waffen, kein Voice","Keine Waffenitems und kein Voicechat bis Minute 10."]],"g24":[["Everything by dice","Heroes, lanes, allowed items and leader are chosen at random. The team just executes."],["Todo al azar","Héroes, líneas, objetos permitidos y líder al azar. El grupo solo ejecuta."],["Tout au hasard","Héros, lanes, objets autorisés et chef tirés au sort. L'équipe exécute."],["Alles zufällig","Helden, Lanes, Items und Anführer werden ausgelost. Das Team folgt."]],"i0":[["No shooting","Only abilities and melee until minute 8."],["Sin disparar","Solo habilidades y cuerpo a cuerpo hasta el minuto 8."],["Sans tirer","Compétences et mêlée uniquement jusqu'à 8 minutes."],["Nicht schießen","Bis Minute 8 nur Fähigkeiten und Nahkampf."]],"i1":[["No ultimate","Do not use your fourth ability until minute 15."],["Sin definitiva","No uses la cuarta habilidad hasta el minuto 15."],["Sans ultime","N'utilisez pas votre compétence 4 avant 15 minutes."],["Keine Ulti","Fähigkeit 4 erst ab Minute 15 benutzen."]],"i2":[["Stay grounded","No zipline for you this match."],["Pies en tierra","No puedes usar tirolina esta partida."],["Pieds au sol","Pas de tyrolienne pour vous pendant cette partie."],["Auf dem Boden bleiben","In diesem Match keine Zipline für dich."]],"i3":[["Pacifist farming","You may only kill minions with melee."],["Farmeo pacifista","Solo puedes matar tropas cuerpo a cuerpo."],["Farming pacifiste","Les troupes ne peuvent être tuées qu'au corps à corps."],["Pazifistisches Farmen","Minions dürfen nur im Nahkampf sterben."]],"i4":[["Always parry","Attempt a parry in every fight, successful or not."],["Siempre parry","Intenta parar en cada pelea, aciertes o no."],["Toujours parer","Essayez de parer à chaque combat, que cela marche ou non."],["Immer parieren","Versuche in jedem Kampf zu parieren, egal ob erfolgreich."]],"i5":[["No actives","No active items in your build."],["Sin activos","Ningún objeto activo en tu build."],["Sans actifs","Aucun objet actif dans votre build."],["Keine aktiven Items","Keine aktiven Items in deinem Build."]],"i6":[["Spirit only","Only buy Spirit items."],["Solo Espíritu","Compra únicamente objetos de Espíritu."],["Esprit seulement","N'achetez que des objets d'Esprit."],["Nur Geist","Kaufe ausschließlich Geist-Items."]],"i7":[["Zero Vitality","No Vitality items. Survive with what you have."],["Cero Vitalidad","Nada de objetos de Vitalidad. Sobrevive como puedas."],["Zéro Vitalité","Aucun objet de Vitalité. Débrouillez-vous."],["Null Vitalität","Keine Vitalitätsitems. Überlebe so."]],"i8":[["Buy only when dead","You may only buy items while dead."],["Compra solo muerto","Solo puedes comprar objetos cuando estás muerto."],["Achats une fois mort","Vous ne pouvez acheter des objets que lorsque vous êtes mort."],["Nur tot einkaufen","Items darfst du nur kaufen, wenn du tot bist."]],"i9":[["Call out everything","Narrate everything you do out loud, all the time."],["Narrarlo todo","Di en voz alta todo lo que haces, todo el tiempo."],["Tout annoncer","Annoncez à voix haute tout ce que vous faites, en permanence."],["Alles ansagen","Kommentiere ständig laut, was du gerade tust."]],"i10":[["Shadow","Always stay near the player to your left."],["Sombra","Quédate siempre cerca del jugador a tu izquierda."],["Ombre","Restez toujours proche du joueur à votre gauche."],["Schatten","Bleibe immer in der Nähe des Spielers links von dir."]],"i11":[["Urn owner","You carry the Soul Urn whenever it is available."],["Dueño de la urna","Lleva la urna siempre que esté disponible."],["Propriétaire de l'urne","Transportez l'urne dès qu'elle est disponible."],["Urnenbesitzer","Trage die Soul-Urne immer, wenn sie verfügbar ist."]],"i12":[["Random hero","Play the hero the team draws from the Heroes deck, no complaints."],["Héroe sorteado","Juega el héroe que sortee el equipo del mazo Héroes, sin quejas."],["Héros tiré au sort","Jouez le héros tiré dans le paquet Héros. Sans vous plaindre."],["Zufälliger Held","Spiele den Helden, den das Team aus dem Helden-Deck zieht. Ohne Beschwerden."]]};
+const i18nCache=new WeakMap(),i18nAttrs=new WeakMap();
+let decklockLang="pt-BR";
+try{const stored=localStorage.getItem(LANGUAGE_KEY);if(stored in LANG_INDEX)decklockLang=stored}catch(e){}
+
+function translateUi(text){
+  if(decklockLang==="pt-BR"||typeof text!=="string")return text;
+  const raw=text.trim(),langIndex=LANG_INDEX[decklockLang];
+  if(!raw)return text;
+  let translated=LANGUAGE_STRINGS[raw]?.[langIndex];
+  if(!translated){
+    let m=raw.match(/^(\d+) (cartas|carta|decks|deck|sorteios|sorteio|missões|missão)$/i);
+    if(m){
+      const units={
+        cartas:["cards","cartas","cartes","Karten"],carta:["card","carta","carte","Karte"],
+        decks:["decks","mazos","paquets","Decks"],deck:["deck","mazo","paquet","Deck"],
+        sorteios:["draws","sorteos","tirages","Ziehungen"],sorteio:["draw","sorteo","tirage","Ziehung"],
+        missões:["missions","misiones","missions","Missionen"],missão:["mission","misión","mission","Mission"]};
+      translated=m[1]+" "+units[m[2].toLowerCase()][langIndex];
+    }
+  }
+  if(!translated){
+    const m=raw.match(/^(Grupo|Heróis|Individual) (?:· (\d+)|\((\d+)\))$/);
+    if(m){const word=({Grupo:["Group","Grupo","Groupe","Gruppe"],Heróis:["Heroes","Héroes","Héros","Helden"],Individual:["Solo","Individual","Individuel","Einzel"]}[m[1]][langIndex]);translated=word+(m[2]?" · "+m[2]:" ("+m[3]+")");}
+  }
+  if(!translated){
+    const m=raw.match(/^DeckLock atualizado para v([\d.]+)\. Configurações reiniciadas\. Seu backup foi salvo em Arquivos\.$/);
+    if(m)translated=[
+      `DeckLock updated to v${m[1]}. Settings have been reset. Your backup was saved under Files.`,
+      `DeckLock actualizado a v${m[1]}. Configuración reiniciada. Tu copia está en Archivos.`,
+      `DeckLock mis à jour en v${m[1]}. Paramètres réinitialisés. Votre sauvegarde est dans Fichiers.`,
+      `DeckLock auf v${m[1]} aktualisiert. Einstellungen zurückgesetzt. Dein Backup liegt unter Dateien.`
+    ][langIndex];
+  }
+  if(!translated){
+    const m=raw.match(/^Nova versão do DeckLock disponível \(v([\d.]+)\)\.$/);
+    if(m)translated=[`New DeckLock version available (v${m[1]}).`,`Nueva versión de DeckLock disponible (v${m[1]}).`,`Nouvelle version de DeckLock disponible (v${m[1]}).`,`Neue DeckLock-Version verfügbar (v${m[1]}).`][langIndex];
+  }
+  if(!translated){
+    const m=raw.match(/^(\d+) decks, (\d+) cartas$/);
+    if(m)translated=[`${m[1]} decks, ${m[2]} cards`,`${m[1]} mazos, ${m[2]} cartas`,`${m[1]} paquets, ${m[2]} cartes`,`${m[1]} Decks, ${m[2]} Karten`][langIndex];
+  }
+  if(!translated){
+    const m=raw.match(/^(.+): (\d+(?:[.,]\d+)?)(%|px|ms)?$/);
+    if(m&&LANGUAGE_STRINGS[m[1]])translated=LANGUAGE_STRINGS[m[1]][langIndex]+": "+m[2]+(m[3]||"");
+  }
+  if(!translated&&raw.includes(" · ")){
+    const segments=raw.split(" · ");
+    const outputs=segments.map(part=>translateUi(part));
+    if(outputs.some((part,i)=>part!==segments[i]))translated=outputs.join(" · ");
+  }
+  if(!translated){
+    const m=raw.match(/^Uso do armazenamento do navegador: cerca de (\d+) KB de ~5000 KB\. Imagens ocupam mais espaço\. Faça backup com 'Salvar tudo em arquivo'\. Para publicar seus decks como padrão do site no GitHub, exporte o arquivo e renomeie para decks\.json\.$/);
+    if(m){translated=[
+      `Browser storage: about ${m[1]} KB out of ~5000 KB. Images take more space. Back up with Save everything to file. To set default decks on GitHub, export and rename to decks.json.`,
+      `Almacenamiento: unos ${m[1]} KB de ~5000 KB. Las imágenes ocupan más espacio. Haz una copia con Guardar todo en archivo. Para publicar mazos predeterminados en GitHub, exporta como decks.json.`,
+      `Stockage : environ ${m[1]} Ko sur ~5000 Ko. Les images prennent plus de place. Sauvegardez avec Tout enregistrer dans un fichier. Pour les paquets par défaut sur GitHub, exportez en decks.json.`,
+      `Speicher: etwa ${m[1]} KB von ~5000 KB. Bilder benötigen mehr Platz. Sichere alles als Datei. Für Standard-Decks auf GitHub als decks.json exportieren.`
+    ][langIndex]}
+  }
+  if(!translated){
+    const m=raw.match(/^Baralho: (\d+) de (\d+) sorteios restantes$/);
+    if(m)translated=[`Deck: ${m[1]} of ${m[2]} draws left`,`Mazo: quedan ${m[1]} de ${m[2]} sorteos`,`Paquet : ${m[1]} tirages restants sur ${m[2]}`,`Deck: ${m[1]} von ${m[2]} Ziehungen übrig`][langIndex];
+  }
+  if(!translated){
+    const m=raw.match(/^(\d+) filtro\(s\)$/);
+    if(m)translated=[`${m[1]} filters`,`${m[1]} filtros`,`${m[1]} filtres`,`${m[1]} Filter`][langIndex];
+  }
+  if(!translated){
+    const m=raw.match(/^Backup (.+)$/);
+    if(m)translated=[`Backup ${m[1]}`,`Copia ${m[1]}`,`Sauvegarde ${m[1]}`,`Backup ${m[1]}`][langIndex];
+  }
+  return translated===undefined?text:text.replace(raw,translated);
+}
+function localizedExampleTitle(c){
+  if(!c||decklockLang==="pt-BR"||!c.id)return c?.title||"";
+  const example=EXEMPLOS.flatMap(d=>d.cards).find(x=>x.id===c.id);
+  return example&&example.title===c.title&&CARD_LANGUAGES[c.id]?CARD_LANGUAGES[c.id][LANG_INDEX[decklockLang]][0]:c.title;
+}
+function localizedExampleCard(c){
+  if(!c||decklockLang==="pt-BR"||!c.id)return c;
+  const base=EXEMPLOS.flatMap(d=>d.cards).find(x=>x.id===c.id);
+  const versions=CARD_LANGUAGES[c.id];
+  if(!base||!versions||c.title!==base.title||c.text!==base.text)return c;
+  const localized=versions[LANG_INDEX[decklockLang]];
+  return {...c,title:localized[0],text:localized[1],cat:translateUi(c.cat)};
+}
+function localizeTextNode(node){
+  if(!node.parentElement||node.parentElement.closest("script,style,.lang-menu"))return;
+  // O editor exibe os dados originais para não modificar textos personalizados sem querer.
+  if(node.parentElement.closest(".front .ct,.front .tx"))return;
+  const last=i18nCache.get(node),value=node.nodeValue;
+  const original=last&&value===last.output?last.source:value;
+  const output=translateUi(original);
+  i18nCache.set(node,{source:original,output});
+  if(value!==output)node.nodeValue=output;
+}
+function localizeAttrs(element){
+  if(element.closest(".lang-menu")||element.matches("script,style"))return;
+  let state=i18nAttrs.get(element);if(!state){state={};i18nAttrs.set(element,state)}
+  for(const attr of ["title","placeholder","aria-label","data-tip","label"]){
+    if(!element.hasAttribute(attr))continue;
+    const current=element.getAttribute(attr),prev=state[attr];
+    const original=prev&&current===prev.output?prev.source:current;
+    const output=translateUi(original);
+    state[attr]={source:original,output};
+    if(current!==output)element.setAttribute(attr,output);
+  }
+}
+function localizeSubtree(root){
+  if(!root)return;
+  if(root.nodeType===Node.TEXT_NODE){localizeTextNode(root);return}
+  if(root.nodeType!==Node.ELEMENT_NODE&&root.nodeType!==Node.DOCUMENT_NODE)return;
+  const elements=[];
+  if(root.nodeType===Node.ELEMENT_NODE)elements.push(root);
+  root.querySelectorAll("*").forEach(e=>elements.push(e));
+  for(const e of elements){localizeAttrs(e);for(const child of e.childNodes){if(child.nodeType===Node.TEXT_NODE)localizeTextNode(child)}}
+}
+function refreshCardLanguage(){
+  document.querySelectorAll(".scene").forEach(sc=>{
+    const card=sc._g?.cards?.[sc._i];if(!card)return;
+    const front=sc.querySelector(".front");if(front)fillCard(front,card);
+  });
+  requestAnimationFrame(fit);
+}
+function updateLanguage(lang){
+  if(!(lang in LANG_INDEX))return;
+  decklockLang=lang;
+  document.documentElement.lang=LANG_LOCALES[lang];
+  try{localStorage.setItem(LANGUAGE_KEY,lang)}catch(e){}
+  document.querySelectorAll("#langMenu button[data-lang]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.lang===lang)));
+  localizeSubtree(document.body);
+  refreshCardLanguage();
+  if(typeof renderHist==="function")renderHist();
+  if(typeof renderQuests==="function")renderQuests();
+  closeLangMenu();
+}
+function closeLangMenu(){
+  document.getElementById("langMenu").hidden=true;
+  document.getElementById("bLanguage").setAttribute("aria-expanded","false");
+}
+function toggleLangMenu(){
+  const menu=document.getElementById("langMenu");menu.hidden=!menu.hidden;
+  document.getElementById("bLanguage").setAttribute("aria-expanded",String(!menu.hidden));
+  if(!menu.hidden)menu.querySelector('[aria-pressed="true"]')?.focus();
+}
+document.getElementById("bLanguage").addEventListener("click",toggleLangMenu);
+document.querySelectorAll("#langMenu button[data-lang]").forEach(b=>b.addEventListener("click",()=>updateLanguage(b.dataset.lang)));
+document.addEventListener("click",e=>{if(!document.getElementById("langPicker").contains(e.target))closeLangMenu()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!document.getElementById("langMenu").hidden){e.stopImmediatePropagation();closeLangMenu();document.getElementById("bLanguage").focus()}},true);
+// Confirmações nativas e diálogos também seguem o idioma selecionado.
+const originalConfirm=window.confirm.bind(window),originalPrompt=window.prompt.bind(window),originalAlert=window.alert.bind(window);
+window.confirm=(message)=>originalConfirm(translateUi(String(message)));
+window.prompt=(message,defaultValue)=>originalPrompt(translateUi(String(message)),defaultValue);
+window.alert=(message)=>originalAlert(translateUi(String(message)));
+
+const localeObserver=new MutationObserver(records=>{
+  for(const m of records){
+    if(m.type==="characterData")localizeTextNode(m.target);
+    else if(m.type==="attributes")localizeAttrs(m.target);
+    else for(const item of m.addedNodes)localizeSubtree(item);
+  }
+});
+localeObserver.observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:["title","placeholder","aria-label","data-tip","label"]});
+updateLanguage(decklockLang);
 </script>
 </body>
 </html>
