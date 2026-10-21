@@ -6,7 +6,7 @@
 <title>DeckLock</title>
 <meta name="description" content="Sorteador de cartas de desafio para partidas de Deadlock, com decks editáveis.">
 <meta name="theme-color" content="#222021">
-<meta name="decklock-version" content="1.24.0">
+<meta name="decklock-version" content="1.25.0">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="DeckLock">
@@ -749,52 +749,16 @@ header:has(> .hl) .site-tab .tab-symbol{font-size:1.1em;opacity:.9}
 #toast button{pointer-events:auto}
 @media(max-width:750px){#toast{inset-block-start:calc(112px + env(safe-area-inset-top, 0px));top:calc(112px + env(safe-area-inset-top, 0px))}}
 
-/* v1.24.1 — polimento visual: menos blocos densos e mais hierarquia. */
-.wrap{max-width:760px}
-.header-meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-width:650px;margin:7px auto 2px}
-.meta-card{padding:10px 11px;border:1px solid color-mix(in srgb,var(--am-line) 82%,transparent);border-radius:9px;background:color-mix(in srgb,var(--am-raised) 78%,var(--am-bg));text-align:left;min-width:0;min-height:56px;display:flex;flex-direction:column;justify-content:center;gap:3px}
-.meta-card .meta-label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--am-muted);font-weight:700}
-.meta-card .meta-value{font-size:12px;line-height:1.45;color:var(--am-text)}
-.meta-card.goal .meta-value{color:var(--am-muted)}
-#ps,#bf,#nextGoal{margin:0;min-height:0;font-size:12px;line-height:1.45}
-.micro-notes{display:grid;gap:7px;max-width:580px;margin:0 auto 12px}
-.hint,#tk{margin:0;padding:10px 12px;border-radius:9px;border:1px solid color-mix(in srgb,var(--am-line) 68%,transparent);background:color-mix(in srgb,var(--am-raised) 62%,var(--am-bg));font-size:12px;line-height:1.5;text-align:left}
-.hint{color:var(--am-text)}
-#tk{font-style:normal;min-height:0;color:var(--am-muted)}
-.tabs{position:sticky;top:0;z-index:12;padding-bottom:6px;background:linear-gradient(to bottom,color-mix(in srgb,var(--am-bg) 92%,transparent),color-mix(in srgb,var(--am-bg) 82%,transparent));backdrop-filter:blur(6px)}
-.section-intro,.investment-tip,.purchase-feedback,#activePath{padding:10px 12px;border-radius:9px;background:color-mix(in srgb,var(--am-raised) 58%,var(--am-bg));border:1px solid color-mix(in srgb,var(--am-line) 70%,transparent);margin:0}
-.purchase-feedback{min-height:0}
-#activePath{margin:0;color:var(--am-brass)}
-.boss,.contracts,.reward-history,.box,.mastery-panel,.records-panel,.legal-notice,.about-panel{background:color-mix(in srgb,var(--am-surface) 62%,var(--am-bg));border:1px solid color-mix(in srgb,var(--am-line) 85%,transparent);border-radius:11px;box-shadow:0 8px 26px rgba(0,0,0,.12)}
-.boss{padding:14px 15px}
-.contracts,.reward-history,.mastery-panel,.records-panel,.legal-notice{padding:10px 14px}
-.box{padding:14px 15px;border-bottom:0}
-.box + .box{margin-top:12px}
-.box h3{margin-bottom:7px}
-.box p{font-size:13px;line-height:1.55}
-.contracts{margin:0}
-.contracts>summary,.reward-history summary,.mastery-panel summary,.records-panel summary,.legal-notice>summary,.about-panel>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.contracts>summary::-webkit-details-marker,.reward-history summary::-webkit-details-marker,.mastery-panel summary::-webkit-details-marker,.records-panel summary::-webkit-details-marker,.legal-notice>summary::-webkit-details-marker,.about-panel>summary::-webkit-details-marker{display:none}
-.contracts>summary,.reward-history summary{padding:2px 0}
-.mastery-panel,.records-panel{margin:8px 0 0;padding-top:10px}
-.reward-history{margin:0;padding-top:10px}
-.event-list{margin-top:8px}
-#tp,#ta,#tr,#tl{display:grid;gap:12px}
-#gl,#il,#pl,#ac{display:grid;gap:8px}
-.about-panel{margin-top:28px;padding:12px 14px}
-.about-panel h2{font-size:18px;margin:0;color:var(--am-text)}
-.about-panel .about-kicker{color:var(--am-muted);font-size:11px;letter-spacing:.12em;text-transform:uppercase}
-.about-body{display:grid;gap:10px;padding-top:10px}
-.about-body p{margin:0;color:var(--am-muted);font-size:13px;line-height:1.6}
-.legal-notice{margin-top:12px}
-.legal-notice p{margin-top:10px}
-@media(max-width:640px){
-  .header-meta{grid-template-columns:1fr}
-  .tabs{position:static;background:none;backdrop-filter:none;padding-bottom:0}
-  .meta-card{min-height:0}
-  .contracts,.reward-history,.mastery-panel,.records-panel,.legal-notice,.about-panel,.boss,.box{padding-inline:12px}
-}
 
+/* v1.25 · feedback e símbolos do universo Deadlock, sem alterar a estrutura dos painéis. */
+.site-rank-chip{display:inline-grid;place-items:center;width:28px;height:29px;flex:none;border-radius:6px;background:color-mix(in srgb,var(--gold) 5%,var(--bg2));filter:drop-shadow(0 0 5px color-mix(in srgb,var(--medal-color,var(--gold)) 22%,transparent))}
+.site-rank-chip img{width:27px;height:27px;object-fit:contain;display:block}
+#tabAlmasMortas{display:flex;align-items:center;gap:5px}
+#bGlobalSound .sound-slash{display:none}
+#bGlobalSound.muted .sound-rays{display:none}
+#bGlobalSound.muted .sound-slash{display:block}
+#bGlobalSound[aria-pressed="false"]{opacity:.72}
+@media(max-width:390px){.site-rank-chip{width:22px;height:24px}.site-rank-chip img{width:22px;height:23px}#tabAlmasMortas{gap:2px}}
 </style>
 </head>
 <body>
@@ -808,11 +772,12 @@ header:has(> .hl) .site-tab .tab-symbol{font-size:1.1em;opacity:.9}
   <span id="title" hidden>DeckLock</span>
   <nav class="site-tabs" aria-label="Modos do site">
     <div class="mode-actions">
-      <button class="site-tab" id="tabAlmasMortas" type="button" aria-controls="soulView" aria-pressed="false" title="Abrir Almas à esquerda"><span>Almas</span></button>
+      <button class="site-tab" id="tabAlmasMortas" type="button" aria-controls="soulView" aria-pressed="false" title="Abrir Almas à esquerda"><span class="site-rank-chip" aria-hidden="true"><img id="siteRankArt" alt=""></span><span>Almas</span></button>
       <button class="site-tab on" id="tabSorteador" type="button" aria-controls="main" aria-pressed="true" title="Centralizar o DeckLock"><span>DeckLock</span></button>
     </div>
   </nav>
   <div class="hr">
+    <button class="ibtn global-sound" id="bGlobalSound" type="button" aria-label="Desativar sons do site" data-tip="Desativar sons do site" title="Som do site" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9v6h4l5 4V5l-5 4H5Z"/><path class="sound-rays" d="M17 9a4 4 0 0 1 0 6M19 6a8 8 0 0 1 0 12"/><path class="sound-slash" d="M17 8l5 8"/></svg></button>
     <div class="lang-picker" id="langPicker">
       <button class="ibtn" id="bLanguage" type="button" aria-label="Idioma" title="Idioma" data-tip="Idioma" aria-haspopup="true" aria-expanded="false" aria-controls="langMenu"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c-3 3.6-3 14.4 0 18M12 3c3 3.6 3 14.4 0 18M5.5 6.5h13M5.5 17.5h13"/></svg></button>
       <div class="lang-menu" id="langMenu" hidden role="group" aria-label="Idioma do site">
@@ -1181,11 +1146,155 @@ textarea{width:100%;height:70px;background:var(--am-ink);color:var(--am-text);bo
 @media(max-width:380px){.ritual-preview{padding:10px}.ritual-metric{padding:8px}.ritual-preview-head strong{font-size:15px}}
 @media(prefers-reduced-motion:reduce){.rank-promotion-dialog.is-division img{animation:none}}
 
+
+/* Almas v1.24.2: melhor hierarquia tipográfica, espaços e informações opcionais.
+   Este CSS fica dentro do Shadow DOM; não interfere na interface do DeckLock. */
+:host{font-size:14px;line-height:1.5}
+.wrap{max-width:740px;padding:12px clamp(12px,2.2vw,23px) 32px}
+.wrap>header{padding:6px 0 4px}
+.almas-head{margin-bottom:4px}
+#f{line-height:1.05;letter-spacing:-.035em}
+.header-meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;max-width:690px;margin:12px 0 4px}
+.meta-card{min-width:0;min-height:56px;padding:9px 10px;text-align:left;border:1px solid color-mix(in srgb,var(--am-line) 70%,transparent);background:color-mix(in srgb,var(--am-raised) 60%,var(--am-bg));border-radius:8px;display:flex;flex-direction:column;justify-content:center;gap:3px}
+.meta-card .meta-label{display:block;color:var(--am-muted);font-size:10px;text-transform:uppercase;letter-spacing:.1em;font-weight:700}
+.meta-card .meta-value{min-height:0;margin:0;font-size:12px;line-height:1.4;color:var(--am-text);overflow-wrap:anywhere}
+.meta-card.goal .meta-value{color:var(--am-muted)}
+.meta-card:has(#bf:empty){display:none}
+.header-meta{grid-template-columns:repeat(auto-fit,minmax(min(158px,100%),1fr))}
+#ps,#bf,#nextGoal{margin:0;min-height:0;font-size:12px;line-height:1.4}
+.tabs{gap:clamp(10px,2.6vw,20px);margin:9px 0 13px}
+.tab{font-size:13px;min-height:38px;font-weight:650}
+#tp,#ta,#tr,#tl{display:grid;gap:12px;align-content:start}
+#tp .stage{padding-bottom:3px}
+#tp .rank-status{margin-bottom:0}
+.am-sr-only{position:absolute!important;width:1px!important;height:1px!important;clip:rect(0 0 0 0)!important;overflow:hidden!important;white-space:nowrap!important}
+.micro-notes{margin:0 0 2px;min-height:0}
+#tk{min-height:0;margin:0;padding:8px 10px;border-radius:7px;background:color-mix(in srgb,var(--am-raised) 35%,var(--am-bg));font-style:normal;text-align:center;font-size:12px;line-height:1.45;opacity:.84}
+.boss,.contracts,.reward-history,.box,.mastery-panel,.records-panel{border:1px solid color-mix(in srgb,var(--am-line) 74%,transparent);background:color-mix(in srgb,var(--am-surface) 60%,var(--am-bg));border-radius:9px;box-shadow:none}
+.boss{margin:0;padding:12px 13px}
+.boss h3{font-size:16px;margin:0 0 5px}
+.boss p{font-size:12px;line-height:1.5}
+.contracts,.reward-history{margin:0;padding:10px 12px}
+.contracts>summary,.reward-history>summary,.mastery-panel>summary,.records-panel>summary,.almas-fold>summary{display:flex;align-items:center;justify-content:space-between;gap:8px;cursor:pointer;list-style:none;min-height:28px}
+.contracts>summary::-webkit-details-marker,.reward-history>summary::-webkit-details-marker,.mastery-panel>summary::-webkit-details-marker,.records-panel>summary::-webkit-details-marker,.almas-fold>summary::-webkit-details-marker{display:none}
+.contracts>summary{font-size:14px;padding:0}
+.contracts.has-ready>summary{color:var(--am-brass)}
+.contracts-list{gap:7px;margin:10px 0 0}
+.contract-entry{padding:10px 11px;gap:8px;border-radius:7px;background:color-mix(in srgb,var(--am-raised) 53%,var(--am-bg))}
+.contract-header strong{font-size:14px;line-height:1.25}
+.contract-header span{font-size:11px}
+.contract-footer{gap:9px}
+.contract-footer>span{font-size:12px}
+.inline-help{margin:0;max-width:100%}
+.inline-help>summary{display:inline-flex;justify-content:center;align-items:center;width:26px;height:26px;border-radius:50%;border:1px solid var(--am-line);font-size:14px;color:var(--am-muted);cursor:pointer;list-style:none}
+.inline-help>summary::-webkit-details-marker{display:none}
+.inline-help[open]{background:color-mix(in srgb,var(--am-raised) 50%,var(--am-bg));padding:7px 10px;border-radius:8px}
+.inline-help>p{margin:8px 0 0;font-size:12px;line-height:1.55;color:var(--am-muted)}
+.contracts-help{margin:5px 0}
+.contracts-help:not([open])>summary{width:21px;height:21px;font-size:12px}
+#qs{margin:0;gap:5px}
+#qs .btn{font-size:12px}
+.investment-tip{margin:0;padding:8px 10px;background:color-mix(in srgb,var(--am-brass) 5%,var(--am-bg));border-left:2px solid color-mix(in srgb,var(--am-brass) 63%,var(--am-line));border-radius:3px;font-size:12px;line-height:1.45}
+.purchase-feedback:not(:empty){margin:0;font-size:12px;line-height:1.4;color:var(--am-brass)}
+#gl,#il,#pl,#st{display:grid;gap:7px}
+#gl .cat,#il .cat{margin:10px 0 2px}
+.up{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,42%);align-items:center;gap:12px;margin:0;padding:12px;border-radius:8px;min-width:0}
+.up>div:first-child{min-width:0}
+.up b{font:600 16px/1.22 Fraunces,Georgia,serif;color:var(--am-text)}
+.up .d{font-size:12px;line-height:1.4;color:var(--am-muted);margin-top:4px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.up .r{display:grid;gap:3px;min-width:0;text-align:right;white-space:normal}
+.up .r em{font-size:14px;line-height:1.3;overflow-wrap:anywhere}
+.up .r small{font-size:11px;line-height:1.4;white-space:normal;overflow-wrap:anywhere;color:var(--am-muted);max-width:100%}
+.up:not(.no):not(.lock):not(.done){border-color:color-mix(in srgb,var(--am-brass) 52%,var(--am-line))}
+.up.no,.up.lock{opacity:1!important}
+.up.no .r em,.up.lock .r em{color:var(--am-muted)}
+.box{padding:13px 14px;margin:0;border-bottom:0}
+.box + .box{margin:0}
+.box h3{font-size:17px;line-height:1.28;margin:0 0 6px}
+.box p{font-size:12px;line-height:1.55;margin:0 0 8px}
+.almas-fold{padding:0}
+.almas-fold>summary{padding:12px 14px;min-height:46px}
+.almas-fold>summary h3{margin:0;font-size:16px}
+.almas-fold .fold-chevron{margin-left:auto;color:var(--am-muted);font-size:17px;transition:transform .15s ease}
+.almas-fold[open] .fold-chevron{transform:rotate(180deg)}
+.almas-fold .fold-count{font-size:12px;color:var(--am-brass);font-weight:650}
+.almas-fold>.fold-body{padding:0 14px 14px}
+.almas-fold .ach-fold{border-bottom:1px solid color-mix(in srgb,var(--am-line) 70%,transparent);padding:3px 0}
+.almas-fold .ach-fold:last-child{border-bottom:0}
+.ach-fold>summary{display:flex;gap:8px;align-items:center;justify-content:space-between;cursor:pointer;list-style:none;padding:8px 2px;color:var(--am-muted)}
+.ach-fold>summary::-webkit-details-marker{display:none}
+.ach-fold.on>summary{color:var(--am-text)}
+.ach-fold>summary b{font-size:13px;font-weight:600}
+.ach-fold>summary .ach-mark{flex:none;font-size:14px;color:var(--am-muted);font-weight:650}
+.ach-fold.on>summary .ach-mark{color:var(--am-brass)}
+.ach-fold>span{display:block;padding:2px 20px 8px 2px;font-size:12px;color:var(--am-muted);line-height:1.45;text-align:left}
+.mastery-panel,.records-panel{padding:8px 10px;margin:10px 0 0;border-radius:7px}
+.mastery-panel>summary,.records-panel>summary{padding:2px 0;font-size:12px}
+#sx{line-height:1.6;max-width:65ch}
+#sv{font-size:11px;min-height:66px}
+.ritual-preview{margin:10px 0 5px;background:color-mix(in srgb,var(--am-raised) 50%,var(--am-bg));padding:11px;border-radius:8px}
+.ritual-preview-head{margin-bottom:9px}
+.ritual-metrics{gap:6px}
+.ritual-metric{padding:8px 9px}
+.ritual-metric b{font-size:15px}
+.favor-highlight{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px 11px;border-radius:7px;padding:9px 10px;background:color-mix(in srgb,var(--am-brass) 8%,var(--am-bg));margin:7px 0}
+.favor-highlight span{font-size:12px;color:var(--am-muted);font-weight:650}
+.favor-highlight strong{font-size:20px;color:var(--am-brass)}
+.favor-highlight small{font-size:12px;color:var(--am-text)}
+.ritual-extra{margin-top:6px;color:var(--am-muted)}
+.ritual-extra>summary{font-size:11px;color:var(--am-muted);cursor:pointer;padding:4px 0}
+.ritual-extra-body{padding:7px 9px;font-size:12px;line-height:1.65;border-left:2px solid var(--am-line)}
+.ritual-paths{margin:12px 0 0}
+.path-options,.reward-options{gap:7px}
+.path-option,.reward-option{padding:10px;border-radius:7px;font-size:12px;line-height:1.45}
+@media(max-width:680px){
+ .header-meta{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .meta-card.goal{grid-column:1/-1}
+ .header-meta:has(.meta-card:has(#bf:empty)) .meta-card.goal{grid-column:auto}
+ .wrap{padding-inline:12px}
+ .up{grid-template-columns:minmax(0,1fr);gap:6px}
+ .up .r{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;justify-content:space-between;text-align:left}
+ .up .r small{flex:1 1 150px;text-align:right}
+ .reward-options,.path-options{grid-template-columns:1fr}
+ .ritual-compare-grid{font-size:10.5px}
+ .contract-header{flex-wrap:wrap;gap:3px 9px}
+}
+@media(prefers-reduced-motion:reduce){.almas-fold .fold-chevron{transition:none}}
+
+
+/* v1.25 — feedback preciso e leitura por símbolos (CSS isolado ao Almas). */
+.am-subtitle{font-size:10px;letter-spacing:.17em;font-weight:750;color:var(--am-muted)}
+.up.operation{position:relative;padding-left:51px;min-height:76px;transition:background .18s,border-color .18s,transform .16s!important}
+.up.operation:before{position:absolute;left:12px;top:50%;transform:translateY(-50%);content:'✦';width:28px;height:30px;display:grid;place-items:center;border:1px solid color-mix(in srgb,var(--am-line) 85%,transparent);border-radius:7px;font:600 19px/1 Georgia,serif;color:var(--am-brass);background:color-mix(in srgb,var(--am-bg) 56%,var(--am-raised))}
+.up.operation[data-op="0"]:before{content:'☷'}.up.operation[data-op="1"]:before{content:'♠'}
+.up.operation[data-op="2"]:before{content:'▣'}.up.operation[data-op="3"]:before{content:'♰'}
+.up.operation[data-op="4"]:before{content:'⛨'}.up.operation[data-op="5"]:before{content:'◈'}
+.up.operation[data-op="6"]:before{content:'⚑'}.up.operation[data-op="7"]:before{content:'✶'}
+.up.operation.ready:before{border-color:color-mix(in srgb,var(--am-brass) 65%,var(--am-line))}
+.up.operation.no:before{opacity:.55}
+@keyframes amInvestment{0%{background:color-mix(in srgb,var(--am-brass) 30%,var(--am-raised))}100%{background:var(--am-raised)}}
+.up.am-purchase-flash{animation:amInvestment .55s ease-out}
+.rank-orb img{transition:filter .17s ease, transform .17s ease;filter:drop-shadow(0 6px 10px rgba(0,0,0,.2))}
+.rank-orb:hover img{filter:drop-shadow(0 2px 17px color-mix(in srgb,var(--rank-glow,var(--am-brass)) 33%,transparent));transform:scale(1.035)}
+.rank-orb:active img{transform:scale(.95)}
+.almas-click-ring{position:absolute;width:42px;height:42px;z-index:6;pointer-events:none;border:2px solid color-mix(in srgb,var(--am-soul) 80%,transparent);border-radius:50%;transform:translate(-50%,-50%) scale(.35);animation:amRing .45s ease-out forwards;box-shadow:0 0 14px color-mix(in srgb,var(--am-soul) 20%,transparent)}
+@keyframes amRing{to{transform:translate(-50%,-50%) scale(2);opacity:0}}
+.almas-burst{position:absolute;top:47%;left:50%;z-index:7;pointer-events:none;color:var(--am-brass);font:700 20px Fraunces,Georgia,serif;white-space:nowrap;text-shadow:0 0 14px color-mix(in srgb,var(--am-brass) 45%,transparent);animation:amBurst .8s ease-out forwards}
+.almas-burst.sacrifice{color:var(--am-soul)}
+@keyframes amBurst{0%{opacity:0;transform:translate(-50%,-50%) scale(.72)}28%{opacity:1}100%{opacity:0;transform:translate(-50%,-135%) scale(1.15)}}
+.boss:has(.hp:not([hidden])){border-color:color-mix(in srgb,var(--am-rust) 55%,var(--am-line))}
+.boss .hp i{transition:width .18s ease}
+.contract-entry.claimable{animation:amReady 2.2s ease-in-out infinite}
+@keyframes amReady{50%{box-shadow:inset 3px 0 0 var(--am-brass),0 0 14px color-mix(in srgb,var(--am-brass) 8%,transparent)}}
+.cat{display:flex;align-items:center;gap:8px}
+.cat:before{content:'◆';font-size:10px;color:var(--am-brass);opacity:.9}
+@media(max-width:520px){.up.operation{padding-left:50px}.up.operation:before{left:10px}}
+@media(prefers-reduced-motion:reduce){.rank-orb img,.rank-orb:hover img{transition:none;transform:none}.almas-click-ring,.almas-burst,.up.am-purchase-flash,.contract-entry.claimable{animation:none}}
 </style>
 
 <div class="wrap">
   <header>
-    <div class="almas-head"><h1>Almas</h1><button id="amSound" type="button" class="sound-toggle" aria-label="Desativar sons do Almas" aria-pressed="true" title="Ativar/desativar sons do Almas">♫ <span>Som ligado</span></button></div>
+    <div class="almas-head"><h1>Almas</h1><span class="am-subtitle">COLETA DE SOULS</span></div>
     <div id="f">0</div>
     <div class="resource-name">Souls disponíveis</div>
     <div class="header-meta" aria-live="off">
@@ -1217,7 +1326,7 @@ textarea{width:100%;height:70px;background:var(--am-ink);color:var(--am-text);bo
       <div class="combo-track"><i id="comboBar"></i></div>
     </div>
     <div class="micro-notes">
-      <p class="hint">Clique no emblema para coletar Souls.</p>
+      <p class="hint am-sr-only">Clique no emblema para coletar Souls.</p>
       <p id="tk"></p>
     </div>
     <div class="boss" id="bs">
@@ -1232,21 +1341,21 @@ textarea{width:100%;height:70px;background:var(--am-ink);color:var(--am-text);bo
     </div>
     <details class="contracts" id="contractsPanel" open>
       <summary><span id="contractsHeading">Contratos</span> <span id="contractsCounter"></span></summary>
-      <p id="contractsInfo" class="contracts-info"></p>
+      <details class="inline-help contracts-help"><summary aria-label="Informações sobre contratos" title="Informações sobre contratos">ⓘ</summary><p id="contractsInfo" class="contracts-info"></p></details>
       <div id="contractsList" class="contracts-list"></div>
     </details>
     <details class="reward-history" id="rewardHistory"><summary>Últimos acontecimentos <span id="eventCount"></span></summary><div id="eventList" class="event-list"></div></details>
   </section>
 
   <section id="ta" hidden>
-    <p class="section-intro">Invista Souls em operações e controle territorial. Cada nível adquirido aumenta sua produção automática.</p>
+    <details class="inline-help"><summary aria-label="Instruções de Domínio" title="Informações sobre as operações">ⓘ</summary><p class="section-intro">Invista Souls em operações e controle territorial. Cada nível adquirido aumenta sua produção automática.</p></details>
     <div class="seg" id="qs" role="group" aria-label="Quantidade por investimento"><button class="btn" data-q="1" aria-pressed="true">Investir x1</button><button class="btn" data-q="10" aria-pressed="false">x10</button><button class="btn" data-q="100" aria-pressed="false">x100</button><button class="btn" data-q="max" aria-pressed="false">Máx.</button></div>
     <p class="investment-tip" id="investmentTip" aria-live="off"></p>
     <p class="purchase-feedback" id="purchaseFeedback" role="status" aria-live="polite"></p>
     <div id="gl"></div><details class="mastery-panel"><summary id="masteryTitle">Maestria das operações</summary><p class="mastery-note" id="masteryIntro"></p><div id="masteryList"></div></details>
   </section>
 
-  <section id="tr" hidden><p class="section-intro">Itens de Arma melhoram a coleta manual; Vitalidade fortalece a coleta offline; Espírito amplia a produção automática. Os efeitos são próprios deste clicker.</p><div id="il"></div></section>
+  <section id="tr" hidden><details class="inline-help"><summary aria-label="Instruções da Loja" title="Informações sobre itens">ⓘ</summary><p class="section-intro">Itens de Arma melhoram a coleta manual; Vitalidade fortalece a coleta offline; Espírito amplia a produção automática. Os efeitos são próprios deste clicker.</p></details><div id="il"></div></section>
 
   <section id="tl" hidden>
     <div class="box"><h3>Ritual do Patrono</h3><p id="lg"></p>
@@ -1263,21 +1372,13 @@ textarea{width:100%;height:70px;background:var(--am-ink);color:var(--am-text);bo
       <div id="activePath"></div>
       <div class="ritual-paths"><h4 id="pathTitle"></h4><p id="pathIntro"></p><div id="pathOptions" class="path-options"></div></div>
       <button class="btn pri" id="asc" style="margin-top:13px">Concluir Ritual</button></div>
-    <div class="box"><h3>Bênçãos do Patrono</h3><p id="lp"></p><div id="pl"></div></div>
-    <div class="box"><h3>Afinidade de herói</h3><p>Escolha uma especialidade de combate. Você pode alterá-la quando quiser.</p><div id="st"></div></div>
-    <div class="box"><h3>Conquistas</h3><div id="ac"></div></div>
-    <div class="box"><h3>Estatísticas e salvamento</h3><p id="sx"></p><details class="records-panel"><summary id="recordsTitle">Recordes</summary><div id="recordsList"></div></details>
+    <details class="box almas-fold" id="blessingsFold"><summary><h3>Bênçãos do Patrono</h3><span class="fold-chevron" aria-hidden="true">⌄</span></summary><div class="fold-body"><p id="lp"></p><div id="pl"></div></div></details>
+    <details class="box almas-fold" id="affinityFold"><summary><h3>Afinidade de herói</h3><span class="fold-chevron" aria-hidden="true">⌄</span></summary><div class="fold-body"><p>Escolha uma especialidade de combate. Você pode alterá-la quando quiser.</p><div id="st"></div></div></details>
+    <details class="box almas-fold" id="achievementsFold"><summary><h3>Conquistas</h3><span class="fold-count" id="achievementsCount"></span><span class="fold-chevron" aria-hidden="true">⌄</span></summary><div class="fold-body"><div id="ac"></div></div></details>
+    <details class="box almas-fold" id="savingFold"><summary><h3>Estatísticas e salvamento</h3><span class="fold-chevron" aria-hidden="true">⌄</span></summary><div class="fold-body"><p id="sx"></p><details class="records-panel"><summary id="recordsTitle">Recordes</summary><div id="recordsList"></div></details>
       <textarea id="sv" aria-label="Código de salvamento" placeholder="O código de salvamento aparece aqui."></textarea>
-      <div class="seg"><button class="btn" id="exp">Exportar</button><button class="btn" id="imp">Importar</button><button class="btn" id="wipe">Apagar</button></div></div>
+      <div class="seg"><button class="btn" id="exp">Exportar</button><button class="btn" id="imp">Importar</button><button class="btn" id="wipe">Apagar</button></div></div></details>
   </section>
-  <details class="about about-panel">
-    <summary><div><span class="about-kicker">Visão geral</span><h2>Sobre Almas</h2></div><span>Resumo</span></summary>
-    <div class="about-body">
-      <p>Um clicker de fã inspirado no universo de Deadlock. Colete Souls, financie operações de heróis, domine lanes e objetivos, adquira itens de Arma, Vitalidade e Espírito e enfrente o Mid-Boss.</p>
-      <p>Conclua Rituais para conquistar Favor do Patrono e desbloquear Bênçãos permanentes. O progresso fica salvo neste navegador, e sua produção continua enquanto você está fora.</p>
-    </div>
-  </details>
-  <details class="legal-notice"><summary>Créditos e informações legais</summary><p>Projeto de fã não oficial, inspirado em Deadlock. Não é afiliado, patrocinado ou endossado pela Valve Corporation. Deadlock é marca de seus respectivos donos. Os emblemas de ranque são usados apenas como referência visual de fã, sem afiliação oficial. Os nomes de itens, objetivos e heróis pertencem à Valve; os efeitos no jogo são próprios deste projeto. As Souls são virtuais, sem valor real, e não podem ser compradas, vendidas ou trocadas por prêmios.</p></details>
 </div>
 <div id="rankPromotion" class="rank-promotion" hidden role="dialog" aria-modal="true" aria-labelledby="rankPromotionTitle">
   <div class="rank-promotion-dialog" id="rankPromotionDialog">
@@ -1402,10 +1503,26 @@ const EXEMPLOS=[{"id":"g","name":"Grupo","cards":[{"id":"g0","title":"Pick do co
 const KEY="deadlock-deck-v3";
 /* Reset único: quem tem dados salvos sem "epoch" (versões antigas) volta ao início UMA vez.
    Os dados antigos são guardados em BKEY antes. Só aumente RESET_EPOCH se quiser forçar outro reset. */
-const RESET_EPOCH=3,APP_VERSION="1.24.0",BKEY="deadlock-deck-v3:backup";
+const RESET_EPOCH=3,APP_VERSION="1.25.0",BKEY="deadlock-deck-v3:backup";
 // Reset único de estados criados antes da v1.9.4. Futuras atualizações não reiniciam
 // os dados sem uma migração explícita; o backup deve ser confirmado antes do reset.
 const RESET_BEFORE_VERSION="1.9.4",INTRO_KEY="deadlock-deck-v3:intro-hidden";
+
+// Emblema do elo sempre visível, inclusive com o DeckLock centralizado.
+const SITE_RANKS=[{"name":"Initiate","src":"data:image/webp;base64,UklGRgIEAABXRUJQVlA4WAoAAAAQAAAAKgAALQAAQUxQSOIBAAABkENtmyFZ319Ve25mG5F9b2YjvKFtK7OZKrRt26kR29YUvmV39VzEETEB+N9Xxuh80QCgJB8U0HbE8H6AyUwM9LxfJHfVhahsNNDxBmmt5+tpgMlANAoW/qYNJB15tilERRIN9LlDOpYaLN9PArSkEm0EqLSedIFlO/JCR0AZLQm0BoAKA58yeCYOlm5lDQBQqjQBKvVZcvEV6ZjakR8vL+9XBZASgp7bXpCk94wYHEm+PNYJAmh0J+mtC4wcnPWkHwANg3HhZ2DG4SdnwcBgOC0zdxwOA4XaH73PKvivdSCAxhzmsspxCjQA0XofbTaWh6FQUpTeQ5uF49FySkqBiNpFF8/zcAEEZYqSw3SxXLhTIAoJDVq7EGJxKAwSa5wKNo7ni4oiyYyMpItjuQQGyQU1PzBECbY1dApobKaN4cIlKKTrQx+Fg2BSQcx9+nQ+PCsvks5gLm06y3XQSK/Q5HdIF361gIoAJTeDS+N4CQoxDcYwwhgxUQSVX4aQLIQ3lSBRoLGFuWQ5boJBXCXtvtIlcfzZUXQkKHR9QVuW45u+UIiuUe8ubWmWTxpDI0ODmsfpSlg+rg+DTBWwmTbQ8lpdaGSsFGaSOe43UMhcNMb94AYtCvlo0G8ORJCfGlCCmFZQOCD6AQAAkAoAnQEqKwAuAD6pSqBLJiQjIaq6qVjAFQlBt1CgnMFXE22d2Z7xOv0RwHuAfDlq8YHP+hSoWwduSq4f8AH/pN8RNATiWBDuLIPp9T3pEPINFh6L7CH39EzoxuAAAP79nBbxq3KL5Vzq0glMUj9Tbs04EzFZbA3c4XKsXsIKsSGPLWA5HG3plBK1/D5xSFX9MN3Il5i6DGYp5L9jLwVK8g8RUTw4eVJ25Uozs9HgLkRkLkrqdinqi4Auh0JeCZNc79wFaxxrk+f+LLV+zaHr/mPfj0X/7vnPjXI2qObmt7up5V4chicxgB0u6A0Z11kYuzGEZPhv05SThRDAvpYiWBGpwwHjgbi5g2MjpGG4TZfxe6uGwBFijUJOD8GOyd0iiTQlRxPKqIsmsBKZXInfQ2DuEFE0xrYpvxxK9ZgtyxyXjDmcotwnay8DJZsKeYWunsk00hRvAEbX6vOIvQEyFiiyZUU+zfKBEwyKMJJHDRccOFGk7iGfmg3syBLvqs2zuxPnQWvkHPsHVwnka8mSRYPjcjlzZa+fAtfUDLCOVvBrReNjJwArzXA9tMaNXn+oL370qNVIwYVmmhsVyr1xTe3kfX75A+YK3rhsLoVi+2M1UorwdP8OC//6oj/6lh//tDK+Se4a+cvss8WI1r+eOIguL5dyveMAAAA=","color":"#aa6e53"},{"name":"Seeker","src":"data:image/webp;base64,UklGRsIDAABXRUJQVlA4WAoAAAAQAAAAKwAALAAAQUxQSCACAAABoLNtu2m7XtD7jTFiO51V2UZlp0pl205pszI627Ztn3OqU8UceMM5x1wRMQGIqowR5KoAgMoRQZvJQ0tA54RG+zXki3aQXFD63M3PlmGUUtkJyn8ivX8+tCiy1+gULB1vIBeNzKIl+b0GVHaCc3SkY3cxmSmp+SkE0nIzdFaSD/NpSQa+K690Ngoo81/wJOm4EdBZGOTp+5CBf/RuTQWIxBKNOpfJwIRvpwM6jhL0/0DrmdCR20rDpBNtIHNIx+TB8lkLKKNSAKh8lC4wtaUdgpSCMt0WvqFjTE+eGtJIJIFBf5KOcYMnz0El6ue+BKYPnr9/s4dT9A2W8R2PJlJoypDO89Fl+t/8kUSC8u8ZIlwYS0fScjpMAiicCS4CP5Ck5+K8Gkk1ejPdX73/Nx8kkYi6TpfCH/zOQNJyOgySa7SnT7P7O0l6PimsJAWUuUGX7M/Bh+bQSGvQk9Yl879ZboRBetF3GNOxs8Qw2Hp1LEMq/60WVASNPgPr0qfxfFMQMUXyHacPSYILwf8/HhIDCl2WMYknaTkLBnEVirxl+Ivjp5H3w5fKWkVCXtkU7J8sXzRAx3AYCrE12vBPjveqocRedoaOJlLwPr+T9DxSDNXv8H5+QXxBqdO09OFCfrR6zocVRWUAhYJr6b5zESZ84r6yUMhUAav4LSwr+Ih78kIjY9EYQS5DoX4GCpmLRke7FhoQ5KJBt9kwWpCbGtEBVlA4IHwBAAAwCgCdASosAC0APqlMnEwmJCKiKrVaqMAVCWcAyCwTZfgrQUGhuPe6ehL+wC+6qZ4OjK9oMXfD3jUzEE3OOuRlPJ7PidV4eh/trI48Yi3RV02d83hDuaVnoCAA/v7Mvnckuj2GjVhwqym6Jvwink7TWAAavH37WbjG4a/hP/zf/Xx2S+bnWKfOp4fEdxGC5pAZGIfyt51ZRStAuAQ4s0ODUu9ZDkqNfQQb8fFfB27tmAiLinOTIiszS2R27YhYT2VFGE6zH6KCvq0thLHnv0mYbJzF7Ku3lS5SLy/sL5wNyxlX04jAwroeCgP/wy2zoUlzGpK4cyALhFaNcW0AcBXT2d6iQxhjhkYqy0FQPEM7y6k9Zy3hXAfC5MzfruDrtfRPhUjGVL/mARngL8IiY7SaDsS86YMZmGaLPQEJQK9fLBN9NEc3KnQ54ptI+pKovICU29tlEHSI9p+MjeMVAgrdf04CbWM/9h8i4IEv3cWZmpPCuasA3Q4+/J/6AA==","color":"#a7a5a8"},{"name":"Acolyte","src":"data:image/webp;base64,UklGRhgEAABXRUJQVlA4WAoAAAAQAAAAJQAALQAAQUxQSDMCAAABoLRteyFRntD7Jalj2ytzZ9u2bdv2GXNre2bplW3bNvtU8r2Lrq5KXxMRE4D/pxgA1plqVZYopoKgxc0tRQ7eNA4mBiTLmv5chelkaYCYYnV7QQCIA7D6i7aP+D/1UrhCJlm0BEYsgH5bln77/s8MXApbCIKdowE02vgcM0PppppGihnpfAidL/2KZJpqCPwMEMSsf7LG9X/w31Jgued+2Cg1H22F0aysodRTTIzkyVYiO++//RUqSXo+ChfDvthZDID99GX0XIwkAr7egFo1sJlBM9T/MxBJIYMnP6sNbGFQZgd+3h6JFHDYwkdmPMigrOz5Yh/A5JPEvUQyMLfnPwcTuDwCdHreX/QsGMjn+kBMBYHd9TuVxTXlf4cMJMNIl6fIwKiefKq7mDKLfkyVkTXlcNgyGDxDH8vrMzDIdFhbBa6DyxI0/50aR/lzM0gWLB5UHyfVm2CRYyojBY7OI6j/JUOMwLedSCU4XM00Rsp9cMhp0ddrBNU/2sPkgcgb9MVSfRgWuR3Wx/CcJS6foN731CKBn9URyQeHc0yLpDwDh4IWvb1qHh+o7A1bRCR5nyFHID0fNwaFLW7QtIKmvOsR5Vy4GCMYsjTwAlqnX9UVKSZS8yP1ZRp4DJjDq+EQ0eIoLyqpgUuBHXp7WysxYLGbGhh0LdwZ/tkeBnEF80v09G2MHHl/KCxiO0z8gd53hqA+DOIn6PYF/+0IIzCopkOHZ9gRBoLqWtS/oh0EVTeICwBWUDggvgEAAFAJAJ0BKiYALgA+qUidSqYkIqGuNAswwBUJaQDUVAnVp4YFIz5R+2vUA6OnoAEHgAAVb4pvylXbsT+6K3hfRM+fRsp7ActgtcXn+Y960kA1coRwAP70LncFpHIxv48CUP+YMhFvM7BtMWI1QWI6hZpZ78IqzqOPb6MZmxym6+PA9EeR1QDo5NTnJisQjKxVQg9F6Kr2gtq3r3ma1FRXlfEl8bv3jD365VB7tTumCdHw6RscaJSwe2n2HGpJvhUS3c/h/lTyPOXqmm6RqBBq6zDOk8NtBl+z0al8PgnciafuYZZO+pqQ9KKqWKqOloc5H7FKmYmypWXp1LaXfsVWcBBfMaU2yaYcE8ogWOa3snJ3AABoli7Oiq9/XVT2Fc2N4vx5iWZO4sVfoAbaIgGA8tEvPn9MrBA5Ku0A6XF2eBAxpgqen7AdDMlGOun5/9ElZfHUVg9tnQY0y87Aq0yAu2WOtvj9qFwgblb2KQ6GPJUf16skK9GPv2foPH5bWsPKibvtT9eH5LjnTInIG08HGSpmPTguVfJzwA49IIGy4TZD+PcoTPNeZ7pJkt5tAWS6dEVm9CYQNcigP+gauQAA","color":"#b2c6cb"},{"name":"Sentinel","src":"data:image/webp;base64,UklGRngEAABXRUJQVlA4WAoAAAAQAAAAKwAALQAAQUxQSNwBAAABoLJt27HNln9e932/YyPats00zVZXtdlsJcVJk2wr2rZ545yl57meb0XEBOD/LfIfIsUJ4IyIGAtIUYLadfDvtapAijFS79Gr9W1r1q3Zbs+rG3VgCrFYS9K/+/juN8mdzhZhzeDoo+c/fYpsZ2wBJQxnINM/ycihKOkZdDocI/87xVdDYbUMmj9jZNbE731hdaRkD/IXs3teqeRExWE3PfN6bkNJw2E0A/MHTkcpn8V8hqSQIqfD5jGYw5iomSKnwWQzaB5jom6ibwSTyckcemp7TjYuGxakIqYhk0jda4xqKT7oLyaDQYOfLDBwLGwGWOxNXi3yTjlBthEMap6L4TIJKj5k1Eq+NUwmOKygVwo8DIPsFu1DUhsLlwMGJ1JQiXxcCZLHYRJ1PNfAIa+gzjsmjRQ6weaCxTZ6hcCzYqDRg1FlLKwCpHSdIVfky0oQDYdl9Lk8N8BC06DRV6Y8KXSEUYHBIYYcIZ0SA10rI/NxMpySoPpzpkyRL6uLKMFhU/qdyae1cNC2MoQxZYiRzcSowWAZY/yPlDgbBgVaTCLjv0SGmbAo1GH8ZwaSgV+HwaFghy7P6Rn4bRAcCreod4k/eac3HMqgRc0DvFkfDmXSADMawKGMigAGmlZQOCB2AgAAkA0AnQEqLAAuAD6pSp1KpiQioaq6rADAFQlsALEMkEh+2g55DTVd4+wADpm4y5oFaDLM0oLMG8L/aP2Jf1VPQ+apEhR+dt/9/uZho3Z9oiDTEhjufUahp3xC1in8l88OJSAYt+TymxiWVMSnbwzgduqM5uIAAP72dSp8IyDTrC4rAHgPYwTF9Qov8t2fQr2AYWmrjnibhxSVmour+ud9d8UtuaO2uUVmn2aXTiXmFGEfbuRE2DuOcXT1pE3FkrNb5EI+omGiZ7GEgYb5wAd2bgVjRT8DpWHonnpxml02MEsLDy4Euv0VaWatuZU/ePY/0cSOL8O5n/Z9P61+so6F5RVuZMZf6PteFwjIk5Jl5/5ZWeh+N/BBQfMit9HnLv1TitZqS4XPRksWdtE8WfF5/QVa9FS7zc2E+HpPb2fpbPU0qpUxr8VX5HnyC9Y6R47ucZAlEjk4nHUVWff+tSlgWXkX4h5stW9WYRhFnau8LWn4GocJ4qUSA71YOoXAR2maPgWo4jNzSlE751+fYQ8XoCXiVwdYZZlM5kgK7gVuAq4ptcTO2u/an2GE5q2O6JAh5Xsnff1b5itF2wU+WbN59sMAYxZSlW7OF5XcyOfn8gP+3UZ/Tm/QIMpTpR/MQGvXp9yyBDXzACQbg4SAHITr1Sc64UacP5oJLQCU2jOnG/JLFsFlsiCqSlVJ94aommC0JwNZj3Uy4rS9H9RwKOCQDjmHJTtP+vGlVxLhloaPrQeaA3JdRWoLIe4JA3Hoh4wRsbVjIxAz7D5nef3o7Ohc8fcT7td5P1VTO8zgGcfb3AajHrSxHrB7IDcnNFDpkM8X47ULxgAA","color":"#d6a260"},{"name":"Mystic","src":"data:image/webp;base64,UklGRtQEAABXRUJQVlA4WAoAAAAQAAAAKQAALQAAQUxQSOcBAAABoHTbtmk7H9Bce58b205VNdss205Kdkq2U7VqtlO2bdvJZ9yN+fGcdV9ETACUBUXVGoiVoiAWyAEwhREDGKDXkSfnxpeABcSqAUmCEuv572uNkSTQFtRtAtQ/w+BDcPzQC6jRHaKSYP1vi7s9YJ7/9swPGnn/e3ERBZGSj0ky8L8DSbr2sAoWrRlcCPz/GPyfHI1EpS89szqOVTFS6QtjlsDOsAoWvX8JCus1LDoERmb2nA6bRUyZh/TMHn2+qdgMCabRUdPxNEw6kbKvY1Chj21gUyWYTE8lHodJI1LmZQxKDKGl2BQJ+tNT23EL0hicjnoxfq0I8z8WrXykvud82P9J0Je+AI77U0Byd+jVonet01j0olNzXAeLlBYrmFfy8VEFa9KItWcYVCJjCxikNlL/dggKMfzYGxYZcxhKr+C4EjlkFVPpM0O2GJpYmwkWO+gyeZ4zBgrShUFhHBIFQYmXDBkiv1SGKCDBcroMjhthoWnQ0MWYLrK1EgRn6FN5XjEGugnG0aVynIlESVD3Vx9TBP9jNRglWOxjPkWeG2ChbUy9U3Txvxx3ljeiBgFW08d/5bkJEBTQGMwjA+m5BdagoGIx/Gc6zzkwgkLn0PE7ORtGUPgEDS6OQSIoigaAQRE1sFAEAFZQOCDGAgAAMA4AnQEqKgAuAD6pSpxLJiQioaqpWMAVCWMAyMvN1le8NTGhbKQ3cgRwK4C7e6wNHv6qH+V4vvpb2BP1g9Lv2Pehz+m6w8kCbKC7MadgS4M0060nQTOCK2Rk7Ui5KhPA+hVe3OouXM6+FOySEgMFdkOkb099Vq+a/AAA/v72XRmX2yPkuDOFREtVZyCpkn8LEDRQYoix4oOZf+M56lq/sxnFN9Uh+YoHD4xpIKE3Tv8P7zJ0nzK8tVenVo43HOuJeZDOeP0vOgsrQ8A01H8z8aPfPwEvYEHzvZR8oILe/3Lu8mMqfpUM/YP14Ij5zLh3kKbrLqc+53UYig6FYJ34oKqxrUyJar1wlrwUAfLV5te1RuyBSSm0RkFeVtuCD0nfETJTjzWetQyUvmKxR/3H86e//77dN7dB2jY73xQPH9VQDMQ154o9cr/Q5T0fAaITr4c4Ks8Irydbbt54Wqep+3ffpnym4ECi9+moT593h4azl770MR5K7fzyR3X1t/vV+Bkf4v2zlpgKn/ddw/flzr4kcbxlJnhx0Fd9c3HesRw/NHe4jW7AKJI4VvZ4c/TvMK/8yG+xl/xeyq2oQBiGtXG0J7sKUjPdMawgHfm7WUSBfNK2MXqwXyuXhyNQk2NRKy7cZ4yo4abZE0lSHOcHYed/M4KYKOaDrFwnAAm8Oj2G+tFvh9xp5ZLlQjU/DbN1ckjjm3OHvWZs5Nt8PaWkqIjXhMXo/+ilXXLe98e4toAh1YCpOnpz5nJ+516mI8Y4XSjwNZ9hUR5gwswaeK39Yytu5dDGSTo1O4QOJqFU0bNTZVzLrugZuwD9NZHxWX0mNIHICgw4T9C6ZgYuJn70ejzmxFUYzMwJ/r5iFuFqxQ1sQByM97jLRKaLAuDefuc1xSSlUcd5bf6aObfQOF+us9L3mciK+R7+qixlEP6v2M4mWdP8AAA=","color":"#becde8"},{"name":"Ritualist","src":"data:image/webp;base64,UklGRqgFAABXRUJQVlA4WAoAAAAQAAAAKgAALQAAQUxQSE4CAAABoCzZtmnb6mOOdW3btm373ppt23btxK3a1nvvB2zbVs3WnugP+6w113k/EBETgP+pxJBoZVjQrBLEpDGCCi0gUVQWdzWASjFRwHQvEY1SDmuvo9cAQP+jQI8euH0O5WIYxUMcOcGV1IYBDGoe+W3MUD4DmGwGuEj/wQHyy8kwBhM+Jo98FvhgNWgWRfWH6EgGS98b0vcv2kDS8Yk60HSKJk/TksGTlq8avEZL+kBaftQOmkbR8Qtaluq4fho9S7X8oh20NEX7r2iZMpCBKS0/bwstZlDtLVqmDkzv+Hkj6H9Eqj1Jy1wtn6giAogxD9MyZ8tHyqtAcYIF5l7gUSjQwRcKITdXKHQXNTccyZBTIMOD0Ipv8J2dX9LnEciXPyQ7AWMXVsSYP3Pxdi4qzvhgDf5bAZdo41meggI1WgKiomZYcPGc729UFMUNan9HH8vzh7owgEgRAd7+IVr49S2DtIJa23u5ECf4YRuqpQKScngxuBiOzwGSASrraOMslwRZDZr+FEK2wO9qQzJB8QBtNstrUGRPZBZdNs/hUQRVv6LP4vlGIoiZoIQ2i+NmJFEUg+lTBQb+1AgSBaKv0qXwpA13oIibYBdtaZ6/0XOKxDJo9itDsQKfaX2G71UQiQTFg94WsXyqNtZxDxLETjCThUAy8KGamP3Xny3ERIPRk3SBPlwAVgcugEF8EWwkHX+ojiP8fSEUeYpi5s/0X2MPvx2MBDmXw7Af+O11fjMICXJP0PF98u12UJTBBI0e/7AJEpRJRcXaUJRRAxhEBVZQOCA0AwAAsA8AnQEqKwAuAD6ZPpdJJaOiITjZKACwEwlsAKkndr8UieV3gFi+wj9sBz03ox3jb0AOkr8m7NAOln0agJYwK1+WRpGpofjN1BP1m6w37Geyr+syUJ4i7bgb2slviV8LWI+8nGQy+uJugQdjtaw59+JeFAgD13SPVVxd8gHMr97RBFLhBrAA/umXrONXexTBh0AKnb350YNxa3N2N0HN7I+5cqQcj7MHTj+daSupyNVL7nTfaVcc7PUOeleKfomcC1nC5mfWiGhOe04h96CZJ+YqKk0TWvMzUvZBZvvfMijX6Atbh/B6ANDt7/BmrNF4Trzioi2bnBr4sljkar/5XX0ad1V4M5CYplgFjnnpqXecbgujimUrGUcKYEdtPV7sCLiGKi5AV3mhmN6fJTAKHVBgfq1HPWp5IHKyP7i1GcdPX5AxARari8FZpR0XylItgCQwmkn8e7KKxrY6jaGy5P8Liemex8SaoST77GUqwAz5jfV1KTRizBlFXh9grPe1l+n7a7PJ7EknPI7lTwcNbgGovOPm2sfWE/gDu0RDfshM84SzPdvQxISec+M9qY8ByBLN5G2MyM2xf+amBrw7D3EmoZObJBbS6h+/vtuK0Kqwb/0uF8ERcinb61yuwekL+LdTld+YSEOt7aFh/bN2sA0ly0nZg2Pq/G9FZo6mmO2HMVqu2ZKnjI4/i+X9ILTvw6mP516DMTe+hcMZw5SEnzk5O9S4CMFm8TCARqRYS+HcKMTDodreNXvvV8/wegkSExRHDyK7ku9LOCjEaXdtpVxp+6IrtSb9BhfRNF6dQ0XB66TiG8//DA+9PzDwKcq7bUfPN/z6ZWr+3fg/LK+VI80hVJWTt2BqusV/VyZ6be6r8t3ZDg6Vfv1ue1XYRTXm3cTHDn98ZGUa0qqpFCxS+LG/tkzOt2hT0ntRD/R3OmIbnyvTkSmwC9uNugb8TsbLe1WNz2azWZbnDMfojcMG4y/Fj71+ksS9ZTltzMGuH8XG/nd6O+mKdUPYG0mx+3xSfYlKTmeL5gErnJtd/CHjiiDX6/hH//+uz//10R//64iVrlp5n8/766MjznTGL5v4cVgAAA==","color":"#eccb73"},{"name":"Emissary","src":"data:image/webp;base64,UklGRlwFAABXRUJQVlA4WAoAAAAQAAAAKgAALQAAQUxQSD0CAAABoLRtm2HbXdD7fVXHtm3btj0zwllmtjmyk5lt2xnZtu1U1fcG3b2qV0RMADI7772iKUXxf/Xee5V6FFh0+OGHDEWx0xoUPa8jyT9uv+SKi3dNbgtINtVeLzKFEFj8wx3LILk8HuBfJGmJTJ888NCTT66G5nE4hH+z4M/7D53WBQA6I6/q4B+T/S/a1V0BqDpBZoerGVgcfn7+3LEQQPI4mfZXtCIjnz6inwgaFe9UAfF4gpGFln5YCEAhXqoVinicy8gSvje+cwsHQXWRfsffevcwCA5mZLmRE4F5L95/VHdIiQgeJ/li2/YXM1oFpvRCnwFfk7wSrkQxO/wVAt98n4nVjZ98xhj+/nsItMjjTAbSyMhGE2lk5F74ApGWrzGRTImNp8T/3QBXhLafF+SPfABa0ubj2u6t8klt91X5tIlavV/bvSVwuIaxlsCT4Ys8TmWoJXIzXJHDNsY6zGwCtEjR/WdaDYnvtYYUQXG3xRqCnQePUo/drCNxIVyZoOMXtGyRTzlFRY/zGGrYDl9FMeqPZJnMvuwoUgUOVzJkCjwZHpVVhv+aLEuyT7uJVIPDcYyNpcTInXBoULT125YaIiMfh5NG4LCewayS8f0346+jRdG4w3VMtCohbjqQh8Eho2q3j/8ypjJLHHHlK+IkBxTLD132J+P/zFLi4S1OHwJFXgGw4EMGFh8CBQS5FR7D32Agv/rkk03wgKJOj06P0I7r0rEzFLU7tLqSXQA4NKECh7QWETSloJnF5QIAVlA4IPgCAAAQDgCdASorAC4APqlImkqmJCIhrjgJmMAVCWIAw2ehjBBgG8UeTBc0OivWB2BBgSqzHJ6JGdTUG/Vrq0ehf+jq/EuVrcpMuZ9mWJ4/idUzt+95P9hUhUdUKj8p/Im3J+D0ASd9azFC2+VjJBiFDiQamX3Bv5FK60gAAP7/Gsyb/3eph8AMIRB29JzEpzwE1uP/FbRvL9vbP/Zl/hXTtGpmOvMd8Oqgz5KiPGu4/ukEfzHDtZHNuvtUPzNvfDhVCwuP3pY8nRCAppHHUow7zp3G5UdQcPnf+0RoHkgyie0zFGrkvstSRFKDsZKkfwA6gSow2dK2y9jrOMky1KR5KMBw7el559qMAOXVHQi+/R81bWsiiTnOnrqOG1lmCAAUCNXF/mQzO1NkpawTX/1SNaPugOw6uWs7P9KW+buMJulP8q7cL9k2anO8C4EWLgNO95lPesW2r+dBrNUl6dlel1/QKnV8HMj+vWHeI/6l5kswSXsDfEjmW/NlTeg10p77r0LPo7RUEd28LPpowVPzHaSaCzEaucIuXPv070UJOHJlylUM/NAck1aQ//uwCxcwwy6AQ6bssc2qBBLwx1ExXSpUrgwq9iOO4SARn2WPjVgvcc9KDH+ngbD/BAb8dHato+JzWvVs9iOAaXohcM1eWAw6fuIQFQUaknVr9M6kAyZadOZ7eTYTATAIVBe3qxa4nHWb1Ud9dLbkszQDxHPJ5mTC3g0wokiZMXC1HbrxfP8Ad5MUpetiJqKCSOlyPeN/6RxezJU0ga+Su/KcbT1V+euzpeJI7Llm8s42xGzhPhf9xFf5utFbH54kBauNxIy9Sniqr3itvkPBmTCUd7TnCgINOQSVjEbFN4fmv4D3zwFRy/kbsbqNGvEyw+7v4s/HbTfjcBnuBKm08cFm2+DYQ5wZwB+3sf3pAgIKvbgWlnxh+7VX9Ev2N+6/FOj+EvqIwNyDQQA/vcGp4Qxzwt5n/BHdr2oj0K0//XHbcPv1sbk6j3MWPLEm0AAA","color":"#8dd5d0"},{"name":"Oracle","src":"data:image/webp;base64,UklGRoYEAABXRUJQVlA4WAoAAAAQAAAAKwAAIwAAQUxQSPMBAAABoGvbtmnb6mOOea3Itm3btm07s23j2S+y7eiltm2/PdGDrbnPF0TEBKBsG7XWWlUjicSoqrVWFYVrEoPCu4xetGPH4nF9WlaCCiCSRwSAAk17j5u9Y9u26f0UmPI7c7pPZsAYABC11gCAKHq8+R9zX66m6O3/yzjvI8njgNZpIciWivVUsOofMnrv3P/uh1ai2EvH7OD5UF10uw/1R6+Y0Rqr56PCNdIzO3qOgIricbos0vGTGZ3i6z+TzLz299wBr9NF5vRcAgVEan7FkIOe/MmTwXmSP5CeuTPcDwsAiqG/uJiDIZA+kow+MgbmzvBWWMmCxTD6mIOMzB+ZN8MHVAW5FcsYY66UgfcaEeRX3BN9TOXjM0YMChSLQWRM47gZKijcYGXwMYXnXTCCYi220SfwvFNUULSo+ZChuJhpBkVCi0N0Rfn4DBQpFe19LI5zYZPAyGv0RQR+VUMkjcWaohwvwCKtQZ0/GAuLoTtMIigejK4gzzfFIJlMYCjIcT1sMkHlLxgKiPytFiQZLM7QFeB4FxTpFd1DLCBwsJQCIm/FkCfEt1WkFBZbmcmT4U5YlNJIwz/oc3j+0UhMSWAw+Fs6kp7fdYOgxIo279PR8dNOUJTcouYL/I9v14NFGVSUu58v14WiTBpgVXUYlFERwCApAFZQOCBsAgAA0AsAnQEqLAAkAD6pTJ1KpiQioa44CADAFQlAGAP88Jewr3j+ua/tnRQrA7TEwJU2M18Y/1N7AX6odXL0MP0UJ0RJd3u8bBXvZ7qx/lGPeR1QZrbM2vMmEmNjhvhfejer2hfCvtM0AAD+85lAhZr3dkLcoi4aCx1UAy+M64+v952eOCpobxSoeCKM2taUJENP2EOTVurIKak3LrVwXfRzLDoH0CpPsV5qEDBQ7ymzcADwKFXyA09CSDIbnrtHy6+3DOLoEwjRVyl0zEXmqbs5Tf/53cDL7757XXjxh1Ni+4Xx0u82/2cDsSA4A1ghLycIr+zoalxqP8yy41bkWptycIcEsBNnF6E36AIYMnAwXdW3aMY6pKAkwsKFDVqVbjJRxwEmTqVAmfJWfHo+BeL5IjyPXBJqVOG15/r04j7RW+bb0Yve3YPTEgE2f/yH/CbZg/TyNWpryMFa7Nqo82d0YxmYeAEQaZ4rP//tXh7vE9zscsklvf5V8UkHD0h6znYjuoE1li0BaNQF3ClOckAAStsl0djl7c5Ml4sH+lsrX/bysT7qC9ukdISJc53k8nAmOgW/ScQRVNSvQJQohfpcIhVpRPJ+nIti7G0/dP7l+xsinYlTe27G1mZ1tCQ0/iBZ1JIVV/7REGRdjjU5Ig7d+osmKAF/MrrtOBQViVkU+Wn1sZKDXqM3grvpMPYH5OsWAfi/uY1Nx8q2K6VwsTHrJCP+kGSIeh92p+CNRs35eDEbMIfBrqXzn70Ih8WQYDP+BBn1eHQhrQX/BpX6o5Do3h/P//J3COX6f8Wgx3UjT9XP9Ny0NRmQDWdYYAA=","color":"#d3c6f5"},{"name":"Phantom","src":"data:image/webp;base64,UklGRsYDAABXRUJQVlA4WAoAAAAQAAAAKwAALAAAQUxQSNEBAAABoENb27E9uu7neWLbto3qT2Xbtm1XSWVXtlPZtno7Y+t7cA0+vO9XTRkRE4D/j5VSWaMEgKjs0EClKpUBnQViUPn0b7//fqoKtMQGdP/M/34zAHGLyruWtCEERx4sqCQWg2m0nv8NCS6GiUXhorNMbt0NqDgERb+hT0H+WRUqBo0ceqZ27C8mBoPVtGkdg45B4QldGiH8VRu5jFHRaDRJBKbreEYAQEQyE6Ov06VFx91Nt61qgShzYSUdM/Qk6e91KawykNxoH1zIhJ7WBnI0dHpAja+DZ5Qh/LLGIG2RgoPe0DNSyxXQaQjEFLhGBkbrw5UcLSLJkj51CcbYDinzVAcalnxEF13C989TpzwAkTI7nrzjd38xem/57avDbUXw39ab3pDeR+Qd+WFnDpKLAAVH3ia9jyA48sm0ooCoJIAyAHrfIX1Gjnw4SANaIV3RAIa+pMvA8f1YDWhBxlpQ7DETaTkeLAPRiDYXyj9nSCNwCWAQuUKRPdancH4FjEKMGnk+MSQJ/L6YUojTyFpaJrdhC0wsGqNpQ5JgOQk6FijMogskg+UyKMRsMIsuMFguh0bsBrPpnOUKGGShwRySK2EkG2Aw48V8aGSpQh4oRAkAVlA4IM4BAAAwCgCdASosAC0APqlKn0wmI6KiKrVaqMAVCWgAyLGqML/slVfqTY5ZekjZc3fLEuE9YjZ81tzkk5uHWSquaooJIDtjmDO6SYe2jPMWIDVt4O20ZWx/wPzBXsAA/vwu893fgjjiBz01J0jv7Cr4MVKjVEc7nGbYngRolJfiyGVsHDbN7H2C4zAW96SwXE1IHJQ+qA25fnw3UHWyFxKr64O7Gt7A4GkJzMCI/CdwGNdIssecmjCj1cqVhClSpUhi5uOH3MCoRajvxUZwGqcTsjrD9Qmbe1MUNVOx35uiIdazvekYWpv6r+jLz1jgmOsjJWH7qD2t0uLzMac0q6nU9thEVelKkkVYr9QHfYlqEtWsdAad2JLGucQwBzc6qP/Dm/KcotqMgEFR4IyQrclpGQsDQc2fs+QvFfKcSjoX8NMH45ZtG0AhL2S5jE0eb2R4VY2exyOmszNFv1CfpeOug+zMeMlj+42u+PuqVG0Ch4rIO36uXcEA1pajzOhctMRssO8J8agk9fpoAPAXEA1ydAoz/x1KX2Tu2OFPoFslVMebJPC0ujDCOLdVAbJSji2juhLfyuynX756LvJk5TRr0aai6xGLaVX2ytXaon4AAAA=","color":"#a897ea"},{"name":"Ascendant","src":"data:image/webp;base64,UklGRgwGAABXRUJQVlA4WAoAAAAQAAAAKwAAKQAAQUxQSMECAAABoCzZtmnb6mOMue99tm3btm2rZNu2bfuVVLNt27axz1pzztELe2nveB8QEROAblXwvyyYbTrIqARccyLCqIh99Tx0RBRLsz87ZAhqUhdwNLmHhDoxbQMgmFQoHiXvhlWIGdqqbLyWAQgmUMz2H/n7tBCIGYAJt98A2mzRnz88b9UAIPRwIGPijugFABNtcNW378ys0gSKZTP53nkrA7CHmaLfq0BY96rPyV9mgqJ5wA4sSb586qST/kbP/EpmOucdkmWxFgxtezidRXTy7qneZU58ebqnyBwL7oeA1hJwB0vmyJ8iSRa/M2aWvAwBHYpO+CIj6azNZORDYtKB2jjM+gGd9ConnS9OIj3TRqIhoPp+T2yYeCUEg8FUqirn3uGCV1465nbmJs7LT373lct3mBsNdfJ5t7/mtYJDLF67bOu5JhZAZaF7SpK5jDmWuU0qU45lJlneMqMIgAmXOeElJz2y00jSXzpxmQnRcLmLPyL//a/dXwX5+qlLo6FoADBuzX0nmPY79yaZb0005UErAkDQGsAs9DDF6dvcWLh7XXYfu3GnMydGL5ih1gyAhfAzO30TPQFgViHA5evNAqzxRxmd/R+rnB//QI/ll0sCs69/NSAARPY7ouA/12/xK53OH+6gD2Tu9SIzMz/b+P4++0fsCAUUb7PvJOlsmTnoJJn7vB8BMBxJZk/ZOei5jj5Az8md5W5iAARrPcfEoSZ/YiUIBgU4nWMxpZTb5ZRSHOOBgKI66MTvsNLbZFa+MaEG1CtmPuCKRx9+4AumZpEfPvDwoxceOgsUTQWVc37Glm9Pj0pBcwmmGnDDFu8wV2W+u+el6KlaEHQ6blo856kqpuswpWKo495hrCq5hwmGarL0D0wDiY/PITocKBb8ltG95PkYwYCFvifJC2EyPAQs/O5PP50HE4yiYsLppoEIOgQAVlA4ICQDAABQDwCdASosACoAPqU8mEkmIyIhNVqoAMAUiWwAtRuARhE3vQvq4DW3A54jTM+fT9j6XB1JzSOakCqAZz40/qb2Bv5R/Y/Sk9fH65exX+qqHgLbXTSnQ4xg9QwQ74HRHtB+hiDbRPUzihfSprsN7PCFGfd3vaSSbVBNS0d3trMMckrKAAD+0y39yBdDLM3+uBuaILh7txSNvRm892Y/mo7sP35srbOz0ymqTrqkdZ7w+4oY+vBgUDpLxOcffemp1FmNzMWXYf5I8QoANqwav2SDOY3K02ltg+s5jyzM9uq3GHQ1e8bYZRm5WDAKGGW9gJi9KVN2pZjGsCLh1FyO6p6Jj9bVa4lhnKIXKzjnLqW1tGxS9r9c+kiq2U7f0v9c32yQiWMX3yArgQQ9QJEB+YetOvxXD7qjOLfhv9Kr3Mcq4MfDG2XhPztHSfuacjae/Eo6F+Fzr7mbWUywdtB+kuXWbVrZB+syQxrYuvfqWTN1LEiSaKs2tfwxH2M4nz0dhtxogaIXaKxjieqo+FA2/bQdSGUCr/IElCXBL2qIsM3BjEfGeGQLAJGODbDEIiZrKMdU7O5mmaIKBuSBDoDj1d7RyM1iWHjEkr5BrKVo05xLpUT9L8X5xZ+1IMFHNp8d4mwCx2CFkegnKtiag4A3d9ypVRs+UwXcsjH8jQvZ/fStvNhFrBYKuexTk2/aENqeRncTpA1T/DNLWT59KFZeBRFZbL3pZQwPLoT/T6WsvZaQQBYtWXAtitI4+KrEwt4nsKSQJv+wS/+SPXQt/xYf/9f8pM/wn/hHx8XSNBruFc+UUMbHGIFbZJ1wvRrgD2S49JBkvcD1Jn+mfPE17LRyGeJd/tVB/p1v/vGSD1yVJatVqu3H/F/sb+I4qwOJ6RK3/gLvBbpWpxYLPd0nkRz1PVi6JiEXHQJSTfpbpyf+QUnOzOvNve9zToqfx/xNqNKP0GT25W9T7FLVahwp+P+lWnLxc3cm7AIUWod8me7ofmQWzbAr/uC+hG4pfab+/QDx9iveF2wSLFdR7S8UEf9wIS+/63bvnOqQokma/tiqq6Ba8xIAAAA=","color":"#f6cf83"},{"name":"Eternus","src":"data:image/webp;base64,UklGRjgFAABXRUJQVlA4WAoAAAAQAAAAKwAAJAAAQUxQSIQCAAABoLRtmyHJ1v98EVE19hzbXtq2bdu2z8rc2rZt7mzbVnXgXWRUTWVHxAQAGIMbMxcGVhiHMbBRt4b18azf23nnC3+ZYP0MMOpTcQzs3Mv//6cT8QzqcRMBz97nE2xMt5/nFvXKVjZAIDD7EwsA5sa/dy4ssi++ZrxR/tcpFvqMObvDsu9diAcCm+q4OZZ/sI9zC/xRop7EV7xt9zTb/fsdGOBt5aTfv/91PkIjcImicl4J3+hw3xs3SK9gAI4lVSTduywOPCv3cslJb4xzBp7uJ1Iqr9aMSV8qlaw/FqNjNvETZUlJl+AtsMzVSinqSnwDeEdZGtFbc9B1J2tEP9+unMsy3tg5KktRJxEqzh4sSVLS+xvB02VEH+6pHHUQ044pSpKSDsJXPCukIklZenbt15WV/pGijtj3S5UiKZePu2YVY8bPpUhSztJ/6v+7lNSMuhoPmEHgVMWGlFQtDeWsZsn/LGmOprnQmfi1ckWlUi2qR13KGG8wLdDcOqXaMEv5YhyA49Jf33zijivO3O495aFlXb7b+Vfe9/T8NunMXzRK45zA+Ov0b0ztlBR72tmwDks8r6SWS9R53gDPXN8ptlOirsFoehZ+Q7GNLF3gOjUcU+5XykOL+udwHP0dXCzFFFPMA8WUUir6fQ2CDYB59ntb1VL6FFXzw8sRmEVHOOnx6568catrFStFO5903303PbAuOGbZU1855iIp6y1H1TmGaN4F57vspSyV8uN8dH2TFoNfvZH17Vgz2vbcoCgpaQNCW47l/8hFUs6vjjVrybNWLFlS1PsTWsOx0f8lK+r9eXG0Hti4p54+mA/HKAxs8r8+mA/PqAxsev88eEapAxxDBFZQOCCOAgAAkAwAnQEqLAAlAD6pPppJJiMiITHZnADAFQlqAKkncglQUwiBvHVc4/cui488xtykZwK4CVcdqf1T0yvrL9Bb9dA38Tbn2ookYxhyO6OD9dCXHp7mdcguAz1iOyqRXXj2ZJv/mhsvBvUW2wVOgAD+6ORdoGgN2ojawqaPvhU5dLNuRMIf8vRF+X9QNWYzuQzKjv+AmXX3nBHS+1PF4b0JkuAipSu3Yfyj49wAk1HNilIGMoAs7/12DuvEbVZfnuwQlzJgb1HeS6xsHrxmyArHtBPtCNDDlAHq2pXxrjqGCXaFxY0Ih7vaE1me+8yqQJyuRKnb06OHTkIG0yMjk2b087BEJtaAXXsFpi07cWVcZXNTwG2aBx7tNK52V1NV8m+fBwsYInyiUCWkmqWuwE83UJRHGMUKvavtmy8sSjwDCx/1bdOnwhh+l9BW3vJODJIkFxOWHI3mZypvklNmlyvWSaVC15bazrcRkwReYiWxg3ZPDp9kzSc6zapbgrHGG9cB6qHoXYEyoXPJW1+DZm6HRbAdktk95MbAVyaTFT5KYv+qdFxKMnUObNXIHsxH7l9N34Y0sJmo0tOd6D3EYsrGghz0pkbToHBePNxFKavqHMmH7529T/zYZHN4EhQjQJYzQ2OIK5ph3eh4+m6QaVDtA/tPuL0vfqUcqrZx9Np/UPYkB4n4/fAQiFPjbKwqqs9G8+fX3/yMBPTDc5Ay4CW5aJgVSur3l7l1WBPnTenio4NZcHfddqBehb748OoN/dGcYXLeJyXd18+pTWTiGyG/uOtAdOwOd6BIkOn04HlugxzQctuzlUqJbwSM9Ae363iA/Ew2ku6uv2H9CRTcvx/+B7o+hHaWIA3+8OCFgjgA","color":"#a0e8e0"}];
+function updateSiteRank(steps){
+ const index=Math.min(10,Math.max(0,Math.floor((Number(steps)||0)/3))),rank=SITE_RANKS[index];
+ const img=document.getElementById("siteRankArt"),chip=document.querySelector(".site-rank-chip");
+ if(!img||!chip)return;
+ if(img.src!==rank.src)img.src=rank.src;
+ chip.title=rank.name;chip.style.setProperty("--medal-color",rank.color);
+ chip.setAttribute("aria-label",rank.name);
+}
+function syncSiteRankFromSave(){try{const s=JSON.parse(localStorage.getItem("almasmortas_v1")||"{}");const rituals=Number(s.rituals)||0;
+ updateSiteRank(rituals+(Number.isFinite(s.rankCredit)?s.rankCredit:rituals*2))}catch(e){updateSiteRank(0)}}
+syncSiteRankFromSave();
+window.addEventListener("decklock:rank",e=>updateSiteRank(e.detail?.steps));
+
 function compareVersions(a,b){
   const x=String(a||"0").split(".").map(n=>Number(n)||0);
   const y=String(b||"0").split(".").map(n=>Number(n)||0);
@@ -1611,15 +1728,57 @@ addEventListener("storage",e=>{
   if(e.key!==KEY||!e.newValue||busy||ed.dirty||document.querySelector("dialog[open]"))return;
   try{S=load();applyCfg();syncTitle();syncCount();refreshAll();renderHist();renderQuests()}catch(x){}
 });
+const globalNoticeQueue=[];let globalNoticeActive=false,globalNoticeClosing=false,globalNoticePaused=false;
 function toast(m,label,fn,ms){
-  const t=$("#toast");t.textContent=m;
-  if(label){const b=el("button","",label);b.onclick=()=>{fn();hideToast()};t.append(b)}
-  try{if(!t.matches(":popover-open"))t.showPopover()}catch(e){}
-  clearTimeout(toast.t);clearTimeout(toast.h);
-  requestAnimationFrame(()=>t.classList.add("on"));
-  toast.t=setTimeout(hideToast,ms||(label?7000:2800));
+ const message=String(m);const pending=globalNoticeQueue[globalNoticeQueue.length-1];
+ if(pending&&pending.message===message)return;
+ globalNoticeQueue.push({message,label,fn,ms});showNextNotice();
 }
-function hideToast(){const t=$("#toast");t.classList.remove("on");clearTimeout(toast.h);toast.h=setTimeout(()=>{try{t.hidePopover()}catch(e){}},280)}
+function showNextNotice(){
+ if(globalNoticePaused||globalNoticeActive||globalNoticeClosing||!globalNoticeQueue.length)return;
+ globalNoticeActive=true;
+ const t=$("#toast"),entry=globalNoticeQueue.shift();t.replaceChildren(document.createTextNode(entry.message));
+ if(entry.label){const b=el("button","",entry.label);b.onclick=()=>{try{entry.fn?.()}finally{hideToast()}};t.append(b)}
+ try{if(!t.matches(":popover-open"))t.showPopover()}catch(e){}
+ requestAnimationFrame(()=>t.classList.add("on"));
+ toast.t=setTimeout(hideToast,entry.ms||(entry.label?7000:3000));
+}
+function hideToast(){
+ if(!globalNoticeActive||globalNoticeClosing)return;
+ globalNoticeClosing=true;clearTimeout(toast.t);
+ const t=$("#toast");t.classList.remove("on");
+ clearTimeout(toast.h);
+ toast.h=setTimeout(()=>{
+  try{t.hidePopover()}catch(e){}
+  globalNoticeActive=false;globalNoticeClosing=false;
+  showNextNotice();
+ },280);
+}
+// Áudio global: controla o sorteador e o Almas com a mesma preferência.
+const GLOBAL_AUDIO_KEY="decklock:global-audio-v1";
+let globalAudioEnabled=true;
+try{const saved=localStorage.getItem(GLOBAL_AUDIO_KEY);globalAudioEnabled=saved===null?S.cfg.snd:saved==="1"}catch(e){globalAudioEnabled=S.cfg.snd}
+S.cfg.snd=globalAudioEnabled;
+window.decklockAudioEnabled=()=>globalAudioEnabled;
+function renderGlobalAudio(){
+ const b=document.getElementById("bGlobalSound");if(!b)return;
+ const name=globalAudioEnabled?"Desativar sons do site":"Ativar sons do site";
+ b.setAttribute("aria-pressed",String(globalAudioEnabled));b.setAttribute("aria-label",name);b.setAttribute("data-tip",name);b.title=name;
+ b.classList.toggle("muted",!globalAudioEnabled);
+}
+function setGlobalAudio(enabled){
+ globalAudioEnabled=!!enabled;S.cfg.snd=globalAudioEnabled;
+ try{localStorage.setItem(GLOBAL_AUDIO_KEY,globalAudioEnabled?"1":"0")}catch(e){}
+ save();renderGlobalAudio();window.dispatchEvent(new CustomEvent("decklock:audio",{detail:{enabled:globalAudioEnabled}}));
+}
+document.getElementById("bGlobalSound").addEventListener("click",()=>{setGlobalAudio(!globalAudioEnabled);if(globalAudioEnabled)blip(1)});
+renderGlobalAudio();
+// Almas publica avisos na mesma fila de notificações do DeckLock.
+window.addEventListener("decklock:notify",e=>{if(e.detail?.message)toast(e.detail.message)});
+window.addEventListener("decklock:modal",e=>{
+ globalNoticePaused=!!e.detail?.open;
+ if(globalNoticePaused)hideToast();else showNextNotice();
+});
 function lum(h){const n=parseInt(h.slice(1),16),f=v=>{v/=255;return v<=.03928?v/12.92:((v+.055)/1.055)**2.4};return .2126*f(n>>16)+.7152*f(n>>8&255)+.0722*f(n&255)}
 // Loja do Patrono: economias compartilhadas, sem nova moeda nem servidor.
 const SHOP_CATALOG=[
@@ -2711,7 +2870,7 @@ function renderSet(){
   const styl=()=>{c.mod=true;up()};
   const field=(lab,node)=>{const l=el("label","",lab);l.append(node);return l};
   const rng=(lab,k,min,max,step,u,sty)=>{const i=el("input");i.type="range";i.min=min;i.max=max;i.step=step;i.value=c[k];const l=el("label","",lab+": "+c[k]+u);i.oninput=()=>{c[k]=+i.value;l.firstChild.textContent=lab+": "+c[k]+u;sty?styl():up()};l.append(i);return l};
-  const chk=(lab,k)=>{const l=el("label","chk"),i=el("input");i.type="checkbox";i.checked=c[k];i.onchange=()=>{c[k]=i.checked;up();if(k==="snd"&&i.checked)sfx("reveal")};l.append(i,document.createTextNode(lab));return l};
+  const chk=(lab,k)=>{const l=el("label","chk"),i=el("input");i.type="checkbox";i.checked=c[k];i.onchange=()=>{c[k]=i.checked;up();if(k==="snd"){setGlobalAudio(i.checked);if(i.checked)sfx("reveal")}};l.append(i,document.createTextNode(lab));return l};
   prof=el("select");
   const g1=el("optgroup");g1.label="Perfis prontos";Object.keys(PROFILES).forEach(n=>{const o=el("option","",n);o.value="b:"+n;g1.append(o)});prof.append(g1);
   if(S.profiles.length){const g2=el("optgroup");g2.label="Meus perfis";S.profiles.forEach(p=>{const o=el("option","",p.name);o.value=p.id;g2.append(o)});prof.append(g2)}
@@ -3010,6 +3169,9 @@ const LANGUAGE_KEY="deadlock-deck-v3:language";
 const LANG_INDEX={"pt-BR":-1,en:0,es:1,fr:2,de:3};
 const LANG_LOCALES={"pt-BR":"pt-BR",en:"en",es:"es",fr:"fr",de:"de"};
 const LANGUAGE_STRINGS={"Idioma":["Language","Idioma","Langue","Sprache"],"Idioma do site":["Website language","Idioma del sitio","Langue du site","Sprache der Website"],"Escolha um deck":["Choose a deck","Elige un mazo","Choisissez un paquet","Deck auswählen"],"Buscar deck…":["Search decks…","Buscar mazo…","Rechercher un paquet…","Deck suchen…"],"☆ Favoritos primeiro":["☆ Favorites first","☆ Favoritos primero","☆ Favoris en premier","☆ Favoriten zuerst"],"Buscar deck":["Search decks","Buscar mazos","Rechercher des paquets","Decks suchen"],"Escolha os decks para sortear":["Select decks to draw from","Elige los mazos para sortear","Choisissez les paquets à tirer","Decks zum Ziehen auswählen"],"Cartas sorteadas":["Drawn cards","Cartas sorteadas","Cartes tirées","Gezogene Karten"],"Quantidade de cartas por deck":["Number of cards per deck","Cantidad de cartas por mazo","Nombre de cartes par paquet","Anzahl Karten pro Deck"],"Diminuir quantidade de cartas":["Decrease card count","Reducir cantidad de cartas","Diminuer le nombre de cartes","Kartenanzahl verringern"],"Aumentar quantidade de cartas":["Increase card count","Aumentar cantidad de cartas","Augmenter le nombre de cartes","Kartenanzahl erhöhen"],"Menos cartas":["Fewer cards","Menos cartas","Moins de cartes","Weniger Karten"],"Mais cartas":["More cards","Más cartas","Plus de cartes","Mehr Karten"],"Sortear carta":["Draw a card","Sacar una carta","Tirer une carte","Karte ziehen"],"Sortear cartas":["Draw cards","Sacar cartas","Tirer des cartes","Karten ziehen"],"Sortear":["Draw","Sortear","Tirer","Ziehen"],"Sorteando…":["Drawing…","Sorteando…","Tirage en cours…","Ziehe Karten…"],"Compartilhar resultado":["Share result","Compartir resultado","Partager le résultat","Ergebnis teilen"],"Copiar texto":["Copy text","Copiar texto","Copier le texte","Text kopieren"],"Copiar imagem":["Copy image","Copiar imagen","Copier l’image","Bild kopieren"],"Baixar PNG":["Download PNG","Descargar PNG","Télécharger PNG","PNG herunterladen"],"Mais opções":["More options","Más opciones","Plus d’options","Weitere Optionen"],"Modo":["Mode","Modo","Mode","Modus"],"Modo de sorteio":["Draw mode","Modo de sorteo","Mode de tirage","Ziehmodus"],"Livre":["Free","Libre","Libre","Frei"],"Clássico":["Classic","Clásico","Classique","Klassisch"],"Caos":["Chaos","Caos","Chaos","Chaos"],"Baralho finito":["Limited deck","Mazo limitado","Paquet limité","Begrenztes Deck"],"Compartilhar deck selecionado":["Share selected deck","Compartir mazo seleccionado","Partager le paquet choisi","Ausgewähltes Deck teilen"],"Copiar link":["Copy link","Copiar enlace","Copier le lien","Link kopieren"],"Copiar código":["Copy code","Copiar código","Copier le code","Code kopieren"],"O link permite adicionar este deck em outro navegador. Imagens não são incluídas.":["Use the link to add this deck in another browser. Images are not included.","Usa el enlace para añadir este mazo en otro navegador. Las imágenes no se incluyen.","Le lien permet d’ajouter ce paquet dans un autre navigateur. Les images ne sont pas incluses.","Über den Link kann das Deck in einem anderen Browser hinzugefügt werden. Bilder werden nicht übertragen."],"Categorias (opcional)":["Categories (optional)","Categorías (opcional)","Catégories (facultatif)","Kategorien (optional)"],"Filtrar categorias":["Filter categories","Filtrar categorías","Filtrer les catégories","Kategorien filtern"],"Limpar filtros":["Clear filters","Borrar filtros","Effacer les filtres","Filter zurücksetzen"],"Sorteio rápido":["Quick draw","Sorteo rápido","Tirage rapide","Schnellziehung"],"Revela as cartas sem esperar pelas animações. Desligado por padrão.":["Reveals cards without waiting for animations. Off by default.","Revela las cartas sin esperar animaciones. Desactivado por defecto.","Révèle les cartes sans attendre les animations. Désactivé par défaut.","Zeigt Karten ohne Animationen an. Standardmäßig aus."],"Acompanhar desafios":["Track challenges","Seguir desafíos","Suivre les défis","Herausforderungen verfolgen"],"Opcional: salvar missões, registrar resultados e consultar relatórios.":["Optional: save missions, record results and view reports.","Opcional: guarda misiones, registra resultados y consulta informes.","Facultatif : sauvegardez les missions, notez les résultats et consultez les rapports.","Optional: Missionen speichern, Ergebnisse erfassen und Berichte ansehen."],"Desfazer sorteio":["Undo draw","Deshacer sorteo","Annuler le tirage","Ziehung rückgängig"],"Ver relatório":["View report","Ver informe","Voir le rapport","Bericht anzeigen"],"Atalhos de teclado":["Keyboard shortcuts","Atajos de teclado","Raccourcis clavier","Tastenkürzel"],"Espaço":["Space","Espacio","Espace","Leertaste"],"Quantidade":["Quantity","Cantidad","Quantité","Anzahl"],"Copiar":["Copy","Copiar","Copier","Kopieren"],"Desfazer":["Undo","Deshacer","Annuler","Rückgängig"],"Editor":["Editor","Editor","Éditeur","Editor"],"Arquivos":["Files","Archivos","Fichiers","Dateien"],"Configurações":["Settings","Configuración","Paramètres","Einstellungen"],"Tela cheia":["Fullscreen","Pantalla completa","Plein écran","Vollbild"],"Modo compacto":["Compact mode","Modo compacto","Mode compact","Kompaktmodus"],"Editar decks":["Edit decks","Editar mazos","Modifier les paquets","Decks bearbeiten"],"Arquivos (A)":["Files (A)","Archivos (A)","Fichiers (A)","Dateien (A)"],"Editar decks (E)":["Edit decks (E)","Editar mazos (E)","Modifier les paquets (E)","Decks bearbeiten (E)"],"Configurações (S)":["Settings (S)","Configuración (S)","Paramètres (S)","Einstellungen (S)"],"Tela cheia (F)":["Fullscreen (F)","Pantalla completa (F)","Plein écran (F)","Vollbild (F)"],"Sair da tela cheia":["Exit fullscreen","Salir de pantalla completa","Quitter le plein écran","Vollbild verlassen"],"✕ Sair":["✕ Exit","✕ Salir","✕ Quitter","✕ Schließen"],"Desafios acompanhados":["Tracked challenges","Desafíos seguidos","Défis suivis","Verfolgte Herausforderungen"],"Ver ou esconder":["Show or hide","Mostrar u ocultar","Afficher ou masquer","Ein- oder ausblenden"],"Marque o resultado quando terminar. Os detalhes são opcionais.":["Mark your result when done. Details are optional.","Marca el resultado al terminar. Los detalles son opcionales.","Indiquez le résultat à la fin. Les détails sont facultatifs.","Ergebnis nach Abschluss markieren. Details sind optional."],"Progresso das missões":["Mission progress","Progreso de misiones","Progression des missions","Missionsfortschritt"],"Filtrar missões":["Filter missions","Filtrar misiones","Filtrer les missions","Missionen filtern"],"Em aberto":["Open","Pendientes","En cours","Offen"],"Finalizadas":["Completed","Finalizadas","Terminées","Abgeschlossen"],"Todas":["All","Todas","Toutes","Alle"],"Últimos sorteios":["Recent draws","Últimos sorteos","Derniers tirages","Letzte Ziehungen"],"Nenhum sorteio ainda.":["No draws yet.","Aún no hay sorteos.","Aucun tirage pour le moment.","Noch keine Ziehungen."],"Limpar histórico":["Clear history","Borrar historial","Effacer l’historique","Verlauf löschen"],"Projeto de fã, sem vínculo com a Valve. Deadlock é marca da Valve Corporation.":["Fan project, not affiliated with Valve. Deadlock is a trademark of Valve Corporation.","Proyecto de fans sin relación con Valve. Deadlock es una marca de Valve Corporation.","Projet de fans sans affiliation avec Valve. Deadlock est une marque de Valve Corporation.","Fanprojekt ohne Verbindung zu Valve. Deadlock ist eine Marke der Valve Corporation."],"Atualização":["Update","Actualización","Mise à jour","Aktualisierung"],"Bem-vindo ao DeckLock!":["Welcome to DeckLock!","¡Bienvenido a DeckLock!","Bienvenue sur DeckLock !","Willkommen bei DeckLock!"],"Escolha um deck e clique em":["Choose a deck and click","Elige un mazo y pulsa","Choisissez un paquet et cliquez sur","Wähle ein Deck und klicke auf"],". Você também pode criar seus próprios decks no editor.":[". You can also create your own decks in the editor.",". También puedes crear tus propios mazos en el editor.",". Vous pouvez aussi créer vos propres paquets dans l’éditeur.",". Im Editor kannst du auch eigene Decks erstellen."],"Não mostrar novamente":["Don't show again","No volver a mostrar","Ne plus afficher","Nicht mehr anzeigen"],"Editor de decks":["Deck editor","Editor de mazos","Éditeur de paquets","Deck-Editor"],"Salvar tudo em arquivo":["Save everything to file","Guardar todo en archivo","Tout enregistrer dans un fichier","Alles als Datei speichern"],"Importar arquivo":["Import file","Importar archivo","Importer un fichier","Datei importieren"],"Fechar":["Close","Cerrar","Fermer","Schließen"],"Deck":["Deck","Mazo","Paquet","Deck"],"Novo deck":["New deck","Nuevo mazo","Nouveau paquet","Neues Deck"],"Renomear":["Rename","Renombrar","Renommer","Umbenennen"],"Excluir deck":["Delete deck","Eliminar mazo","Supprimer le paquet","Deck löschen"],"Nova carta":["New card","Nueva carta","Nouvelle carte","Neue Karte"],"Remover todos os decks":["Remove all decks","Eliminar todos los mazos","Supprimer tous les paquets","Alle Decks entfernen"],"Buscar carta…":["Search cards…","Buscar carta…","Rechercher une carte…","Karte suchen…"],"Buscar carta":["Search cards","Buscar cartas","Rechercher des cartes","Karten suchen"],"Adicionar aos meus decks":["Add to my decks","Añadir a mis mazos","Ajouter à mes paquets","Zu meinen Decks hinzufügen"],"Substituir tudo":["Replace everything","Reemplazar todo","Tout remplacer","Alles ersetzen"],"Cancelar":["Cancel","Cancelar","Annuler","Abbrechen"],"Relatório de desafios":["Challenge report","Informe de desafíos","Rapport des défis","Herausforderungsbericht"],"Copiar relatório":["Copy report","Copiar informe","Copier le rapport","Bericht kopieren"],"Baixar .txt":["Download .txt","Descargar .txt","Télécharger .txt","TXT herunterladen"],"Nova sessão":["New session","Nueva sesión","Nouvelle session","Neue Sitzung"],"Deck compartilhado":["Shared deck","Mazo compartido","Paquet partagé","Geteiltes Deck"],"Adicionar":["Add","Añadir","Ajouter","Hinzufügen"],"Importar por código":["Import by code","Importar por código","Importer par code","Per Code importieren"],"Decks prontos":["Ready-made decks","Mazos preparados","Paquets prêts à l’emploi","Fertige Decks"],"Pacote completo":["Full collection","Paquete completo","Collection complète","Gesamtpaket"],"Seus decks":["Your decks","Tus mazos","Vos paquets","Deine Decks"],"Seus dados":["Your data","Tus datos","Vos données","Deine Daten"],"Backup completo":["Full backup","Copia completa","Sauvegarde complète","Vollständiges Backup"],"Backups automáticos":["Automatic backups","Copias automáticas","Sauvegardes automatiques","Automatische Backups"],"Baixar":["Download","Descargar","Télécharger","Herunterladen"],"Adicionar ao site":["Add to site","Añadir al sitio","Ajouter au site","Zur Website hinzufügen"],"Restaurar tudo":["Restore all","Restaurar todo","Tout restaurer","Alles wiederherstellen"],"Apagar":["Delete","Borrar","Supprimer","Löschen"],"Código ou link de deck":["Deck code or link","Código o enlace de mazo","Code ou lien du paquet","Deck-Code oder -Link"],"Cole um código ou link de deck":["Paste a deck code or link","Pega un código o enlace de mazo","Collez un code ou un lien de paquet","Deck-Code oder Link einfügen"],"Importar código":["Import code","Importar código","Importer le code","Code importieren"],"Para usar um arquivo baixado depois, vá em Editar decks e clique em Importar arquivo.":["To use a downloaded file later, open Edit decks and click Import file.","Para usar después un archivo descargado, abre Editar mazos y pulsa Importar archivo.","Pour utiliser un fichier téléchargé, ouvrez Modifier les paquets et cliquez sur Importer un fichier.","Um eine heruntergeladene Datei zu nutzen, öffne Decks bearbeiten und wähle Datei importieren."],"Perfis de estilo":["Style profiles","Perfiles de estilo","Profils de style","Stilprofile"],"Perfil":["Profile","Perfil","Profil","Profil"],"Perfis prontos":["Built-in profiles","Perfiles predeterminados","Profils prédéfinis","Voreingestellte Profile"],"Meus perfis":["My profiles","Mis perfiles","Mes profils","Meine Profile"],"Personalizado":["Custom","Personalizado","Personnalisé","Benutzerdefiniert"],"Salvar estilo atual como perfil":["Save current style as profile","Guardar estilo actual como perfil","Enregistrer le style actuel comme profil","Aktuellen Stil als Profil speichern"],"Atualizar perfil":["Update profile","Actualizar perfil","Mettre le profil à jour","Profil aktualisieren"],"Excluir":["Delete","Eliminar","Supprimer","Löschen"],"Cores":["Colors","Colores","Couleurs","Farben"],"Cartas":["Cards","Cartas","Cartes","Karten"],"Fundo da frente da carta":["Card front background","Fondo del frente de la carta","Fond du recto de la carte","Vorderseitenhintergrund"],"Verso das cartas":["Card backs","Reverso de las cartas","Dos des cartes","Kartenrückseiten"],"Fundo do site":["Site background","Fondo del sitio","Fond du site","Website-Hintergrund"],"Aparência":["Appearance","Apariencia","Apparence","Darstellung"],"Animação e som":["Animation and sound","Animación y sonido","Animation et son","Animation und Ton"],"Animações por raridade":["Animations by rarity","Animaciones por rareza","Animations par rareté","Animationen nach Seltenheit"],"Modos de jogo":["Game modes","Modos de juego","Modes de jeu","Spielmodi"],"Sorteio":["Drawing","Sorteo","Tirage","Ziehung"],"Dados":["Data","Datos","Données","Daten"],"Sorteio e modos de jogo":["Drawing and game modes","Sorteo y modos de juego","Tirage et modes de jeu","Ziehung und Spielmodi"],"Animações e sons":["Animations and sounds","Animaciones y sonidos","Animations et sons","Animationen und Töne"],"Dados e segurança":["Data and security","Datos y seguridad","Données et sécurité","Daten und Sicherheit"],"Fundo":["Background","Fondo","Fond","Hintergrund"],"Fundo secundário":["Secondary background","Fondo secundario","Fond secondaire","Sekundärer Hintergrund"],"Painéis":["Panels","Paneles","Panneaux","Bedienfelder"],"Texto":["Text","Texto","Texte","Text"],"Texto suave":["Muted text","Texto tenue","Texte discret","Dezenter Text"],"Destaque":["Highlight","Destacado","Accent","Akzent"],"Carta rara":["Rare card","Carta rara","Carte rare","Seltene Karte"],"Carta lendária":["Legendary card","Carta legendaria","Carte légendaire","Legendäre Karte"],"Bordas":["Borders","Bordes","Bordures","Rahmen"],"Fonte dos títulos":["Heading font","Fuente de títulos","Police des titres","Überschriftenschrift"],"Tamanho da carta":["Card size","Tamaño de carta","Taille de la carte","Kartengröße"],"Intensidade do fundo":["Background intensity","Intensidad del fondo","Intensité du fond","Hintergrundintensität"],"Intensidade dos efeitos":["Effect intensity","Intensidad de efectos","Intensité des effets","Effektintensität"],"Animações ligadas":["Animations enabled","Animaciones activadas","Animations activées","Animationen aktiviert"],"Duração da virada":["Flip duration","Duración del giro","Durée du retournement","Dauer des Umdrehens"],"Sons ligados":["Sound enabled","Sonidos activados","Sons activés","Ton aktiviert"],"Pacote de sons":["Sound pack","Paquete de sonidos","Pack sonore","Soundpaket"],"Entrada":["Entrance","Entrada","Entrée","Eingang"],"Efeito":["Effect","Efecto","Effet","Effekt"],"Testar":["Test","Probar","Tester","Testen"],"Tamanho do baralho finito (sorteios)":["Limited-deck size (draws)","Tamaño de mazo limitado (sorteos)","Taille du paquet limité (tirages)","Größe des begrenzten Decks (Ziehungen)"],"Modo compacto (só cartas e controles essenciais)":["Compact mode (cards and essential controls only)","Modo compacto (solo cartas y controles esenciales)","Mode compact (cartes et commandes essentielles)","Kompaktmodus (nur Karten und wichtige Bedienelemente)"],"Percorrer o deck inteiro antes de repetir cartas":["Go through the whole deck before repeating cards","Recorrer todo el mazo antes de repetir cartas","Parcourir tout le paquet avant de répéter des cartes","Ganzes Deck durchlaufen, bevor Karten wiederholt werden"],"Evitar repetir as cartas do sorteio anterior":["Avoid repeating cards from the previous draw","Evitar repetir cartas del sorteo anterior","Éviter de répéter les cartes du tirage précédent","Karten der letzten Ziehung nicht wiederholen"],"Mostrar histórico":["Show history","Mostrar historial","Afficher l’historique","Verlauf anzeigen"],"Trocas permitidas por sorteio (0 = ilimitado)":["Rerolls allowed per draw (0 = unlimited)","Cambios permitidos por sorteo (0 = ilimitado)","Échanges autorisés par tirage (0 = illimité)","Erlaubte Neuziehungen pro Runde (0 = unbegrenzt)"],"Chance de cada raridade (pesos relativos; 0 desliga a raridade):":["Chance per rarity (relative weights; 0 disables rarity):","Probabilidad por rareza (pesos relativos; 0 desactiva la rareza):","Chance par rareté (poids relatifs ; 0 désactive la rareté) :","Chance pro Seltenheit (relative Gewichte; 0 deaktiviert die Seltenheit):"],"Peso Comum":["Common weight","Peso común","Poids commun","Gewichtung Gewöhnlich"],"Peso Rara":["Rare weight","Peso rara","Poids rare","Gewichtung Selten"],"Peso Lendária":["Legendary weight","Peso legendaria","Poids légendaire","Gewichtung Legendär"],"Comum":["Common","Común","Commune","Gewöhnlich"],"Rara":["Rare","Rara","Rare","Selten"],"Lendária":["Legendary","Legendaria","Légendaire","Legendär"],"Geral":["General","General","Général","Allgemein"],"Handicap":["Handicap","Desventaja","Handicap","Handicap"],"Build":["Build","Build","Build","Build"],"Objetivo":["Objective","Objetivo","Objectif","Ziel"],"Comunicação":["Communication","Comunicación","Communication","Kommunikation"],"Individual":["Solo","Individual","Individuel","Einzel"],"Herói":["Hero","Héroe","Héros","Held"],"Liso":["Plain","Liso","Uni","Einfarbig"],"Olho":["Eye","Ojo","Œil","Auge"],"Listras":["Stripes","Rayas","Rayures","Streifen"],"Losangos":["Diamonds","Rombos","Losanges","Rauten"],"Raios":["Rays","Rayos","Rayons","Strahlen"],"Losango":["Diamond","Rombo","Losange","Raute"],"Imagem":["Image","Imagen","Image","Bild"],"Plano":["Plain","Plano","Uni","Einfarbig"],"Brilho suave":["Soft glow","Brillo suave","Lueur douce","Sanftes Leuchten"],"Aurora":["Aurora","Aurora","Aurore","Aurora"],"Holofote":["Spotlight","Foco","Projecteur","Scheinwerfer"],"Degradê":["Gradient","Degradado","Dégradé","Farbverlauf"],"Vinheta":["Vignette","Viñeta","Vignette","Vignette"],"Pontos":["Dots","Puntos","Points","Punkte"],"Granulado":["Grain","Granulado","Grain","Körnung"],"Serifada":["Serif","Con serifa","Avec empattement","Serifenschrift"],"Sem serifa":["Sans-serif","Sin serifa","Sans empattement","Serifenlos"],"Condensada":["Condensed","Condensada","Condensée","Schmal"],"Giro duplo":["Double spin","Giro doble","Double rotation","Doppeldrehung"],"Subir":["Rise","Subir","Monter","Aufsteigen"],"Cair com quique":["Drop and bounce","Caer y rebotar","Tomber avec rebond","Fallen und abprallen"],"Zoom":["Zoom","Zoom","Zoom","Zoom"],"Deslizar":["Slide","Deslizar","Glisser","Hereingleiten"],"Tremer":["Shake","Temblar","Secouer","Zittern"],"Inclinar 3D":["3D tilt","Inclinar 3D","Inclinaison 3D","3D-Neigung"],"Nenhum":["None","Ninguno","Aucun","Keiner"],"Ondas de luz":["Light waves","Ondas de luz","Ondes lumineuses","Lichtwellen"],"Faíscas":["Sparks","Chispas","Étincelles","Funken"],"Confete":["Confetti","Confeti","Confettis","Konfetti"],"Clarão":["Flash","Destello","Éclair","Blitz"],"Chuva de brilho":["Sparkle rain","Lluvia brillante","Pluie d’étincelles","Glitzerregen"],"Explosão (tudo junto)":["Burst (all together)","Explosión (todo junto)","Explosion (tout ensemble)","Explosion (alles zusammen)"],"Virar (padrão)":["Flip (default)","Girar (predeterminado)","Retourner (défaut)","Umdrehen (Standard)"],"Suave":["Soft","Suave","Doux","Sanft"],"Cassino":["Casino","Casino","Casino","Casino"],"Máquina de escrever":["Typewriter","Máquina de escribir","Machine à écrire","Schreibmaschine"],"Magia de palco":["Stage magic","Magia escénica","Magie de scène","Bühnenmagie"],"Arcade retrô":["Retro arcade","Arcade retro","Arcade rétro","Retro-Arcade"],"Enviar imagem para o verso":["Upload back image","Subir imagen de reverso","Importer une image pour le dos","Bild für Kartenrückseite hochladen"],"Trocar imagem do verso":["Change back image","Cambiar imagen del reverso","Changer l’image du dos","Rückseitenbild ändern"],"Remover imagem do verso":["Remove back image","Quitar imagen del reverso","Supprimer l’image du dos","Rückseitenbild entfernen"],"Restaurar configurações padrão":["Restore default settings","Restaurar configuración predeterminada","Restaurer les paramètres par défaut","Standardeinstellungen wiederherstellen"],"Apagar todos os dados e voltar ao início":["Erase all data and reset","Borrar todos los datos y reiniciar","Effacer toutes les données et réinitialiser","Alle Daten löschen und zurücksetzen"],"Um perfil guarda cores, fonte, tamanho da carta e verso.":["A profile saves colors, font, card size and back.","Un perfil guarda colores, fuente, tamaño de carta y reverso.","Un profil enregistre les couleurs, la police, la taille et le dos des cartes.","Ein Profil speichert Farben, Schrift, Kartengröße und Rückseite."],"O estilo foi alterado em relação ao perfil escolhido. Use 'Atualizar perfil' ou 'Salvar estilo atual como perfil' para guardar.":["Style differs from the selected profile. Use Update profile or Save current style as profile to keep it.","El estilo difiere del perfil elegido. Usa Actualizar perfil o Guardar estilo actual como perfil.","Le style diffère du profil choisi. Utilisez Mettre le profil à jour ou Enregistrer le style actuel comme profil.","Der Stil wurde geändert. Nutze Profil aktualisieren oder Aktuellen Stil als Profil speichern."],"Cada raridade pode ter uma entrada e um efeito diferentes. Use Testar para ver.":["Each rarity can have a different entrance and effect. Select Test to preview.","Cada rareza puede tener una entrada y un efecto distintos. Usa Probar.","Chaque rareté peut avoir une entrée et un effet différents. Utilisez Tester.","Jede Seltenheit kann eine andere Animation und einen anderen Effekt haben. Mit Testen ansehen."],"Título":["Title","Título","Titre","Titel"],"Categoria":["Category","Categoría","Catégorie","Kategorie"],"Raridade":["Rarity","Rareza","Rareté","Seltenheit"],"Escolher imagem":["Choose image","Elegir imagen","Choisir une image","Bild auswählen"],"Remover imagem":["Remove image","Quitar imagen","Supprimer l’image","Bild entfernen"],"Duplicar":["Duplicate","Duplicar","Dupliquer","Duplizieren"],"Excluir carta":["Delete card","Eliminar carta","Supprimer la carte","Karte löschen"],"Subir na lista":["Move up","Subir en la lista","Monter dans la liste","Nach oben"],"Descer na lista":["Move down","Bajar en la lista","Descendre dans la liste","Nach unten"],"Favorita (sai com mais frequência)":["Favorite (appears more often)","Favorita (aparece con más frecuencia)","Favorite (sort plus souvent)","Favorit (erscheint häufiger)"],"Fora do sorteio por enquanto":["Exclude from draws for now","Excluir del sorteo por ahora","Exclure des tirages pour le moment","Vorübergehend nicht ziehen"],"Imagem da carta":["Card image","Imagen de la carta","Image de la carte","Kartenbild"],"Descreva a regra aqui.":["Describe the rule here.","Describe la regla aquí.","Décrivez la règle ici.","Beschreibe hier die Regel."],"Nada encontrado.":["No results found.","No se encontraron resultados.","Aucun résultat.","Keine Ergebnisse."],"Deck vazio.":["Empty deck.","Mazo vacío.","Paquet vide.","Leeres Deck."],"Nenhum deck ainda.":["No decks yet.","Aún no hay mazos.","Aucun paquet pour le moment.","Noch keine Decks."],"Selecione ou crie uma carta.":["Select or create a card.","Selecciona o crea una carta.","Choisissez ou créez une carte.","Karte auswählen oder erstellen."],"Crie um deck ou carregue um arquivo para começar.":["Create a deck or import a file to get started.","Crea un mazo o importa un archivo para empezar.","Créez un paquet ou importez un fichier pour commencer.","Erstelle ein Deck oder importiere eine Datei."],"Nenhum deck por aqui ainda":["No decks here yet","Aún no hay mazos aquí","Aucun paquet ici pour le moment","Hier gibt es noch keine Decks"],"Carregar arquivo":["Load file","Cargar archivo","Charger un fichier","Datei laden"],"Criar deck":["Create deck","Crear mazo","Créer un paquet","Deck erstellen"],"Selecione ao menos um deck.":["Select at least one deck.","Selecciona al menos un mazo.","Choisissez au moins un paquet.","Wähle mindestens ein Deck."],"Trocar":["Reroll","Cambiar","Changer","Neu ziehen"],"↻ Trocar":["↻ Reroll","↻ Cambiar","↻ Changer","↻ Neu ziehen"],"＋ Assumir desafio":["＋ Accept challenge","＋ Aceptar desafío","＋ Accepter le défi","＋ Herausforderung annehmen"],"Missão cumprida":["Mission completed","Misión cumplida","Mission réussie","Mission abgeschlossen"],"Cumprida":["Completed","Cumplida","Réussie","Erfüllt"],"Não cumprida":["Failed","No cumplida","Non réussie","Nicht erfüllt"],"Em andamento":["In progress","En curso","En cours","In Bearbeitung"],"Pausada":["Paused","Pausada","En pause","Pausiert"],"Cumpridas":["Completed","Cumplidas","Réussies","Erfüllt"],"Falhas":["Failed","Fallidas","Échecs","Fehlgeschlagen"],"Responsável":["Assigned to","Responsable","Responsable","Verantwortlich"],"Observação (opcional)":["Note (optional)","Nota (opcional)","Note (facultative)","Notiz (optional)"],"Responsável e anotação (opcional)":["Assigned to and note (optional)","Responsable y nota (opcional)","Responsable et note (facultatif)","Zuständig und Notiz (optional)"],"✓ Cumpriu":["✓ Completed","✓ Cumplido","✓ Réussi","✓ Erfüllt"],"✕ Não cumpriu":["✕ Failed","✕ No cumplido","✕ Échec","✕ Nicht erfüllt"],"Retomar":["Resume","Reanudar","Reprendre","Fortsetzen"],"Pausar":["Pause","Pausar","Mettre en pause","Pausieren"],"↶ Reabrir":["↶ Reopen","↶ Reabrir","↶ Rouvrir","↶ Wieder öffnen"],"Remover":["Remove","Quitar","Supprimer","Entfernen"],"Não assumida":["Not accepted","No aceptada","Non acceptée","Nicht angenommen"],"Nenhuma missão assumida.":["No missions accepted.","No se aceptaron misiones.","Aucune mission acceptée.","Keine Missionen angenommen."],"Sessão atual":["Current session","Sesión actual","Session actuelle","Aktuelle Sitzung"],"Selecionar sessão":["Select session","Seleccionar sesión","Sélectionner une session","Sitzung auswählen"],"Resultado da partida":["Match result","Resultado de partida","Résultat de la partie","Spielergebnis"],"Não informado":["Not specified","No indicado","Non renseigné","Nicht angegeben"],"Vitória":["Victory","Victoria","Victoire","Sieg"],"Derrota":["Defeat","Derrota","Défaite","Niederlage"],"Observação da partida":["Match notes","Nota de partida","Note sur la partie","Spielnotizen"],"Desafios assumidos":["Accepted challenges","Desafíos aceptados","Défis acceptés","Angenommene Herausforderungen"],"Cumpridos":["Completed","Cumplidos","Réussis","Erfüllt"],"Não cumpridos":["Failed","No cumplidos","Non réussis","Nicht erfüllt"],"Sucesso nos finalizados":["Success rate","Éxito en finalizados","Taux de réussite","Erfolgsquote"],"Cartas sorteadas por raridade":["Cards by rarity","Cartas por rareza","Cartes par rareté","Karten nach Seltenheit"],"Resultados dos desafios":["Challenge results","Resultados de desafíos","Résultats des défis","Herausforderungsergebnisse"],"Linha do tempo de sorteios":["Draw timeline","Cronología de sorteos","Historique des tirages","Ziehungsverlauf"],"Nenhuma carta foi assumida como missão nesta sessão.":["No cards accepted as missions in this session.","No hay cartas aceptadas como misiones en esta sesión.","Aucune carte acceptée comme mission dans cette session.","In dieser Sitzung wurden keine Karten als Mission angenommen."],"Nenhum sorteio nesta sessão.":["No draws in this session.","No hay sorteos en esta sesión.","Aucun tirage dans cette session.","Keine Ziehungen in dieser Sitzung."],"Nenhuma missão finalizada ainda.":["No completed missions yet.","Aún no hay misiones finalizadas.","Aucune mission terminée pour le moment.","Noch keine abgeschlossenen Missionen."],"Nenhuma missão nesta sessão.":["No missions in this session.","No hay misiones en esta sesión.","Aucune mission dans cette session.","Keine Missionen in dieser Sitzung."],"Não foi possível copiar neste navegador.":["Could not copy in this browser.","No se pudo copiar en este navegador.","Copie impossible dans ce navigateur.","Kopieren in diesem Browser nicht möglich."],"Copiado.":["Copied.","Copiado.","Copié.","Kopiert."],"Sorteio copiado.":["Draw copied.","Sorteo copiado.","Tirage copié.","Ziehung kopiert."],"Imagem copiada. Cole no Discord ou WhatsApp.":["Image copied. Paste into Discord or WhatsApp.","Imagen copiada. Pégala en Discord o WhatsApp.","Image copiée. Collez-la dans Discord ou WhatsApp.","Bild kopiert. In Discord oder WhatsApp einfügen."],"Imagem PNG salva.":["PNG saved.","PNG guardado.","PNG enregistré.","PNG gespeichert."],"Não foi possível copiar a imagem neste navegador. Use ‘Baixar PNG’.":["Could not copy the image in this browser. Use Download PNG.","No se pudo copiar la imagen. Usa Descargar PNG.","Impossible de copier l’image. Utilisez Télécharger PNG.","Bild konnte nicht kopiert werden. Bitte PNG herunterladen."],"Não foi possível gerar a imagem.":["Could not generate the image.","No se pudo generar la imagen.","Impossible de générer l’image.","Bild konnte nicht erstellt werden."],"Preparando…":["Preparing…","Preparando…","Préparation…","Wird vorbereitet…"],"Sorteie primeiro.":["Draw a card first.","Primero saca una carta.","Tirez d’abord une carte.","Ziehe zuerst eine Karte."],"Selecione um deck acima para sortear.":["Select a deck above to draw from.","Elige un mazo arriba para sortear.","Choisissez un paquet ci-dessus.","Wähle oben ein Deck aus."],"Você ainda não tem decks. Crie um deck ou importe um arquivo.":["You have no decks yet. Create one or import a file.","Aún no tienes mazos. Crea uno o importa un archivo.","Vous n’avez pas encore de paquets. Créez-en un ou importez un fichier.","Du hast noch keine Decks. Erstelle eines oder importiere eine Datei."],"Os decks selecionados não têm cartas ativas. Confira o editor.":["Selected decks have no active cards. Check the editor.","Los mazos seleccionados no tienen cartas activas. Revisa el editor.","Les paquets choisis n’ont aucune carte active. Vérifiez l’éditeur.","Die gewählten Decks enthalten keine aktiven Karten. Bitte im Editor prüfen."],"Nenhuma raridade disponível. Confira os pesos em Configurações.":["No rarity available. Check the weights in Settings.","No hay rarezas disponibles. Revisa los pesos en Configuración.","Aucune rareté disponible. Vérifiez les poids dans Paramètres.","Keine Seltenheit verfügbar. Prüfe die Gewichtung in Einstellungen."],"Nenhuma carta corresponde aos filtros atuais.":["No cards match the current filters.","No hay cartas que coincidan con los filtros.","Aucune carte ne correspond aux filtres.","Keine Karte passt zu den Filtern."],"Nenhuma raridade disponível.":["No rarity available.","No hay rarezas disponibles.","Aucune rareté disponible.","Keine Seltenheit verfügbar."],"Filtros removidos.":["Filters cleared.","Filtros borrados.","Filtres effacés.","Filter zurückgesetzt."],"Último sorteio desfeito.":["Last draw undone.","Último sorteo deshecho.","Dernier tirage annulé.","Letzte Ziehung rückgängig gemacht."],"No modo Clássico a carta sorteada vale.":["No rerolls in Classic mode.","En modo Clásico no se puede cambiar la carta.","En mode Classique, la carte tirée est définitive.","Im klassischen Modus bleibt die gezogene Karte."],"Limite de trocas atingido.":["Reroll limit reached.","Límite de cambios alcanzado.","Limite de changements atteinte.","Limit für Neuziehungen erreicht."],"Remova a missão no painel antes de trocar esta carta.":["Remove the mission from the panel before rerolling this card.","Quita la misión del panel antes de cambiar esta carta.","Retirez la mission du panneau avant de changer cette carte.","Entferne zuerst die Mission, bevor du diese Karte neu ziehst."],"Não há outra carta disponível nesta categoria e raridade.":["No other card is available in this category and rarity.","No hay otra carta de esta categoría y rareza.","Aucune autre carte dans cette catégorie et rareté.","Keine weitere Karte dieser Kategorie und Seltenheit verfügbar."],"Baralho renovado. Novo ciclo iniciado.":["Deck refreshed. New cycle started.","Mazo renovado. Nuevo ciclo iniciado.","Paquet renouvelé. Nouveau cycle lancé.","Deck erneuert. Neuer Durchlauf gestartet."],"Acompanhamento ativado para os próximos sorteios.":["Tracking enabled for future draws.","Seguimiento activado para los próximos sorteos.","Suivi activé pour les prochains tirages.","Verfolgung für künftige Ziehungen aktiviert."],"Acompanhamento desligado. Agora é só sortear.":["Tracking disabled. Just draw cards.","Seguimiento desactivado. Ya puedes sortear.","Suivi désactivé. Il suffit de tirer des cartes.","Verfolgung deaktiviert. Einfach Karten ziehen."],"Nova sessão iniciada. A anterior está no relatório.":["New session started. The previous one is in the report.","Nueva sesión iniciada. La anterior está en el informe.","Nouvelle session commencée. La précédente est dans le rapport.","Neue Sitzung begonnen. Die vorherige steht im Bericht."],"Relatório copiado.":["Report copied.","Informe copiado.","Rapport copié.","Bericht kopiert."],"Arquivo baixado.":["File downloaded.","Archivo descargado.","Fichier téléchargé.","Datei heruntergeladen."],"Código copiado (sem imagens).":["Code copied (without images).","Código copiado (sin imágenes).","Code copié (sans images).","Code kopiert (ohne Bilder)."],"Link copiado (sem imagens).":["Link copied (without images).","Enlace copiado (sin imágenes).","Lien copié (sans images).","Link kopiert (ohne Bilder)."],"Não foi possível gerar o código.":["Could not generate the code.","No se pudo generar el código.","Impossible de générer le code.","Code konnte nicht erzeugt werden."],"Código inválido, grande demais ou não suportado por este navegador.":["Invalid code, too large or not supported by this browser.","Código inválido, demasiado grande o no compatible.","Code invalide, trop volumineux ou non pris en charge.","Ungültiger, zu großer oder nicht unterstützter Code."],"Não foi possível restaurar o backup.":["Could not restore the backup.","No se pudo restaurar la copia.","Impossible de restaurer la sauvegarde.","Backup konnte nicht wiederhergestellt werden."],"Não foi possível salvar no navegador. Exporte um backup em Arquivos.":["Unable to save in this browser. Export a backup under Files.","No se pudo guardar. Exporta una copia en Archivos.","Impossible d’enregistrer. Exportez une sauvegarde sous Fichiers.","Speichern fehlgeschlagen. Exportiere ein Backup unter Dateien."],"O estilo foi alterado em relação ao perfil escolhido.":["The style differs from the selected profile.","El estilo difiere del perfil seleccionado.","Le style diffère du profil choisi.","Der Stil weicht vom gewählten Profil ab."],"Perfil salvo.":["Profile saved.","Perfil guardado.","Profil enregistré.","Profil gespeichert."],"Perfil atualizado.":["Profile updated.","Perfil actualizado.","Profil mis à jour.","Profil aktualisiert."],"Perfil excluído.":["Profile deleted.","Perfil eliminado.","Profil supprimé.","Profil gelöscht."],"Verso aplicado.":["Card back applied.","Reverso aplicado.","Dos de carte appliqué.","Kartenrückseite angewendet."],"Imagem aplicada.":["Image applied.","Imagen aplicada.","Image appliquée.","Bild angewendet."],"Carta duplicada.":["Card duplicated.","Carta duplicada.","Carte dupliquée.","Karte dupliziert."],"Carta excluída.":["Card deleted.","Carta eliminada.","Carte supprimée.","Karte gelöscht."],"Todos os decks removidos.":["All decks removed.","Todos los mazos eliminados.","Tous les paquets supprimés.","Alle Decks entfernt."],"Não foi possível processar a imagem.":["Could not process the image.","No se pudo procesar la imagen.","Impossible de traiter l’image.","Bild konnte nicht verarbeitet werden."],"Imagem muito grande. Escolha uma imagem de até 12 MB.":["Image too large. Choose an image under 12 MB.","Imagen demasiado grande. Elige una imagen de hasta 12 MB.","Image trop volumineuse. Choisissez une image de 12 Mo maximum.","Bild zu groß. Bitte ein Bild bis 12 MB wählen."],"Formato não suportado. Use PNG, JPG, WebP ou GIF.":["Unsupported format. Use PNG, JPG, WebP or GIF.","Formato no compatible. Usa PNG, JPG, WebP o GIF.","Format non pris en charge. Utilisez PNG, JPG, WebP ou GIF.","Nicht unterstütztes Format. PNG, JPG, WebP oder GIF verwenden."],"Resolução muito alta. Escolha uma imagem com até 24 megapixels.":["Resolution too high. Choose an image under 24 megapixels.","Resolución demasiado alta. Elige una imagen de hasta 24 megapíxeles.","Résolution trop élevée. Choisissez une image de 24 mégapixels maximum.","Auflösung zu hoch. Bitte höchstens 24 Megapixel verwenden."],"A imagem excede o limite de armazenamento. Use uma imagem menor.":["Image exceeds storage limits. Use a smaller image.","La imagen excede el límite de almacenamiento. Usa una más pequeña.","L’image dépasse la limite de stockage. Utilisez-en une plus petite.","Bild überschreitet das Speicherlimit. Bitte kleineres Bild wählen."],"Não foi possível ler a imagem.":["Could not read the image.","No se pudo leer la imagen.","Impossible de lire l’image.","Bild konnte nicht gelesen werden."],"Arquivo de imagem inválido.":["Invalid image file.","Archivo de imagen inválido.","Fichier image invalide.","Ungültige Bilddatei."],"Atualizar":["Update","Actualizar","Mettre à jour","Aktualisieren"],"Nova versão do DeckLock disponível":["New DeckLock version available","Nueva versión de DeckLock disponible","Nouvelle version de DeckLock disponible","Neue DeckLock-Version verfügbar"],"Nome do novo deck:":["New deck name:","Nombre del nuevo mazo:","Nom du nouveau paquet :","Name des neuen Decks:"],"Novo nome do deck:":["New deck name:","Nuevo nombre del mazo:","Nouveau nom du paquet :","Neuer Deckname:"],"Nome do perfil:":["Profile name:","Nombre del perfil:","Nom du profil :","Profilname:"],"Novo nome:":["New name:","Nuevo nombre:","Nouveau nom :","Neuer Name:"],"Apagar de vez este backup?":["Permanently delete this backup?","¿Borrar esta copia definitivamente?","Supprimer définitivement cette sauvegarde ?","Dieses Backup endgültig löschen?"],"Grupo":["Group","Grupo","Groupe","Gruppe"],"Heróis":["Heroes","Héroes","Héros","Helden"],"Aparência e estilo":["Appearance and style","Apariencia y estilo","Apparence et style","Aussehen und Stil"],"⌨ Atalhos de teclado":["⌨ Keyboard shortcuts","⌨ Atajos de teclado","⌨ Raccourcis clavier","⌨ Tastenkürzel"],"· Espaço: sortear · 1–8: quantidade":["· Space: draw · 1–8: quantity","· Espacio: sortear · 1–8: cantidad","· Espace : tirer · 1–8 : quantité","· Leertaste: ziehen · 1–8: Anzahl"],"Degradê suave":["Soft gradient","Degradado suave","Dégradé doux","Sanfter Farbverlauf"],"Decks, configurações, missões e relatórios de sessões":["Decks, settings, missions and session reports","Mazos, ajustes, misiones e informes de sesiones","Paquets, réglages, missions et rapports de session","Decks, Einstellungen, Missionen und Sitzungsberichte"],"O DeckLock foi atualizado.":["DeckLock has been updated.","DeckLock se ha actualizado.","DeckLock a été mis à jour.","DeckLock wurde aktualisiert."],"Perfis":["Profiles","Perfiles","Profils","Profile"],"Deadlock Creme":["Deadlock Cream","Deadlock Crema","Deadlock Crème","Deadlock Creme"],"Âmbar quente":["Warm amber","Ámbar cálido","Ambre chaud","Warmes Bernstein"],"Safira":["Sapphire","Zafiro","Saphir","Saphir"],"Esmeralda":["Emerald","Esmeralda","Émeraude","Smaragd"],"Rubi":["Ruby","Rubí","Rubis","Rubin"],"Claro":["Light","Claro","Clair","Hell"],"Grupos":["Groups","Grupos","Groupes","Gruppen"],"Lista":["List","Lista","Liste","Liste"],"Foram encontrados":["Found","Se encontraron","Résultats trouvés","Gefunden"],"Resumo":["Summary","Resumen","Résumé","Zusammenfassung"],"Sair":["Exit","Salir","Quitter","Verlassen"],"Novo perfil":["New profile","Nuevo perfil","Nouveau profil","Neues Profil"],"Escolha uma imagem":["Choose an image","Elige una imagen","Choisir une image","Bild auswählen"],"Trocar imagem":["Change image","Cambiar imagen","Changer l’image","Bild ändern"],"Adicionar aos decks":["Add to decks","Añadir a mazos","Ajouter aux paquets","Zu Decks hinzufügen"],"Decks, categorias e raridades":["Decks, categories and rarities","Mazos, categorías y rarezas","Paquets, catégories et raretés","Decks, Kategorien und Seltenheiten"],"Modo:":["Mode:","Modo:","Mode :","Modus:"],"OK":["OK","OK","OK","OK"],"Nenhum deck encontrado.":["No decks found.","No se encontraron mazos.","Aucun paquet trouvé.","Keine Decks gefunden."],"Limpar busca":["Clear search","Borrar búsqueda","Effacer la recherche","Suche zurücksetzen"],"Favoritar deck:":["Favorite deck:","Marcar mazo favorito:","Mettre le paquet en favori :","Deck favorisieren:"],"Remover dos favoritos:":["Remove favorite:","Quitar de favoritos:","Retirer des favoris :","Aus Favoriten entfernen:"],"Adicionar aos favoritos":["Add to favorites","Añadir a favoritos","Ajouter aux favoris","Zu Favoriten hinzufügen"],"Remover dos favoritos":["Remove from favorites","Quitar de favoritos","Retirer des favoris","Aus Favoriten entfernen"],"Sortear outra carta no lugar desta":["Draw another card instead","Sacar otra carta en su lugar","Tirer une autre carte à la place","Stattdessen eine andere Karte ziehen"],"Adicionar às missões da sessão":["Add to session missions","Añadir a misiones de sesión","Ajouter aux missions de session","Zu Sitzungsmissionen hinzufügen"],"Abrir a missão no painel":["Open mission panel","Abrir panel de misión","Ouvrir le panneau des missions","Missionsbereich öffnen"],"Use o botão para sortear.":["Use the button to draw.","Usa el botón para sortear.","Utilisez le bouton pour tirer.","Ziehe mit der Schaltfläche eine Karte."],"Nova versão disponível.":["New version available.","Nueva versión disponible.","Nouvelle version disponible.","Neue Version verfügbar."],"Voltar a estes dados? Os dados atuais serão substituídos. Baixe um backup antes se quiser guardá-los.":["Restore this backup? Current data will be replaced. Download a backup first if you want to keep it.","¿Volver a estos datos? Se reemplazarán los actuales. Descarga una copia antes si deseas guardarlos.","Restaurer ces données ? Les données actuelles seront remplacées. Téléchargez une sauvegarde d’abord si besoin.","Dieses Backup wiederherstellen? Aktuelle Daten werden ersetzt. Sichere sie vorher bei Bedarf."],"Há missões em aberto. Encerrar a sessão atual e arquivar esses resultados para mudar de modo?":["There are open missions. End this session and archive results to change modes?","Hay misiones pendientes. ¿Finalizar la sesión y archivar resultados para cambiar de modo?","Des missions sont en cours. Terminer cette session et archiver les résultats pour changer de mode ?","Es gibt offene Missionen. Sitzung beenden und Ergebnisse für den Moduswechsel archivieren?"],"Isso apaga TODOS os seus decks, perfis e configurações neste navegador e volta ao estado inicial. Um backup será criado ANTES da exclusão. Continuar?":["This deletes ALL decks, profiles and settings in this browser and restores defaults. A backup will be created FIRST. Continue?","Esto borra TODOS los mazos, perfiles y ajustes de este navegador. ANTES se creará una copia. ¿Continuar?","Cela supprime TOUS les paquets, profils et réglages de ce navigateur. Une sauvegarde sera créée AVANT. Continuer ?","Damit werden ALLE Decks, Profile und Einstellungen dieses Browsers gelöscht. VORHER wird ein Backup erstellt. Fortfahren?"],"Não foi possível salvar o backup. Nenhum dado foi apagado. Exporte o arquivo manualmente.":["Could not save backup. No data was deleted. Export your file manually.","No se pudo guardar la copia. No se borraron datos. Exporta el archivo manualmente.","Impossible de sauvegarder. Rien n’a été supprimé. Exportez le fichier manuellement.","Backup konnte nicht gespeichert werden. Es wurden keine Daten gelöscht. Bitte manuell exportieren."],"Não foi possível salvar o backup automático. Seus dados antigos foram mantidos. Exporte-os em Arquivos antes de continuar.":["Automatic backup failed. Your previous data was kept. Export it under Files before continuing.","Falló la copia automática. Se conservaron tus datos. Expórtalos en Archivos antes de seguir.","Échec de la sauvegarde automatique. Vos données sont conservées. Exportez-les dans Fichiers.","Automatisches Backup fehlgeschlagen. Deine alten Daten wurden behalten. Bitte unter Dateien exportieren."],"Falha ao apagar os dados. Seus decks foram preservados.":["Could not erase data. Your decks were preserved.","No se pudieron borrar los datos. Tus mazos están a salvo.","Impossible d’effacer les données. Vos paquets sont conservés.","Daten konnten nicht gelöscht werden. Deine Decks wurden behalten."],"Não foi possível criar um backup automático. Exporte seus dados em Arquivos antes de substituir. Continuar mesmo assim?":["Automatic backup failed. Export your data under Files before replacing it. Continue anyway?","No se pudo crear una copia automática. Exporta tus datos en Archivos antes de reemplazarlos. ¿Continuar?","Sauvegarde automatique impossible. Exportez vos données dans Fichiers avant le remplacement. Continuer quand même ?","Automatisches Backup fehlgeschlagen. Exportiere deine Daten unter Dateien vor dem Ersetzen. Trotzdem fortfahren?"],"Não foi possível criar um backup. Exporte seus dados antes de excluir.":["Could not create a backup. Export your data before deleting.","No se pudo crear una copia. Exporta los datos antes de borrar.","Sauvegarde impossible. Exportez vos données avant de supprimer.","Backup konnte nicht erstellt werden. Exportiere die Daten vor dem Löschen."],"Uso do armazenamento do navegador:":["Browser storage use:","Uso de almacenamiento del navegador:","Espace de stockage du navigateur :","Browserspeicherbelegung:"],"Imagens ocupam mais espaço.":["Images take up more space.","Las imágenes ocupan más espacio.","Les images prennent plus de place.","Bilder benötigen mehr Speicher."],"Faça backup com 'Salvar tudo em arquivo'.":["Back up using Save everything to file.","Haz una copia con Guardar todo en archivo.","Créez une sauvegarde avec Tout enregistrer dans un fichier.","Backup über Alles als Datei speichern erstellen."],"Para publicar seus decks como padrão do site no GitHub, exporte o arquivo e renomeie para decks.json.":["To publish your decks as website defaults on GitHub, export the file and rename it decks.json.","Para publicar tus mazos predeterminados en GitHub, exporta y renombra el archivo decks.json.","Pour publier vos paquets par défaut sur GitHub, exportez le fichier et renommez-le decks.json.","Um deine Decks als Standard auf GitHub zu veröffentlichen, exportiere die Datei als decks.json."],"Acompanhamento ligado":["Tracking enabled","Seguimiento activado","Suivi activé","Verfolgung aktiviert"],"acompanhamento ligado":["tracking enabled","seguimiento activado","suivi activé","Verfolgung aktiviert"],"filtro(s)":["filter(s)","filtro(s)","filtre(s)","Filter"],"Baralho:":["Deck:","Mazo:","Paquet :","Deck:"],"Restantes no ciclo:":["Remaining in cycle:","Restantes del ciclo:","Restant dans le cycle :","Noch im Durchlauf:"],"Sorteio concluído:":["Draw completed:","Sorteo completado:","Tirage terminé :","Ziehung abgeschlossen:"],"Carta trocada no deck":["Card rerolled in deck","Carta cambiada en mazo","Carte changée dans le paquet","Karte in Deck neu gezogen"],"Nova carta:":["New card:","Nueva carta:","Nouvelle carte :","Neue Karte:"],"Missão assumida:":["Mission accepted:","Misión aceptada:","Mission acceptée :","Mission angenommen:"],"Missão removida.":["Mission removed.","Misión eliminada.","Mission supprimée.","Mission entfernt."],"Resultado registrado: missão não cumprida.":["Result recorded: mission failed.","Resultado registrado: misión no cumplida.","Résultat enregistré : mission non réussie.","Ergebnis erfasst: Mission nicht erfüllt."],"Modo compacto (M)":["Compact mode (M)","Modo compacto (M)","Mode compact (M)","Kompaktmodus (M)"],"Nenhum resultado":["No results","Sin resultados","Aucun résultat","Keine Ergebnisse"]};
+LANGUAGE_STRINGS["Ativar sons do site"]=["Enable site sound","Activar el sonido del sitio","Activer le son du site","Seitenton einschalten"];
+LANGUAGE_STRINGS["Desativar sons do site"]=["Mute site sound","Silenciar el sitio","Couper le son du site","Seitenton ausschalten"];
+
 const CARD_LANGUAGES={"g0":[["Teammate's pick","Everyone plays the hero picked for them by the teammate next to them. No vetoes, no swaps."],["Elección del compañero","Cada uno juega el héroe elegido por su compañero de al lado. Sin vetos ni cambios."],["Choix du voisin","Chacun joue le héros choisi par son voisin. Pas de veto ni de changement."],["Wahl des Mitspielers","Jeder spielt den Helden, den der Nachbar auswählt. Kein Veto, kein Wechsel."]],"g1":[["Forgotten hero","Everyone plays the hero they have used least. If they have never played anyone, any hero is allowed."],["Héroe olvidado","Todos juegan el héroe que menos han usado. Si nunca usaron ninguno, vale cualquiera."],["Héros oublié","Tout le monde joue son héros le moins utilisé. Sinon, n'importe lequel convient."],["Vergessener Held","Alle spielen den am seltensten genutzten Helden. Wer keinen hat, wählt frei."]],"g2":[["No weapon items","No Weapon items all match. Only Vitality and Spirit items."],["Sin armas","Sin objetos de Arma durante toda la partida. Solo Vitalidad y Espíritu."],["Sans armes","Aucun objet d'Arme pendant la partie. Uniquement Vitalité et Esprit."],["Keine Waffenitems","Im gesamten Match keine Waffenitems. Nur Vitalität und Geist."]],"g3":[["One item category","Each player picks one category (Weapon, Vitality or Spirit) and buys only from it."],["Categoría única","Cada jugador elige una categoría (Arma, Vitalidad o Espíritu) y compra solo esa."],["Catégorie unique","Chaque joueur choisit Arme, Vitalité ou Esprit et n'achète que cette catégorie."],["Nur eine Kategorie","Jeder wählt Waffe, Vitalität oder Geist und kauft nur daraus."]],"g4":[["Passives only","No active items in your build. If a fight needs a button, that button does not exist."],["Solo pasivos","Nada de objetos activos. Si la pelea depende de pulsar un botón, ese botón no existe."],["Passifs seulement","Pas d'objets actifs. Si un combat exige un bouton, ce bouton n'existe pas."],["Nur Passive","Keine aktiven Items. Braucht ein Kampf einen Knopf, gibt es ihn nicht."]],"g5":[["Save your souls","Nobody spends souls before minute 5. Make the first purchase all at once."],["Manos quietas","Nadie gasta souls antes del minuto 5. La primera compra se hace de golpe."],["Économies forcées","Personne ne dépense d'âmes avant 5 minutes. Premier achat en une fois."],["Souls sparen","Bis Minute 5 gibt niemand Souls aus. Der erste Einkauf kommt auf einmal."]],"g6":[["No zipline","Zipline is banned. If you're late to a fight, you came on foot."],["Sin tirolina","Tirolina prohibida. Si llegas tarde a la pelea, llegaste andando."],["Sans tyrolienne","Tyrolienne interdite. Si vous arrivez en retard, c'est à pied."],["Keine Zipline","Zipline verboten. Wer zu spät zum Kampf kommt, ist gelaufen."]],"g7":[["Melee laning","Until minute 5, only melee and abilities. Shooting starts afterward."],["Línea cuerpo a cuerpo","Hasta el minuto 5, solo cuerpo a cuerpo y habilidades. Disparos después."],["Lane au corps à corps","Jusqu'à 5 minutes, uniquement mêlée et compétences. Tirs ensuite."],["Nahkampf-Lane","Bis Minute 5 nur Nahkampf und Fähigkeiten. Danach darf geschossen werden."]],"g8":[["No minimap","Nobody checks the minimap. Enemy positions only via voice callouts."],["Sin minimapa","Nadie mira el minimapa. Posición enemiga solo por voz."],["Sans mini-carte","Interdiction de regarder la mini-carte. Positions ennemies annoncées à la voix."],["Keine Minikarte","Niemand schaut auf die Minikarte. Gegnerpositionen nur per Voice-Call."]],"g9":[["One lane","The entire team stays in the same lane until the first Guardian falls."],["Una sola línea","Todo el grupo va por la misma línea hasta que caiga el primer Guardián."],["Une seule lane","Toute l'équipe reste sur la même lane jusqu'à la chute du premier Gardien."],["Eine Lane","Das ganze Team bleibt auf einer Lane, bis der erste Guardian fällt."]],"g10":[["Mid-Boss first","As soon as Mid-Boss spawns, the team heads there. No vote."],["Prioridad Mid-Boss","En cuanto aparece el Mid-Boss, todos van a por él. Sin votar."],["Priorité Mid-Boss","Dès l'apparition du Mid-Boss, l'équipe y va. Sans vote."],["Mid-Boss zuerst","Sobald der Mid-Boss spawnt, geht das Team hin. Keine Abstimmung."]],"g11":[["Poorest player carries","The player with the fewest souls always carries the Soul Urn."],["Urna del más pobre","Quien tenga menos souls lleva siempre la urna."],["Urne du plus pauvre","Le joueur ayant le moins d'âmes transporte toujours l'urne."],["Urne für den Ärmsten","Der Spieler mit den wenigsten Souls trägt immer die Urne."]],"g12":[["First 5 in jungle","Nobody stays in lane for the first 5 minutes. Everyone goes jungle."],["Primeros 5 en jungla","Nadie se queda en línea los primeros 5 minutos. Todos a la jungla."],["5 premières minutes dans la jungle","Personne sur la lane avant 5 minutes. Tout le monde en jungle."],["Erste 5 im Jungle","In den ersten 5 Minuten geht niemand auf die Lane. Alle junglen."]],"g13":[["No talking","No voice until the first Guardian falls. Only pings and text chat."],["Sin hablar","Sin voz hasta que caiga el primer Guardián. Solo pings y chat."],["Silence radio","Pas de voix avant la chute du premier Gardien. Pings et texte uniquement."],["Redeverbot","Kein Voicechat bis zum ersten gefallenen Guardian. Nur Pings und Text."]],"g14":[["Questions only","On voice chat, speak only in questions. A statement means you skip your next turn."],["Solo preguntas","Por voz, solo se permite hablar con preguntas. Si afirmas algo, pierdes tu turno."],["Questions seulement","À l'oral, parlez uniquement sous forme de questions. Une affirmation vous fait passer un tour."],["Nur Fragen","Im Voicechat darf nur gefragt werden. Wer etwas behauptet, setzt eine Runde aus."]],"g15":[["No names","You cannot say hero or item names. Describe what you mean."],["Sin nombres","No se pueden decir nombres de héroes ni objetos. Hay que describirlos."],["Pas de noms","Interdiction de nommer héros ou objets. Il faut les décrire."],["Keine Namen","Keine Helden- oder Itemnamen nennen. Alles umschreiben."]],"g16":[["Dead narrator","Whoever dies narrates the match until respawning."],["Narrador muerto","Quien muere narra la partida hasta reaparecer."],["Narrateur mort","Le joueur mort commente la partie jusqu'à sa réapparition."],["Toter Kommentator","Wer stirbt, kommentiert das Match bis zum Respawn."]],"g17":[["Mandatory compliment","After each death, the team compliments something the enemy did well. No sarcasm."],["Elogio obligatorio","Tras cada muerte, el grupo elogia algo que hizo bien el enemigo. Sin ironía."],["Compliment obligatoire","Après chaque mort, l'équipe félicite un adversaire. Sans ironie."],["Pflichtkompliment","Nach jedem Tod lobt das Team eine gute Aktion des Gegners. Ohne Ironie."]],"g18":[["Rotating leader","Every 5 minutes the leader changes. Only they call fights, objectives and retreats."],["Líder rotativo","Cada 5 minutos cambia el líder. Solo él decide peleas, objetivos y retiradas."],["Chef tournant","Le chef change toutes les 5 minutes. Lui seul lance combats, objectifs et replis."],["Wechselnder Anführer","Alle 5 Minuten wechselt der Anführer. Nur er ruft Kämpfe, Ziele und Rückzug aus."]],"g19":[["Fewest kills decides","The player with the fewest kills decides where the team goes."],["Decide el que menos tiene","Quien tenga menos bajas decide adónde va el grupo."],["Le moins de kills décide","Le joueur avec le moins de kills décide où va l'équipe."],["Wenigste Kills entscheiden","Der Spieler mit den wenigsten Kills bestimmt das nächste Ziel."]],"g20":[["Kill prediction","Before the match, everyone predicts their kills. Whoever misses by most picks their hero last next game."],["Apuesta de bajas","Antes de jugar, cada uno predice sus bajas. Quien más falle elige héroe el último en la próxima."],["Pari sur les kills","Avant la partie, chacun annonce ses kills. Le plus éloigné choisit son héros en dernier la prochaine fois."],["Kill-Wette","Vor dem Match tippt jeder seine Kills. Wer am weitesten danebenliegt, wählt nächstes Mal zuletzt."]],"g21":[["Roll for everything","Roll dice for each player's hero, lane and item category. No complaints."],["Todo al dado","Tirad dados para héroe, línea y categoría de objetos. Sin quejas."],["Tout aux dés","Tirez aux dés héros, lane et catégorie d'objets. Aucune plainte."],["Alles würfeln","Helden, Lane und Itemkategorie werden ausgewürfelt. Keine Beschwerden."]],"g22":[["Two cards","Draw one more card and follow both rules at the same time."],["Dos cartas","Sortea otra carta y cumplid las dos a la vez."],["Deux cartes","Tirez une carte de plus et appliquez les deux règles ensemble."],["Zwei Karten","Ziehe eine weitere Karte und erfülle beide gleichzeitig."]],"g23":[["No weapons, no voice","No Weapon items and no voice chat until minute 10."],["Sin armas ni voz","Nada de objetos de Arma ni voz hasta el minuto 10."],["Sans armes ni voix","Aucun objet d'Arme ni voix avant 10 minutes."],["Keine Waffen, kein Voice","Keine Waffenitems und kein Voicechat bis Minute 10."]],"g24":[["Everything by dice","Heroes, lanes, allowed items and leader are chosen at random. The team just executes."],["Todo al azar","Héroes, líneas, objetos permitidos y líder al azar. El grupo solo ejecuta."],["Tout au hasard","Héros, lanes, objets autorisés et chef tirés au sort. L'équipe exécute."],["Alles zufällig","Helden, Lanes, Items und Anführer werden ausgelost. Das Team folgt."]],"i0":[["No shooting","Only abilities and melee until minute 8."],["Sin disparar","Solo habilidades y cuerpo a cuerpo hasta el minuto 8."],["Sans tirer","Compétences et mêlée uniquement jusqu'à 8 minutes."],["Nicht schießen","Bis Minute 8 nur Fähigkeiten und Nahkampf."]],"i1":[["No ultimate","Do not use your fourth ability until minute 15."],["Sin definitiva","No uses la cuarta habilidad hasta el minuto 15."],["Sans ultime","N'utilisez pas votre compétence 4 avant 15 minutes."],["Keine Ulti","Fähigkeit 4 erst ab Minute 15 benutzen."]],"i2":[["Stay grounded","No zipline for you this match."],["Pies en tierra","No puedes usar tirolina esta partida."],["Pieds au sol","Pas de tyrolienne pour vous pendant cette partie."],["Auf dem Boden bleiben","In diesem Match keine Zipline für dich."]],"i3":[["Pacifist farming","You may only kill minions with melee."],["Farmeo pacifista","Solo puedes matar tropas cuerpo a cuerpo."],["Farming pacifiste","Les troupes ne peuvent être tuées qu'au corps à corps."],["Pazifistisches Farmen","Minions dürfen nur im Nahkampf sterben."]],"i4":[["Always parry","Attempt a parry in every fight, successful or not."],["Siempre parry","Intenta parar en cada pelea, aciertes o no."],["Toujours parer","Essayez de parer à chaque combat, que cela marche ou non."],["Immer parieren","Versuche in jedem Kampf zu parieren, egal ob erfolgreich."]],"i5":[["No actives","No active items in your build."],["Sin activos","Ningún objeto activo en tu build."],["Sans actifs","Aucun objet actif dans votre build."],["Keine aktiven Items","Keine aktiven Items in deinem Build."]],"i6":[["Spirit only","Only buy Spirit items."],["Solo Espíritu","Compra únicamente objetos de Espíritu."],["Esprit seulement","N'achetez que des objets d'Esprit."],["Nur Geist","Kaufe ausschließlich Geist-Items."]],"i7":[["Zero Vitality","No Vitality items. Survive with what you have."],["Cero Vitalidad","Nada de objetos de Vitalidad. Sobrevive como puedas."],["Zéro Vitalité","Aucun objet de Vitalité. Débrouillez-vous."],["Null Vitalität","Keine Vitalitätsitems. Überlebe so."]],"i8":[["Buy only when dead","You may only buy items while dead."],["Compra solo muerto","Solo puedes comprar objetos cuando estás muerto."],["Achats une fois mort","Vous ne pouvez acheter des objets que lorsque vous êtes mort."],["Nur tot einkaufen","Items darfst du nur kaufen, wenn du tot bist."]],"i9":[["Call out everything","Narrate everything you do out loud, all the time."],["Narrarlo todo","Di en voz alta todo lo que haces, todo el tiempo."],["Tout annoncer","Annoncez à voix haute tout ce que vous faites, en permanence."],["Alles ansagen","Kommentiere ständig laut, was du gerade tust."]],"i10":[["Shadow","Always stay near the player to your left."],["Sombra","Quédate siempre cerca del jugador a tu izquierda."],["Ombre","Restez toujours proche du joueur à votre gauche."],["Schatten","Bleibe immer in der Nähe des Spielers links von dir."]],"i11":[["Urn owner","You carry the Soul Urn whenever it is available."],["Dueño de la urna","Lleva la urna siempre que esté disponible."],["Propriétaire de l'urne","Transportez l'urne dès qu'elle est disponible."],["Urnenbesitzer","Trage die Soul-Urne immer, wenn sie verfügbar ist."]],"i12":[["Random hero","Play the hero the team draws from the Heroes deck, no complaints."],["Héroe sorteado","Juega el héroe que sortee el equipo del mazo Héroes, sin quejas."],["Héros tiré au sort","Jouez le héros tiré dans le paquet Héros. Sans vous plaindre."],["Zufälliger Held","Spiele den Helden, den das Team aus dem Helden-Deck zieht. Ohne Beschwerden."]]};
 LANGUAGE_STRINGS["Sorteador"]=["Card draw","Sorteador","Tirage de cartes","Kartenziehung"];
 LANGUAGE_STRINGS["Almas"]=["Souls", "Almas", "Âmes", "Seelen"];
@@ -3274,6 +3436,7 @@ function initAlmasMortas(root){
     art.src=r.rank.src;
     button.style.setProperty("--rank-glow",r.rank.color);
     $("rankStatus").style.setProperty("--rank-glow",r.rank.color);
+    window.dispatchEvent(new CustomEvent("decklock:rank",{detail:{steps:rankSteps()}}));
     $("rankName").textContent=label;
     $("rankNext").textContent=r.i===10?t.max+" · "+t.stars+": "+r.stars:et("division")+" "+["III","II","I"][r.progress]+" · "+t.next+": "+r.next.name+" ("+(3-r.progress)+" "+(soulLang==="pt-BR"&&3-r.progress===1?t.ritual:t.rituals)+")";
     $("rankDivisionTrack").innerHTML=Array.from({length:3},(_,i)=>'<i'+(i<r.progress?' class="done"':'')+'></i>').join("");
@@ -3297,7 +3460,7 @@ function initAlmasMortas(root){
     $("rankPromotionInfo").textContent=rt("finished")+" · +"+fmt(report.run.favor)+" "+rt("gained")+" · "+t.rituals+": "+S.rituals;
     fillRitualResult(report);
     $("rankPromotionClose").textContent=t.continue;
-    overlay.hidden=false;
+    overlay.hidden=false;window.dispatchEvent(new CustomEvent("decklock:modal",{detail:{open:true}}));soulTone("promotion");showSoulBurst("rank","");
     priorRankFocus=root.activeElement;
     $("rankPromotionClose").focus();
     $("orb").classList.remove("promotion");
@@ -3306,7 +3469,7 @@ function initAlmasMortas(root){
     setTimeout(()=>$("orb")?.classList.remove("promotion"),800);
   }
   function closeRankPromotion(){
-    $("rankPromotion").hidden=true;
+    $("rankPromotion").hidden=true;window.dispatchEvent(new CustomEvent("decklock:modal",{detail:{open:false}}));
     if(priorRankFocus&&priorRankFocus.isConnected&&priorRankFocus.getClientRects().length)priorRankFocus.focus();
     else $("orb").focus();
   }
@@ -3330,6 +3493,13 @@ function initAlmasMortas(root){
   SOUL_LANGS["Pacto Espiritual"]=["Spirit Pact","Pacto espiritual","Pacte spirituel","Geisterpakt"];
   SOUL_LANGS["Caça às Estátuas"]=["Statue Hunt","Caza de estatuas","Chasse aux statues","Statuenjagd"];
   SOUL_LANGS["Proteção do Patrono"]=["Patron Protection","Protección del Patrón","Protection du Patron","Patron-Schutz"];
+  // Traduções dos rótulos visuais compactos da v1.24.2.
+  SOUL_LANGS["Ritmo"]=["Production", "Producción", "Production", "Produktion"];
+  SOUL_LANGS["Bônus"]=["Bonuses", "Bonificaciones", "Bonus", "Boni"];
+  SOUL_LANGS["Próxima meta"]=["Next goal", "Próxima meta", "Prochain objectif", "Nächstes Ziel"];
+  SOUL_LANGS["Instruções de Domínio"]=["Domain instructions", "Instrucciones de dominio", "Instructions de domaine", "Gebietshinweise"];
+  SOUL_LANGS["Instruções da Loja"]=["Shop instructions", "Instrucciones de la tienda", "Instructions de la boutique", "Shop-Hinweise"];
+  SOUL_LANGS["Informações sobre contratos"]=["Contract information", "Información sobre contratos", "Informations sur les contrats", "Vertragsinformationen"];
   const SOUL_ORDER={en:0,es:1,fr:2,de:3};
   const soulTranslateCache=new WeakMap(),soulTranslateAttrs=new WeakMap();
   let soulLang=typeof decklockLang==="string"?decklockLang:"pt-BR";
@@ -3394,15 +3564,38 @@ function initAlmasMortas(root){
 
   // Cada entrada de GEN representa um investimento/nível de renda, não uma unidade física recrutada.
   // A ordem dos arrays é fixa para manter compatibilidade com os salvamentos existentes.
-  var GEN=[["Patrulha de Troopers","Financie o avanço dos Troopers pelas lanes para recolher Souls.",15,.3],
-    ["Operação Wraith","Apoie as emboscadas de Wraith e receba parte das Souls.",120,1.6],
-    ["Operação Haze","Expanda a rede silenciosa de Haze pelos becos da cidade.",850,7],
-    ["Operação Bebop","Bebop abre caminho à força e garante novas Souls.",5200,34],
-    ["Rota do Guardian","Controle as rotas abertas após a queda de um Guardian inimigo.",32000,160],
-    ["Rota do Walker","Amplie seu domínio das lanes além dos Walkers inimigos.",210000,820],
-    ["Cerco aos Shrines","Pressione os Shrines da base inimiga em busca de Souls.",1.6e6,4600],
-    ["Controle do Covil","Mantenha operações no território neutro do Mid-Boss.",13e6,29000]];
-  var GEN_GROUPS={0:"Tropas e operações",4:"Avanço nas lanes",6:"Cerco à base",7:"Território neutro"};
+  var GEN=[["Coleta de Troopers","Controle a última Soul dos Troopers em York, Broadway e Park.",15,.3],
+    ["Operação Wraith","Invista nas emboscadas de Wraith e receba parte das Souls.",120,1.6],
+    ["Rotas de Caixas","Organize a quebra de caixas pela cidade. Rotas ativas encontram caches extras.",850,7],
+    ["Sinner's Sacrifice","Financie as máquinas de sacrifício. A cada 12 cliques, um tributo extra.",5200,34],
+    ["Queda do Guardian","Aproveite o avanço da lane após a queda de um Guardian inimigo.",32000,160],
+    ["Entrega da Soul Urn","Organize entregas da Soul Urn; potencializa os prêmios do Mid-Boss.",210000,820],
+    ["Cerco aos Shrines","Abra caminho até os Shrines inimigos e recolha Souls.",1.6e6,4600],
+    ["Covil do Mid-Boss","Controle o território ao redor do covil para ampliar a coleta.",13e6,29000]];
+  var GEN_GROUPS={0:"Lanes e economia de rua",2:"Coleta e sacrifícios",4:"Objetivos do mapa",6:"Cerco ao Patrono",7:"Território neutro"};
+
+  // Nomenclatura alinhada aos objetivos e à economia de Deadlock.
+  SOUL_LANGS["Coleta de Troopers"]=["Trooper Souls", "Almas de Troopers", "Âmes des Troopers", "Trooper-Souls"];
+  SOUL_LANGS["Operação Wraith"]=["Wraith Operation", "Operación Wraith", "Opération Wraith", "Wraith-Operation"];
+  SOUL_LANGS["Rotas de Caixas"]=["Crate Routes", "Rutas de cajas", "Routes des caisses", "Kistenrouten"];
+  SOUL_LANGS["Sinner's Sacrifice"]=["Sinner's Sacrifice", "Sinner's Sacrifice", "Sinner's Sacrifice", "Sinner's Sacrifice"];
+  SOUL_LANGS["Queda do Guardian"]=["Guardian Down", "Caída del Guardian", "Chute du Guardian", "Guardian gefallen"];
+  SOUL_LANGS["Entrega da Soul Urn"]=["Soul Urn Delivery", "Entrega de Soul Urn", "Livraison de la Soul Urn", "Soul-Urn-Lieferung"];
+  SOUL_LANGS["Cerco aos Shrines"]=["Shrine Siege", "Asedio a los Shrines", "Siège des Shrines", "Shrine-Belagerung"];
+  SOUL_LANGS["Covil do Mid-Boss"]=["Mid-Boss Lair", "Guarida del Mid-Boss", "Repaire du Mid-Boss", "Mid-Boss-Höhle"];
+  SOUL_LANGS["Lanes e economia de rua"]=["Lanes and street economy", "Líneas y economía callejera", "Voies et économie de rue", "Lanes und Straßenökonomie"];
+  SOUL_LANGS["Coleta e sacrifícios"]=["Scavenging and sacrifices", "Recolección y sacrificios", "Collecte et sacrifices", "Plündern und Opfer"];
+  SOUL_LANGS["Objetivos do mapa"]=["Map objectives", "Objetivos del mapa", "Objectifs de carte", "Kartenziele"];
+  SOUL_LANGS["Cerco ao Patrono"]=["Patron Siege", "Asedio al Patrón", "Siège du Patron", "Patron-Belagerung"];
+  SOUL_LANGS["Território neutro"]=["Neutral territory", "Territorio neutral", "Territoire neutre", "Neutrales Gebiet"];
+  SOUL_LANGS["Controle a última Soul dos Troopers em York, Broadway e Park."]=["Secure the last Soul from Troopers on York, Broadway and Park.", "Asegura el alma final de los Troopers en York, Broadway y Park.", "Récupérez les dernières âmes des Troopers à York, Broadway et Park.", "Sichere Trooper-Souls auf York, Broadway und Park."];
+  SOUL_LANGS["Invista nas emboscadas de Wraith e receba parte das Souls."]=["Fund Wraith ambushes to collect a share of Souls.", "Financia las emboscadas de Wraith para ganar Souls.", "Financez les embuscades de Wraith pour récolter des âmes.", "Finanziere Wraiths Hinterhalte und erhalte Souls."];
+  SOUL_LANGS["Organize a quebra de caixas pela cidade. Rotas ativas encontram caches extras."]=["Plan crate runs through the city. Active routes find extra caches.", "Organiza rutas de cajas por la ciudad con botines extra.", "Organisez la collecte de caisses et trouvez des caches bonus.", "Plane Kistenrouten und finde zusätzliche Beute."];
+  SOUL_LANGS["Financie as máquinas de sacrifício. A cada 12 cliques, um tributo extra."]=["Fund sacrifice machines. Every 12 clicks grants a bonus tribute.", "Financia máquinas de sacrificio. Cada 12 clics ganas un tributo extra.", "Financez les machines de sacrifice. Tous les 12 clics : tribut bonus.", "Finanziere Opfermaschinen. Alle 12 Klicks gibt es Zusatztribut."];
+  SOUL_LANGS["Aproveite o avanço da lane após a queda de um Guardian inimigo."]=["Exploit the lane push after an enemy Guardian falls.", "Aprovecha el avance de la línea tras caer un Guardian enemigo.", "Profitez de la poussée après la chute du Guardian ennemi.", "Nutze den Lane-Vorstoß nach dem Fall eines Guardians."];
+  SOUL_LANGS["Organize entregas da Soul Urn; potencializa os prêmios do Mid-Boss."]=["Run Soul Urn deliveries to enhance Mid-Boss prizes.", "Organiza entregas de Soul Urn para mejorar recompensas del Mid-Boss.", "Livrez la Soul Urn pour améliorer les récompenses du Mid-Boss.", "Liefere die Soul Urn und verbessere Mid-Boss-Belohnungen."];
+  SOUL_LANGS["Abra caminho até os Shrines inimigos e recolha Souls."]=["Push toward enemy Shrines and secure Souls.", "Avanza hacia los Shrines enemigos y recolecta Souls.", "Avancez vers les Shrines ennemis et récoltez des âmes.", "Rücke zu feindlichen Shrines vor und sammle Souls."];
+  SOUL_LANGS["Controle o território ao redor do covil para ampliar a coleta."]=["Control the lair territory to expand Soul collection.", "Controla el territorio de la guarida para aumentar la recolección.", "Contrôlez les alentours du repaire pour récolter davantage.", "Kontrolliere das Höhlengebiet für zusätzliche Souls."];
   var CAT=["Arma · coleta manual","Vitalidade · coleta offline","Espírito · produção automática"];
   var ITM=[
     [["Basic Magazine",600,"Cliques x1,5"],["Spirit Shredder Bullets",7500,"Cliques x1,5"],["Spirit Rend",90000,"Cliques x2"],["Silencer",1.1e6,"Cliques x2"]],
@@ -3412,9 +3605,9 @@ function initAlmasMortas(root){
   // Estas Bênçãos são mecânicas exclusivas do clicker, não efeitos de itens oficiais.
   var PRK=[["Tributo Inicial","Comece cada ciclo com 500 Souls por nível.",5],["Mira Sobrenatural","Cliques +25% por nível.",10],["Pacto Espiritual","Produção automática +10% por nível.",10],["Caça às Estátuas","Golden Statues aparecem 15% mais rápido por nível.",5],["Proteção do Patrono","Coleta offline +5% por nível.",6]];
   var STY=[["Seven · Sobrecarga","Cliques x1,5."],["Abrams · Resistência","Produção automática x1,25."],["Paradox · Distorção","Golden Statues aparecem 30% mais rápido e o Fervor Espiritual dura 50% mais."]];
-  var TK=["Troopers avançam pela lane sob a chuva.","A Soul Urn apareceu do outro lado do mapa.","O Mid-Boss se agita sob a ponte.","O Walker inimigo vigia o avanço da sua equipe.","Uma Golden Statue cintila num beco.","O Patron inimigo enfraquece a cada avanço.","As Souls brilham sob as luzes da cidade.","Há passos no andar de cima. Ninguém está lá."];
+  var TK=["York, Broadway e Park disputam as últimas Souls dos Troopers.","Caixas retornaram aos becos — verifique suas rotas.","A máquina Sinner's Sacrifice voltou a chamar por um tributo.","A Soul Urn espera um novo portador.","O Mid-Boss guarda o covil nas profundezas.","Um Walker recuou e abriu caminho na lane.","O Patron ainda espera seu próximo Ritual.","Uma estátua dourada pode aparecer a qualquer momento."];
 
-  var S={f:0,life:0,own:[0,0,0,0,0,0,0,0],items:[],legacy:0,spent:0,perk:[0,0,0,0,0],boss:0,bossT:Date.now()+120000,stance:0,clicks:0,ts:Date.now(),rituals:0,bestRitualGain:0,lastRitualGain:0,ritualPath:"none",nextPath:"harvest",rewardBoost:null,pendingReward:null,contracts:[],contractStats:{purchases:0},contractClaims:0,contractBoost:null,rankCredit:null,masteryXp:null,records:null};
+  var S={f:0,life:0,own:[0,0,0,0,0,0,0,0],items:[],legacy:0,spent:0,perk:[0,0,0,0,0],boss:0,bossT:Date.now()+120000,stance:0,clicks:0,ts:Date.now(),rituals:0,bestRitualGain:0,lastRitualGain:0,ritualPath:"none",nextPath:"harvest",rewardBoost:null,pendingReward:null,contracts:[],contractStats:{purchases:0},contractClaims:0,contractBoost:null,rankCredit:null,masteryXp:null,records:null,cacheT:Date.now()+45000};
   var KEY="almasmortas_v1";
   // Metas exigentes, porém curtas: um contrato não deve exigir centenas de
   // cliques repetitivos nem vários Mid-Bosses separados por longos cooldowns.
@@ -3470,15 +3663,16 @@ function initAlmasMortas(root){
     S.stance=[0,1,2].includes(S.stance)?S.stance:0;
     S.bossT=nonneg(S.bossT,Date.now()+365*864e5);
     S.ts=nonneg(S.ts,Date.now())||Date.now();
+    S.cacheT=typeof S.cacheT==="number"&&Number.isFinite(S.cacheT)&&S.cacheT>0?Math.min(S.cacheT,Date.now()+45000):Date.now()+45000;
     S.achievements=Array.isArray(S.achievements)?[...new Set(S.achievements.filter(v=>typeof v==="string").slice(0,60))]:[];
-    S.events=Array.isArray(S.events)?S.events.filter(e=>e&&typeof e==="object"&&["boss","bossFail","ritual","gold","fervor","achievement","milestone","offline","bossChoice"].includes(e.kind)&&typeof e.at==="number"&&Number.isFinite(e.at)&&e.at>0&&e.at<8.64e15).slice(0,12).map(e=>({kind:e.kind,at:e.at,amount:typeof e.amount==="number"&&Number.isFinite(e.amount)&&e.amount>=0?Math.min(e.amount,1e300):0,label:typeof e.label==="string"?e.label.slice(0,90):""})):[];
+    S.events=Array.isArray(S.events)?S.events.filter(e=>e&&typeof e==="object"&&["boss","bossFail","ritual","gold","fervor","achievement","milestone","offline","bossChoice","cache"].includes(e.kind)&&typeof e.at==="number"&&Number.isFinite(e.at)&&e.at>0&&e.at<8.64e15).slice(0,12).map(e=>({kind:e.kind,at:e.at,amount:typeof e.amount==="number"&&Number.isFinite(e.amount)&&e.amount>=0?Math.min(e.amount,1e300):0,label:typeof e.label==="string"?e.label.slice(0,90):""})):[];
     S.soundOn=S.soundOn!==false;
     if(!S.cosmetics||typeof S.cosmetics!=="object"||Array.isArray(S.cosmetics))S.cosmetics={};
     S.cosmeticSpent=nonneg(S.cosmeticSpent,1e12);
   }
   try{var raw=localStorage.getItem(KEY);if(raw){var p=JSON.parse(raw);if(p&&typeof p==="object"&&!Array.isArray(p)&&Number.isFinite(p.f)&&p.f>=0){
     // Não copiar propriedades inesperadas nem __proto__ de importações corrompidas.
-    for(const k of ["f","life","own","items","legacy","spent","perk","boss","bossT","stance","clicks","ts","soundOn","cosmetics","cosmeticSpent","achievements","rituals","bestRitualGain","lastRitualGain","events","ritualPath","nextPath","rewardBoost","pendingReward","contracts","contractStats","contractClaims","contractBoost","rankCredit","masteryXp","records"])
+    for(const k of ["f","life","own","items","legacy","spent","perk","boss","bossT","stance","clicks","ts","soundOn","cosmetics","cosmeticSpent","achievements","rituals","bestRitualGain","lastRitualGain","events","ritualPath","nextPath","rewardBoost","pendingReward","contracts","contractStats","contractClaims","contractBoost","rankCredit","masteryXp","records","cacheT"])
       if(Object.prototype.hasOwnProperty.call(p,k))S[k]=p[k];
   }}}catch(e){}
   norm();
@@ -3487,8 +3681,8 @@ function initAlmasMortas(root){
   function save(){S.ts=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S));window.dispatchEvent(new Event("decklock:economy"))}catch(e){}}
   // Sons procedurais: nenhum arquivo externo; preferencia fica no save do clicker.
   let soulAudio=null, lastClickTone=0;
-  S.soundOn=S.soundOn!==false;
-  function soundUi(){const b=$("amSound");if(!b)return;b.setAttribute("aria-pressed",String(S.soundOn));b.setAttribute("aria-label",S.soundOn?"Desativar sons do Almas":"Ativar sons do Almas");b.innerHTML=S.soundOn?"♫ <span>Som ligado</span>":"♪ <span>Som desligado</span>";}
+  S.soundOn=typeof window.decklockAudioEnabled==="function"?window.decklockAudioEnabled():S.soundOn!==false;
+  function soundUi(){} // O controle de áudio agora é único, no cabeçalho do DeckLock.
   function soulTone(kind){
     if(!S.soundOn)return;
     if(kind==="collect"&&Date.now()-lastClickTone<75)return;
@@ -3496,11 +3690,11 @@ function initAlmasMortas(root){
     try{
       soulAudio=soulAudio||new (window.AudioContext||window.webkitAudioContext)();
       if(soulAudio.state==="suspended")soulAudio.resume().catch(()=>{});
-      const t=soulAudio.currentTime,tones={collect:[[280,440,.065,"sine",.028]],purchase:[[470,0,.10,"triangle",.04],[710,0,.17,"sine",.04]],ritual:[[330,0,.16,"sine",.06],[440,0,.20,"sine",.06],[660,0,.28,"sine",.07]],boss:[[165,85,.22,"sawtooth",.035]],gold:[[880,1300,.14,"sine",.05],[1320,1760,.22,"sine",.045]],tab:[[520,0,.07,"triangle",.025]]};
+      const t=soulAudio.currentTime,tones={collect:[[280,440,.065,"sine",.028]],purchase:[[470,0,.10,"triangle",.04],[710,0,.17,"sine",.04]],ritual:[[330,0,.16,"sine",.06],[440,0,.20,"sine",.06],[660,0,.28,"sine",.07]],boss:[[165,85,.22,"sawtooth",.035]],gold:[[880,1300,.14,"sine",.05],[1320,1760,.22,"sine",.045]],cache:[[480,720,.12,"triangle",.025],[780,1060,.15,"sine",.028]],sacrifice:[[210,350,.12,"triangle",.038]],contract:[[620,880,.12,"sine",.035],[880,1100,.17,"sine",.04]],promotion:[[420,520,.2,"triangle",.045],[620,850,.23,"sine",.06],[1000,1280,.3,"sine",.045]],milestone:[[550,750,.12,"triangle",.04],[760,1070,.21,"sine",.05]],tab:[[520,0,.07,"triangle",.025]]};
       (tones[kind]||tones.tab).forEach(([start,end,d,type,vol],i)=>{const at=t+i*.085,osc=soulAudio.createOscillator(),gain=soulAudio.createGain();osc.type=type;osc.frequency.setValueAtTime(start,at);if(end)osc.frequency.exponentialRampToValueAtTime(end,at+d);gain.gain.setValueAtTime(.0001,at);gain.gain.exponentialRampToValueAtTime(vol,at+.012);gain.gain.exponentialRampToValueAtTime(.0001,at+d);osc.connect(gain).connect(soulAudio.destination);osc.start(at);osc.stop(at+d+.015)})
     }catch(e){}
   }
-  $("amSound").addEventListener("click",function(){S.soundOn=!S.soundOn;soundUi();save();if(S.soundOn)soulTone("gold")});soundUi();
+  window.addEventListener("decklock:audio",function(e){S.soundOn=!!e.detail?.enabled;save()});soundUi();
   // Os investimentos fazem som apenas quando a compra foi realmente efetuada.
   root.addEventListener("click",function(e){const b=e.target.closest("button.up");if(b&&!b.disabled&&!b.classList.contains("no")&&!b.classList.contains("lock"))soulTone("purchase")});
   function fmt(n){
@@ -3510,16 +3704,18 @@ function initAlmasMortas(root){
     var s=suffix[soulLang]||["mil","mi","bi","tri","qua","qui"],i=-1;while(n>=1000&&i<5){n/=1000;i++}
     return n.toFixed(n<10?2:n<100?1:0).replace(".",separator)+" "+s[i];
   }
-  const toastQueue=[];let toastShowing=false;
   function toast(m){
-    const message=String(m);if(toastQueue.includes(message))return;
-    toastQueue.push(message);if(toastQueue.length>5)toastQueue.splice(1,toastQueue.length-5);
-    if(toastShowing)return;
-    function next(){if(!toastQueue.length){toastShowing=false;return}
-      toastShowing=true;const t=$("toast");t.textContent=toastQueue.shift();t.classList.add("on");
-      toast.t=setTimeout(()=>{t.classList.remove("on");toast.t=setTimeout(next,230)},2400);
-    }
-    next();
+    window.dispatchEvent(new CustomEvent("decklock:notify",{detail:{message:soulTranslate(String(m))}}));
+  }
+  function showSoulBurst(kind,caption){
+    const stage=$("stage");if(!stage||document.hidden||stage.closest("[hidden]"))return;
+    const p=document.createElement("span");p.className="almas-burst"+(kind==="sacrifice"?" sacrifice":"");
+    if(caption)p.textContent=caption;
+    stage.appendChild(p);p.addEventListener("animationend",()=>p.remove(),{once:true});
+  }
+  function ringClick(x,y){
+    const stage=$("stage"),r=document.createElement("span");r.className="almas-click-ring";r.style.left=x+"px";r.style.top=y+"px";
+    stage.appendChild(r);r.addEventListener("animationend",()=>r.remove(),{once:true});
   }
   function rnd(n){return Math.floor(Math.random()*n)}
 
@@ -3579,7 +3775,9 @@ function initAlmasMortas(root){
   function cMul(){var m=gm()*(1+.25*S.perk[1]);for(var t=0;t<4;t++)if(S.items[t])m*=WM[t];if(S.stance===0)m*=1.5;if(S.ritualPath==="sacrifice")m*=1.35;if(rewardActive("click"))m*=BOSS_BALANCE.clickMult;if(contractBoostActive("click"))m*=1.25;if(buff.t>0)m*=7;return m}
   function clickVal(){
     const cpsNow=cps(),share=S.ritualPath==="sacrifice"?BOSS_BALANCE.clickProductionShare:.02;
-    return(1+cpsNow*share)*cMul()+(rewardActive("click")?cpsNow*BOSS_BALANCE.clickCpsBonus:0);
+    // Sinner's Sacrifice: eficiência manual discreta, limitada a +24%.
+    const sacrificeBoost=1+Math.min(.24,.012*Math.sqrt(Math.max(0,S.own[3])));
+    return ((1+cpsNow*share)*cMul()+(rewardActive("click")?cpsNow*BOSS_BALANCE.clickCpsBonus:0))*sacrificeBoost;
   }
   // Dificuldade dos chefes usa a força habitual do personagem, e não bônus temporários
   // ou da especialização. Assim, escolher Sacrifício realmente ajuda nos confrontos.
@@ -3689,7 +3887,7 @@ function initAlmasMortas(root){
     const name=ct(c.kind);S.contracts.splice(slot,1);
     ensureContracts();
     syncAchievements();soulTone("gold");
-    toast(ct("claimed")+": "+name+" · +"+fmt(c.reward)+" Souls"+(bonus?" · "+ct(S.contractBoost.type):""));
+    toast(ct("claimed")+": "+name+" · +"+fmt(c.reward)+" Souls"+(bonus?" · "+ct(S.contractBoost.type):""));soulTone("contract");showSoulBurst("contract","✓");
     save();drawAll();
   }
   function drawContracts(){
@@ -3774,8 +3972,12 @@ function initAlmasMortas(root){
     S.records.bestCps=Math.max(S.records.bestCps,cps());
     if(masteryLevel(S.masteryXp[i])>oldMastery)toast(et("masteryLevel")+" "+masteryLevel(S.masteryXp[i])+" · "+GEN[i][0]);
     $("purchaseFeedback").textContent=GEN[i][0]+" · +"+fmt(delta)+" Souls/s";
-    if(crossed.length){logEvent("milestone",crossed[crossed.length-1],GEN[i][0]);toast(et("special")+" · "+GEN[i][0]+" · "+pt("lv")+" "+crossed[crossed.length-1]);}
-    save();drawAll()}))});
+    if(crossed.length){logEvent("milestone",crossed[crossed.length-1],GEN[i][0]);toast(et("special")+" · "+GEN[i][0]+" · "+pt("lv")+" "+crossed[crossed.length-1]);soulTone("milestone");showSoulBurst("milestone","✦");}
+    soulTone("purchase");
+    const pressed=gR[i]?.b;if(pressed){pressed.classList.remove("am-purchase-flash");void pressed.offsetWidth;pressed.classList.add("am-purchase-flash");setTimeout(()=>pressed.classList.remove("am-purchase-flash"),550)}
+    save();drawAll()}));
+    gR[i].b.classList.add("operation");gR[i].b.dataset.op=String(i);
+  });
   CAT.forEach(function(c,ci){
     var h=document.createElement("div");h.className="cat";h.textContent=c;$("il").appendChild(h);
     ITM[ci].forEach(function(it,t){var id=ci*4+t;iR[id]=row($("il"),it[0],it[2],function(){
@@ -3816,7 +4018,7 @@ function initAlmasMortas(root){
     const contractBonus=S.contractBoost&&Date.now()<S.contractBoost.until
       ?" · "+ct("bonus")+" "+(S.contractBoost.type==="auto"?"Souls/s +15%":"clique +25%")+" "+Math.ceil((S.contractBoost.until-Date.now())/1000)+"s":"";
     $("bf").textContent=(buff.t>0?"Fervor Espiritual · cliques x7 por "+Math.ceil(buff.t)+" s":"")+bonus+contractBonus;
-    $("nextGoal").textContent=tx("goal")+": "+nextObjective();
+    $("nextGoal").textContent=nextObjective();
     drawCombo();
     drawRank();
   }
@@ -3836,11 +4038,16 @@ function initAlmasMortas(root){
       const lang=allLanguage[soulLang]||allLanguage["pt-BR"];
       r.b.classList.toggle("no",S.f<c);r.b.classList.toggle("ready",S.f>=c);
       r.b.setAttribute("aria-disabled",String(S.f<c));r.n.textContent=fmt(c);
-      r.s.textContent=lang.lv+" "+S.own[i]+" (+"+n+") · +"+fmt(inc)+" Souls/s ("+lang.gain+") · "+lang.payback+" ~"+roi+
-        (crossed.length?" · "+lang.cross:"" )+(nx&&!crossed.length?" · "+lang.next+" "+nx:"")+
+      const fullDetails=lang.lv+" "+S.own[i]+" (+"+n+") · +"+fmt(inc)+" Souls/s ("+lang.gain+") · "+lang.payback+" ~"+roi+
+        (crossed.length?" · "+lang.cross:"")+(nx&&!crossed.length?" · "+lang.next+" "+nx:"")+
         " · "+et("masteryLevel")+" "+masteryLevel(S.masteryXp[i])+"/5"+
         (S.own[i]>=10?" · "+et("special")+" +"+Math.round((operationMilestoneMult(S.own[i])-1)*100)+"%":"")+
         (S.f<c?" · "+lang.missing+" "+fmt(c-S.f)+" Souls":" · "+lang.ready);
+      // Na lista exibir apenas o essencial; detalhes completos permanecem no tooltip.
+      r.s.textContent=lang.lv+" "+S.own[i]+" (+"+n+") · +"+fmt(inc)+" Souls/s"+
+        (crossed.length?" · "+lang.cross:nx&&nx-S.own[i]<=5?" · "+lang.next+" "+nx:"")+
+        (S.f<c?" · "+lang.missing+" "+fmt(c-S.f)+" Souls":"");
+      r.b.title=fullDetails;
     });
     root.querySelectorAll("#qs .btn").forEach(function(b){
       const on=String(Q)===b.dataset.q;b.classList.toggle("on",on);b.setAttribute("aria-pressed",String(on));
@@ -4018,11 +4225,23 @@ function initAlmasMortas(root){
     };
     const x=ritualExtras[soulLang]||ritualExtras["pt-BR"];
     const bonusNow=gm();
-    $("lg").innerHTML=l.favor+" <b>"+S.legacy+"</b> "+l.earned+", "+l.grants+" +"+Math.round(S.legacy*4)+"% "+l.bonus+". "+
+    const ritualDetailText=l.favor+" <b>"+S.legacy+"</b> "+l.earned+", "+l.grants+" +"+Math.round(S.legacy*4)+"% "+l.bonus+". "+
       (gain>=1?l.claim+" +"+gain+" "+l.points+" "+l.reset:l.next+" "+fmt(nextThreshold)+" "+l.lifetime)+
       "<br>"+x.total+" <b>x"+bonusNow.toFixed(2)+" → x"+bonusAfter.toFixed(2)+"</b> ("+x.current+" → "+x.next+")."+
       "<br>"+x.more+" <b>"+fmt(futurePoints)+"</b> "+x.toNext+(passive>0?" · "+x.hours+" ~"+timeLabel(futurePoints/passive)+" ("+x.estimate+")":"")+"."+
       (S.rituals>0?"<br>"+x.history+" "+S.rituals+" · "+x.best+" "+S.bestRitualGain+" · "+x.last+" +"+S.lastRitualGain:"");
+    const ritualDetailsNode=$("lg");
+    const detailLabel={"pt-BR":"Detalhes do Favor",en:"Favor details",es:"Detalles del Favor",fr:"Détails de la Faveur",de:"Gunst-Details"}[soulLang]||"Detalhes do Favor";
+    // Preserva o <details> e seu foco/estado durante as atualizações periódicas.
+    if(!ritualDetailsNode.querySelector(".favor-highlight")){
+      ritualDetailsNode.innerHTML="<div class='favor-highlight'><span></span><strong></strong><small></small></div><details class='ritual-extra'><summary></summary><div class='ritual-extra-body'></div></details>";
+    }
+    const highlight=ritualDetailsNode.querySelector(".favor-highlight");
+    highlight.querySelector("span").textContent=l.favor;
+    highlight.querySelector("strong").textContent=String(S.legacy);
+    highlight.querySelector("small").textContent="+"+Math.max(0,gain)+" "+l.points;
+    ritualDetailsNode.querySelector(".ritual-extra summary").textContent=detailLabel;
+    ritualDetailsNode.querySelector(".ritual-extra-body").innerHTML=ritualDetailText;
     drawRitualPreview(gain);
     $("asc").disabled=gain<1||!!S.pendingReward;
     $("lp").textContent="Favor disponível para Bênçãos: "+avail+" "+(avail===1?"ponto":"pontos")+".";
@@ -4036,9 +4255,10 @@ function initAlmasMortas(root){
       b.innerHTML='<div><b>'+s[0]+'</b><span class="d">'+s[1]+'</span></div>';
       b.addEventListener("click",function(){S.stance=i;save();drawLeg();drawHead()});$("st").appendChild(b)});
     $("ac").replaceChildren();
-    ACH.forEach(a=>{const on=S.achievements.includes(a[0]),entry=document.createElement("div"),name=document.createElement("b"),desc=document.createElement("span");
-      entry.className="ach"+(on?" on":"");const translated=NEW_ACH_LANG[soulLang]?.[a[0]];
-      name.textContent=translated?.[0]||a[0];desc.textContent=translated?.[1]||a[1];entry.append(name,desc);$("ac").append(entry)});
+    ACH.forEach(a=>{const on=S.achievements.includes(a[0]),entry=document.createElement("details"),head=document.createElement("summary"),name=document.createElement("b"),desc=document.createElement("span"),mark=document.createElement("span");
+      entry.className="ach ach-fold"+(on?" on":"");const translated=NEW_ACH_LANG[soulLang]?.[a[0]];
+      name.textContent=translated?.[0]||a[0];desc.textContent=translated?.[1]||a[1];mark.className="ach-mark";mark.textContent=on?"✓":"○";head.append(name,mark);entry.append(head,desc);$("ac").append(entry)});
+    $("achievementsCount").textContent=S.achievements.length+" / "+ACH.length;
     $("sx").innerHTML="Souls acumuladas: "+fmt(S.life)+"<br>Cliques: "+fmt(S.clicks)+" · Mid-Bosses derrotados: "+S.boss+"<br>Multiplicador global: x"+gm().toFixed(2).replace(".",soulLang==="en"?".":",")+" · Eficiência offline: "+Math.round(offEff()*100)+"% por até "+(8+4*vit())+" h";
     drawRecords();
   }
@@ -4068,12 +4288,15 @@ function initAlmasMortas(root){
   $("orb").addEventListener("click",function(e){
     const now=Date.now();combo.count=now-combo.last<=COMBO_GRACE?Math.min(combo.count+1,50):1;combo.last=now;
     var v=clickVal()*(1+.02*Math.max(0,combo.count-1));add(v);S.clicks++;
+    if(S.own[3]>0&&S.clicks%12===0){const tribute=v*.5;add(tribute);soulTone("sacrifice");showSoulBurst("sacrifice", "+"+fmt(tribute));}
     S.records.bestCombo=Math.max(S.records.bestCombo,combo.count);S.records.bestClick=Math.max(S.records.bestClick,v);
     soulTone("collect");if(boss.on)boss.hp-=v;
     if([10,25,50].includes(combo.count))soulTone("purchase");
     var st=$("stage"),r=st.getBoundingClientRect(),x=e.clientX?e.clientX-r.left:r.width/2,y=e.clientX?e.clientY-r.top:r.height/2;
     var p=document.createElement("span");p.className="pop";p.textContent="+"+fmt(v);p.style.left=(x-14)+"px";p.style.top=(y-20)+"px";
-    st.appendChild(p);setTimeout(function(){p.remove()},900);drawHead();
+    st.appendChild(p);setTimeout(function(){p.remove()},900);
+    if(!window.matchMedia("(prefers-reduced-motion: reduce)").matches)ringClick(x,y);
+    drawHead();
     if(S.clicks%8===0)save();
   });
 
@@ -4088,8 +4311,9 @@ function initAlmasMortas(root){
   function endBoss(win){
     boss.on=false;
     if(win){
-      const r=Math.max(cps()*BOSS_BALANCE.baseSeconds,bossBaseClick()*BOSS_BALANCE.manualClicks);add(r);S.boss++;S.bossT=Date.now()+3e5;
-      S.pendingReward={base:r};logEvent("boss",r);toast(tx("won"));
+      const urnBonus=1+Math.min(.25,.008*Math.sqrt(Math.max(0,S.own[5])));
+      const r=Math.max(cps()*BOSS_BALANCE.baseSeconds,bossBaseClick()*BOSS_BALANCE.manualClicks)*urnBonus;add(r);S.boss++;S.bossT=Date.now()+3e5;
+      S.pendingReward={base:r};logEvent("boss",r);toast(tx("won"));soulTone("gold");showSoulBurst("boss","✦");
     }else{S.bossT=Date.now()+15e4;logEvent("bossFail");toast("O Mid-Boss resistiu. Ele volta em breve.")}
     save();drawAll();
   }
@@ -4140,7 +4364,7 @@ function initAlmasMortas(root){
     S.legacy+=g;S.ritualPath=S.nextPath;
     S.rewardBoost=null;S.pendingReward=null;
     soulTone("ritual");S.f=500*S.perk[0];logEvent("ritual",g);
-    S.own=[0,0,0,0,0,0,0,0];S.items=[];norm();
+    S.own=[0,0,0,0,0,0,0,0];S.items=[];S.cacheT=Date.now()+45000;norm();
     buff.t=0;combo.count=0;boss.on=false;S.bossT=Date.now()+120000;
     const justUnlocked=syncAchievements();justUnlocked.forEach(name=>logEvent("achievement",0,name));
     save();tab("p");
@@ -4151,7 +4375,7 @@ function initAlmasMortas(root){
     try{var o=JSON.parse(decodeURIComponent(escape(atob($("sv").value.trim()))));
       if(!o||typeof o!=="object"||Array.isArray(o)||!Number.isFinite(o.f)||o.f<0||!Array.isArray(o.own)||!Array.isArray(o.items))throw 0;
       // Um código importado também passa pela migração e validação.
-      const validKeys=["f","life","own","items","legacy","spent","perk","boss","bossT","stance","clicks","ts","soundOn","cosmetics","cosmeticSpent","achievements","rituals","bestRitualGain","lastRitualGain","events","ritualPath","nextPath","rewardBoost","pendingReward","contracts","contractStats","contractClaims","contractBoost","rankCredit","masteryXp","records"];
+      const validKeys=["f","life","own","items","legacy","spent","perk","boss","bossT","stance","clicks","ts","soundOn","cosmetics","cosmeticSpent","achievements","rituals","bestRitualGain","lastRitualGain","events","ritualPath","nextPath","rewardBoost","pendingReward","contracts","contractStats","contractClaims","contractBoost","rankCredit","masteryXp","records","cacheT"];
       const imported={};for(const k of validKeys)if(Object.prototype.hasOwnProperty.call(o,k))imported[k]=o[k];
       S={...S,...imported,rankCredit:imported.rankCredit??null,masteryXp:imported.masteryXp??null,records:imported.records??null,contracts:imported.contracts??[],contractStats:imported.contractStats??{purchases:0},contractClaims:imported.contractClaims??0,contractBoost:imported.contractBoost??null};norm();ensureContracts();combo.count=0;
       S.cosmetics={...shopData().cosmetics,...(S.cosmetics||{})};
@@ -4162,7 +4386,7 @@ function initAlmasMortas(root){
   $("wipe").addEventListener("click",function(){
     var b=$("wipe");
     if(b.dataset.arm){try{localStorage.removeItem(KEY)}catch(e){}
-      S={f:0,life:0,own:[0,0,0,0,0,0,0,0],items:[],legacy:0,spent:0,perk:[0,0,0,0,0],boss:0,bossT:Date.now()+120000,stance:0,clicks:0,ts:Date.now(),achievements:[],events:[],rituals:0,bestRitualGain:0,lastRitualGain:0,ritualPath:"none",nextPath:"harvest",rewardBoost:null,pendingReward:null,contracts:[],contractStats:{purchases:0},contractClaims:0,contractBoost:null,rankCredit:0,masteryXp:Array(8).fill(0),records:null,soundOn:S.soundOn,cosmetics:shopLedger().cosmetics||{},cosmeticSpent:shopLedger().cosmeticSpent||0};norm();ensureContracts();combo.count=0;renderedRankKey="";resetRitualConfirmation();last=Date.now();window.dispatchEvent(new Event("decklock:economy"));
+      S={f:0,life:0,own:[0,0,0,0,0,0,0,0],items:[],legacy:0,spent:0,perk:[0,0,0,0,0],boss:0,bossT:Date.now()+120000,stance:0,clicks:0,ts:Date.now(),achievements:[],events:[],rituals:0,bestRitualGain:0,lastRitualGain:0,ritualPath:"none",nextPath:"harvest",rewardBoost:null,pendingReward:null,contracts:[],contractStats:{purchases:0},contractClaims:0,contractBoost:null,rankCredit:0,masteryXp:Array(8).fill(0),records:null,cacheT:Date.now()+45000,soundOn:S.soundOn,cosmetics:shopLedger().cosmetics||{},cosmeticSpent:shopLedger().cosmeticSpent||0};norm();ensureContracts();combo.count=0;renderedRankKey="";resetRitualConfirmation();last=Date.now();window.dispatchEvent(new Event("decklock:economy"));
       b.dataset.arm="";b.textContent="Apagar";tab("p");drawEvents();toast("Progresso apagado.");return}
     b.dataset.arm="1";b.textContent="Certeza?";clearTimeout(wt);wt=setTimeout(function(){b.dataset.arm="";b.textContent="Apagar"},3500);
   });
@@ -4224,6 +4448,12 @@ function initAlmasMortas(root){
       if(boss.on){boss.t-=dt;if(boss.t<=0)endBoss(false)}
     }else{
       var c=cps();add(c*dt);
+      // Rotas de Caixas: uma descoberta periódica, sem exigir cliques repetidos.
+      if(S.own[2]>0&&now>=S.cacheT){
+        const bounty=c*Math.min(12,2+1.8*Math.log1p(S.own[2]));
+        add(bounty);S.cacheT=now+45000;
+        logEvent("cache",bounty);toast((soulLang==="en"?"Crate cache":soulLang==="es"?"Botín de cajas":soulLang==="fr"?"Cache de caisses":soulLang==="de"?"Kistenfund":"Caixas encontradas")+" · +"+fmt(bounty)+" Souls");soulTone("cache");
+      }
       if(boss.on){
         // A ajuda automática pode causar no máximo 45% do HP em 30 segundos:
         // o jogador precisa participar do confronto, mas builds passivas seguem viáveis.
