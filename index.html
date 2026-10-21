@@ -6,7 +6,7 @@
 <title>DeckLock</title>
 <meta name="description" content="Sorteador de cartas de desafio para partidas de Deadlock, com decks editáveis.">
 <meta name="theme-color" content="#222021">
-<meta name="decklock-version" content="1.14.1">
+<meta name="decklock-version" content="1.14.2">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="DeckLock">
@@ -743,6 +743,11 @@ header:has(> .hl) .site-tab .tab-symbol{font-size:1.1em;opacity:.9}
 .shop-item .sample-btn:focus-visible,.shop-item .shop-purchase:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 #dlgPreview[open]{animation:none}
 #dlgPreview .preview-buy:disabled{background:var(--panel);border:1px solid var(--line);color:var(--mute);opacity:1;cursor:not-allowed}
+
+/* v1.14.2 — avisos no alto da tela, abaixo dos controles; não no rodapé. */
+#toast{inset:calc(86px + env(safe-area-inset-top, 0px)) auto auto 50%;bottom:auto;top:calc(86px + env(safe-area-inset-top, 0px));width:max-content;max-width:min(430px,calc(100vw - 28px));padding:11px 20px;border:1px solid color-mix(in srgb,var(--gold) 65%,var(--line));border-radius:10px;box-shadow:0 12px 38px #0009;font-weight:700;pointer-events:none}
+#toast button{pointer-events:auto}
+@media(max-width:750px){#toast{inset-block-start:calc(112px + env(safe-area-inset-top, 0px));top:calc(112px + env(safe-area-inset-top, 0px))}}
 </style>
 </head>
 <body>
@@ -756,8 +761,8 @@ header:has(> .hl) .site-tab .tab-symbol{font-size:1.1em;opacity:.9}
   <span id="title" hidden>DeckLock</span>
   <nav class="site-tabs" aria-label="Modos do site">
     <div class="mode-actions">
-      <button class="site-tab" id="tabAlmasMortas" type="button" aria-controls="soulView" aria-pressed="false" title="Abrir Almas à esquerda"><span class="tab-symbol">✧</span><span>Almas</span></button>
-      <button class="site-tab on" id="tabSorteador" type="button" aria-controls="main" aria-pressed="true" title="Centralizar o sorteador"><span class="tab-symbol">▤</span><span>Sorteador</span></button>
+      <button class="site-tab" id="tabAlmasMortas" type="button" aria-controls="soulView" aria-pressed="false" title="Abrir Almas à esquerda"><span>Almas</span></button>
+      <button class="site-tab on" id="tabSorteador" type="button" aria-controls="main" aria-pressed="true" title="Centralizar o DeckLock"><span>DeckLock</span></button>
     </div>
   </nav>
   <div class="hr">
@@ -1175,7 +1180,7 @@ const EXEMPLOS=[{"id":"g","name":"Grupo","cards":[{"id":"g0","title":"Pick do co
 const KEY="deadlock-deck-v3";
 /* Reset único: quem tem dados salvos sem "epoch" (versões antigas) volta ao início UMA vez.
    Os dados antigos são guardados em BKEY antes. Só aumente RESET_EPOCH se quiser forçar outro reset. */
-const RESET_EPOCH=3,APP_VERSION="1.14.1",BKEY="deadlock-deck-v3:backup";
+const RESET_EPOCH=3,APP_VERSION="1.14.2",BKEY="deadlock-deck-v3:backup";
 // Reset único de estados criados antes da v1.9.4. Futuras atualizações não reiniciam
 // os dados sem uma migração explícita; o backup deve ser confirmado antes do reset.
 const RESET_BEFORE_VERSION="1.9.4",INTRO_KEY="deadlock-deck-v3:intro-hidden";
@@ -1326,6 +1331,9 @@ function load(first){
     if(bk){s=null;did=true}
     else {resetBackupFailed=true;if(!s)s=null}
   }
+  // A atualização de código não exige reset: identificar upgrade sem apagar dados.
+  const olderVersion=first&&!did&&!resetBackupFailed&&s&&typeof s==="object"&&
+    Array.isArray(s.decks)&&typeof s.ver==="string"&&compareVersions(s.ver,APP_VERSION)<0;
   if(!s||!Array.isArray(s.decks))s={decks:DEF_DECKS()};
   s.decks=cleanImportedDecks(s.decks);
   s.cfg=cleanCfg(s.cfg);
@@ -1341,7 +1349,12 @@ function load(first){
   if(s.mode==="finite"){const f=s.fin;s.fin=f&&+f.total>0?{total:+f.total,left:Math.max(0,Math.min(+f.total,+f.left||0))}:{total:s.cfg.finiteN,left:s.cfg.finiteN}}else s.fin=null;
   // Não marcar como migrado se não foi possível preservar o estado anterior.
   if(!resetBackupFailed){s.epoch=RESET_EPOCH;s.ver=APP_VERSION}
-  if(did){s.notice={type:"update",key:bk,ver:APP_VERSION};resetNotice=true;try{localStorage.setItem(KEY,JSON.stringify(s))}catch(e){}}
+  if(did){s.notice={type:"update",key:bk,ver:APP_VERSION};resetNotice=true}
+  else if(olderVersion&&!s.notice){s.notice={type:"upgrade",ver:APP_VERSION}}
+  // Grava o número da versão e um aviso pendente para não repetir indefinidamente.
+  if(first&&(did||olderVersion)){
+    try{localStorage.setItem(KEY,JSON.stringify(s))}catch(e){}
+  }
   return s;
 }
 function restoreBackup(key){
@@ -2632,8 +2645,13 @@ function showIntro(){
   if(!hidden&&!$("#dlgIntro").open){$("#introDontShow").checked=false;$("#dlgIntro").showModal()}
 }
 function showNotice(){
-  if(S.notice){$("#noticeMsg").textContent="DeckLock atualizado para v"+APP_VERSION+". Configurações reiniciadas. Seu backup foi salvo em Arquivos.";$("#dlgNotice").showModal()}
-  else showIntro();
+  if(S.notice){
+    // Só mencionar restauração/reset quando a migração realmente foi realizada.
+    $("#noticeMsg").textContent=S.notice.type==="update"
+      ? "DeckLock atualizado para v"+APP_VERSION+". Configurações reiniciadas. Seu backup foi salvo em Arquivos."
+      : "DeckLock atualizado para v"+APP_VERSION+". Seus decks, progresso e configurações foram mantidos.";
+    $("#dlgNotice").showModal();
+  }else showIntro();
 }
 $("#noticeOk").onclick=()=>$("#dlgNotice").close();
 $("#dlgNotice").addEventListener("cancel",e=>e.preventDefault());
@@ -2852,6 +2870,15 @@ function translateUi(text){
       `DeckLock actualizado a v${m[1]}. Configuración reiniciada. Tu copia está en Archivos.`,
       `DeckLock mis à jour en v${m[1]}. Paramètres réinitialisés. Votre sauvegarde est dans Fichiers.`,
       `DeckLock auf v${m[1]} aktualisiert. Einstellungen zurückgesetzt. Dein Backup liegt unter Dateien.`
+    ][langIndex];
+  }
+  if(!translated){
+    const m=raw.match(/^DeckLock atualizado para v([\d.]+)\. Seus decks, progresso e configurações foram mantidos\.$/);
+    if(m)translated=[
+      `DeckLock updated to v${m[1]}. Your decks, progress and settings were preserved.`,
+      `DeckLock actualizado a v${m[1]}. Se conservaron tus mazos, progreso y ajustes.`,
+      `DeckLock mis à jour en v${m[1]}. Vos paquets, votre progression et vos paramètres ont été conservés.`,
+      `DeckLock auf v${m[1]} aktualisiert. Deine Decks, Fortschritte und Einstellungen wurden beibehalten.`
     ][langIndex];
   }
   if(!translated){
