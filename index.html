@@ -6,7 +6,7 @@
 <title>DeckLock</title>
 <meta name="description" content="Sorteador de cartas de desafio para partidas de Deadlock, com decks editáveis.">
 <meta name="theme-color" content="#222021">
-<meta name="decklock-version" content="1.25.0">
+<meta name="decklock-version" content="1.25.2">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="DeckLock">
@@ -759,6 +759,23 @@ header:has(> .hl) .site-tab .tab-symbol{font-size:1.1em;opacity:.9}
 #bGlobalSound.muted .sound-slash{display:block}
 #bGlobalSound[aria-pressed="false"]{opacity:.72}
 @media(max-width:390px){.site-rank-chip{width:22px;height:24px}.site-rank-chip img{width:22px;height:23px}#tabAlmasMortas{gap:2px}}
+/* v1.25.1 — A Carta do Patrono usa a própria linguagem visual do DeckLock. */
+.patron-draw{width:min(100%,460px);max-width:100%;min-width:0;margin:4px auto 10px;padding:9px 11px;display:flex;align-items:center;gap:11px;border:1px solid color-mix(in srgb,var(--gold) 32%,var(--line));background:color-mix(in srgb,var(--gold) 6%,var(--bg2));border-radius:10px;box-shadow:0 6px 22px #0002}
+.patron-draw[hidden],body:not(.souls-active) .patron-draw{display:none!important}
+.patron-draw-badge{width:39px;height:47px;min-width:39px;border-radius:7px;display:grid;place-items:center;color:var(--gold);border:1px solid color-mix(in srgb,var(--gold) 45%,var(--line));background:linear-gradient(140deg,color-mix(in srgb,var(--gold) 16%,var(--panel)),var(--bg));font:28px/1 Georgia,serif;box-shadow:inset 0 1px #fff1}
+.patron-draw-info{flex:1;min-width:0;display:grid;gap:3px}
+.patron-draw-info strong{font:600 .86rem/1.2 Georgia,serif;color:var(--ink)}
+.patron-draw-info small{font-size:.75rem;line-height:1.3;color:var(--mute);font-weight:500}
+.patron-draw-result{display:block;color:var(--gold);font-size:.76rem;font-weight:650;line-height:1.4}
+.patron-draw-result[hidden]{display:none!important}
+.patron-draw-result.reveal{animation:patron-reveal 400ms ease-out}
+@keyframes patron-reveal{0%{opacity:0;transform:translateY(8px) scale(.96)}60%{opacity:1;transform:translateY(-2px) scale(1.01)}100%{opacity:1;transform:none}}
+.patron-draw-button{flex:none;min-height:36px;padding:8px 13px;border-radius:7px;font-size:.8rem;font-weight:700;color:var(--bg);background:var(--gold);border:1px solid var(--gold);cursor:pointer}
+.patron-draw-button:disabled{color:var(--mute);background:var(--panel);border-color:var(--line);cursor:default;opacity:.82}
+.patron-draw.ready .patron-draw-badge{animation:patron-shimmer 2.8s ease-in-out infinite}
+@keyframes patron-shimmer{50%{filter:drop-shadow(0 0 9px color-mix(in srgb,var(--gold) 55%,transparent))}}
+@media(max-width:440px){.patron-draw{gap:8px;padding:8px}.patron-draw-badge{width:32px;min-width:32px;height:40px;font-size:24px}.patron-draw-button{padding:8px 9px}}
+@media(prefers-reduced-motion:reduce){.patron-draw.ready .patron-draw-badge,.patron-draw-result.reveal{animation:none}}
 </style>
 </head>
 <body>
@@ -823,6 +840,11 @@ header:has(> .hl) .site-tab .tab-symbol{font-size:1.1em;opacity:.9}
         </div>
       </div>
     </div>
+    <section class="patron-draw" id="patronDraw" hidden aria-label="Carta do Patrono">
+      <div class="patron-draw-badge" aria-hidden="true">✧</div>
+      <div class="patron-draw-info"><strong id="patronDrawName">Carta do Patrono</strong><small id="patronDrawStatus">Disponível</small><span id="patronDrawResult" class="patron-draw-result" hidden></span></div>
+      <button class="patron-draw-button" id="bPatronDraw" type="button">Sortear</button>
+    </section>
     <details class="extras" id="moreOptions">
       <summary>Mais opções <span id="optionsHint"></span></summary>
       <div class="extras-content">
@@ -1268,8 +1290,8 @@ textarea{width:100%;height:70px;background:var(--am-ink);color:var(--am-text);bo
 .up.operation:before{position:absolute;left:12px;top:50%;transform:translateY(-50%);content:'✦';width:28px;height:30px;display:grid;place-items:center;border:1px solid color-mix(in srgb,var(--am-line) 85%,transparent);border-radius:7px;font:600 19px/1 Georgia,serif;color:var(--am-brass);background:color-mix(in srgb,var(--am-bg) 56%,var(--am-raised))}
 .up.operation[data-op="0"]:before{content:'☷'}.up.operation[data-op="1"]:before{content:'♠'}
 .up.operation[data-op="2"]:before{content:'▣'}.up.operation[data-op="3"]:before{content:'♰'}
-.up.operation[data-op="4"]:before{content:'⛨'}.up.operation[data-op="5"]:before{content:'◈'}
-.up.operation[data-op="6"]:before{content:'⚑'}.up.operation[data-op="7"]:before{content:'✶'}
+.up.operation[data-op="4"]:before,.up.operation[data-op="5"]:before,
+.up.operation[data-op="6"]:before,.up.operation[data-op="7"]:before{content:'◇';color:var(--am-muted)}
 .up.operation.ready:before{border-color:color-mix(in srgb,var(--am-brass) 65%,var(--am-line))}
 .up.operation.no:before{opacity:.55}
 @keyframes amInvestment{0%{background:color-mix(in srgb,var(--am-brass) 30%,var(--am-raised))}100%{background:var(--am-raised)}}
@@ -1319,7 +1341,7 @@ textarea{width:100%;height:70px;background:var(--am-ink);color:var(--am-text);bo
     <div class="rank-status" id="rankStatus" aria-live="off">
       <strong id="rankName">Initiate</strong>
       <small id="rankNext"></small>
-      <div class="rank-division-track" id="rankDivisionTrack" aria-hidden="true"></div><div class="rank-progress-dots" id="rankDots" aria-hidden="true"></div>
+      <div class="rank-progress-dots" id="rankDots" aria-hidden="true"></div>
     </div>
     <div id="comboStatus" class="combo-status" hidden aria-live="off">
       <span id="comboLabel"></span><span id="comboMult"></span>
@@ -1503,7 +1525,7 @@ const EXEMPLOS=[{"id":"g","name":"Grupo","cards":[{"id":"g0","title":"Pick do co
 const KEY="deadlock-deck-v3";
 /* Reset único: quem tem dados salvos sem "epoch" (versões antigas) volta ao início UMA vez.
    Os dados antigos são guardados em BKEY antes. Só aumente RESET_EPOCH se quiser forçar outro reset. */
-const RESET_EPOCH=3,APP_VERSION="1.25.0",BKEY="deadlock-deck-v3:backup";
+const RESET_EPOCH=3,APP_VERSION="1.25.2",BKEY="deadlock-deck-v3:backup";
 // Reset único de estados criados antes da v1.9.4. Futuras atualizações não reiniciam
 // os dados sem uma migração explícita; o backup deve ser confirmado antes do reset.
 const RESET_BEFORE_VERSION="1.9.4",INTRO_KEY="deadlock-deck-v3:intro-hidden";
@@ -3425,7 +3447,7 @@ function initAlmasMortas(root){
   let renderedRankKey="",priorRankFocus=null;
   function rankAt(steps){return RANK_EMBLEMS[Math.min(10,Math.max(0,Math.floor(steps/3||0)))]}
   function rankSteps(){return Math.max(0,S.rituals+S.rankCredit)}
-  function rankInfo(steps){const n=Math.max(0,Math.floor(steps||0)),i=Math.min(10,Math.floor(n/3));return {rank:rankAt(n),i,n,progress:n%3,stars:Math.max(0,Math.floor((n-30)/3)),next:RANK_EMBLEMS[Math.min(10,i+1)]}}
+  function rankInfo(steps){const n=Math.max(0,Math.floor(steps||0)),i=Math.min(10,Math.floor(n/3));return {rank:rankAt(n),i,n,stars:Math.max(0,Math.floor((n-30)/3)),next:RANK_EMBLEMS[Math.min(10,i+1)]}}
 
   function drawRank(){
     const key=rankSteps()+"|"+soulLang;if(key===renderedRankKey)return;
@@ -3438,25 +3460,23 @@ function initAlmasMortas(root){
     $("rankStatus").style.setProperty("--rank-glow",r.rank.color);
     window.dispatchEvent(new CustomEvent("decklock:rank",{detail:{steps:rankSteps()}}));
     $("rankName").textContent=label;
-    $("rankNext").textContent=r.i===10?t.max+" · "+t.stars+": "+r.stars:et("division")+" "+["III","II","I"][r.progress]+" · "+t.next+": "+r.next.name+" ("+(3-r.progress)+" "+(soulLang==="pt-BR"&&3-r.progress===1?t.ritual:t.rituals)+")";
-    $("rankDivisionTrack").innerHTML=Array.from({length:3},(_,i)=>'<i'+(i<r.progress?' class="done"':'')+'></i>').join("");
+    $("rankNext").textContent=r.i===10?t.max+" · "+t.stars+": "+r.stars:t.next+": "+r.next.name+" · 1 "+t.ritual;
     button.setAttribute("aria-label",(soulLang==="pt-BR"?"Coletar Souls — ":soulLang==="en"?"Collect Souls — ":soulLang==="es"?"Recolectar almas — ":soulLang==="fr"?"Récolter des âmes — ":"Souls sammeln — ")+label);
     $("rankDots").innerHTML=Array.from({length:10},(_,i)=>'<i'+(i<r.i?' class="done"':'')+'></i>').join("");
     $("rankNextArt").src=r.i===10?r.rank.src:r.next.src;
-    $("rankRitualTitle").textContent=r.i===10?t.max+" — "+label:r.progress===2?t.next+": "+r.next.name:label+" · "+et("division")+" "+["III","II","I"][r.progress];
-    $("rankRitualHint").textContent=r.i===10?(3-r.progress)+" "+t.rituals+" · "+t.moreStars:r.progress===2?t.nextReward+" "+r.next.name+".":(3-r.progress)+" "+t.rituals+" · "+t.next+": "+r.next.name;
+    $("rankRitualTitle").textContent=r.i===10?t.max+" — "+label:t.next+": "+r.next.name;
+    $("rankRitualHint").textContent=r.i===10?t.moreStars:t.nextReward+" "+r.next.name+".";
     $("rankPromotionClose").textContent=t.continue;
   }
   function showRankPromotion(report,oldRank){
     const r=rankInfo(rankSteps()),t=RANK_TEXT[soulLang]||RANK_TEXT["pt-BR"];
     const overlay=$("rankPromotion"),isRankUp=r.i>oldRank.i,isStarUp=r.stars>oldRank.stars;
-    const division=et("division")+" "+["III","II","I"][r.progress];
     const label=r.rank.name+(r.stars>0?" ★"+r.stars:"");
     $("rankPromotionDialog").style.setProperty("--promotion-color",r.rank.color);
-    $("rankPromotionDialog").classList.toggle("is-division",!isRankUp&&!isStarUp);
+    $("rankPromotionDialog").classList.remove("is-division");
     $("rankPromotionArt").src=r.rank.src;
-    $("rankPromotionEyebrow").textContent=isStarUp?rt("starUp"):isRankUp?rt("rankUp"):rt("divisionUp");
-    $("rankPromotionTitle").textContent=label+(!isRankUp&&!isStarUp?" · "+division:"");
+    $("rankPromotionEyebrow").textContent=isStarUp?rt("starUp"):rt("rankUp");
+    $("rankPromotionTitle").textContent=label;
     $("rankPromotionInfo").textContent=rt("finished")+" · +"+fmt(report.run.favor)+" "+rt("gained")+" · "+t.rituals+": "+S.rituals;
     fillRitualResult(report);
     $("rankPromotionClose").textContent=t.continue;
@@ -3568,11 +3588,11 @@ function initAlmasMortas(root){
     ["Operação Wraith","Invista nas emboscadas de Wraith e receba parte das Souls.",120,1.6],
     ["Rotas de Caixas","Organize a quebra de caixas pela cidade. Rotas ativas encontram caches extras.",850,7],
     ["Sinner's Sacrifice","Financie as máquinas de sacrifício. A cada 12 cliques, um tributo extra.",5200,34],
-    ["Queda do Guardian","Aproveite o avanço da lane após a queda de um Guardian inimigo.",32000,160],
-    ["Entrega da Soul Urn","Organize entregas da Soul Urn; potencializa os prêmios do Mid-Boss.",210000,820],
-    ["Cerco aos Shrines","Abra caminho até os Shrines inimigos e recolha Souls.",1.6e6,4600],
-    ["Covil do Mid-Boss","Controle o território ao redor do covil para ampliar a coleta.",13e6,29000]];
-  var GEN_GROUPS={0:"Lanes e economia de rua",2:"Coleta e sacrifícios",4:"Objetivos do mapa",6:"Cerco ao Patrono",7:"Território neutro"};
+    ["Investimento 5","Função em definição.",32000,160],
+    ["Investimento 6","Função em definição.",210000,820],
+    ["Investimento 7","Função em definição.",1.6e6,4600],
+    ["Investimento 8","Função em definição.",13e6,29000]];
+  var GEN_GROUPS={0:"Lanes e economia de rua",2:"Coleta e sacrifícios",4:"Próximos investimentos"};
 
   // Nomenclatura alinhada aos objetivos e à economia de Deadlock.
   SOUL_LANGS["Coleta de Troopers"]=["Trooper Souls", "Almas de Troopers", "Âmes des Troopers", "Trooper-Souls"];
@@ -3583,6 +3603,9 @@ function initAlmasMortas(root){
   SOUL_LANGS["Entrega da Soul Urn"]=["Soul Urn Delivery", "Entrega de Soul Urn", "Livraison de la Soul Urn", "Soul-Urn-Lieferung"];
   SOUL_LANGS["Cerco aos Shrines"]=["Shrine Siege", "Asedio a los Shrines", "Siège des Shrines", "Shrine-Belagerung"];
   SOUL_LANGS["Covil do Mid-Boss"]=["Mid-Boss Lair", "Guarida del Mid-Boss", "Repaire du Mid-Boss", "Mid-Boss-Höhle"];
+  for(let i=5;i<=8;i++)SOUL_LANGS["Investimento "+i]=["Investment "+i,"Inversión "+i,"Investissement "+i,"Investition "+i];
+  SOUL_LANGS["Função em definição."]=["Function to be defined.","Función por definir.","Fonction à définir.","Funktion noch offen."];
+  SOUL_LANGS["Próximos investimentos"]=["Future investments","Próximas inversiones","Futurs investissements","Zukünftige Investitionen"];
   SOUL_LANGS["Lanes e economia de rua"]=["Lanes and street economy", "Líneas y economía callejera", "Voies et économie de rue", "Lanes und Straßenökonomie"];
   SOUL_LANGS["Coleta e sacrifícios"]=["Scavenging and sacrifices", "Recolección y sacrificios", "Collecte et sacrifices", "Plündern und Opfer"];
   SOUL_LANGS["Objetivos do mapa"]=["Map objectives", "Objetivos del mapa", "Objectifs de carte", "Kartenziele"];
@@ -3607,7 +3630,7 @@ function initAlmasMortas(root){
   var STY=[["Seven · Sobrecarga","Cliques x1,5."],["Abrams · Resistência","Produção automática x1,25."],["Paradox · Distorção","Golden Statues aparecem 30% mais rápido e o Fervor Espiritual dura 50% mais."]];
   var TK=["York, Broadway e Park disputam as últimas Souls dos Troopers.","Caixas retornaram aos becos — verifique suas rotas.","A máquina Sinner's Sacrifice voltou a chamar por um tributo.","A Soul Urn espera um novo portador.","O Mid-Boss guarda o covil nas profundezas.","Um Walker recuou e abriu caminho na lane.","O Patron ainda espera seu próximo Ritual.","Uma estátua dourada pode aparecer a qualquer momento."];
 
-  var S={f:0,life:0,own:[0,0,0,0,0,0,0,0],items:[],legacy:0,spent:0,perk:[0,0,0,0,0],boss:0,bossT:Date.now()+120000,stance:0,clicks:0,ts:Date.now(),rituals:0,bestRitualGain:0,lastRitualGain:0,ritualPath:"none",nextPath:"harvest",rewardBoost:null,pendingReward:null,contracts:[],contractStats:{purchases:0},contractClaims:0,contractBoost:null,rankCredit:null,masteryXp:null,records:null,cacheT:Date.now()+45000};
+  var S={f:0,life:0,own:[0,0,0,0,0,0,0,0],items:[],legacy:0,spent:0,perk:[0,0,0,0,0],boss:0,bossT:Date.now()+120000,stance:0,clicks:0,ts:Date.now(),rituals:0,bestRitualGain:0,lastRitualGain:0,ritualPath:"none",nextPath:"harvest",rewardBoost:null,pendingReward:null,contracts:[],contractStats:{purchases:0},contractClaims:0,contractBoost:null,rankCredit:null,masteryXp:null,records:null,cacheT:Date.now()+45000,patronDrawT:0};
   var KEY="almasmortas_v1";
   // Metas exigentes, porém curtas: um contrato não deve exigir centenas de
   // cliques repetitivos nem vários Mid-Bosses separados por longos cooldowns.
@@ -3664,15 +3687,16 @@ function initAlmasMortas(root){
     S.bossT=nonneg(S.bossT,Date.now()+365*864e5);
     S.ts=nonneg(S.ts,Date.now())||Date.now();
     S.cacheT=typeof S.cacheT==="number"&&Number.isFinite(S.cacheT)&&S.cacheT>0?Math.min(S.cacheT,Date.now()+45000):Date.now()+45000;
+    S.patronDrawT=typeof S.patronDrawT==="number"&&Number.isFinite(S.patronDrawT)&&S.patronDrawT>0?Math.min(S.patronDrawT,Date.now()+300000):0;
     S.achievements=Array.isArray(S.achievements)?[...new Set(S.achievements.filter(v=>typeof v==="string").slice(0,60))]:[];
-    S.events=Array.isArray(S.events)?S.events.filter(e=>e&&typeof e==="object"&&["boss","bossFail","ritual","gold","fervor","achievement","milestone","offline","bossChoice","cache"].includes(e.kind)&&typeof e.at==="number"&&Number.isFinite(e.at)&&e.at>0&&e.at<8.64e15).slice(0,12).map(e=>({kind:e.kind,at:e.at,amount:typeof e.amount==="number"&&Number.isFinite(e.amount)&&e.amount>=0?Math.min(e.amount,1e300):0,label:typeof e.label==="string"?e.label.slice(0,90):""})):[];
+    S.events=Array.isArray(S.events)?S.events.filter(e=>e&&typeof e==="object"&&["boss","bossFail","ritual","gold","fervor","achievement","milestone","offline","bossChoice","cache","patron"].includes(e.kind)&&typeof e.at==="number"&&Number.isFinite(e.at)&&e.at>0&&e.at<8.64e15).slice(0,12).map(e=>({kind:e.kind,at:e.at,amount:typeof e.amount==="number"&&Number.isFinite(e.amount)&&e.amount>=0?Math.min(e.amount,1e300):0,label:typeof e.label==="string"?e.label.slice(0,90):""})):[];
     S.soundOn=S.soundOn!==false;
     if(!S.cosmetics||typeof S.cosmetics!=="object"||Array.isArray(S.cosmetics))S.cosmetics={};
     S.cosmeticSpent=nonneg(S.cosmeticSpent,1e12);
   }
   try{var raw=localStorage.getItem(KEY);if(raw){var p=JSON.parse(raw);if(p&&typeof p==="object"&&!Array.isArray(p)&&Number.isFinite(p.f)&&p.f>=0){
     // Não copiar propriedades inesperadas nem __proto__ de importações corrompidas.
-    for(const k of ["f","life","own","items","legacy","spent","perk","boss","bossT","stance","clicks","ts","soundOn","cosmetics","cosmeticSpent","achievements","rituals","bestRitualGain","lastRitualGain","events","ritualPath","nextPath","rewardBoost","pendingReward","contracts","contractStats","contractClaims","contractBoost","rankCredit","masteryXp","records","cacheT"])
+    for(const k of ["f","life","own","items","legacy","spent","perk","boss","bossT","stance","clicks","ts","soundOn","cosmetics","cosmeticSpent","achievements","rituals","bestRitualGain","lastRitualGain","events","ritualPath","nextPath","rewardBoost","pendingReward","contracts","contractStats","contractClaims","contractBoost","rankCredit","masteryXp","records","cacheT","patronDrawT"])
       if(Object.prototype.hasOwnProperty.call(p,k))S[k]=p[k];
   }}}catch(e){}
   norm();
@@ -3945,7 +3969,7 @@ function initAlmasMortas(root){
     S.events.forEach(e=>{
       const line=document.createElement("div");line.className="event-entry";
       const label=document.createElement("span"),time=document.createElement("time");
-      label.textContent=pt(e.kind)+(e.label?" · "+(e.kind==="bossChoice"?tx(e.label):e.label):"")+
+      label.textContent=(e.kind==="patron"?({"pt-BR":"Carta do Patrono",en:"Patron Card",es:"Carta del Patrón",fr:"Carte du Patron",de:"Patron-Karte"}[soulLang]||"Carta do Patrono"):pt(e.kind))+(e.label?" · "+(e.kind==="bossChoice"?tx(e.label):e.label):"")+
         (e.amount>0?" · "+(e.kind==="ritual"?"+"+fmt(e.amount)+" "+pt("favor"):e.kind==="milestone"?pt("lv")+" "+fmt(e.amount):"+"+fmt(e.amount)+" Souls"):"");
       const date=new Date(e.at);time.dateTime=date.toISOString();time.textContent=date.toLocaleTimeString(locale,{hour:"2-digit",minute:"2-digit"});
       line.append(label,time);list.appendChild(line);
@@ -4173,8 +4197,9 @@ function initAlmasMortas(root){
     target.append(table);
   }
   function ritualRankTarget(){
-    const r=rankInfo(rankSteps()+1),t=RANK_TEXT[soulLang]||RANK_TEXT["pt-BR"];
-    return r.i===10?r.rank.name+(r.stars?" ★"+r.stars:""):r.rank.name+" · "+et("division")+" "+["III","II","I"][r.progress];
+    // Próximo Ritual equivale a +3 passos na representação salva antiga.
+    const r=rankInfo(rankSteps()+3);
+    return r.rank.name+(r.stars?" ★"+r.stars:"");
   }
   function drawRitualPreview(gain){
     const run=ritualSnapshot(gain),previous=S.records.lastRitual;
@@ -4360,7 +4385,9 @@ function initAlmasMortas(root){
     S.records.bestRun=Math.max(S.records.bestRun,S.records.runSouls);
     S.records.lastRitual={...report.run};
     S.records.runStart=Date.now();S.records.runSouls=0;S.records.runPeakCps=0;
-    S.rituals++;S.bestRitualGain=Math.max(S.bestRitualGain,g);S.lastRitualGain=g;
+    // Preserva o elo alcançado no sistema antigo (3 etapas por elo). Cada novo
+    // Ritual passa a somar 3 etapas virtuais: um elo inteiro, sem divisões.
+    S.rituals++;S.rankCredit=Math.min(2e9,S.rankCredit+2);S.bestRitualGain=Math.max(S.bestRitualGain,g);S.lastRitualGain=g;
     S.legacy+=g;S.ritualPath=S.nextPath;
     S.rewardBoost=null;S.pendingReward=null;
     soulTone("ritual");S.f=500*S.perk[0];logEvent("ritual",g);
@@ -4375,7 +4402,7 @@ function initAlmasMortas(root){
     try{var o=JSON.parse(decodeURIComponent(escape(atob($("sv").value.trim()))));
       if(!o||typeof o!=="object"||Array.isArray(o)||!Number.isFinite(o.f)||o.f<0||!Array.isArray(o.own)||!Array.isArray(o.items))throw 0;
       // Um código importado também passa pela migração e validação.
-      const validKeys=["f","life","own","items","legacy","spent","perk","boss","bossT","stance","clicks","ts","soundOn","cosmetics","cosmeticSpent","achievements","rituals","bestRitualGain","lastRitualGain","events","ritualPath","nextPath","rewardBoost","pendingReward","contracts","contractStats","contractClaims","contractBoost","rankCredit","masteryXp","records","cacheT"];
+      const validKeys=["f","life","own","items","legacy","spent","perk","boss","bossT","stance","clicks","ts","soundOn","cosmetics","cosmeticSpent","achievements","rituals","bestRitualGain","lastRitualGain","events","ritualPath","nextPath","rewardBoost","pendingReward","contracts","contractStats","contractClaims","contractBoost","rankCredit","masteryXp","records","cacheT","patronDrawT"];
       const imported={};for(const k of validKeys)if(Object.prototype.hasOwnProperty.call(o,k))imported[k]=o[k];
       S={...S,...imported,rankCredit:imported.rankCredit??null,masteryXp:imported.masteryXp??null,records:imported.records??null,contracts:imported.contracts??[],contractStats:imported.contractStats??{purchases:0},contractClaims:imported.contractClaims??0,contractBoost:imported.contractBoost??null};norm();ensureContracts();combo.count=0;
       S.cosmetics={...shopData().cosmetics,...(S.cosmetics||{})};
@@ -4476,9 +4503,67 @@ function initAlmasMortas(root){
     else{settleElapsed(Date.now());save();drawAll()}
   });
   window.addEventListener("pagehide",function(){settleElapsed(Date.now());save()});
-  tab("p");drawEvents();
+  // Carta do Patrono: sorteio opcional no DeckLock. Um único resgate a cada 5 minutos,
+  // protegido pelo salvamento de Almas. Não altera chances ou cartas dos decks comuns.
+  const PATRON_DRAW_COOLDOWN=5*60*1000;
+  function publishPatronStatus(extra={}){
+    window.dispatchEvent(new CustomEvent("decklock:patron-status",{detail:{readyAt:S.patronDrawT,...extra}}));
+  }
+  window.addEventListener("decklock:patron-request",function(){
+    const now=Date.now();
+    if(S.patronDrawT>now){publishPatronStatus();return}
+    const cards=[
+      {id:"troopers",seconds:20,labels:{"pt-BR":"Patrulha de Troopers",en:"Trooper Patrol",es:"Patrulla de Troopers",fr:"Patrouille de Troopers",de:"Trooper-Patrouille"}},
+      {id:"crates",seconds:35,labels:{"pt-BR":"Caixas Abandonadas",en:"Abandoned Crates",es:"Cajas abandonadas",fr:"Caisses abandonnées",de:"Verlassene Kisten"}},
+      {id:"patron",seconds:55,labels:{"pt-BR":"Tributo do Patrono",en:"Patron Tribute",es:"Tributo del Patrón",fr:"Tribut du Patron",de:"Patron-Tribut"}}
+    ];
+    const choice=cards[Math.floor(Math.random()*cards.length)];
+    const amount=Math.max(10,Math.ceil(Math.max(cps(),clickVal()/2,1)*choice.seconds));
+    S.patronDrawT=now+PATRON_DRAW_COOLDOWN;
+    add(amount);
+    logEvent("patron",amount,choice.labels[soulLang]||choice.labels["pt-BR"]);
+    save();drawAll();soulTone("gold");showSoulBurst("gold","✧");
+    publishPatronStatus({card:choice.id,amount});
+    toast((choice.labels[soulLang]||choice.labels["pt-BR"])+" · +"+fmt(amount)+" Souls");
+  });
+  tab("p");drawEvents();publishPatronStatus();
 
 }
+(function(){
+  // Painel do sorteio periódico fica no DeckLock e funciona mesmo com o Almas
+  // isolado em Shadow DOM. O cartão só aparece após abrir o Almas pelo menos uma vez.
+  const panel=document.getElementById("patronDraw"),button=document.getElementById("bPatronDraw"),
+        status=document.getElementById("patronDrawStatus"),result=document.getElementById("patronDrawResult"),
+        title=document.getElementById("patronDrawName");
+  let readyAt=0,initialized=false;
+  const content={
+    "pt-BR":{title:"Carta do Patrono",draw:"Sortear",ready:"Pronta para sortear",wait:"Próxima carta em",cards:{troopers:"Patrulha de Troopers",crates:"Caixas Abandonadas",patron:"Tributo do Patrono"}},
+    en:{title:"Patron Card",draw:"Draw",ready:"Ready to draw",wait:"Next card in",cards:{troopers:"Trooper Patrol",crates:"Abandoned Crates",patron:"Patron Tribute"}},
+    es:{title:"Carta del Patrón",draw:"Sortear",ready:"Lista para sortear",wait:"Próxima carta en",cards:{troopers:"Patrulla de Troopers",crates:"Cajas abandonadas",patron:"Tributo del Patrón"}},
+    fr:{title:"Carte du Patron",draw:"Tirer",ready:"Prête à tirer",wait:"Prochaine carte dans",cards:{troopers:"Patrouille de Troopers",crates:"Caisses abandonnées",patron:"Tribut du Patron"}},
+    de:{title:"Patron-Karte",draw:"Ziehen",ready:"Bereit zum Ziehen",wait:"Nächste Karte in",cards:{troopers:"Trooper-Patrouille",crates:"Verlassene Kisten",patron:"Patron-Tribut"}}
+  };
+  function words(){return content[decklockLang]||content["pt-BR"]}
+  function render(){
+    if(!initialized)return;
+    const w=words(),seconds=Math.max(0,Math.ceil((readyAt-Date.now())/1000));
+    title.textContent=w.title;button.textContent=w.draw;
+    status.textContent=seconds?w.wait+" "+Math.floor(seconds/60)+":"+String(seconds%60).padStart(2,"0"):w.ready;
+    button.disabled=seconds>0;panel.classList.toggle("ready",seconds===0);
+    if(result.dataset.card){result.textContent=(w.cards[result.dataset.card]||w.title)+" · +"+Number(result.dataset.amount).toLocaleString(decklockLang)+" Souls"}
+  }
+  window.addEventListener("decklock:patron-status",e=>{
+    initialized=true;panel.dataset.initialized="1";
+    panel.hidden=!document.body.classList.contains("souls-active");
+    readyAt=Math.max(0,Number(e.detail?.readyAt)||0);
+    if(e.detail?.card){result.hidden=false;result.dataset.card=e.detail.card;result.dataset.amount=String(e.detail.amount||0);
+      result.classList.remove("reveal");void result.offsetWidth;result.classList.add("reveal")}
+    render();
+  });
+  button.addEventListener("click",()=>{if(initialized&&Date.now()>=readyAt){button.disabled=true;window.dispatchEvent(new Event("decklock:patron-request"))}});
+  window.addEventListener("decklock:language",render);
+  setInterval(render,1000);
+})();
 (function(){
   const sortTab=document.getElementById("tabSorteador");
   const soulsTab=document.getElementById("tabAlmasMortas");
@@ -4486,11 +4571,21 @@ function initAlmasMortas(root){
   const soulView=document.getElementById("soulView");
   const workspace=document.getElementById("workspace");
   const mount=document.getElementById("soulMount");
+  const patronPanel=document.getElementById("patronDraw");
+  const patronHomeParent=patronPanel.parentElement;
+  const patronHome=patronPanel.nextSibling;
   const desktop=matchMedia("(min-width: 1050px)");
   let started=false;
   let mode="deck";
   function applyLayout(){
     const souls=mode==="souls",split=desktop.matches;
+    // Em telas estreitas, a carta acompanha o Almas: o DeckLock fica oculto.
+    if(split){
+      if(patronPanel.parentElement!==patronHomeParent)patronHomeParent.insertBefore(patronPanel,patronHome);
+    }else if(patronPanel.parentElement!==soulView){
+      soulView.insertBefore(patronPanel,mount);
+    }
+    patronPanel.hidden=!souls||!patronPanel.dataset.initialized;
     // Nas telas largas, ambos os módulos ficam disponíveis. No celular, alternam.
     workspace.classList.toggle("dual",souls&&split);
     document.body.classList.toggle("souls-active",souls);
