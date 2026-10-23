@@ -6,7 +6,7 @@
 <title>DeckLock</title>
 <meta name="description" content="Sorteador de cartas de desafio para partidas de Deadlock, com decks editáveis.">
 <meta name="theme-color" content="#222021">
-<meta name="decklock-version" content="1.29.1">
+<meta name="decklock-version" content="1.29.2">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="DeckLock">
@@ -808,6 +808,31 @@ body.fs #trackingView,body.fs #histbox{display:none!important}
   @keyframes trackingSlideIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:none}}
   @keyframes deckReturnCenter{from{opacity:.9;transform:translateX(-7vw)}to{opacity:1;transform:none}}
 }
+
+/* v1.29.2 — Cartas da Cidade: baralho experimental exclusivo do Almas lado a lado.
+   Não usa EXEMPLOS, S.decks, histórico, favoritos ou cartas criadas pelos jogadores. */
+.workspace.almas-deck-mode .deck-choice,
+.workspace.almas-deck-mode #table,
+.workspace.almas-deck-mode .quick-count,
+.workspace.almas-deck-mode .share-results,
+.workspace.almas-deck-mode #moreOptions,
+.workspace.almas-deck-mode #histbox{display:none!important}
+.workspace.almas-deck-mode .almas-deck-intro:not([hidden]){display:flex;flex-direction:column;align-items:center;text-align:center;gap:5px;max-width:350px;width:100%;margin:0 auto 3px}
+.almas-deck-eyebrow{font-size:10px;font-weight:750;letter-spacing:.17em;color:var(--mute)}
+.almas-deck-intro strong{font:650 clamp(21px,2.4vw,29px)/1.2 Georgia,serif;color:var(--gold)}
+.almas-deck-intro p{font-size:12px;line-height:1.5;color:var(--mute);margin:3px 0 0;max-width:310px}
+.workspace.almas-deck-mode .almas-card-table:not([hidden]){display:flex;justify-content:center;align-items:center;width:100%;min-height:0;padding:0 4px}
+.almas-card-table .scene{width:min(var(--cw),min(305px,100%));max-width:100%}
+.almas-card-table .noimg .body{justify-content:center;text-align:center}
+.almas-card-table .noimg .ct{font-size:1.65em}
+.almas-card-table .noimg .tx{font-size:.98em;line-height:1.46}
+.workspace.almas-deck-mode .almas-card-status:not([hidden]){display:block;width:min(355px,100%);margin:0 auto;color:var(--mute);font-size:12px;text-align:center;line-height:1.5;min-height:36px}
+.almas-card-status .almas-status-primary{display:block;color:var(--ink);font-weight:650}
+.almas-card-status .almas-status-secondary{display:block;font-size:11px;margin-top:3px}
+.workspace.almas-deck-mode #main .draw-action-row{justify-content:center}
+.workspace.almas-deck-mode #bDraw{min-width:190px}
+@media(prefers-reduced-motion:reduce){.workspace.almas-deck-mode .almas-card-table .card{transition:none!important}}
+
 </style>
 </head>
 <body>
@@ -853,6 +878,13 @@ body.fs #trackingView,body.fs #histbox{display:none!important}
       </div>
       <div class="chips" id="deckChips" role="group" aria-label="Escolha os decks para sortear"></div>
     </div>
+    <div id="almasDeckMode" class="almas-deck-intro" hidden>
+      <span class="almas-deck-eyebrow">ALMAS · MODO EXPERIMENTAL</span>
+      <strong>Cartas da Cidade</strong>
+      <p>Revele acontecimentos para o Almas. Os decks de desafios ficam guardados enquanto o jogo está lado a lado.</p>
+    </div>
+    <div id="almasCardTable" class="almas-card-table" role="region" aria-label="Carta do Almas" hidden></div>
+    <div id="almasCardStatus" class="almas-card-status" role="status" aria-live="off" hidden></div>
     <div id="table" role="region" aria-label="Cartas sorteadas"></div>
     <div class="ctrl simple-actions">
       <div class="quick-count" aria-label="Quantidade de cartas por deck">
@@ -2151,7 +2183,7 @@ function upgradeDefaultCards(state,raw){
 const KEY="deadlock-deck-v3";
 /* Reset único: quem tem dados salvos sem "epoch" (versões antigas) volta ao início UMA vez.
    Os dados antigos são guardados em BKEY antes. Só aumente RESET_EPOCH se quiser forçar outro reset. */
-const RESET_EPOCH=3,APP_VERSION="1.29.1",BKEY="deadlock-deck-v3:backup";
+const RESET_EPOCH=3,APP_VERSION="1.29.2",BKEY="deadlock-deck-v3:backup";
 // Reset único de estados criados antes da v1.9.4. Futuras atualizações não reiniciam
 // os dados sem uma migração explícita; o backup deve ser confirmado antes do reset.
 const RESET_BEFORE_VERSION="1.9.4",INTRO_KEY="deadlock-deck-v3:intro-hidden";
@@ -2575,6 +2607,87 @@ function blip(i=0){
 }
 
 /* ---------- Sorteio ---------- */
+
+/* Baralho experimental independente: os decks de desafios nunca são modificados. */
+const ALMAS_CARD_POOL=Object.freeze([
+  {id:"troopers",title:"Últimas Souls da Lane",text:"Uma colheita de Troopers rende um pequeno lote de Souls.",cat:"Coleta",rar:"comum",img:""},
+  {id:"crates",title:"Caixas dos Becos",text:"As rotas de caixas revelam um esconderijo de Souls.",cat:"Recursos",rar:"comum",img:""},
+  {id:"urn",title:"Entrega Improvisada",text:"Uma Soul Urn perdida concede uma recompensa moderada.",cat:"Objetivo",rar:"rara",img:""},
+  {id:"sinner",title:"Tributo dos Sinners",text:"Fervor Espiritual por 12 segundos para fortalecer seus cliques.",cat:"Sacrifício",rar:"rara",img:""},
+  {id:"wraith",title:"Emboscada de Wraith",text:"Seus cliques manuais ficam 15% mais fortes por 60 segundos.",cat:"Emboscada",rar:"rara",img:""},
+  {id:"guardian",title:"Brecha no Guardian",text:"Sua produção automática aumenta 10% por 60 segundos.",cat:"Domínio",rar:"rara",img:""},
+  {id:"lair",title:"Rumores do Covil",text:"Reduza em até 45 segundos a espera pelo Mid-Boss.",cat:"Mid-Boss",rar:"lendaria",img:""},
+  {id:"route",title:"Rota Desimpedida",text:"Adiante o próximo achado de caixas, ou receba Souls se não tiver rotas.",cat:"Recursos",rar:"comum",img:""}
+]);
+const ALMAS_CARD_DELAY_MS=4*60*1000;
+const almasCardsDisabled=new URLSearchParams(location.search).get("almas-cards")==="off";
+let almasDeckBusy=false,almasDeckVisible=false;
+const inAlmasDeckMode=()=>document.getElementById("workspace")?.classList.contains("almas-deck-mode")===true;
+const almasCardApi=()=>window.decklockAlmasCard;
+function almasCardLabelTime(ms){const sec=Math.ceil(Math.max(0,ms)/1000);return String(Math.floor(sec/60)).padStart(2,"0")+":"+String(sec%60).padStart(2,"0")}
+function showAlmasCard(id,animate=false){
+  const spot=document.getElementById("almasCardTable");
+  const card=ALMAS_CARD_POOL.find(c=>c.id===id)||null;
+  const group={name:"Almas",deck:{id:"almas-experimental"},cards:[card]};
+  const scene=cardEl(group,0,true);spot.replaceChildren(scene);
+  if(card){
+    if(animate){void scene.offsetWidth;reveal(scene,0,0)}
+    else{scene.querySelector(".card").classList.add("up");scene.classList.add("live")}
+  }
+  requestAnimationFrame(()=>fit(scene));
+}
+function syncAlmasCardUi(){
+  if(!inAlmasDeckMode())return;
+  const info=almasCardApi()?.status();
+  if(!info)return;
+  const remaining=Math.max(0,info.readyAt-Date.now());
+  const action=document.getElementById("bDraw"),status=document.getElementById("almasCardStatus");
+  action.disabled=remaining>0||almasDeckBusy;
+  action.textContent=almasDeckBusy?"Revelando…":remaining>0?"Nova carta em "+almasCardLabelTime(remaining):"Revelar carta";
+  status.replaceChildren();
+  const primary=document.createElement("span");primary.className="almas-status-primary";
+  primary.textContent=remaining>0?"Próxima carta em "+almasCardLabelTime(remaining):"Uma carta está disponível";
+  status.append(primary);
+  if(info.result){const note=document.createElement("span");note.className="almas-status-secondary";note.textContent="Última carta: "+info.result;status.append(note)}
+}
+function setAlmasDeckMode(enabled){
+  const box=document.getElementById("workspace"),willShow=!!enabled&&!almasCardsDisabled;
+  if(almasDeckVisible===willShow){if(willShow)syncAlmasCardUi();return}
+  almasDeckVisible=willShow;
+  box.classList.toggle("almas-deck-mode",willShow);
+  for(const id of ["almasDeckMode","almasCardTable","almasCardStatus"])document.getElementById(id).hidden=!willShow;
+  if(willShow){
+    closeShareMenu();
+    const last=almasCardApi()?.status()?.lastId||null;
+    showAlmasCard(last);
+    syncAlmasCardUi();
+  }else{
+    document.getElementById("bDraw").disabled=busy;
+    syncCount();
+  }
+}
+async function drawAlmasCard(){
+  if(!inAlmasDeckMode()||almasDeckBusy)return;
+  const api=almasCardApi();if(!api)return;
+  const st=api.status();
+  if(st.readyAt>Date.now()){syncAlmasCardUi();return}
+  // Evita cartas repetidas seguidas, preservando variedade.
+  const options=ALMAS_CARD_POOL.filter(c=>c.id!==st.lastId);
+  const weights={comum:5,rara:3,lendaria:1};
+  let remaining=Math.random()*options.reduce((sum,c)=>sum+weights[c.rar],0);
+  const choice=options.find(c=>(remaining-=weights[c.rar])<0)||options[options.length-1];
+  // Salva a recompensa e o cooldown de maneira atômica no Almas, nunca no DeckLock.
+  const result=api.play(choice.id);
+  if(!result.ok){if(result.message)toast(result.message);syncAlmasCardUi();return}
+  almasDeckBusy=true;syncAlmasCardUi();
+  showAlmasCard(choice.id,true);
+  if(result.message)toast(result.message);
+  const endDelay=animationEnabled()?flipMs()+180:100;
+  await sleep(endDelay);
+  almasDeckBusy=false;syncAlmasCardUi();
+}
+setInterval(()=>{if(inAlmasDeckMode())syncAlmasCardUi()},1000);
+
 const sel=()=>S.decks.filter(d=>S.active.includes(d.id));
 function fillCard(f,c){
   f.className="face front r-"+c.rar+(c.img?"":" noimg");f.innerHTML="";
@@ -2769,6 +2882,7 @@ function snapshot(){
   return{table:table.map(g=>({name:g.name,deck:g.deck,cards:[...g.cards]})),used:cp,last:[...lastIds],hist:S.hist.slice(),sess:S.sess.draws.slice(),fin:S.fin?{...S.fin}:null,cur:curEntry,questIds:[],up:!!document.querySelector("#table .card.up")};
 }
 async function draw(){
+  if(inAlmasDeckMode()){await drawAlmasCard();return}
   if(busy)return;
   const ds=sel();
   if(!ds.length){
@@ -4532,10 +4646,14 @@ function initAlmasMortas(root){
     S.streetPending=S.streetPending===true;
     S.postRitualPhase=["blessing","tactic"].includes(S.postRitualPhase)?S.postRitualPhase:"";
     S.postBlessingChosen=S.postBlessingChosen===true;
+    S.almasCardReadyAt=nonneg(S.almasCardReadyAt,Date.now()+365*86400000);
+    S.almasCardLast=(typeof S.almasCardLast==="string"&&["troopers","crates","urn","sinner","wraith","guardian","lair","route"].includes(S.almasCardLast))?S.almasCardLast:"";
+    S.almasCardResult=typeof S.almasCardResult==="string"?S.almasCardResult.slice(0,180):"";
+    S.almasCardBuff=activeWindow(S.almasCardBuff,["auto","click"],60001);
   }
   try{var raw=localStorage.getItem(KEY);if(raw){var p=JSON.parse(raw);if(p&&typeof p==="object"&&!Array.isArray(p)&&Number.isFinite(p.f)&&p.f>=0){
     // Não copiar propriedades inesperadas nem __proto__ de importações corrompidas.
-    for(const k of ["f","life","own","items","legacy","spent","perk","boss","bossT","stance","clicks","ts","soundOn","cosmetics","cosmeticSpent","achievements","rituals","bestRitualGain","lastRitualGain","events","ritualPath","nextPath","rewardBoost","pendingReward","contracts","contractStats","contractClaims","contractBoost","rankCredit","masteryXp","records","cacheT","doctrinesOwned","doctrineSpent","doctrineActive","doctrineRefunded","tactic","tacticChangedAt","booster","boosterReadyAt","streetNext","streetPending","streetEffect","postRitualPhase","postBlessingChosen","brawlNext","brawl","brawlWins","brawlMatches"])
+    for(const k of ["f","life","own","items","legacy","spent","perk","boss","bossT","stance","clicks","ts","soundOn","cosmetics","cosmeticSpent","achievements","rituals","bestRitualGain","lastRitualGain","events","ritualPath","nextPath","rewardBoost","pendingReward","contracts","contractStats","contractClaims","contractBoost","rankCredit","masteryXp","records","cacheT","doctrinesOwned","doctrineSpent","doctrineActive","doctrineRefunded","tactic","tacticChangedAt","booster","boosterReadyAt","streetNext","streetPending","streetEffect","postRitualPhase","postBlessingChosen","brawlNext","brawl","brawlWins","brawlMatches","almasCardReadyAt","almasCardLast","almasCardResult","almasCardBuff"])
       if(Object.prototype.hasOwnProperty.call(p,k))S[k]=p[k];
   }}}catch(e){}
   norm();
@@ -4779,10 +4897,11 @@ function initAlmasMortas(root){
     cycleSeconds:7.5,shieldSeconds:5,shieldDamage:.27,exposedDamage:1.95,
     breakHits:5,breakFraction:.018,autoHpPerSecond:.004,autoCpsShare:.07};
   function rewardActive(kind){return !!(S.rewardBoost&&S.rewardBoost.type===kind&&Date.now()<S.rewardBoost.until)}
-  function pMul(levels=S.own){var m=gm()*(1+.1*S.perk[2])*operationSynergy(levels);for(var t=0;t<4;t++)if(S.items[8+t])m*=1.25;if(S.stance===1)m*=1.25;if(rewardActive("auto"))m*=BOSS_BALANCE.autoMult;if(contractBoostActive("auto"))m*=1.15;if(S.tactic==="lanes")m*=1.10;if(S.tactic==="crates")m*=.94;if(S.tactic==="boss")m*=.92;if(extActive(S.booster,"production"))m*=1.12;if(extActive(S.streetEffect,"production"))m*=1.15;return m}
+  function cardBonusActive(kind){return !!(S.almasCardBuff&&S.almasCardBuff.type===kind&&Date.now()<S.almasCardBuff.until)}
+  function pMul(levels=S.own){var m=gm()*(1+.1*S.perk[2])*operationSynergy(levels);for(var t=0;t<4;t++)if(S.items[8+t])m*=1.25;if(S.stance===1)m*=1.25;if(rewardActive("auto"))m*=BOSS_BALANCE.autoMult;if(contractBoostActive("auto"))m*=1.15;if(S.tactic==="lanes")m*=1.10;if(S.tactic==="crates")m*=.94;if(S.tactic==="boss")m*=.92;if(extActive(S.booster,"production"))m*=1.12;if(extActive(S.streetEffect,"production"))m*=1.15;if(cardBonusActive("auto"))m*=1.10;return m}
   function cpsFor(levels,xps=S.masteryXp){let value=0;for(let i=0;i<8;i++)value+=levels[i]*GEN[i][3]*gMul(i,levels[i],xps[i]);return value*pMul(levels)}
   function cps(){return cpsFor(S.own)}
-  function cMul(){var m=gm()*(1+.18*S.perk[1]);for(var t=0;t<4;t++)if(S.items[t])m*=WM[t];if(S.stance===0)m*=1.35;if(rewardActive("click"))m*=BOSS_BALANCE.clickMult;if(contractBoostActive("click"))m*=1.25;if(buff.t>0)m*=4;return m}
+  function cMul(){var m=gm()*(1+.18*S.perk[1]);for(var t=0;t<4;t++)if(S.items[t])m*=WM[t];if(S.stance===0)m*=1.35;if(rewardActive("click"))m*=BOSS_BALANCE.clickMult;if(contractBoostActive("click"))m*=1.25;if(buff.t>0)m*=4;if(cardBonusActive("click"))m*=1.15;return m}
   function clickVal(){
     // Production-derived clicks are added *after* manual multipliers, avoiding runaway feedback.
     // Even a fast player cannot convert more than ~35% of passive Souls/s through clicks.
@@ -4809,6 +4928,52 @@ function initAlmasMortas(root){
     S.records.runSouls=Math.min(1e300,S.records.runSouls+n);
     S.records.bestRun=Math.max(S.records.bestRun,S.records.runSouls);
   }
+
+  // API interna para o baralho experimental que ocupa o painel DeckLock no modo lado a lado.
+  // Todas as recompensas passam pela validação e pelo salvamento do Almas.
+  window.decklockAlmasCard={
+    status:()=>({readyAt:S.almasCardReadyAt||0,lastId:S.almasCardLast||"",result:S.almasCardResult||""}),
+    play:(id)=>{
+      const valid=["troopers","crates","urn","sinner","wraith","guardian","lair","route"];
+      if(!valid.includes(id))return {ok:false,message:"Carta inválida."};
+      if(!document.body.classList.contains("souls-active")||!matchMedia("(min-width: 1050px)").matches)
+        return {ok:false,message:"Abra o Almas lado a lado para usar o baralho."};
+      if(document.getElementById("workspace")?.classList.contains("almas-deck-mode")!==true)
+        return {ok:false,message:"O baralho experimental não está aberto."};
+      if(S.almasCardReadyAt>Date.now())return {ok:false,message:"A próxima carta ainda não está disponível."};
+      if(S.postRitualPhase||root.querySelector(".era2-overlay"))
+        return {ok:false,message:"Conclua primeiro a cerimônia ou as escolhas do Ritual."};
+      const backup=JSON.stringify(S),oldFervor=buff.t,now=Date.now();
+      const cash=seconds=>Math.max(25,Math.floor(Math.min(ritualTarget()*.0025,Math.max(1,cps(),clickVal()*2)*seconds)));
+      let summary="";
+      S.almasCardReadyAt=now+ALMAS_CARD_DELAY_MS;
+      S.almasCardLast=id;
+      if(id==="troopers"){const n=cash(20);add(n);summary="+"+fmt(n)+" Souls · Troopers"}
+      else if(id==="crates"){const n=cash(30);add(n);summary="+"+fmt(n)+" Souls · Caixas"}
+      else if(id==="urn"){const n=cash(35);add(n);summary="+"+fmt(n)+" Souls · Soul Urn"}
+      else if(id==="sinner"){buff.t=Math.max(buff.t,12);summary="Fervor Espiritual · 12 s"}
+      else if(id==="wraith"){S.almasCardBuff={type:"click",since:now,until:now+60000};summary="+15% clique manual · 60 s"}
+      else if(id==="guardian"){S.almasCardBuff={type:"auto",since:now,until:now+60000};summary="+10% Souls/s · 60 s"}
+      else if(id==="lair"){
+        const reduced=Math.max(0,Math.min(45000,S.bossT-now));
+        if(!boss.on&&reduced>0){S.bossT=Math.max(now,S.bossT-45000);summary="Mid-Boss adiantado "+Math.ceil(reduced/1000)+" s"}
+        else{const n=cash(20);add(n);summary="+"+fmt(n)+" Souls · Covil"}
+      }
+      else if(id==="route"){
+        if(S.own[2]>0){S.cacheT=Math.min(S.cacheT||now+45000,now+1000);summary="Próxima caixa antecipada"}
+        else{const n=cash(20);add(n);summary="+"+fmt(n)+" Souls · Rota"}
+      }
+      S.almasCardResult=summary;
+      syncAchievements();
+      if(!save(true)){
+        S=JSON.parse(backup);buff.t=oldFervor;norm();drawAll();
+        return {ok:false,message:"Não foi possível salvar a carta. Nenhuma recompensa foi aplicada."};
+      }
+      soulTone("gold");drawAll();
+      return {ok:true,readyAt:S.almasCardReadyAt,message:summary};
+    }
+  };
+
   // Ritual cost is PER RUN, not lifetime. The target rises with actual Ritual count.
   const RITUAL_BASE=120000;
   function ritualTarget(){return Math.min(1e28,RITUAL_BASE*Math.pow(2.75,Math.min(55,S.rituals)))}
@@ -5603,7 +5768,7 @@ function initAlmasMortas(root){
     // Uma divisão por Ritual. Não alteramos rankCredit já salvo.
     S.rituals++;S.bestRitualGain=Math.max(S.bestRitualGain,g);S.lastRitualGain=g;
     S.legacy+=g;S.postRitualPhase="blessing";S.postBlessingChosen=false;
-    S.rewardBoost=null;S.pendingReward=null;
+    S.rewardBoost=null;S.pendingReward=null;S.almasCardBuff=null;
     S.booster=null;S.boosterReadyAt=0;S.streetEffect=null;S.streetPending=false;S.streetNext=Date.now()+240000;S.tactic="none";S.tacticChangedAt=0;
     soulTone("ritual");S.f=500*S.perk[0];logEvent("ritual",g);
     S.own=[0,0,0,0,0,0,0,0];S.items=[];S.cacheT=Date.now()+45000;norm();
@@ -5626,7 +5791,7 @@ function initAlmasMortas(root){
     try{var o=JSON.parse(decodeURIComponent(escape(atob($("sv").value.trim()))));
       if(!o||typeof o!=="object"||Array.isArray(o)||!Number.isFinite(o.f)||o.f<0||!Array.isArray(o.own)||!Array.isArray(o.items))throw 0;
       // Um código importado também passa pela migração e validação.
-      const validKeys=["f","life","own","items","legacy","spent","perk","boss","bossT","stance","clicks","ts","soundOn","cosmetics","cosmeticSpent","achievements","rituals","bestRitualGain","lastRitualGain","events","ritualPath","nextPath","rewardBoost","pendingReward","contracts","contractStats","contractClaims","contractBoost","rankCredit","masteryXp","records","cacheT","doctrinesOwned","doctrineSpent","doctrineActive","doctrineRefunded","tactic","tacticChangedAt","booster","boosterReadyAt","streetNext","streetPending","streetEffect","postRitualPhase","postBlessingChosen","brawlNext","brawl","brawlWins","brawlMatches"];
+      const validKeys=["f","life","own","items","legacy","spent","perk","boss","bossT","stance","clicks","ts","soundOn","cosmetics","cosmeticSpent","achievements","rituals","bestRitualGain","lastRitualGain","events","ritualPath","nextPath","rewardBoost","pendingReward","contracts","contractStats","contractClaims","contractBoost","rankCredit","masteryXp","records","cacheT","doctrinesOwned","doctrineSpent","doctrineActive","doctrineRefunded","tactic","tacticChangedAt","booster","boosterReadyAt","streetNext","streetPending","streetEffect","postRitualPhase","postBlessingChosen","brawlNext","brawl","brawlWins","brawlMatches","almasCardReadyAt","almasCardLast","almasCardResult","almasCardBuff"];
       const imported={};for(const k of validKeys)if(Object.prototype.hasOwnProperty.call(o,k))imported[k]=o[k];
       S={...S,...imported,rankCredit:imported.rankCredit??null,masteryXp:imported.masteryXp??null,records:imported.records??null,contracts:imported.contracts??[],contractStats:imported.contractStats??{purchases:0},contractClaims:imported.contractClaims??0,contractBoost:imported.contractBoost??null,doctrinesOwned:imported.doctrinesOwned??[],doctrineSpent:imported.doctrineSpent??null,doctrineActive:imported.doctrineActive??"none",doctrineRefunded:imported.doctrineRefunded??false,tactic:imported.tactic??"none",tacticChangedAt:imported.tacticChangedAt??0,booster:imported.booster??null,boosterReadyAt:imported.boosterReadyAt??0,streetNext:imported.streetNext??Date.now()+240000,streetPending:imported.streetPending??false,streetEffect:imported.streetEffect??null,postRitualPhase:imported.postRitualPhase??"",postBlessingChosen:imported.postBlessingChosen??false,brawlNext:imported.brawlNext??Date.now()+600000,brawl:imported.brawl??null,brawlWins:imported.brawlWins??0,brawlMatches:imported.brawlMatches??0};norm();ensureContracts();combo.count=0;
       S.cosmetics={...shopData().cosmetics,...(S.cosmetics||{})};
@@ -5672,12 +5837,13 @@ function initAlmasMortas(root){
     if(contractBoostActive("auto"))production/=1.15;
     if(extActive(S.booster,"production"))production/=1.12;
     if(extActive(S.streetEffect,"production"))production/=1.15;
+    if(cardBonusActive("auto"))production/=1.10;
     const end=Date.now(),start=end-secs*1000;
     function overlap(b){return b&&b.type==="auto"?Math.max(0,Math.min(end,b.until)-Math.max(start,b.since))/1000:0}
-    const bossDuration=overlap(S.rewardBoost),contractDuration=overlap(S.contractBoost);
+    const bossDuration=overlap(S.rewardBoost),contractDuration=overlap(S.contractBoost),cardDuration=overlap(S.almasCardBuff);
     const intersection=(S.rewardBoost?.type==="auto"&&S.contractBoost?.type==="auto")
       ?Math.max(0,Math.min(end,S.rewardBoost.until,S.contractBoost.until)-Math.max(start,S.rewardBoost.since,S.contractBoost.since))/1000:0;
-    let gain=production*offEff()*(secs+(BOSS_BALANCE.autoMult-1)*bossDuration+.15*contractDuration+
+    let gain=production*offEff()*(secs+(BOSS_BALANCE.autoMult-1)*bossDuration+.15*contractDuration+.10*cardDuration+
       (BOSS_BALANCE.autoMult-1)*.15*intersection);
     if(secs>0&&Number.isFinite(gain)&&gain>0){
       add(gain);
@@ -5864,6 +6030,9 @@ function initAlmasMortas(root){
         started=true;
       }
     }
+    // O baralho experimental só existe quando ambas as áreas estão lado a lado.
+    // Fora dessa situação o histórico e o sorteio normal são restaurados intactos.
+    setAlmasDeckMode(souls&&split);
     if(!deckMain.hidden){
       requestAnimationFrame(()=>{if(typeof fit==="function")fit()});
       // As cartas podem precisar de um segundo ajuste após a animação da grade.
