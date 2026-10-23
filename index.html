@@ -6,7 +6,7 @@
 <title>DeckLock</title>
 <meta name="description" content="Sorteador de cartas de desafio para partidas de Deadlock, com decks editáveis.">
 <meta name="theme-color" content="#222021">
-<meta name="decklock-version" content="1.30.5">
+<meta name="decklock-version" content="1.31.4">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="DeckLock">
@@ -173,6 +173,36 @@ html[data-bg=dots],.bgm[data-b=dots]{--fx:radial-gradient(color-mix(in srgb,var(
 html[data-bg=grain],.bgm[data-b=grain]{--fx:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),radial-gradient(ellipse at 50% -10%,var(--bg2),transparent 62%);--fxs:160px 160px,auto}
 html[data-bg=rays],.bgm[data-b=rays]{--fx:repeating-conic-gradient(from 0deg at 50% -5%,color-mix(in srgb,var(--gold) 9%,transparent) 0 5deg,transparent 5deg 10deg)}
 .bgm{width:100%;aspect-ratio:16/10;border-radius:6px;border:1px solid var(--line);background-color:var(--bg);background-image:var(--fx,none);background-size:var(--fxs,auto)}
+/* Os dois fundos são camadas fixas do site. CSS externo NÃO atravessa o Shadow DOM. */
+html[data-almas-bg=plain]{--soul-fx:none}
+html[data-almas-bg=glow]{--soul-fx:radial-gradient(ellipse at 50% -10%,var(--bg2),transparent 62%)}
+html[data-almas-bg=aurora]{--soul-fx:radial-gradient(40% 45% at 18% 8%,color-mix(in srgb,var(--gold) 18%,transparent),transparent),radial-gradient(45% 50% at 88% 18%,color-mix(in srgb,var(--rare) 24%,transparent),transparent)}
+html[data-almas-bg=spot]{--soul-fx:radial-gradient(circle at 50% 42%,color-mix(in srgb,var(--gold) 14%,transparent),transparent 48%)}
+html[data-almas-bg=gradient]{--soul-fx:linear-gradient(165deg,var(--bg2),transparent 55%,color-mix(in srgb,var(--rare) 12%,transparent))}
+html[data-almas-bg=vignette]{--soul-fx:radial-gradient(ellipse at center,var(--bg2),var(--bg) 85%)}
+html[data-almas-bg=dots]{--soul-fx:radial-gradient(color-mix(in srgb,var(--gold) 32%,transparent) 1px,transparent 1.6px);--soul-fxs:22px 22px}
+html[data-almas-bg=grain]{--soul-fx:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),radial-gradient(ellipse at 50% -10%,var(--bg2),transparent 62%);--soul-fxs:160px 160px,auto}
+html[data-almas-bg=rays]{--soul-fx:repeating-conic-gradient(from 0deg at 50% -5%,color-mix(in srgb,var(--gold) 9%,transparent) 0 5deg,transparent 5deg 10deg)}
+body::before{display:block!important;transition:opacity .48s ease!important}
+body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:0;background-image:var(--soul-fx,none);background-size:var(--soul-fxs,auto);transition:opacity .48s ease}
+body.souls-active::before{opacity:0!important}
+body.souls-active::after{opacity:var(--bgi,1)!important}
+.mode-surface::before,.mode-surface::after{display:none!important}
+@media(prefers-reduced-motion:reduce){body::before,body::after{transition:none!important}}
+
+.mode-surface{position:relative;isolation:isolate;overflow:hidden}
+.mode-surface::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.92;background-color:transparent;background-image:var(--mode-fx,none);background-size:var(--mode-fxs,auto);transition:opacity .42s ease,filter .42s ease,transform .42s ease}
+.mode-surface::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--bg) 10%,transparent) 74%,color-mix(in srgb,var(--bg) 26%,transparent));opacity:.72;transition:opacity .42s ease}
+.mode-surface[data-bgx=glow]{--mode-fx:radial-gradient(ellipse at 50% -10%,var(--bg2),transparent 62%)}
+.mode-surface[data-bgx=aurora]{--mode-fx:radial-gradient(40% 45% at 18% 8%,color-mix(in srgb,var(--gold) 18%,transparent),transparent),radial-gradient(45% 50% at 88% 18%,color-mix(in srgb,var(--rare) 24%,transparent),transparent),radial-gradient(60% 50% at 50% 105%,color-mix(in srgb,var(--panel) 80%,transparent),transparent)}
+.mode-surface[data-bgx=spot]{--mode-fx:radial-gradient(circle at 50% 42%,color-mix(in srgb,var(--gold) 14%,transparent),transparent 48%)}
+.mode-surface[data-bgx=gradient]{--mode-fx:linear-gradient(165deg,var(--bg2),transparent 55%,color-mix(in srgb,var(--rare) 12%,transparent))}
+.mode-surface[data-bgx=vignette]{--mode-fx:radial-gradient(ellipse at center,var(--bg2),var(--bg) 85%)}
+.mode-surface[data-bgx=dots]{--mode-fx:radial-gradient(color-mix(in srgb,var(--gold) 22%,transparent) 1px,transparent 1.6px);--mode-fxs:22px 22px}
+.mode-surface[data-bgx=grain]{--mode-fx:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),radial-gradient(ellipse at 50% -10%,var(--bg2),transparent 62%);--mode-fxs:160px 160px,auto}
+.mode-surface[data-bgx=rays]{--mode-fx:repeating-conic-gradient(from 0deg at 50% -5%,color-mix(in srgb,var(--gold) 9%,transparent) 0 5deg,transparent 5deg 10deg)}
+#main.mode-surface,#soulView.mode-surface{transition:opacity .34s ease,transform .46s cubic-bezier(.22,1,.36,1),box-shadow .38s ease,background-color .38s ease,filter .38s ease}
+
 .scene[class*="fx-"]{animation-duration:calc(var(--flip)*1.3);animation-timing-function:cubic-bezier(.2,.8,.2,1);animation-fill-mode:both}
 .fx-spin{animation-name:fx-spin}.fx-rise{animation-name:fx-rise}.fx-drop{animation-name:fx-drop}.fx-zoom{animation-name:fx-zoom}.fx-slide{animation-name:fx-slide}.fx-shake{animation-name:fx-shake}.fx-tilt{animation-name:fx-tilt}
 @keyframes fx-spin{from{transform:rotateY(-360deg) scale(.9)}to{transform:none}}
@@ -835,6 +865,21 @@ body.fs #trackingView,body.fs #histbox{display:none!important}
 
 .site-test-toggle{min-width:44px!important;width:auto!important;padding:0 7px!important;font:750 10px/1.1 system-ui,sans-serif;letter-spacing:.035em;color:var(--gold);border-radius:7px}
 .site-test-toggle.active{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 17%,var(--bg2))}
+
+/* Biblioteca de backups — identidade editorial compartilhada */
+.soul-backup-section{display:grid;gap:14px;margin:0 0 18px;padding:18px;border:1px solid color-mix(in srgb,var(--gold) 28%,var(--line));border-radius:14px;background:color-mix(in srgb,var(--bg2) 60%,var(--bg))}
+.soul-backup-hero{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.soul-backup-heading{display:grid;gap:4px}.soul-backup-kicker{font-size:10px;letter-spacing:.17em;font-weight:800;color:var(--mute)}
+.soul-backup-heading h3{font:600 23px/1.2 Georgia,serif;margin:0;color:var(--gold)}.soul-backup-heading p{margin:0;font-size:12px}
+.soul-backup-actions,.soul-backup-card-actions{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.soul-backup-actions button{font-size:12px;min-height:38px;padding:8px 12px}.soul-backup-primary{background:var(--gold);color:var(--onacc);font-weight:750;border-color:var(--gold)}
+.soul-backup-subtitle{display:flex;justify-content:space-between;align-items:center;gap:9px;font-size:13px}.soul-backup-subtitle .empty{font-size:11px}
+.soul-backup-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.soul-backup-card{display:grid;gap:10px;min-width:0;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+.soul-backup-card-info{display:grid;gap:3px}.soul-backup-card-info strong{font:600 15px Georgia,serif}.soul-backup-card-info .empty{font-size:11px}
+.soul-backup-card-actions button{font-size:11px;padding:5px 9px;min-height:31px}.soul-backup-card-actions .soul-backup-delete{color:var(--leg);margin-left:auto}
+.soul-backup-foot{font-size:11px;line-height:1.55;margin:2px 0 0;color:var(--mute)}
+@media(max-width:680px){.soul-backup-section{padding:13px}.soul-backup-grid{grid-template-columns:1fr}.soul-backup-actions{width:100%}.soul-backup-actions button{flex:1 1 auto}}
 </style>
 </head>
 <body>
@@ -871,7 +916,7 @@ body.fs #trackingView,body.fs #histbox{display:none!important}
 </header>
 
 <div id="workspace" class="workspace">
-<main id="main" aria-label="Sorteador DeckLock">
+<main id="main" class="mode-surface" aria-label="Sorteador DeckLock">
   <section class="stage">
     <div class="deck-choice">
       <p class="deck-label">Escolha um deck</p>
@@ -965,7 +1010,7 @@ body.fs #trackingView,body.fs #histbox{display:none!important}
     <p id="questEmpty" hidden></p>
   </section>
 </aside>
-<section id="soulView" role="region" aria-label="Almas" aria-hidden="true" hidden>
+<section id="soulView" class="mode-surface" role="region" aria-label="Almas" aria-hidden="true" hidden>
   <div id="soulMount"></div>
 </section>
 </div><!-- /workspace -->
@@ -1519,7 +1564,7 @@ textarea{width:100%;height:70px;background:var(--am-ink);color:var(--am-text);bo
 #il>.up>.r{display:flex;justify-content:space-between;align-items:center;text-align:left;gap:5px;flex-wrap:wrap}
 #il>.up small{font-size:11px}
 /* Ritual com painéis secundários, em vez de uma rolagem interminável */
-.ritual-layout{display:grid;gap:12px;width:100%;max-width:720px;margin-inline:auto}
+.ritual-layout{display:grid;gap:12px;width:100%;max-width:none;min-width:0;margin-inline:0}
 .ritual-main{padding:16px 18px}
 .ritual-main-head{display:flex;align-items:center;justify-content:space-between;gap:9px;flex-wrap:wrap}
 .ritual-main-head h3{margin:0;font-size:21px}
@@ -1685,6 +1730,11 @@ textarea{width:100%;height:70px;background:var(--am-ink);color:var(--am-text);bo
  .ritual-main .ritual-metric{padding:6px 5px}
  .ritual-main .rank-ritual-summary{margin:5px 0}
 }
+
+/* Ritual ocupa a mesma largura das demais abas do Almas. */
+#tl{width:100%;min-width:0}
+#tl .ritual-layout{width:100%;max-width:100%;min-width:0;align-items:stretch}
+#tl .ritual-main,#tl .ritual-menu,#tl .ritual-subpane{width:100%;min-width:0}
 
 /* v1.28.5 — Ritual legível, decisões em rounds e marcos a cada 50 níveis */
 .ritual-layout{display:flex;flex-direction:column;gap:12px}
@@ -2124,6 +2174,127 @@ textarea{width:100%;height:70px;background:var(--am-ink);color:var(--am-text);bo
   .wrap :is(.btn,.tab,.up,.operation,.am-choice,.ritual-menu-btn):hover{transform:none!important}
 }
 
+
+/* v1.30.8 — Combo centralizado e coerente com os painéis do Almas */
+.combo-ribbon{box-sizing:border-box!important;width:calc(100% - 20px)!important;max-width:none!important;min-width:0!important;margin:4px auto 9px!important;padding:8px 10px 9px!important;border:1px solid color-mix(in srgb,var(--am-line) 85%,transparent)!important;border-radius:8px!important;background:color-mix(in srgb,var(--am-surface) 60%,var(--am-bg))!important;box-shadow:none!important;display:grid;gap:6px}
+.combo-ribbon[hidden]{display:none!important}
+.combo-ribbon-head{display:flex;justify-content:center;gap:8px;align-items:baseline;text-align:center;font-size:11px!important;color:var(--am-muted);font-weight:600!important;letter-spacing:.025em}
+.combo-ribbon-head #comboLabel{font-weight:650;color:var(--am-text)}
+.combo-ribbon-head #comboMult{font-size:12px;font-weight:750;color:var(--am-brass)}
+.combo-ribbon .combo-track{box-sizing:border-box;width:100%;height:6px!important;flex-basis:auto!important;background:var(--am-ink);border:0!important;border-radius:999px;overflow:hidden}
+.combo-ribbon .combo-track i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--am-brass),var(--am-soul));transition:width .16s linear}
+.combo-ribbon.peak .combo-track i{background:linear-gradient(90deg,var(--am-soul),var(--am-brass))}
+.combo-ribbon.maxed{border-color:color-mix(in srgb,var(--am-brass) 48%,var(--am-line))!important;box-shadow:0 0 14px color-mix(in srgb,var(--am-brass) 11%,transparent)!important}
+.am-combo-spark{position:absolute;width:6px;height:16px;pointer-events:none;z-index:8;background:var(--am-brass);border-radius:3px;box-shadow:0 0 12px var(--am-brass);animation:amComboSpark .65s ease-out forwards}
+@keyframes amComboSpark{0%{opacity:1;transform:translateY(0) scale(.5) rotate(-20deg)}100%{opacity:0;transform:translateY(-40px) scale(1.5) rotate(25deg)}}
+.am-beat-track .am-beat-zone{position:absolute;top:1px;bottom:1px;height:auto;border-radius:999px;pointer-events:none}
+.am-beat-track .zone-outer{background:color-mix(in srgb,var(--am-soul) 27%,transparent)}
+.am-beat-track .zone-mid{background:color-mix(in srgb,var(--am-brass) 41%,transparent)}
+.am-beat-track .zone-core{background:color-mix(in srgb,#fff 80%,var(--am-brass));box-shadow:0 0 13px color-mix(in srgb,var(--am-brass) 45%,transparent)}
+@media(max-width:480px){.combo-ribbon{width:calc(100% - 12px)!important;padding:7px 9px!important}}
+@media(prefers-reduced-motion:reduce){.am-combo-spark{animation:none!important}.combo-ribbon .combo-track i{transition:none!important}}
+
+/* v1.30.9 — metas verdadeiramente centradas, recompensas e ritual PLATINUM. */
+.am-goal-strip{
+  box-sizing:border-box;display:grid!important;grid-template-columns:minmax(0,1fr);
+  justify-items:center;align-items:center;align-content:center;text-align:center;
+  width:100%;max-width:100%;margin:3px auto 10px;padding:9px 12px;
+  gap:3px;
+}
+.am-goal-strip strong,.am-goal-strip #nextGoal{display:block;max-width:100%;width:100%;margin:0;text-align:center;overflow-wrap:anywhere}
+.am-goal-strip #nextGoal{font-size:12px;line-height:1.45}
+/* Os itens curtos podem compartilhar três colunas em telas com espaço real. */
+#il{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+#il>.cat{grid-column:1/-1}
+#il>.up{min-height:135px!important;padding:11px 10px!important;gap:7px!important}
+#il>.up .r{align-items:flex-start;justify-content:flex-start;text-align:left}
+#il>.up .r small{flex:1 1 100%;text-align:left}
+/* Três oportunidades; apenas uma pode ser resgatada por ocorrência. */
+#streetOptions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+#streetOptions .am-choice{min-height:124px}
+#streetOptions .am-choice-desc{line-height:1.45}
+/* Sobreposição de tela inteira, com visual prateado próprio do PLATINUM. */
+.am-platinum-warning[hidden]{display:none!important}
+.am-platinum-warning{position:fixed;inset:0;z-index:130;display:grid;place-items:center;padding:20px;
+ background:rgba(4,7,12,.91);backdrop-filter:blur(12px);overflow-y:auto}
+.am-platinum-warning-dialog{width:min(480px,100%);max-height:calc(100dvh - 40px);overflow:auto;
+ text-align:center;padding:clamp(23px,5vw,37px);border:1px solid #b6c5db;border-radius:15px;
+ background:linear-gradient(160deg,color-mix(in srgb,#d7e1f2 12%,var(--am-raised)),var(--am-bg) 62%);
+ box-shadow:0 18px 90px #000b,0 0 50px rgba(190,210,242,.13)}
+.am-platinum-warning-mark{display:block;font:700 43px/1 Georgia,serif;color:#e6efff;margin-bottom:12px;text-shadow:0 0 27px #bed6ff80}
+.am-platinum-warning-kicker{color:#c5d3e8;font:800 11px/1.5 var(--am-font-ui,system-ui);letter-spacing:.18em}
+.am-platinum-warning-dialog h2{color:var(--am-text);font-size:clamp(25px,5vw,35px);line-height:1.15;margin:11px 0}
+.am-platinum-warning-dialog p{color:var(--am-muted);font-size:14px;line-height:1.6;margin:0 0 12px}
+.am-platinum-warning-dialog .platinum-highlight{display:block;margin:16px 0 19px;padding:12px 13px;border:1px solid #b6c5db80;
+ border-radius:8px;color:#dbe6f7;font-size:13px;line-height:1.5;background:#c9d5e714}
+.am-platinum-warning-actions{display:grid;gap:9px}
+.am-platinum-warning-actions .btn{width:100%;min-height:46px}
+.am-platinum-warning-actions .platinum-return{background:linear-gradient(160deg,#ebf2fd,#adbfdb)!important;
+ border:1px solid #e5efff!important;color:#203045!important;font-weight:800}
+.am-platinum-warning-actions .platinum-skip{background:transparent!important;color:var(--am-muted);border:1px solid var(--am-line)!important}
+@media(max-width:660px){#il{grid-template-columns:repeat(2,minmax(0,1fr))}#streetOptions{grid-template-columns:1fr}#streetOptions .am-choice{min-height:0;padding:11px 12px}}
+@media(max-width:349px){#il{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.am-platinum-warning{backdrop-filter:none}}
+
+/* v1.31.0 — balanceamento, estado dos itens, arquivo de temporadas e avisos. */
+.am-encounters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;align-items:stretch}
+.am-encounters>.boss,.am-encounters>.am-fund{min-width:0;margin:0;display:flex;flex-direction:column;gap:9px}
+.am-encounters .am-fund{padding:12px 13px}
+.am-encounters .boss-rewards{margin-top:auto}
+.am-encounters #fundAction,.am-encounters #bgo{margin-top:auto;max-width:100%}
+.am-encounters #fundStatus,.am-encounters #fundReturn,.am-encounters #bt{overflow-wrap:anywhere}
+@media(max-width:580px){.am-encounters{grid-template-columns:1fr}}
+/* v1.31.1 — componentes de Confronto e Consórcio com hierarquia idêntica. */
+.am-encounters>.boss,.am-encounters>.am-fund{padding:14px;gap:0;align-items:stretch}
+.am-encounters .am-encounter-heading{min-height:116px;display:flex;flex-direction:column;gap:7px;margin:0 0 12px}
+.am-encounters .am-encounter-heading h3{font:600 17px/1.3 Fraunces,Georgia,serif;color:var(--am-text);margin:0}
+.am-encounters .am-encounter-heading p{font:400 12px/1.5 "Instrument Sans",system-ui,sans-serif;color:var(--am-muted);margin:0;overflow-wrap:anywhere}
+.am-encounters .am-encounter-state{min-height:64px;margin:0 0 10px;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:4px;font-size:12px;line-height:1.5}
+.am-encounters .am-encounter-state p{font-size:12px;line-height:1.5;margin:0;color:var(--am-muted)}
+.am-encounters .am-fund-info strong{font-size:12px;line-height:1.5}
+.am-encounters #hpw,.am-encounters .fund-progress{height:8px;min-height:8px;width:100%;margin:0 0 13px;border:1px solid var(--am-ui-edge,var(--am-line));border-radius:6px;background:var(--am-bg);overflow:hidden;box-sizing:border-box}
+.am-encounters #hpw[hidden]{display:block!important;visibility:hidden}
+.am-encounters #hpw i,.am-encounters .fund-progress i{height:100%;display:block}
+.am-encounters #bgo,.am-encounters #fundAction{margin-top:auto;min-height:42px;width:100%}
+.am-encounters .boss-rewards{margin-top:12px}
+@media(max-width:580px){.am-encounters .am-encounter-heading{min-height:0}.am-encounters .am-encounter-state{min-height:0}}
+/* Loja: verde para adquirido, dourado para comprável, cinza para bloqueado. */
+#il>.up.done{border:1px solid color-mix(in srgb,#77d3ab 78%,var(--am-line))!important;
+ background:linear-gradient(160deg,color-mix(in srgb,#489c79 20%,var(--am-raised)),color-mix(in srgb,#3d8665 13%,var(--am-bg)))!important;
+ box-shadow:inset 3px 0 0 #76ceaa,0 5px 19px #0002!important}
+#il>.up.done b,#il>.up.done>.r em{color:color-mix(in srgb,#a6f1d3 86%,var(--am-text))!important}
+#il>.up.ready{border:1px solid color-mix(in srgb,var(--am-brass) 85%,var(--am-line))!important;
+ background:linear-gradient(160deg,color-mix(in srgb,var(--am-brass) 19%,var(--am-raised)),var(--am-bg))!important;
+ box-shadow:inset 3px 0 0 var(--am-brass),0 5px 19px #0002!important}
+#il>.up.no,#il>.up.lock{border:1px solid var(--am-ui-edge)!important;
+ background:color-mix(in srgb,var(--am-bg) 79%,var(--am-raised))!important;box-shadow:none!important}
+#il>.up.lock{border-style:dashed!important}
+#il>.up.done .r small{color:#a6e1c9!important}
+/* Aviso dourado, paralelo ao PLATINUM prateado. */
+.am-global-warning .am-platinum-warning-dialog{border-color:color-mix(in srgb,var(--am-brass) 75%,var(--am-line));
+ background:linear-gradient(157deg,color-mix(in srgb,var(--am-brass) 13%,var(--am-raised)),var(--am-bg) 67%)}
+.am-global-warning .am-platinum-warning-mark,.am-global-warning .am-platinum-warning-kicker{color:var(--am-brass)}
+.am-global-warning .platinum-highlight{color:var(--am-brass);border-color:color-mix(in srgb,var(--am-brass) 48%,var(--am-line));background:color-mix(in srgb,var(--am-brass) 7%,var(--am-bg))}
+.am-global-warning .platinum-return{background:var(--am-brass)!important;color:var(--am-ink)!important;border-color:var(--am-brass)!important}
+.season-list{display:grid;gap:13px;margin-top:10px}
+.season-help,.season-empty{color:var(--am-muted);font-size:12px;line-height:1.55;margin:4px 0 10px}
+.season-card{padding:14px;border:1px solid var(--am-line);border-radius:10px;background:color-mix(in srgb,var(--am-raised) 70%,var(--am-bg))}
+.season-kicker{color:var(--am-brass);font-size:10px;font-weight:760;letter-spacing:.13em}
+.season-card h4{font:620 19px/1.3 Fraunces,Georgia,serif;margin:5px 0;color:var(--am-text)}
+.season-card>p{color:var(--am-muted);font-size:12px;margin:0 0 12px}
+.season-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.season-stat{border:1px solid var(--am-line);border-radius:7px;padding:9px;min-width:0;background:var(--am-bg)}
+.season-stat small{display:block;font-size:10px;color:var(--am-muted)}
+.season-stat strong{display:block;font-size:13px;color:var(--am-text);overflow-wrap:anywhere;margin-top:4px}
+@media(max-width:460px){.season-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* v1.31.2 — Legado persistente separado da recompensa da run. */
+.ritual-legacy{margin:12px 0 3px;padding:13px;border:1px solid color-mix(in srgb,var(--am-brass) 40%,var(--am-line));border-radius:9px;background:color-mix(in srgb,var(--am-brass) 5%,var(--am-bg))}
+.ritual-legacy h4{margin:0 0 4px;font:600 17px/1.3 Fraunces,Georgia,serif;color:var(--am-brass)}
+.ritual-legacy>p{margin:0 0 11px;color:var(--am-muted);font-size:12px;line-height:1.5}
+.ritual-legacy .ritual-bonus-line{margin:9px 0 0;font-size:12px}
+.ritual-reward-cap{margin:10px 0}
+.ritual-legacy .ritual-cap{width:100%}
 </style>
 
 <div class="wrap">
@@ -2148,11 +2319,11 @@ textarea{width:100%;height:70px;background:var(--am-ink);color:var(--am-text);bo
         <small id="rankNext"></small>
         <div class="rank-progress-dots" id="rankDots" aria-hidden="true"></div>
       </div>
-      <div id="comboStatus" class="combo-status" hidden aria-live="off">
-        <span id="comboLabel"></span><span id="comboMult"></span>
-        <div class="combo-track"><i id="comboBar"></i></div>
-      </div>
     </div>
+  </div>
+  <div id="comboStatus" class="combo-ribbon" hidden aria-live="off">
+    <div class="combo-ribbon-head"><span id="comboLabel"></span><span id="comboMult"></span></div>
+    <div class="combo-track"><i id="comboBar"></i></div>
   </div>
   <div class="am-goal-strip"><strong>Próxima meta</strong><span id="nextGoal" aria-live="off"></span></div>
   <nav class="tabs">
@@ -2173,20 +2344,21 @@ textarea{width:100%;height:70px;background:var(--am-ink);color:var(--am-text);bo
     </div>
     <div class="am-status-line" id="amStatusLine" aria-live="off" hidden></div>
     <section class="am-street box" id="streetPanel" hidden>
-      <div class="am-panel-heading"><span class="am-panel-icon" aria-hidden="true">✧</span><div><small id="streetKicker"></small><h3 id="streetHeading"></h3></div><strong class="am-street-count" id="streetCount">1/3</strong></div>
+      <div class="am-panel-heading"><span class="am-panel-icon" aria-hidden="true">✧</span><div><small id="streetKicker"></small><h3 id="streetHeading"></h3></div><strong class="am-street-count" id="streetCount">1 pend.</strong></div>
       <p id="streetInfo" class="am-feature-desc"></p>
       <div class="am-choice-grid" id="streetOptions"></div>
     </section>
     <div class="am-beat box" id="beatPanel">
-      <div class="am-section-title"><strong>Pulso do Patrono</strong><small>Minigame de precisão · prêmio máximo com 5 de 8 acertos</small></div>
+      <div class="am-section-title"><strong>Pulso do Patrono</strong><small>Minigame de precisão · zonas adaptativas e bônus maior no centro</small></div>
       <p id="beatInfo">Aguarde a próxima abertura do Pulso.</p>
-      <div class="am-beat-track"><i id="beatNeedle"></i><span class="am-beat-zone"></span></div>
+      <div class="am-beat-track"><i id="beatNeedle"></i><span class="am-beat-zone zone-outer" style="left:34%;width:32%"></span><span class="am-beat-zone zone-mid" style="left:42%;width:16%"></span><span class="am-beat-zone zone-core" style="left:48.5%;width:3%"></span></div>
       <div class="am-beat-actions"><button type="button" id="beatStart" class="btn">Iniciar desafio</button><button type="button" id="beatTap" class="btn pri" hidden>MARCAR RITMO</button><small id="beatScore"></small></div>
     </div>
+    <div class="am-encounters">
     <div class="boss" id="bs">
-      <h3>Confronto com o Mid-Boss</h3>
-      <div class="hp" id="hpw" hidden><i id="hpi"></i></div><div id="bossShieldState" class="boss-shield-state" hidden></div>
-      <p id="bt"></p>
+      <div class="am-encounter-heading"><h3>Confronto com o Mid-Boss</h3><p>Derrote o inimigo em 30 s. Explore as aberturas no escudo para conquistar Souls e bônus permanentes.</p></div>
+      <div class="am-encounter-state"><p id="bt"></p><div id="bossShieldState" class="boss-shield-state" hidden></div></div>
+      <div class="hp" id="hpw" hidden><i id="hpi"></i></div>
       <button class="btn pri" id="bgo" hidden>Iniciar confronto</button>
       <div class="boss-rewards" id="bossRewards" hidden>
         <h4 id="rewardTitle"></h4><p id="rewardIntro"></p>
@@ -2195,11 +2367,12 @@ textarea{width:100%;height:70px;background:var(--am-ink);color:var(--am-text);bo
     </div>
 
     <section class="am-fund box" id="fundPanel">
-      <div class="am-section-title"><strong>Consórcio das Ruas</strong><small>Retorno após 3 min. Cada contrato concluído aumenta o lucro (até +95%). Um Ritual encerra financiamentos pendentes.</small></div>
-      <div class="am-fund-info"><span id="fundStatus">Sem financiamento ativo</span><strong id="fundReturn"></strong></div>
+      <div class="am-encounter-heading"><h3>Consórcio das Ruas</h3><p>Financie por 3 min e receba de +90% a +200% de lucro conforme os contratos. O Ritual encerra depósitos pendentes.</p></div>
+      <div class="am-encounter-state am-fund-info"><span id="fundStatus">Sem financiamento ativo</span><strong id="fundReturn"></strong></div>
       <div class="fund-progress"><i id="fundProgressBar"></i></div>
       <button type="button" class="btn" id="fundAction">Financiar operação</button>
     </section>
+    </div><!-- /am-encounters -->
     <details class="contracts" id="contractsPanel" open>
       <summary><span id="contractsHeading">Contratos</span> <span id="contractsCounter"></span></summary>
       <details class="inline-help contracts-help"><summary aria-label="Informações sobre contratos" title="Informações sobre contratos">ⓘ</summary><p id="contractsInfo" class="contracts-info"></p></details>
@@ -2221,7 +2394,7 @@ textarea{width:100%;height:70px;background:var(--am-ink);color:var(--am-text);bo
     <p class="am-next-unlock" id="nextUnlock" aria-live="off"></p>
     <section class="am-ticket box" id="ticketPanel">
       <h3>Ticket Platinum</h3>
-      <p>Um PLATINUM concede +15% permanente a um investimento. Clique em “Selecionar investimento” e marque o cartão desejado acima. Apenas um PLATINUM por operação e por Ritual.</p>
+      <p>Um PLATINUM dobra (x2) permanentemente a produção da operação escolhida. Clique em “Selecionar investimento” e marque o cartão desejado acima. Apenas um PLATINUM por operação e por Ritual.</p>
       <div class="am-ticket-actions"><button type="button" class="btn" id="ticketArm" aria-pressed="false">Selecionar investimento</button><button type="button" class="btn pri" id="ticketBuy" disabled>Comprar PLATINUM</button></div>
       <div class="am-ticket-selection" id="ticketSelection" aria-live="polite">Escolha um investimento acima. Cada PLATINUM é permanente.</div>
       <small id="ticketStatus"></small>
@@ -2250,11 +2423,15 @@ textarea{width:100%;height:70px;background:var(--am-ink);color:var(--am-text);bo
           </div>
           <div id="runSummaryView">
           <div class="ritual-metrics" id="ritualPreviewMetrics"></div>
-          <div class="ritual-bonus-line" id="ritualPreviewBonus"></div>
-          <div class="ritual-caps" aria-label="Limites de progressão">
-            <div class="ritual-cap" id="globalCapStatus"><span class="limit-label">Bônus global permanente</span><strong class="limit-value"></strong><div class="cap-track"><i></i></div><small class="limit-state"></small></div>
-            <div class="ritual-cap" id="favorCapStatus"><span class="limit-label">Favor do Patrono por Ritual</span><strong class="limit-value"></strong><div class="cap-track"><i></i></div><small class="limit-state"></small></div>
+          <div class="ritual-caps ritual-reward-cap" aria-label="Recompensa desta run">
+            <div class="ritual-cap" id="favorCapStatus"><span class="limit-label">Favor recebido neste Ritual</span><strong class="limit-value"></strong><div class="cap-track"><i></i></div><small class="limit-state"></small></div>
           </div>
+          <section class="ritual-legacy" aria-label="Legado Permanente">
+            <h4>Legado Permanente</h4>
+            <p>Multiplicador aplicado a toda a produção.</p>
+            <div class="ritual-caps"><div class="ritual-cap" id="globalCapStatus"><span class="limit-label">Produção global acumulada</span><strong class="limit-value"></strong><div class="cap-track"><i></i></div><small class="limit-state"></small></div></div>
+            <div class="ritual-bonus-line" id="ritualPreviewBonus"></div>
+          </section>
           <p class="ritual-cap-note" id="globalCapNote" hidden></p>
           <details class="ritual-extra"><summary>Comparar com a run anterior</summary><div class="ritual-compare" id="ritualPreviewCompare"></div></details>
           <small class="ritual-reset-warning" id="ritualPreviewWarning"></small>
@@ -2274,12 +2451,14 @@ textarea{width:100%;height:70px;background:var(--am-ink);color:var(--am-text);bo
       <div class="ritual-menu" role="group" aria-label="Outras opções do Ritual">
         <button class="ritual-menu-btn" type="button" data-ritual-pane="blessings"><b>Bênçãos do Patrono</b><small id="favorMenuBalance"></small></button>
         <button class="ritual-menu-btn" type="button" data-ritual-pane="achievements"><b>Conquistas</b><small id="achievementsCount"></small></button>
+        <button class="ritual-menu-btn" type="button" data-ritual-pane="seasons"><b>Temporadas anteriores</b><small>Arquivo das eras</small></button>
         <button class="ritual-menu-btn" type="button" data-ritual-pane="saving"><b>Dados / backup</b><small>Histórico</small></button>
       </div>
       <div class="ritual-subpane" id="ritualSubpane" hidden>
         <button type="button" class="btn ritual-back" id="ritualBack">← Voltar ao Ritual</button>
         <div class="box" id="blessingsFold" hidden><h3>Bênçãos do Patrono</h3><p id="lp"></p><div id="pl"></div></div>
         <div class="box" id="achievementsFold" hidden><h3>Conquistas</h3><div id="ac"></div></div>
+        <div class="box" id="seasonsFold" hidden><h3>Temporadas anteriores</h3><p class="season-help">Arquivos de temporadas encerradas ficam disponíveis aqui para consulta. A temporada atual permanece intacta.</p><div id="seasonsList" class="season-list"></div></div>
         <div class="box" id="savingFold" hidden><h3>Estatísticas e salvamento</h3><p id="sx"></p><details class="records-panel"><summary id="recordsTitle">Recordes</summary><div id="recordsList"></div></details>
           <textarea id="sv" aria-label="Código de salvamento" placeholder="O código de salvamento aparece aqui."></textarea>
           <div class="seg"><button class="btn" id="exp">Exportar</button><button class="btn" id="imp">Importar</button><button class="btn" id="wipe">Apagar</button></div>
@@ -2314,6 +2493,20 @@ textarea{width:100%;height:70px;background:var(--am-ink);color:var(--am-text);bo
     <button class="btn pri am-next" type="button" id="postRitualNext">Continuar</button>
   </div>
 </div>
+<div id="platinumWarning" class="am-platinum-warning" hidden role="dialog" aria-modal="true" aria-labelledby="platinumWarningTitle" aria-describedby="platinumWarningText">
+  <div class="am-platinum-warning-dialog">
+    <span class="am-platinum-warning-mark" aria-hidden="true">✧</span>
+    <span class="am-platinum-warning-kicker">AVISO ANTES DO RITUAL</span>
+    <h2 id="platinumWarningTitle">Seu PLATINUM ficou para trás</h2>
+    <p id="platinumWarningText">Você ainda não comprou o Ticket Platinum desta run. Ao concluir o Ritual, perde suas Souls e os investimentos atuais — e só poderá comprar o próximo PLATINUM na nova run.</p>
+    <strong class="platinum-highlight">O PLATINUM dobra (x2) permanentemente a produção da operação escolhida, mesmo após os próximos Rituais.</strong>
+    <div class="am-platinum-warning-actions">
+      <button class="btn platinum-return" type="button" id="platinumGoBuy">Voltar e comprar PLATINUM</button>
+      <button class="btn platinum-skip" type="button" id="platinumContinue">Continuar sem PLATINUM</button>
+    </div>
+  </div>
+</div>
+<div id="globalWarning" hidden></div>
 <div id="ritualConfirmOverlay" class="ritual-confirm-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="ritualConfirmTitle" aria-describedby="ritualConfirmText">
   <div class="ritual-confirm-dialog">
     <span class="ritual-confirm-mark" aria-hidden="true">✦</span>
@@ -2441,7 +2634,7 @@ const PROFILES={
 "Rubi":{back:"plain",colors:{bg:"#140b0d",bg2:"#1e1013",panel:"#271519",ink:"#f1e3dc",mute:"#a58f88",gold:"#e0b060",rare:"#5ea8c8",leg:"#e8574a",line:"#4a2a30"}},
 "Claro":{back:"plain",colors:{bg:"#f2ede3",bg2:"#fbf8f1",panel:"#e7dfcf",ink:"#241d16",mute:"#6e6252",gold:"#a8741a",rare:"#1f7a8c",leg:"#b3341f",line:"#c9bca3"}}};
 const FONTS={serif:["Serifada","Georgia,'Times New Roman',serif"],sans:["Sem serifa","system-ui,sans-serif"],cond:["Condensada","'Arial Narrow',Bahnschrift,Impact,sans-serif"]};
-const DEF_CFG=()=>({profile:"b:Deadlock",mod:false,colors:{...PROFILES.Deadlock.colors},back:"plain",backImg:"",bgfx:"vignette",face:"solid",bgi:100,font:"serif",cw:300,flip:700,anim:!matchMedia("(prefers-reduced-motion: reduce)").matches,snd:true,pack:"soft",finiteN:10,track:true,quick:false,compact:false,fxn:100,fx:{comum:{in:"flip",fx:"none"},rara:{in:"rise",fx:"glow"},lendaria:{in:"spin",fx:"confetti"}},hist:true,norepeat:true,cycle:true,rr:0,w:{comum:60,rara:30,lendaria:10}});
+const DEF_CFG=()=>({profile:"b:Deadlock",mod:false,colors:{...PROFILES.Deadlock.colors},back:"plain",backImg:"",bgfx:"vignette",bgfxDeck:"vignette",bgfxAlmas:"dots",bgSplitReady:true,face:"solid",bgi:100,font:"serif",cw:300,flip:700,anim:!matchMedia("(prefers-reduced-motion: reduce)").matches,snd:true,pack:"soft",finiteN:10,track:true,quick:false,compact:false,fxn:100,fx:{comum:{in:"flip",fx:"none"},rara:{in:"rise",fx:"glow"},lendaria:{in:"spin",fx:"confetti"}},hist:true,norepeat:true,cycle:true,rr:0,w:{comum:60,rara:30,lendaria:10}});
 
 const DEF_DECKS=()=>EXEMPLOS.filter(d=>d.name==="Grupo"||d.name==="Heróis").map(d=>JSON.parse(JSON.stringify(d)));
 const EXEMPLOS=[{"id":"g","name":"Grupo","cards":[{"id":"g0","title":"Pick do colega","text":"Cada um joga o herói que o colega ao lado escolheu para você. Sem veto, sem troca.","cat":"Caos","rar":"comum","img":""},{"id":"g1","title":"Herói esquecido","text":"Todo mundo joga o herói que menos usou na conta. Selecione somente os picks com o heróis em que você tem menos partidas","cat":"Caos","rar":"comum","img":""},{"id":"g2","title":"Sem Spirit","text":"Nenhum item de Spirit na partida inteira. Só Vitalidade e Gun.","cat":"Build","rar":"comum","img":""},{"id":"g3","title":"Categoria única","text":"Cada um escolhe uma categoria (Arma, Vitalidade ou Espírito) e só compra dela.","cat":"Build","rar":"comum","img":""},{"id":"g4","title":"Sem passivos","text":"Nenhum item passivo na build. Somente ativos e itens com efeitos que entram em cd","cat":"Build","rar":"rara","img":""},{"id":"g5","title":"Mão fechada","text":"Ninguém gasta souls antes do minuto 8-10. A primeira compra sai toda de uma vez.","cat":"Build","rar":"rara","img":""},{"id":"g6","title":"Sem zipline","text":"Zipline proibida. Quem chegar atrasado na luta, chegou a pé.","cat":"Handicap","rar":"comum","img":""},{"id":"g7","title":"Lane no corpo a corpo","text":"Até o minuto 5, só melee e parry. Tiro e habilidade só depois disso.","cat":"Handicap","rar":"comum","img":""},{"id":"g8","title":"Minimapa desligado","text":"Ninguém olha o minimapa. Posição do inimigo só por callout no voz. Use o seguinte comando no F7: citadel_render_minimap false\n","cat":"Handicap","rar":"rara","img":""},{"id":"g9","title":"Lane única","text":"O grupo todo na mesma lane até a primeira Guardian cair. Depois o grupo se divide em dois (3x3) para derrubar os guardians restantes.","cat":"Objetivo","rar":"comum","img":""},{"id":"g10","title":"Prioridade Mid-Boss","text":"Assim que chegar aos 10 minutos, vão imediatamente ao Mid-Boss. Sem votação.","cat":"Objetivo","rar":"rara","img":""},{"id":"g11","title":"Urn do mais pobre","text":"Quem carrega a Soul Urn é sempre o jogador com menos souls do grupo, mas ele não pode entregar.","cat":"Objetivo","rar":"rara","img":""},{"id":"g12","title":"Primeiros 5 no camp","text":"Ninguém fica em lane nos primeiros 5 minutos. Todo mundo no jungle.","cat":"Objetivo","rar":"comum","img":""},{"id":"g13","title":"Sem falar","text":"Sem voz até o primeiro Guardian cair. Cada player tem um Guardian atribuido a sua voz. Sorteie. ","cat":"Comunicação","rar":"rara","img":""},{"id":"g14","title":"Só perguntas","text":"Na voz, só vale falar em forma de pergunta. Se afirmar, precisa imediatamente se matar na base inimiga.","cat":"Comunicação","rar":"comum","img":""},{"id":"g15","title":"Sem nomes","text":"Não vale dizer nada sobre Deadlock. Tem que descrever o que quer dizer.","cat":"Comunicação","rar":"rara","img":""},{"id":"g16","title":"Narrador morto","text":"Quem morreu narra a partida para o grupo até renascer. Dois ou mais podem narrar ao mesmo tempo.","cat":"Comunicação","rar":"comum","img":""},{"id":"g17","title":"Elogio obrigatório","text":"Depois de cada morte, o grupo elogia uma coisa que o inimigo fez bem. Sem ironia.","cat":"Comunicação","rar":"comum","img":""},{"id":"g18","title":"Líder rotativo","text":"A cada 10 minutos muda o líder. Só ele chama luta, objetivo e recuo. Sorteie a ordem.","cat":"Caos","rar":"comum","img":""},{"id":"g21","title":"Dado de tudo","text":"Rolem dado para herói.","cat":"Caos","rar":"rara","img":""},{"id":"g22","title":"Duas cartas","text":"Sorteie mais uma carta e cumpram as duas ao mesmo tempo.","cat":"Caos","rar":"lendaria","img":""},{"id":"g24","title":"Tudo no dado","text":"Heróis e itens sorteados. O grupo só executa. Sorteie em: https://buildlocker.gg/random-build\n'Random Hero' e 'Tier Sensible'","cat":"Caos","rar":"lendaria","img":""},{"id":"n1792631502249515wm","title":"Nova role","text":"Dois jungles. um de cada lado.","cat":"Caos","rar":"comum","img":""},{"id":"n1792633043635hc0gw","title":"PCD","text":"Sem hud e Sem som","cat":"Caos","rar":"comum","img":""},{"id":"n17926333352115s7td","title":"DPI nas alturas","text":"A cada morte, aumente a sua sensibilidade em 1,0","cat":"Caos","rar":"comum","img":""}]},{"id":"h","name":"Heróis","cards":[{"id":"h0","title":"Abrams","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h1","title":"Apollo","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h2","title":"Bebop","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h3","title":"Billy","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h4","title":"Calico","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h5","title":"Celeste","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h6","title":"Doorman","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h7","title":"Drifter","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h8","title":"Dynamo","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h9","title":"Graves","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h10","title":"Grey Talon","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h11","title":"Haze","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h12","title":"Holliday","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h13","title":"Infernus","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h14","title":"Ivy","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h15","title":"Kelvin","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h16","title":"Lady Geist","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h17","title":"Lash","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h18","title":"McGinnis","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h19","title":"Mina","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h20","title":"Mirage","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h21","title":"Mo & Krill","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h22","title":"Paige","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h23","title":"Paradox","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h24","title":"Pocket","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h25","title":"Rem","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h26","title":"Seven","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h27","title":"Shiv","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h28","title":"Silver","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h29","title":"Sinclair","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h30","title":"Venator","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h31","title":"Victor","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h32","title":"Vindicta","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h33","title":"Viscous","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h34","title":"Vyper","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h35","title":"Warden","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h36","title":"Wraith","text":"","cat":"Herói","rar":"comum","img":""},{"id":"h37","title":"Yamato","text":"","cat":"Herói","rar":"comum","img":""}]}];
@@ -2497,7 +2690,7 @@ if(testModeButton){
 const KEY="deadlock-deck-v3";
 /* Reset único: quem tem dados salvos sem "epoch" (versões antigas) volta ao início UMA vez.
    Os dados antigos são guardados em BKEY antes. Só aumente RESET_EPOCH se quiser forçar outro reset. */
-const RESET_EPOCH=3,APP_VERSION="1.30.5",BKEY="deadlock-deck-v3:backup";
+const RESET_EPOCH=3,APP_VERSION="1.31.4",BKEY="deadlock-deck-v3:backup";
 // Reset único de estados criados antes da v1.9.4. Futuras atualizações não reiniciam
 // os dados sem uma migração explícita; o backup deve ser confirmado antes do reset.
 const RESET_BEFORE_VERSION="1.9.4",INTRO_KEY="deadlock-deck-v3:intro-hidden";
@@ -2630,7 +2823,11 @@ function cleanCfg(c){
     const v=c.fx&&c.fx[k]&&typeof c.fx[k]==="object"?c.fx[k]:d.fx[k];
     fx[k]={in:ENTRADAS[v.in]?v.in:d.fx[k].in,fx:EFEITOS[v.fx]?v.fx:d.fx[k].fx};
   }o.fx=fx;
-  if(!BGFX[o.bgfx])o.bgfx="glow";
+  if(!BGFX[o.bgfx])o.bgfx="vignette";
+  o.bgfxDeck=BGFX[o.bgfxDeck]?o.bgfxDeck:(BGFX[c.bgfx]?c.bgfx:d.bgfxDeck);
+  o.bgfxAlmas=BGFX[o.bgfxAlmas]?o.bgfxAlmas:d.bgfxAlmas;
+  if(!c.bgSplitReady&&!(BGFX[c.bgfxDeck]&&BGFX[c.bgfxAlmas])){o.bgfxDeck="vignette";o.bgfxAlmas="dots";}
+  o.bgSplitReady=true;o.bgfx=o.bgfxDeck;
   if(!FACES[o.face])o.face="solid";
   if(!SFX[o.pack])o.pack="soft";
   o.finiteN=Math.min(60,Math.max(3,Math.round(+o.finiteN)||10));o.track=true;o.quick=c.quick===true;o.compact=!!o.compact;
@@ -2638,7 +2835,7 @@ function cleanCfg(c){
   o.cw=Math.min(440,Math.max(200,+o.cw||300));o.flip=Math.min(1600,Math.max(0,+o.flip||700));
   if(c.profile===undefined)o.profile=PROFILES[c.preset]?"b:"+c.preset:(c.preset===undefined?d.profile:"");
   const bp=typeof o.profile==="string"&&o.profile.startsWith("b:")?PROFILES[o.profile.slice(2)]:null;
-  if(bp&&!o.mod){o.colors=cleanColors(bp.colors);o.back=bp.back;o.bgfx=bp.bgfx||"glow";o.face=bp.face||"solid"}
+  if(bp&&!o.mod){o.colors=cleanColors(bp.colors);o.back=bp.back;o.face=bp.face||"solid"}
   return o;
 }
 function cleanProfile(p){
@@ -2647,11 +2844,11 @@ function cleanProfile(p){
   return{id:String(p.id),name:String(p.name),style:{colors:cleanColors(s.colors),font:FONTS[s.font]?s.font:"serif",cw:Math.min(440,Math.max(200,+s.cw||300)),back:BACKS[s.back]?s.back:"stripes",backImg:okImg(s.backImg)?s.backImg:"",bgfx:BGFX[s.bgfx]?s.bgfx:"glow",face:FACES[s.face]?s.face:"solid"}};
 }
 const allProfiles=()=>[...Object.entries(PROFILES).map(([n,p])=>({id:"b:"+n,name:n,style:p})),...S.profiles];
-const curStyle=()=>({colors:{...S.cfg.colors},font:S.cfg.font,cw:S.cfg.cw,back:S.cfg.back,backImg:S.cfg.backImg||"",bgfx:S.cfg.bgfx,face:S.cfg.face});
+const curStyle=()=>({colors:{...S.cfg.colors},font:S.cfg.font,cw:S.cfg.cw,back:S.cfg.back,backImg:S.cfg.backImg||"",bgfx:S.cfg.bgfxDeck||S.cfg.bgfx,face:S.cfg.face});
 function applyProfile(id){
   const p=allProfiles().find(x=>x.id===id);if(!p)return;
   const s=p.style,c=S.cfg;
-  c.colors=cleanColors(s.colors);c.font=s.font||"serif";c.cw=s.cw||300;c.back=s.back||"stripes";c.backImg=s.backImg||"";c.bgfx=s.bgfx||"glow";c.face=s.face||"solid";c.profile=id;c.mod=false;
+  c.colors=cleanColors(s.colors);c.font=s.font||"serif";c.cw=s.cw||300;c.back=s.back||"stripes";c.backImg=s.backImg||"";c.bgfxDeck=s.bgfx||"vignette";c.bgfx=c.bgfxDeck;c.face=s.face||"solid";c.profile=id;c.mod=false;
   applyCfg();save();
 }
 let S=load(true),filt=new Set(),lastIds=new Set(),used={},table=[],busy=false,rrUsed=0,ed={d:null,c:null,q:"",dirty:false};
@@ -2878,7 +3075,10 @@ function applyCfg(){
   for(const[k,v]of Object.entries(c.colors))r.setProperty("--"+k,v);
   r.setProperty("--cw",c.cw+"px");r.setProperty("--flip",flipMs()+"ms");
   r.setProperty("--fh",FONTS[c.font][1]);
-  r.setProperty("--bgi",c.bgi/100);document.documentElement.dataset.bg=c.bgfx;document.documentElement.dataset.face=c.face;document.body.classList.toggle("compact",!!c.compact);document.body.classList.toggle("tracking",!!c.track);document.body.classList.toggle("quick-draw",!!c.quick);
+  r.setProperty("--bgi",c.bgi/100);document.documentElement.dataset.bg=c.bgfxDeck||c.bgfx;document.documentElement.dataset.almasBg=c.bgfxAlmas||"dots";document.documentElement.dataset.face=c.face;document.body.classList.toggle("compact",!!c.compact);document.body.classList.toggle("tracking",!!c.track);document.body.classList.toggle("quick-draw",!!c.quick);
+  const deckSurface=$("main"),soulSurface=$("soulView");
+  if(deckSurface)deckSurface.dataset.bgx=c.bgfxDeck||c.bgfx||"vignette";
+  if(soulSurface)soulSurface.dataset.bgx=c.bgfxAlmas||"dots";
   const trackCheck=$("#trackToggle");if(trackCheck)trackCheck.checked=!!c.track;
   const quickCheck=$("#quickToggle");if(quickCheck)quickCheck.checked=!!c.quick;
   r.setProperty("--onacc",lum(c.colors.gold)>.4?"#16110a":"#ffffff");
@@ -2936,7 +3136,14 @@ const ALMAS_CARD_POOL=Object.freeze([
   {id:"sweep",title:"Atalho dos Becos",text:"Antecipe a próxima ocorrência de rua.",cat:"Evento",rar:"rara",img:""},
   {id:"focus",title:"Disciplina de Paradox",text:"Melhore brevemente a coleta manual.",cat:"Estratégia",rar:"rara",img:""},
   {id:"deposit",title:"Caixa-Forte Oculta",text:"Recupere uma parcela moderada de Souls para novos investimentos.",cat:"Recursos",rar:"lendaria",img:""},
-  {id:"veil",title:"Véu das Lanes",text:"Acelere a produção por um curto período.",cat:"Domínio",rar:"rara",img:""}
+  {id:"veil",title:"Véu das Lanes",text:"Acelere a produção por um curto período.",cat:"Domínio",rar:"rara",img:""},
+  {id:"eclipse",title:"Eclipse dos Patronos",text:"Ganhe um grande lote de Souls e ative +10% de produção por 60 segundos.",cat:"Fenômeno",rar:"lendaria",img:""},
+  {id:"prophecy",title:"Presságio de Paradox",text:"Antecipe o Pulso do Patrono em 90 segundos e receba Souls.",cat:"Destino",rar:"lendaria",img:""},
+  {id:"bastion",title:"Queda do Bastião",text:"Encurte em 90 segundos a espera pelo Mid-Boss e receba Souls.",cat:"Confronto",rar:"lendaria",img:""},
+  {id:"jackpot",title:"Tesouro da Cidade",text:"Descubra uma remessa excepcional de Souls no submundo.",cat:"Tesouro",rar:"lendaria",img:""},
+  {id:"goldroute",title:"Rota Dourada",text:"Antecipe as caixas e receba Souls de um comboio secreto.",cat:"Recursos",rar:"lendaria",img:""},
+  {id:"twinflame",title:"Pacto da Chama Dupla",text:"Reforce os cliques por 60 segundos e receba Souls.",cat:"Pacto",rar:"lendaria",img:""},
+  {id:"convergence",title:"Convergência das Ruas",text:"Antecipe uma ocorrência de rua e receba Souls.",cat:"Evento",rar:"lendaria",img:""}
 ]);
 const ALMAS_CARD_DELAY_MS=90*1000;
 const almasCardsDisabled=new URLSearchParams(location.search).get("almas-cards")==="off";
@@ -2992,7 +3199,7 @@ async function drawAlmasCard(){
   if(st.readyAt>Date.now()){syncAlmasCardUi();return}
   // Evita cartas repetidas seguidas, preservando variedade.
   const options=ALMAS_CARD_POOL.filter(c=>c.id!==st.lastId);
-  const weights={comum:5,rara:3,lendaria:1};
+  const weights={comum:5,rara:3,lendaria:.6};
   let remaining=Math.random()*options.reduce((sum,c)=>sum+weights[c.rar],0);
   const choice=options.find(c=>(remaining-=weights[c.rar])<0)||options[options.length-1];
   // Salva a recompensa e o cooldown de maneira atômica no Almas, nunca no DeckLock.
@@ -3992,8 +4199,8 @@ function renderSet(){
   br.append(bu,bx);
   const wr=el("div","row");
   Object.entries(RARS).forEach(([k,n])=>{const i=el("input");i.type="number";i.min=0;i.max=100;i.value=c.w[k];i.oninput=()=>{c.w[k]=Math.max(0,+i.value||0);save()};wr.append(field("Peso "+n,i))});
-  const bgg=el("div","bkgrid");
-  Object.entries(BGFX).forEach(([k,n])=>{const o=el("button","bkopt"+(c.bgfx===k?" on":""));o.setAttribute("aria-pressed",c.bgfx===k);const m=el("div","bgm");m.dataset.b=k;o.append(m,el("span","",shopAllow("bg",k)?n:"🔒 "+n));o.onclick=()=>{if(!shopAllow("bg",k)){shopCategory="Fundos";$("#bShop").click();return}c.bgfx=k;styl();renderSet()};bgg.append(o)});
+  const makeBgGrid=(key)=>{const wrap=el("div","bkgrid");Object.entries(BGFX).forEach(([k,n])=>{const on=c[key]===k;const o=el("button","bkopt"+(on?" on":""));o.setAttribute("aria-pressed",on);const m=el("div","bgm");m.dataset.b=k;o.append(m,el("span","",shopAllow("bg",k)?n:"🔒 "+n));o.onclick=()=>{if(!shopAllow("bg",k)){shopCategory="Fundos";$("#bShop").click();return}c[key]=k;if(key==="bgfxDeck")c.bgfx=k;styl();renderSet()};wrap.append(o)});return wrap};
+  const bggDeck=makeBgGrid("bgfxDeck"),bggAlmas=makeBgGrid("bgfxAlmas");
   const fxRows=el("div","fxrows"),pv=el("div","");pv.id="fxPrev";
   Object.entries(RARS).forEach(([rk,rn])=>{
     const row=el("div","row fxrow"),sIn=el("select"),sFx=el("select");
@@ -4020,7 +4227,7 @@ function renderSet(){
     el("p","empty",c.mod?"O estilo foi alterado em relação ao perfil escolhido. Use 'Atualizar perfil' ou 'Salvar estilo atual como perfil' para guardar.":"Um perfil guarda cores, fonte, tamanho da carta e verso."),
     el("h3","","Cores"),grid,
     el("h3","","Cartas"),field("Fundo da frente da carta",fcs),el("h3","","Verso das cartas"),bg,br,
-    el("h3","","Fundo do site"),bgg,rng("Intensidade do fundo","bgi",0,100,5,"%",true),
+    el("h3","","Fundo do site"),el("p","empty","Agora o DeckLock e o Almas podem usar fundos diferentes."),el("strong","","Fundo do DeckLock"),bggDeck,el("strong","","Fundo do Almas"),bggAlmas,rng("Intensidade do fundo","bgi",0,100,5,"%",true),
     el("h3","","Aparência"),field("Fonte dos títulos",fs),rng("Tamanho da carta","cw",200,440,10,"px",true),
     el("h3","","Animação e som"),chk(" Animações ligadas","anim"),rng("Duração da virada","flip",200,1600,50,"ms"),chk(" Sons ligados","snd"),field("Pacote de sons",spk),
     el("h3","","Animações por raridade"),el("p","empty","Cada raridade pode ter uma entrada e um efeito diferentes. Use Testar para ver."),fxRows,pv,rng("Intensidade dos efeitos","fxn",50,200,10,"%"),
@@ -4067,6 +4274,48 @@ function dl(name,obj){
   const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(obj,null,1)],{type:"application/json"}));
   a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500);
 }
+// Backups independentes do Almas: não alteram o save principal.
+const SOUL_SAVE_KEY="almasmortas_v1",SOUL_BACKUP_PREFIX="almas:backup:v2:",SOUL_BACKUP_LIMIT=12;
+function soulBackupList(){
+ const result=[];
+ try{for(let i=0;i<localStorage.length;i++){
+  const key=localStorage.key(i);if(!key?.startsWith(SOUL_BACKUP_PREFIX))continue;
+  const parts=key.slice(SOUL_BACKUP_PREFIX.length).split(":");
+  const stamp=Number(parts[0]);if(Number.isFinite(stamp))result.push({key,stamp,reason:parts.slice(1).join(":")||"rotina"});
+ }}catch(e){}
+ return result.sort((a,b)=>b.stamp-a.stamp);
+}
+function soulBackup(reason="rotina",force=false){
+ try{
+  const raw=localStorage.getItem(SOUL_SAVE_KEY);if(!raw)return false;
+  const obj=JSON.parse(raw);if(!obj||typeof obj!=="object"||!Number.isFinite(Number(obj.f)))return false;
+  const all=soulBackupList();
+  if(!force&&all[0]&&Date.now()-all[0].stamp<5*60*1000)return true;
+  const key=SOUL_BACKUP_PREFIX+Date.now()+":"+reason;
+  const payload=JSON.stringify({format:"almas-backup-v2",createdAt:Date.now(),reason,save:obj});
+  localStorage.setItem(key,payload);
+  if(localStorage.getItem(key)!==payload)return false;
+  const list=soulBackupList();
+  const special=list.filter(x=>x.reason==="elo"||x.reason==="divisao").slice(0,4);
+  const keep=new Set([...list.slice(0,SOUL_BACKUP_LIMIT),...special].map(x=>x.key));
+  for(const item of list)if(!keep.has(item.key))localStorage.removeItem(item.key);
+  return true;
+ }catch(e){return false}
+}
+function soulBackupDownload(payload,name){dl(name,payload)}
+function soulValidateBackup(payload){
+ const data=payload?.format==="almas-backup-v2"?payload.save:payload;
+ return data&&typeof data==="object"&&!Array.isArray(data)&&Number.isFinite(data.f)&&data.f>=0&&Array.isArray(data.own)&&Number.isFinite(data.rituals)?data:null;
+}
+function soulRestore(data){
+ const parsed=soulValidateBackup(data);if(!parsed){toast("Arquivo do Almas inválido.");return}
+ if(!confirm("Restaurar este progresso do Almas? O progresso atual será substituído e a página será recarregada."))return;
+ const old=localStorage.getItem(SOUL_SAVE_KEY);
+ if(old&&!soulBackup("antes-restaurar",true)){toast("Não foi possível proteger o save atual. Restauração cancelada.");return}
+ try{const raw=JSON.stringify(parsed);localStorage.setItem(SOUL_SAVE_KEY,raw);if(localStorage.getItem(SOUL_SAVE_KEY)!==raw)throw Error("verify");location.reload()}
+ catch(e){if(old!==null)try{localStorage.setItem(SOUL_SAVE_KEY,old)}catch(_){}toast("Não foi possível restaurar o Almas.")}
+}
+window.addEventListener("almas:backup",e=>{soulBackup(e.detail?.reason||"rotina",e.detail?.force===true)});
 function renderFiles(){
   const b=$("#filesBody");b.innerHTML="";
   const item=(title,desc,file,payload,canAdd,share)=>{
@@ -4077,6 +4326,52 @@ function renderFiles(){
     if(share){const bc=el("button","","Copiar código");bc.onclick=()=>shareDeck(payload.decks[0],false);const bl=el("button","","Copiar link");bl.onclick=()=>shareDeck(payload.decks[0],true);a.append(bc,bl)}
     r.append(t,a);return r;
   };
+  const soulSection=el("section","soul-backup-section");
+  const hero=el("div","soul-backup-hero"),headline=el("div","soul-backup-heading");
+  headline.append(el("span","soul-backup-kicker","ALMAS · PROTEÇÃO DE PROGRESSO"),el("h3","","Arquivo de Almas"),el("p","empty","Cópias locais automáticas, exportação e recuperação da sua jornada."));
+  const sbActions=el("div","soul-backup-actions");
+  const makeBackup=el("button","soul-backup-primary","Criar backup agora");
+  makeBackup.onclick=()=>{if(soulBackup("manual",true)){renderFiles();toast("Backup do Almas criado.")}else toast("Não foi possível criar o backup do Almas.")};
+  const exportSoul=el("button","","Exportar save");
+  exportSoul.onclick=()=>{try{const raw=localStorage.getItem(SOUL_SAVE_KEY);if(!raw)throw Error();const data=JSON.parse(raw);if(!soulValidateBackup(data))throw Error();soulBackupDownload({format:"almas-backup-v2",createdAt:Date.now(),reason:"exportado",save:data},"almas-"+new Date().toISOString().slice(0,10)+".json")}catch(e){toast("Nenhum save válido do Almas encontrado.")}};
+  // Mesmo código Base64 UTF-8 usado em Almas > Backup > Gerar código.
+  const exportSoulCode=el("button","","Baixar código TXT");
+  exportSoulCode.title="Baixar um TXT com o código compatível com a importação de save do Almas";
+  exportSoulCode.onclick=()=>{
+    try{
+      const raw=localStorage.getItem(SOUL_SAVE_KEY);
+      if(!raw)throw Error("missing");
+      const data=JSON.parse(raw);
+      if(!soulValidateBackup(data)||!Array.isArray(data.items))throw Error("invalid");
+      const code=btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+      const url=URL.createObjectURL(new Blob([code],{type:"text/plain;charset=utf-8"}));
+      const a=document.createElement("a");a.href=url;
+      a.download="almas-codigo-"+new Date().toISOString().slice(0,10)+".txt";
+      a.click();setTimeout(()=>URL.revokeObjectURL(url),1500);
+      toast("Código do save baixado em TXT.");
+    }catch(e){toast("Não foi possível gerar o código do Almas.")}
+  };
+  const importSoul=el("button","","Importar backup");const inputSoul=el("input");inputSoul.type="file";inputSoul.accept=".json,application/json";inputSoul.hidden=true;
+  inputSoul.onchange=async()=>{const file=inputSoul.files?.[0];if(!file)return;try{soulRestore(JSON.parse(await file.text()))}catch(e){toast("Arquivo JSON inválido.")}inputSoul.value=""};
+  importSoul.onclick=()=>inputSoul.click();sbActions.append(makeBackup,exportSoul,exportSoulCode,importSoul,inputSoul);
+  hero.append(headline,sbActions);soulSection.append(hero);
+  const copies=soulBackupList(),sub=el("div","soul-backup-subtitle");
+  sub.append(el("strong","","Cópias disponíveis"),el("span","empty",copies.length+" salvas neste navegador"));soulSection.append(sub);
+  const grid=el("div","soul-backup-grid");
+  if(!copies.length)grid.append(el("p","empty","Nenhuma cópia automática ainda. A primeira será criada ao retornar ao jogo."));
+  copies.forEach(entry=>{
+   const card=el("article","soul-backup-card"),info=el("div","soul-backup-card-info"),actions=el("div","soul-backup-card-actions");
+   let data=null;try{data=JSON.parse(localStorage.getItem(entry.key))}catch(e){}
+   if(!soulValidateBackup(data))return;
+   const label=entry.reason==="elo"?"Subida de elo":entry.reason==="divisao"?"Nova divisão":entry.reason==="retorno"?"Retorno ao jogo":entry.reason==="manual"?"Backup manual":entry.reason==="antes-restaurar"?"Antes da restauração":"Backup periódico";
+   info.append(el("strong","",label),el("span","empty",new Date(entry.stamp).toLocaleString("pt-BR")+" · "+(data.save.rituals||0)+" Rituais"));
+   const down=el("button","","Baixar");down.onclick=()=>soulBackupDownload(data,"almas-backup-"+entry.stamp+".json");
+   const restore=el("button","","Restaurar");restore.onclick=()=>soulRestore(data);
+   const del=el("button","soul-backup-delete","Excluir");del.onclick=()=>{if(confirm("Excluir esta cópia do Almas?")){localStorage.removeItem(entry.key);renderFiles()}};
+   actions.append(down,restore,del);card.append(info,actions);grid.append(card);
+  });
+  soulSection.append(grid,el("p","soul-backup-foot","Backups automáticos a cada 5 minutos de jogo, no retorno à página e ao avançar de elo ou divisão. Guardados somente neste navegador; exporte um arquivo para protegê-los fora dele."));
+  b.append(soulSection);
   const n=EXEMPLOS.reduce((x,d)=>x+d.cards.length,0);
   const slug=t=>t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\W+/g,"-").replace(/^-|-$/g,"")||"deck";
   const cr=el("div","row"),ci=el("input");ci.type="text";ci.placeholder="Cole um código ou link de deck";ci.setAttribute("aria-label","Código ou link de deck");
@@ -4105,6 +4400,7 @@ function renderFiles(){
     });
   }
 }
+window.addEventListener("load",()=>setTimeout(()=>soulBackup("retorno",true),1200),{once:true});
 $("#bFiles").onclick=()=>{renderFiles();$("#dlgF").showModal()};
 $("#bFClose").onclick=()=>$("#dlgF").close();
 function showIntro(){
@@ -4559,6 +4855,7 @@ function initAlmasMortas(root){
     $("rankPromotionInfo").textContent=rt("finished")+" · +"+fmt(report.run.favor)+" "+rt("gained")+" · "+t.rituals+": "+S.rituals;
     fillRitualResult(report);
     $("rankPromotionClose").textContent=t.continue;
+    window.dispatchEvent(new CustomEvent("almas:backup",{detail:{reason:isRankUp?"elo":"divisao",force:true}}));
     overlay.hidden=false;window.dispatchEvent(new CustomEvent("decklock:modal",{detail:{open:true}}));soulTone("promotion");showSoulBurst("rank","");
     priorRankFocus=root.activeElement;
     $("rankPromotionClose").focus();
@@ -4569,47 +4866,35 @@ function initAlmasMortas(root){
   }
   let requireBlessingPurchase=false;
   function nextPostRitualPhase(){
-    S.postRitualPhase="tactic";
-    if(save(true))renderPostRitual();else toast("Não foi possível salvar. Tente novamente.");
+    if(!transact(()=>{S.postRitualPhase="";S.postBlessingChosen=false;S.tactic="none";S.tacticChangedAt=0}))return;
+    $("postRitualOverlay").hidden=true;
+    tab("p");drawAll();$("orb").focus();
   }
   function renderPostRitual(){
+    // Saves antigos que aguardavam a etapa de Táticas são liberados automaticamente.
+    if(S.postRitualPhase==="tactic"){
+      S.postRitualPhase="";S.postBlessingChosen=false;S.tactic="none";save(true);
+    }
     const overlay=$("postRitualOverlay"),phase=S.postRitualPhase;
     overlay.hidden=!phase;
     if(!phase){drawAll();return}
     const list=$("postRitualChoices");list.replaceChildren();
-    if(phase==="blessing"){
-      const affordable=PRK.some((spec,i)=>S.perk[i]<spec[2]&&availableFavor()>=S.perk[i]+1);
-      requireBlessingPurchase=affordable&&!S.postBlessingChosen;
-      $("postRitualStep").textContent="ETAPA 1 DE 2 · FAVOR DO PATRONO";
-      $("postRitualTitle").textContent="Escolha uma Bênção";
-      $("postRitualText").textContent=affordable?"Você recebeu Favor! Compre pelo menos uma Bênção permanente antes de iniciar a próxima run.":"Você já possui todas as Bênçãos possíveis ou não tem Favor suficiente. Continue para a Tática sem precisar comprar.";
-      $("postRitualWallet").textContent=fmt(availableFavor())+" Favor disponível";
-      PRK.forEach((spec,i)=>{
-        const lv=S.perk[i],price=lv+1,maxed=lv>=spec[2],afford=availableFavor()>=price;
-        makeChoice(list,{name:spec[0],desc:spec[1],meta:maxed?"Máximo":`Nv. ${lv}/${spec[2]} · ${price} Favor`,sign:"",disabled:maxed||!afford},()=>{
-          if(S.perk[i]>=spec[2]||availableFavor()<price)return;
-          if(!transact(()=>{S.spent+=price;S.perk[i]++;S.postBlessingChosen=true}))return;
-          requireBlessingPurchase=false;
-          soulTone("milestone");renderPostRitual();
-          requireBlessingPurchase=false;
-        });
+    const affordable=PRK.some((spec,i)=>S.perk[i]<spec[2]&&availableFavor()>=S.perk[i]+1);
+    requireBlessingPurchase=affordable&&!S.postBlessingChosen;
+    $("postRitualStep").textContent="RECOMPENSA DO RITUAL · FAVOR DO PATRONO";
+    $("postRitualTitle").textContent="Escolha uma Bênção";
+    $("postRitualText").textContent=affordable?"Use o Favor acumulável em pelo menos uma Bênção permanente para iniciar a nova run.":"Você já possui todas as Bênçãos possíveis ou não tem Favor suficiente. Pode iniciar a próxima run normalmente.";
+    $("postRitualWallet").textContent=fmt(availableFavor())+" Favor disponível";
+    PRK.forEach((spec,i)=>{
+      const lv=S.perk[i],price=lv+1,maxed=lv>=spec[2],afford=availableFavor()>=price;
+      makeChoice(list,{name:spec[0],desc:spec[1],meta:maxed?"Máximo":`Nv. ${lv}/${spec[2]} · ${price} Favor`,sign:"",disabled:maxed||!afford},()=>{
+        if(S.perk[i]>=spec[2]||availableFavor()<price)return;
+        if(!transact(()=>{S.spent+=price;S.perk[i]++;S.postBlessingChosen=true}))return;
+        soulTone("milestone");renderPostRitual();
       });
-      $("postRitualNext").textContent=affordable?"Escolher Tática →":"Continuar sem Bênção →";
-      $("postRitualNext").disabled=requireBlessingPurchase;
-    }else{
-      $("postRitualStep").textContent="ETAPA 2 DE 2 · NOVA RUN";
-      $("postRitualTitle").textContent="Escolha uma Tática";
-      $("postRitualText").textContent="Uma estratégia para esta run. Você poderá escolher outra após o próximo Ritual. Nenhum custo em Souls.";
-      $("postRitualWallet").textContent="Uma única Tática ativa";
-      TACTIC_CATALOG.forEach(spec=>{
-        makeChoice(list,{name:ext(spec.id==="none"?"neutral":spec.id),desc:ext(spec.id==="none"?"neutralDesc":spec.id+"Desc"),meta:"Selecionar",sign:"",chosen:false},()=>{
-          if(!transact(()=>{S.tactic=spec.id;S.tacticChangedAt=Date.now();S.postRitualPhase="";S.postBlessingChosen=false}))return;
-          overlay.hidden=true;soulTone("contract");tab("p");drawAll();$("orb").focus();
-        });
-      });
-      $("postRitualNext").textContent="Escolha uma Tática acima";
-      $("postRitualNext").disabled=true;
-    }
+    });
+    $("postRitualNext").textContent="Iniciar nova run →";
+    $("postRitualNext").disabled=requireBlessingPurchase;
   }
   $("postRitualNext").addEventListener("click",()=>{
     if(S.postRitualPhase==="blessing"&&!requireBlessingPurchase)nextPostRitualPhase();
@@ -4779,7 +5064,28 @@ function initAlmasMortas(root){
     ["Wraith · Emboscada","Cliques +25%, produção automática -5%."],["Ivy · Correio Urbano","Rotas de Caixas +30% de prêmio; produção sem alteração."],["Haze · Silêncio","Produção automática +12%; cliques -8%."]];
   var TK=["York, Broadway e Park disputam as últimas Souls dos Troopers.","Caixas retornaram aos becos — verifique suas rotas.","A máquina Sinner's Sacrifice voltou a chamar por um tributo.","A Soul Urn espera um novo portador.","O Mid-Boss guarda o covil nas profundezas.","Um Walker recuou e abriu caminho na lane.","O Patron ainda espera seu próximo Ritual.","Uma estátua dourada pode aparecer a qualquer momento."];
 
-  var S={f:0,life:0,own:Array(GEN.length).fill(0),items:[],legacy:0,spent:0,perk:Array(PRK.length).fill(0),boss:0,bossT:Date.now()+120000,stance:0,clicks:0,ts:Date.now(),rituals:0,bestRitualGain:0,lastRitualGain:0,rewardBoost:null,pendingReward:null,contracts:[],contractStats:{purchases:0},contractClaims:0,contractBoost:null,rankCredit:null,rankFormat:1,tutorialSeen:null,masteryXp:null,records:null,unlockedOps:null,tickets:null,ticketBoughtRun:false,beatNext:Date.now()+420000,beatState:null,beatWins:0,beatPlays:0,extraStats:null,itemSchema:1,cacheT:Date.now()+45000,doctrinesOwned:[],doctrineSpent:0,doctrineActive:"none",doctrineRefunded:true,tactic:"none",tacticChangedAt:0,booster:null,boosterReadyAt:0,streetNext:Date.now()+240000,streetPending:false,streetCount:0,streetEffect:null,fund:null,fundReadyAt:0,fundCompleted:0,postRitualPhase:"",postBlessingChosen:false,brawlNext:Date.now()+600000,brawl:null,brawlWins:0,brawlMatches:0};
+  // Opções de uma ocorrência: três ofertas diferentes, apenas um resgate.
+  // Os IDs são salvos para impedir que atualizar a página altere as opções.
+  const STREET_CHOICES=[
+    {id:"streetCash",sign:"▣",name:["Carga Recuperada","Recovered Shipment","Carga recuperada","Cargaison récupérée","Geborgene Lieferung"],desc:["Souls equivalentes a 30 s de produção.","Souls worth 30 s of production.","Souls de 30 s de producción.","Souls pour 30 s de production.","Souls für 30 s Produktion."]},
+    {id:"streetPower",sign:"✦",name:["Colheita Acelerada","Accelerated Harvest","Cosecha acelerada","Récolte accélérée","Beschleunigte Ernte"],desc:["+15% Souls/s por 75 s.","+15% Souls/s for 75 s.","+15% Souls/s por 75 s.","+15 % Souls/s pendant 75 s.","+15 % Souls/s für 75 s."]},
+    {id:"streetManual",sign:"♠",name:["Foco da Emboscada","Ambush Focus","Enfoque de emboscada","Concentration d'embuscade","Hinterhalt-Fokus"],desc:["+20% no clique manual por 75 s.","+20% manual clicks for 75 s.","+20% al clic manual por 75 s.","+20 % aux clics pendant 75 s.","+20 % manuelle Klicks für 75 s."]},
+    {id:"streetCrates",sign:"◇",name:["Mapa do Contrabando","Smuggler's Map","Mapa del contrabando","Carte des contrebandiers","Schmugglerkarte"],desc:["Antecipe a próxima caixa; sem rota, ganhe Souls.","Advance the next crate; gain Souls if unavailable.","Adelanta la siguiente caja o gana Souls.","Avance la prochaine caisse ou gagne des Souls.","Nächste Kiste früher oder Souls."]},
+    {id:"streetBoss",sign:"♜",name:["Informante do Covil","Lair Informant","Informante de la guarida","Informateur du repaire","Informant der Höhle"],desc:["Reduza a espera do Mid-Boss em até 45 s.","Cut up to 45 s from Mid-Boss wait.","Reduce hasta 45 s la espera del jefe.","Réduit l'attente du boss de 45 s max.","Bis zu 45 s weniger Boss-Wartezeit."]},
+    {id:"streetBeat",sign:"◈",name:["Relógio Roubado","Stolen Clock","Reloj robado","Horloge volée","Gestohlene Uhr"],desc:["Antecipe o próximo Pulso em até 60 s.","Advance the next Pulse by up to 60 s.","Adelanta el próximo Pulso hasta 60 s.","Avance la prochaine Impulsion de 60 s max.","Nächster Puls bis zu 60 s früher."]},
+    {id:"streetSupply",sign:"✺",name:["Rede de Suprimentos","Supply Network","Red de suministros","Réseau d'approvisionnement","Nachschubnetz"],desc:["Reduza a recarga dos suprimentos em 60 s.","Reduce supply cooldown by 60 s.","Reduce 60 s de recarga de suministros.","Réduit le délai des fournitures de 60 s.","Nachschub-Abklingzeit −60 s."]},
+    {id:"streetWindfall",sign:"✧",name:["Cofre Esquecido","Forgotten Vault","Bóveda olvidada","Coffre oublié","Vergessener Tresor"],desc:["Receba uma remessa maior de Souls (45 s).","Gain a larger Soul shipment (45 s).","Obtén más Souls (45 s).","Reçois plus de Souls (45 s).","Größere Souls-Lieferung (45 s)."]}
+  ];
+  const streetText=parts=>parts[({"pt-BR":0,en:1,es:2,fr:3,de:4}[soulLang]??0)];
+  function pickStreetOffers(){
+    const pool=STREET_CHOICES.filter(c=>c.id!==S.streetLastPick);
+    // Uma opção econômica garantida, duas opções variadas.
+    const base=pool.filter(c=>["streetCash","streetPower","streetManual","streetWindfall"].includes(c.id));
+    const result=[base[Math.floor(Math.random()*base.length)].id];
+    while(result.length<3){const choices=pool.filter(c=>!result.includes(c.id));result.push(choices[Math.floor(Math.random()*choices.length)].id)}
+    return result;
+  }
+  var S={f:0,life:0,own:Array(GEN.length).fill(0),items:[],legacy:0,spent:0,perk:Array(PRK.length).fill(0),boss:0,bossT:Date.now()+120000,stance:0,clicks:0,ts:Date.now(),rituals:0,bestRitualGain:0,lastRitualGain:0,rewardBoost:null,pendingReward:null,contracts:[],contractStats:{purchases:0},contractClaims:0,contractHistory:[],contractBoost:null,rankCredit:null,rankFormat:1,tutorialSeen:null,masteryXp:null,records:null,unlockedOps:null,tickets:null,ticketBoughtRun:false,beatNext:Date.now()+420000,beatState:null,beatWins:0,beatPlays:0,extraStats:null,itemSchema:1,cacheT:Date.now()+45000,doctrinesOwned:[],doctrineSpent:0,doctrineActive:"none",doctrineRefunded:true,tactic:"none",tacticChangedAt:0,booster:null,boosterReadyAt:0,streetNext:Date.now()+240000,streetPending:false,streetCount:0,streetOffers:[],streetLastPick:"",streetEffect:null,fund:null,fundReadyAt:0,fundCompleted:0,postRitualPhase:"",postBlessingChosen:false,brawlNext:Date.now()+600000,brawl:null,brawlWins:0,brawlMatches:0};
   // Habilitar no endereço: ?almas-dev=1. A partida real nunca é usada pelo console.
   const ALMAS_DEV = new URLSearchParams(window.location.search).get("almas-dev")==="1" || window.__almasDevMode===true;
   var KEY=ALMAS_DEV?"almasmortas_v1_dev":"almasmortas_v1";
@@ -4938,10 +5244,11 @@ function initAlmasMortas(root){
     while(S.own.length<GEN.length)S.own.push(0);
     while(S.perk.length<PRK.length)S.perk.push(0);
     S.contractClaims=Math.floor(nonneg(S.contractClaims,1e8));
+    S.contractHistory=Array.isArray(S.contractHistory)?S.contractHistory.filter(k=>["clicks","purchases","souls","boss","cache","items","gold","beat"].includes(k)).slice(-8):[];
     S.contractStats={purchases:Math.floor(nonneg(S.contractStats?.purchases,1e12))};
-    S.contracts=Array.isArray(S.contracts)?S.contracts.slice(0,3).filter(c=>c&&typeof c==="object"&&["clicks","purchases","souls","boss","cache","items","gold","beat"].includes(c.kind)&&
+    S.contracts=Array.isArray(S.contracts)?S.contracts.slice(0,4).filter(c=>c&&typeof c==="object"&&["clicks","purchases","souls","boss","cache","items","gold","beat"].includes(c.kind)&&
       Number.isFinite(c.start)&&c.start>=0&&Number.isFinite(c.goal)&&c.goal>=1&&Number.isFinite(c.reward)&&c.reward>=0&&c.reward<=1e300)
-      .map(c=>({kind:c.kind,start:Math.floor(c.start),goal:Math.min(Math.floor(c.goal),contractGoalLimit(c.kind,c.tier||"common")),reward:Math.min(c.reward,1e300),tier:["common","advanced","legendary"].includes(c.tier)?c.tier:"common"})):[];
+      .map(c=>({kind:c.kind,start:Math.floor(c.start),goal:Math.min(Math.floor(c.goal),contractGoalLimit(c.kind,c.tier||"common")),reward:Math.min(c.reward,1e300),tier:["common","advanced","legendary"].includes(c.tier)?c.tier:"common",balanceV:c.balanceV===2?2:0})):[];
     if(!S.contractBoost||typeof S.contractBoost!=="object"||!["auto","click"].includes(S.contractBoost.type))S.contractBoost=null;
     else{
       const since=nonneg(S.contractBoost.since,Date.now()+864e5),until=nonneg(S.contractBoost.until,Date.now()+864e5);
@@ -4955,8 +5262,11 @@ function initAlmasMortas(root){
     S.ticketBoughtRun=S.ticketBoughtRun===true;
     S.beatNext=nonneg(S.beatNext,Date.now()+365*864e5)||Date.now()+420000;
     S.beatWins=Math.floor(nonneg(S.beatWins,1e7));S.beatPlays=Math.floor(nonneg(S.beatPlays,1e7));
-    S.beatState=S.beatState&&typeof S.beatState==="object"&&Number.isFinite(S.beatState.start)&&S.beatState.start>0&&Date.now()-S.beatState.start<18000
-      ?{start:S.beatState.start,hits:Math.min(8,Math.max(0,Math.floor(nonneg(S.beatState.hits,8)))),scored:Math.min(8,Math.max(0,Math.floor(nonneg(S.beatState.scored,8))))}:null;
+    S.beatState=S.beatState&&typeof S.beatState==="object"&&Number.isFinite(S.beatState.start)&&S.beatState.start>0&&Date.now()-S.beatState.start<24000
+      ?{start:S.beatState.start,hits:Math.min(8,Math.max(0,Math.floor(nonneg(S.beatState.hits,8)))),scored:Math.min(24,Math.max(0,Math.floor(nonneg(S.beatState.scored,24)))),
+        lastTap:nonneg(S.beatState.lastTap,Date.now()+1000),
+        phaseStarted:Number.isFinite(S.beatState.phaseStarted)&&S.beatState.phaseStarted>=S.beatState.start?S.beatState.phaseStarted:S.beatState.start,
+        phaseOffset:Number.isFinite(S.beatState.phaseOffset)?((S.beatState.phaseOffset%1)+1)%1:0}:null;
     const extra=S.extraStats&&typeof S.extraStats==="object"?S.extraStats:{};
     S.extraStats={cache:Math.floor(nonneg(extra.cache,1e9)),items:Math.floor(nonneg(extra.items,1e9)),gold:Math.floor(nonneg(extra.gold,1e9))};
     S.bossT=nonneg(S.bossT,Date.now()+365*864e5);
@@ -4978,7 +5288,7 @@ function initAlmasMortas(root){
     // Retain the fields in the save for backward compatibility and safe rollbacks.
     S.doctrineActive="none";
     if(!S.doctrineRefunded){S.doctrineRefunded=true;S.doctrineSpent=0;}
-    S.tactic=["none","lanes","crates","boss"].includes(S.tactic)?S.tactic:"none";
+    S.tactic="none";
     S.tacticChangedAt=nonneg(S.tacticChangedAt,Date.now()+86400000);
     const activeWindow=(value,types,maxDuration)=>{
       if(!value||typeof value!=="object"||!types.includes(value.type))return null;
@@ -4986,27 +5296,30 @@ function initAlmasMortas(root){
       return since>0&&until>since&&until-since<=maxDuration?{type:value.type,since,until}:null;
     };
     S.booster=activeWindow(S.booster,["production","click","crates"],90001);
-    S.streetEffect=activeWindow(S.streetEffect,["production"],75001);
+    S.streetEffect=activeWindow(S.streetEffect,["production","click"],75001);
     S.boosterReadyAt=nonneg(S.boosterReadyAt,Date.now()+86400000);
     S.streetNext=nonneg(S.streetNext,Date.now()+86400000)||Date.now()+240000;
-    S.streetCount=Math.min(3,Math.floor(nonneg(S.streetCount,3))|| (S.streetPending===true?1:0));
+    S.streetCount=Math.min(1,Math.floor(nonneg(S.streetCount,3))|| (S.streetPending===true?1:0));
     S.streetPending=S.streetCount>0;
+    S.streetOffers=Array.isArray(S.streetOffers)&&S.streetOffers.length===3&&new Set(S.streetOffers).size===3&&S.streetOffers.every(id=>STREET_CHOICES.some(c=>c.id===id))?S.streetOffers:[];
+    S.streetLastPick=typeof S.streetLastPick==="string"&&STREET_CHOICES.some(c=>c.id===S.streetLastPick)?S.streetLastPick:"";
+    if(!S.streetPending)S.streetOffers=[];
     S.fundReadyAt=nonneg(S.fundReadyAt,Date.now()+86400000);
     S.fundCompleted=Math.floor(nonneg(S.fundCompleted,1e7));
     const f=S.fund;
     S.fund=f&&typeof f==="object"&&Number.isFinite(f.deposit)&&f.deposit>=0&&Number.isFinite(f.start)&&f.start>0&&Number.isFinite(f.due)&&f.due>=f.start&&f.due-f.start<=180001&&Number.isFinite(f.claims)&&f.claims>=0
       ?{deposit:Math.min(f.deposit,1e300),start:f.start,due:f.due,claims:Math.floor(f.claims)}:null;
-    S.postRitualPhase=["blessing","tactic"].includes(S.postRitualPhase)?S.postRitualPhase:"";
+    S.postRitualPhase=S.postRitualPhase==="blessing"?"blessing":"";
     S.postBlessingChosen=S.postBlessingChosen===true;
     S.tutorialSeen=(S.tutorialSeen&&typeof S.tutorialSeen==="object"&&!Array.isArray(S.tutorialSeen))?S.tutorialSeen:{};
     S.almasCardReadyAt=Math.min(nonneg(S.almasCardReadyAt,Date.now()+365*86400000),Date.now()+90*1000);
-    S.almasCardLast=(typeof S.almasCardLast==="string"&&["troopers","crates","urn","sinner","wraith","guardian","lair","route","ward","sweep","focus","deposit","veil"].includes(S.almasCardLast))?S.almasCardLast:"";
+    S.almasCardLast=(typeof S.almasCardLast==="string"&&["troopers","crates","urn","sinner","wraith","guardian","lair","route","ward","sweep","focus","deposit","veil","eclipse","prophecy","bastion","jackpot","goldroute","twinflame","convergence"].includes(S.almasCardLast))?S.almasCardLast:"";
     S.almasCardResult=typeof S.almasCardResult==="string"?S.almasCardResult.slice(0,180):"";
     S.almasCardBuff=activeWindow(S.almasCardBuff,["auto","click"],60001);
   }
   try{var raw=localStorage.getItem(KEY);if(raw){var p=JSON.parse(raw);if(p&&typeof p==="object"&&!Array.isArray(p)&&Number.isFinite(p.f)&&p.f>=0){
     // Não copiar propriedades inesperadas nem __proto__ de importações corrompidas.
-    for(const k of ["rankFormat","itemSchema","unlockedOps","tickets","ticketBoughtRun","beatNext","beatState","beatWins","beatPlays","extraStats","tutorialSeen","f","life","own","items","legacy","spent","perk","boss","bossT","stance","clicks","ts","soundOn","cosmetics","cosmeticSpent","achievements","rituals","bestRitualGain","lastRitualGain","events","ritualPath","nextPath","rewardBoost","pendingReward","contracts","contractStats","contractClaims","contractBoost","rankCredit","masteryXp","records","cacheT","doctrinesOwned","doctrineSpent","doctrineActive","doctrineRefunded","tactic","tacticChangedAt","booster","boosterReadyAt","streetNext","streetPending","streetCount","streetEffect","fund","fundReadyAt","fundCompleted","postRitualPhase","postBlessingChosen","brawlNext","brawl","brawlWins","brawlMatches","almasCardReadyAt","almasCardLast","almasCardResult","almasCardBuff"])
+    for(const k of ["rankFormat","itemSchema","unlockedOps","tickets","ticketBoughtRun","beatNext","beatState","beatWins","beatPlays","extraStats","tutorialSeen","f","life","own","items","legacy","spent","perk","boss","bossT","stance","clicks","ts","soundOn","cosmetics","cosmeticSpent","achievements","rituals","bestRitualGain","lastRitualGain","events","ritualPath","nextPath","rewardBoost","pendingReward","contracts","contractStats","contractClaims","contractHistory","contractBoost","rankCredit","masteryXp","records","cacheT","doctrinesOwned","doctrineSpent","doctrineActive","doctrineRefunded","tactic","tacticChangedAt","booster","boosterReadyAt","streetNext","streetPending","streetCount","streetOffers","streetLastPick","streetEffect","fund","fundReadyAt","fundCompleted","postRitualPhase","postBlessingChosen","brawlNext","brawl","brawlWins","brawlMatches","almasCardReadyAt","almasCardLast","almasCardResult","almasCardBuff"])
       if(Object.prototype.hasOwnProperty.call(p,k))S[k]=p[k];
   }}}catch(e){}
   norm();
@@ -5093,7 +5406,7 @@ function initAlmasMortas(root){
     ["Investidor Lendário","Compre mil níveis de operações ao longo das runs.",function(){return S.masteryXp.reduce((a,b)=>a+b,0)>=1000}],
     ["Primeiro PLATINUM","Aprimore uma operação permanentemente.",function(){return S.tickets.some(Boolean)}],
     ["Coleção Platinum","Adquira PLATINUM em três operações.",function(){return S.tickets.filter(Boolean).length>=3}],
-    ["Caixa de Oportunidades","Acumule três ocorrências de rua.",function(){return S.streetCount>=3}],
+    ["Caixa de Oportunidades","Encontre uma ocorrência de rua.",function(){return S.streetCount>=1||S.streetLastPick!==""}],
     ["Consórcio Concluído","Resgate um financiamento do Consórcio das Ruas.",function(){return S.fundCompleted>=1}],
     ["Financiador Experiente","Resgate cinco financiamentos.",function(){return S.fundCompleted>=5}],
     ["Agente dos Contratos","Conclua cem contratos.",function(){return S.contractClaims>=100}],
@@ -5145,7 +5458,7 @@ function initAlmasMortas(root){
   }
   function refreshExpansionText(){
     $("boostersKicker").textContent=ext("boostersKicker");$("boostersHeading").textContent=ext("boosters");$("boostersIntro").textContent=ext("boostersIntro");
-    $("streetKicker").textContent=ext("streetKicker");$("streetHeading").textContent=ext("street");$("streetInfo").textContent=ext("streetIntro");
+    $("streetKicker").textContent=ext("streetKicker");$("streetHeading").textContent=ext("street");$("streetInfo").textContent=streetText(["Escolha uma das três opções. Você recebe apenas uma recompensa por ocorrência.","Choose one of three options. You get one reward per encounter.","Elige una entre tres opciones. Recibes una recompensa por encuentro.","Choisissez une option sur trois. Une récompense par rencontre.","Wähle eine von drei Möglichkeiten. Eine Belohnung je Begegnung."]);
   }
   function drawBoosters(){
     refreshExpansionText();const list=$("boostersList");
@@ -5176,32 +5489,50 @@ function initAlmasMortas(root){
     $("boostersStatus").textContent=running?ext("active")+" · "+Math.ceil((S.booster.until-now)/1000)+" s":wait>0?ext("cooldown")+" "+wait+" s":ext("available");
   }
   function accumulateStreet(now=Date.now()){
-    if(S.streetNext>now)return false;
-    const count=Math.min(3,1+Math.floor((now-S.streetNext)/240000));
-    const previous=S.streetCount;
-    S.streetCount=Math.min(3,S.streetCount+count);
-    S.streetPending=S.streetCount>0;
-    S.streetNext=now+240000;
-    return previous!==S.streetCount;
+    // Uma ocorrência por vez. Não acumulamos eventos enquanto houver escolha pendente.
+    if(S.streetPending||S.streetCount>0||S.streetNext>now)return false;
+    S.streetCount=1;S.streetPending=true;
+    return true;
   }
   accumulateStreet();
   function drawStreet(){
-    refreshExpansionText();const el=$("streetPanel"),list=$("streetOptions");el.hidden=!S.streetCount;
-    if(!S.streetCount)return;
-    $("streetCount").textContent=S.streetCount+"/3";
-    // Stable DOM instead of rebuilding on every 100ms refresh.
-    if(list.children.length&&list.dataset.lang===soulLang)return;
-    list.dataset.lang=soulLang;list.replaceChildren();
-    for(const option of ["streetCash","streetPower"]){
-      makeChoice(list,{name:ext(option),desc:ext(option+"Desc"),meta:ext("select"),sign:option==="streetCash"?"▣":"✦"},()=>{
-        if(!S.streetCount)return;
-        const now=Date.now(),value=option==="streetCash"?Math.max(35,cps()*30):0;
-        if(transact(()=>{if(value)add(value);else S.streetEffect={type:"production",since:now,until:now+75000};
-          S.streetCount=Math.max(0,S.streetCount-1);S.streetPending=S.streetCount>0;
-          if(S.streetNext<=now)S.streetNext=now+240000;
+    refreshExpansionText();const panel=$("streetPanel"),list=$("streetOptions");panel.hidden=!S.streetCount;
+    if(!S.streetCount){list.replaceChildren();list.dataset.offers="";return}
+    $("streetCount").textContent=S.streetCount+" "+streetText(["pend.","pending","pend.","en attente","offen"]);
+    if(S.streetOffers.length!==3){S.streetOffers=pickStreetOffers();if(!save(true)){toast(ext("saveError"));return}}
+    const key=S.streetOffers.join("|");
+    // Não recriar botões durante as atualizações rápidas: o clique permanece estável.
+    if(list.dataset.offers===key&&list.dataset.lang===soulLang&&list.children.length===3)return;
+    list.dataset.offers=key;list.dataset.lang=soulLang;list.replaceChildren();
+    for(const id of S.streetOffers){
+      const choice=STREET_CHOICES.find(c=>c.id===id);
+      makeChoice(list,{name:streetText(choice.name),desc:streetText(choice.desc),meta:ext("select"),sign:choice.sign},()=>{
+        if(!S.streetCount||!S.streetOffers.includes(id)||S.postRitualPhase)return;
+        const now=Date.now(),cash=seconds=>Math.max(35,Math.floor(Math.min(ritualTarget()*.015,Math.max(cps(),clickVal()*2,1)*seconds)));
+        let summary="";
+        if(transact(()=>{
+          const give=seconds=>{const n=cash(seconds);add(n);summary="+"+fmt(n)+" Souls"};
+          const advance=(field,amount)=>{const before=S[field]||now;if(before<=now)return false;S[field]=Math.max(now,before-amount);return true};
+          if(id==="streetCash")give(30);
+          else if(id==="streetWindfall")give(45);
+          else if(id==="streetPower"||id==="streetManual"){
+            S.streetEffect={type:id==="streetPower"?"production":"click",since:now,until:now+75000};summary=id==="streetPower"?"+15% Souls/s · 75 s":"+20% clique · 75 s";
+          }
+          else if(id==="streetCrates"){
+            if(S.own[2]>0&&advance("cacheT",45000))summary="Caixa antecipada";else give(24);
+          }else if(id==="streetBoss"){
+            if(!boss.on&&advance("bossT",45000))summary="Mid-Boss antecipado";else give(24);
+          }else if(id==="streetBeat"){
+            if(advance("beatNext",60000))summary="Pulso antecipado";else give(24);
+          }else if(id==="streetSupply"){
+            if(advance("boosterReadyAt",60000))summary="Suprimentos antecipados";else give(24);
+          }
+          S.streetLastPick=id;
+          S.streetCount=0;S.streetPending=false;
+          S.streetOffers=[];S.streetNext=now+240000;
         })){
-          soulTone(option==="streetCash"?"cache":"contract");showSoulBurst("street","✧");
-          toast(ext(option)+(value?" · +"+fmt(value)+" Souls":""));drawAll();
+          soulTone(id==="streetCash"||id==="streetWindfall"?"cache":"contract");showSoulBurst("street","✧");
+          toast(streetText(choice.name)+(summary?" · "+summary:""));drawAll();
         }
       });
     }
@@ -5209,24 +5540,24 @@ function initAlmasMortas(root){
   function drawExpansionStatus(){
     const el=$("amStatusLine"),chips=[];
     
-    if(S.tactic!=="none")chips.push(ext("statusTactic")+": "+ext(S.tactic));
     if(S.booster&&Date.now()<S.booster.until)chips.push(ext("statusBuff")+": "+Math.ceil((S.booster.until-Date.now())/1000)+" s");
-    if(S.streetEffect&&Date.now()<S.streetEffect.until)chips.push(ext("statusStreet")+": +15% · "+Math.ceil((S.streetEffect.until-Date.now())/1000)+" s");
+    if(S.streetEffect&&Date.now()<S.streetEffect.until)chips.push(ext("statusStreet")+": "+(S.streetEffect.type==="click"?"clique +20%":"Souls/s +15%")+" · "+Math.ceil((S.streetEffect.until-Date.now())/1000)+" s");
     el.hidden=!chips.length;
     const snapshot=chips.join(" | ");if(el.dataset.snapshot===snapshot&&el.dataset.lang===soulLang)return;
     el.dataset.snapshot=snapshot;el.dataset.lang=soulLang;el.replaceChildren();
     chips.forEach(c=>{const span=document.createElement("span");span.className="am-status-tag";span.textContent=c;el.append(span)});
   }
   // Crate multipliers are limited to the selected run tactic and temporary supplies.
-  function crateMultiplier(){return (S.stance===4?1.3:1)*(S.tactic==="crates"?1.25:1)*(extActive(S.booster,"crates")?1.30:1)}
+  function crateMultiplier(){return (S.stance===4?1.3:1)*(extActive(S.booster,"crates")?1.30:1)}
   // Teto TOTAL do multiplicador global permanente: Favor + bosses + conquistas.
   // Os pontos e conquistas continuam registrados mesmo após atingir o teto.
   const GLOBAL_MULT_CAP=3.00;
   const FAVOR_RITUAL_CAP=3;
   function permanentFactor(legacy=S.legacy,bosses=S.boss,ach=achN()){
-    const favorBonus=.025*Math.min(legacy,60)+.12*Math.log1p(Math.max(0,legacy-60))/Math.log(11);
+    // Teto alcançável em ~7 a 8 Rituais com +3 Favor, antes dos bônus opcionais.
+    const favorBonus=Math.min(2,.085*Math.max(0,legacy));
     const bossBonus=.002*Math.min(bosses,20)+.01*Math.log1p(Math.max(0,bosses-20))/Math.log(11);
-    return Math.min(GLOBAL_MULT_CAP,1+Math.min(1.9,favorBonus)+Math.min(.09,bossBonus)+.012*Math.min(30,ach));
+    return Math.min(GLOBAL_MULT_CAP,1+favorBonus+Math.min(.09,bossBonus)+.012*Math.min(30,ach));
   }
   function gm(){return permanentFactor()}
   const reachedGlobalCap=(mult=gm())=>mult>=GLOBAL_MULT_CAP-1e-9;
@@ -5243,23 +5574,23 @@ function initAlmasMortas(root){
   function drawBalanceCaps(gain=pts()){
     const global=$('globalCapStatus'),favor=$('favorCapStatus');
     const mult=gm(),globalMax=reachedGlobalCap(mult),favorMax=gain>=FAVOR_RITUAL_CAP;
-    global.querySelector('.limit-label').textContent="Bônus global permanente";
+    global.querySelector('.limit-label').textContent="Multiplicador atual do Legado";
     global.querySelector('.limit-value').textContent='x'+mult.toFixed(2).replace(".",",");
     global.querySelector('.cap-track i').style.width=Math.max(0,Math.min(100,(mult-1)/(GLOBAL_MULT_CAP-1)*100))+'%';
-    global.querySelector('.limit-state').textContent=globalMax?'Máximo atingido':'Máximo: x3,00';
+    global.querySelector('.limit-state').textContent=globalMax?'Teto permanente atingido':'Teto permanente: x3,00 · cresce entre Rituais';
     global.classList.toggle('is-capped',globalMax);
-    favor.querySelector('.limit-label').textContent="Favor ganho neste Ritual";
+    favor.querySelector('.limit-label').textContent="Favor recebido apenas neste Ritual";
     favor.querySelector('.limit-value').textContent=String(gain);
     favor.querySelector('.cap-track i').style.width=Math.max(0,Math.min(100,gain/FAVOR_RITUAL_CAP*100))+'%';
     favor.querySelector('.limit-state').textContent='+3 por Ritual';
     favor.classList.toggle('is-capped',favorMax);
-    $('globalCapNote').textContent=globalMax?limitText('note'):'';
-    $('globalCapNote').hidden=!globalMax;
+    $('globalCapNote').textContent='O Legado é preservado nas próximas runs. O máximo de +3 Favor vale por Ritual, não para o Favor acumulado.';
+    $('globalCapNote').hidden=false;
   }
   function masteryLevel(x){let lvl=0;for(let i=1;i<MASTERY_TARGETS.length;i++)if(x>=MASTERY_TARGETS[i])lvl=i;return lvl}
   function operationMilestoneMult(level){return level>=100?1.30:level>=50?1.18:level>=25?1.10:level>=10?1.05:1}
   function operationSynergy(levels){return 1+levels.reduce((total,level)=>total+(level>=50?.015:0)+(level>=100?.025:0),0)}
-  function gMul(i,level=S.own[i],xp=S.masteryXp[i]){return Math.pow(1.55,MS.filter(t=>level>=t).length)*operationMilestoneMult(level)*(1+.02*masteryLevel(xp))*(1+.15*(S.tickets?.[i]?1:0))}
+  function gMul(i,level=S.own[i],xp=S.masteryXp[i]){return Math.pow(1.55,MS.filter(t=>level>=t).length)*operationMilestoneMult(level)*(1+.02*masteryLevel(xp))*(S.tickets?.[i]?2:1)}
   // Mid-Boss: vitória depende de atacar de forma consistente e explorar aberturas.
   // Os bônus de recompensa permanecem moderados, evitando progresso explosivo.
   const BOSS_BALANCE={baseSeconds:30,manualClicks:65,autoMult:1.12,
@@ -5270,10 +5601,10 @@ function initAlmasMortas(root){
     breakHits:5,breakFraction:.018,autoHpPerSecond:.004,autoCpsShare:.07};
   function rewardActive(kind){return !!(S.rewardBoost&&S.rewardBoost.type===kind&&Date.now()<S.rewardBoost.until)}
   function cardBonusActive(kind){return !!(S.almasCardBuff&&S.almasCardBuff.type===kind&&Date.now()<S.almasCardBuff.until)}
-  function pMul(levels=S.own){var m=gm()*(1+.1*S.perk[2])*(1+.025*S.perk[5])*operationSynergy(levels);for(var t=0;t<6;t++)if(S.items[12+t])m*=1.25;if(S.stance===1)m*=1.25;if(S.stance===5)m*=1.12;if(S.stance===3)m*=.95;if(rewardActive("auto"))m*=BOSS_BALANCE.autoMult;if(contractBoostActive("auto"))m*=1.15;if(S.tactic==="lanes")m*=1.10;if(S.tactic==="crates")m*=.94;if(S.tactic==="boss")m*=.92;if(extActive(S.booster,"production"))m*=1.12;if(extActive(S.streetEffect,"production"))m*=1.15;if(cardBonusActive("auto"))m*=1.10;return m}
+  function pMul(levels=S.own){var m=gm()*(1+.1*S.perk[2])*(1+.025*S.perk[5])*operationSynergy(levels);for(var t=0;t<6;t++)if(S.items[12+t])m*=1.25;if(S.stance===1)m*=1.25;if(S.stance===5)m*=1.12;if(S.stance===3)m*=.95;if(rewardActive("auto"))m*=BOSS_BALANCE.autoMult;if(contractBoostActive("auto"))m*=1.15;if(extActive(S.booster,"production"))m*=1.12;if(extActive(S.streetEffect,"production"))m*=1.15;if(cardBonusActive("auto"))m*=1.10;return m}
   function cpsFor(levels,xps=S.masteryXp){let value=0;for(let i=0;i<GEN.length;i++)value+=levels[i]*GEN[i][3]*gMul(i,levels[i],xps[i]);return value*pMul(levels)*1.30}
   function cps(){return cpsFor(S.own)}
-  function cMul(){var m=gm()*(1+.18*S.perk[1]);for(var t=0;t<6;t++)if(S.items[t])m*=WM[t];if(S.stance===0)m*=1.35;if(S.stance===3)m*=1.25;if(S.stance===5)m*=.92;if(rewardActive("click"))m*=BOSS_BALANCE.clickMult;if(contractBoostActive("click"))m*=1.25;if(buff.t>0)m*=4;if(cardBonusActive("click"))m*=1.15;return m}
+  function cMul(){var m=gm()*(1+.18*S.perk[1]);for(var t=0;t<6;t++)if(S.items[t])m*=WM[t];if(S.stance===0)m*=1.35;if(S.stance===3)m*=1.25;if(S.stance===5)m*=.92;if(rewardActive("click"))m*=BOSS_BALANCE.clickMult;if(contractBoostActive("click"))m*=1.25;if(buff.t>0)m*=4;if(cardBonusActive("click"))m*=1.15;if(extActive(S.streetEffect,"click"))m*=1.20;return m}
   function clickVal(){
     // Production-derived clicks are added *after* manual multipliers, avoiding runaway feedback.
     // Even a fast player cannot convert more than ~35% of passive Souls/s through clicks.
@@ -5282,7 +5613,7 @@ function initAlmasMortas(root){
     const sinnerExtra=Math.min(.025,.0012*Math.sqrt(Math.max(0,S.own[3])));
     const rewardExtra=rewardActive("click")?BOSS_BALANCE.clickCpsBonus:0;
     const passiveShare=Math.min(.075,share+sinnerExtra+rewardExtra);
-    const manual=(1+Math.min(.20,.015*Math.sqrt(Math.max(0,S.own[3]))))*cMul()*(S.tactic==="lanes"?.92:1)*(extActive(S.booster,"click")?1.20:1);
+    const manual=(1+Math.min(.20,.015*Math.sqrt(Math.max(0,S.own[3]))))*cMul()*(extActive(S.booster,"click")?1.20:1);
     return (S.stance===3?manual*.95:manual)*1.16*(1+.03*S.perk[6])+passive*passiveShare;
   }
   // Dificuldade dos chefes usa a força habitual do personagem, e não bônus temporários
@@ -5313,7 +5644,7 @@ function initAlmasMortas(root){
   window.decklockAlmasCard={
     status:()=>({readyAt:S.almasCardReadyAt||0,lastId:S.almasCardLast||"",result:S.almasCardResult||""}),
     play:(id)=>{
-      const valid=["troopers","crates","urn","sinner","wraith","guardian","lair","route","ward","sweep","focus","deposit","veil"];
+      const valid=["troopers","crates","urn","sinner","wraith","guardian","lair","route","ward","sweep","focus","deposit","veil","eclipse","prophecy","bastion","jackpot","goldroute","twinflame","convergence"];
       if(!valid.includes(id))return {ok:false,message:"Carta inválida."};
       if(!document.body.classList.contains("souls-active")||!matchMedia("(min-width: 1050px)").matches)
         return {ok:false,message:"Abra o Almas lado a lado para usar o baralho."};
@@ -5347,6 +5678,13 @@ function initAlmasMortas(root){
       else if(id==="focus"){S.almasCardBuff={type:"click",since:now,until:now+60000};summary="+15% clique · 60 s"}
       else if(id==="deposit"){const n=cash(40);add(n);summary="+"+fmt(n)+" Souls · Depósito"}
       else if(id==="veil"){S.almasCardBuff={type:"auto",since:now,until:now+60000};summary="+10% Souls/s · 60 s"}
+      else if(id==="eclipse"){const n=cash(50);add(n);S.almasCardBuff={type:"auto",since:now,until:now+60000};summary="+"+fmt(n)+" Souls · produção +10% / 60 s"}
+      else if(id==="prophecy"){S.beatNext=Math.max(now,S.beatNext-90000);const n=cash(24);add(n);summary="Pulso antecipado · +"+fmt(n)+" Souls"}
+      else if(id==="bastion"){if(!boss.on)S.bossT=Math.max(now,S.bossT-90000);const n=cash(24);add(n);summary="Mid-Boss antecipado · +"+fmt(n)+" Souls"}
+      else if(id==="jackpot"){const n=cash(75);add(n);summary="+"+fmt(n)+" Souls · Tesouro"}
+      else if(id==="goldroute"){if(S.own[2]>0)S.cacheT=Math.min(S.cacheT,now+1000);const n=cash(35);add(n);summary="+"+fmt(n)+" Souls · Caixas antecipadas"}
+      else if(id==="twinflame"){S.almasCardBuff={type:"click",since:now,until:now+60000};const n=cash(28);add(n);summary="+"+fmt(n)+" Souls · clique +15% / 60 s"}
+      else if(id==="convergence"){S.streetNext=Math.max(now,S.streetNext-90000);const n=cash(25);add(n);summary="+"+fmt(n)+" Souls · Rua antecipada"}
       S.almasCardResult=summary;
       syncAchievements();
       if(!save(true)){
@@ -5432,41 +5770,49 @@ function initAlmasMortas(root){
     if(progress<.68)return S.contractClaims>=6?"advanced":"common";
     return S.contractClaims>=18?"legendary":"advanced";
   }
+  function contractRewardCap(kind,tier="common"){
+    const tierFactor=tier==="legendary"?2:tier==="advanced"?1.45:1;
+    const seconds=kind==="boss"?15:kind==="purchases"?11:12;
+    const basis=Math.max(18,cps()*seconds,clickVal()*15);
+    return Math.ceil(Math.max(18,Math.min(ritualTarget()*.006,basis*tierFactor)));
+  }
   function makeContract(slot,forceCommon=false){
-    // Se todas as operações chegaram ao limite, não oferecer contratos impossíveis.
     const remainingLevels=S.own.reduce((sum,level)=>sum+Math.max(0,4000-level),0);
     const pool=remainingLevels>0?["clicks","purchases","souls","boss"]:["clicks","souls","boss"];
     if(S.own[2]>0)pool.push("cache");
     if(S.items.some(v=>!v))pool.push("items");
     if(S.clicks>20)pool.push("gold");
     if(S.beatPlays>0)pool.push("beat");
-    let kind=pool[(S.contractClaims+slot)%pool.length];
-    for(let j=0;j<pool.length;j++){
-      const candidate=pool[(S.contractClaims+slot+j)%pool.length];
-      if(!S.contracts.some(c=>c.kind===candidate)){kind=candidate;break}
-    }
+    const history=Array.isArray(S.contractHistory)?S.contractHistory:[];
+    const recent=history.slice(-2);
+    let candidates=pool.filter(k=>!S.contracts.some(c=>c.kind===k));
+    if(!forceCommon)candidates=candidates.filter(k=>!(k==="clicks"&&recent.includes("clicks")&&pool.some(x=>x!=="clicks"&&!S.contracts.some(c=>c.kind===x))));
+    if(!candidates.length)candidates=[...pool];
+    let kind=candidates[(S.contractClaims+slot)%candidates.length];
     const tier=Math.min(15,Math.floor(S.contractClaims/3)+Math.floor(S.rituals/3));
     const rarity=forceCommon?"common":contractTier(),difficulty=rarity==="legendary"?2.2:rarity==="advanced"?1.55:1;
-    if(forceCommon)kind="clicks";
-    let goal=kind==="clicks"?(forceCommon?42:75+14*tier):kind==="purchases"?12+5*tier:["cache","gold","items","beat","boss"].includes(kind)?1:(rarity==="common"?Math.max(180,Math.ceil((cps()+clickVal()*3)*90)):Math.max(900,Math.ceil(cps()*150),Math.ceil(clickVal()*80)));
+    if(forceCommon){
+      const commonKinds=["clicks","purchases","souls","cache","gold"].filter(k=>pool.includes(k));
+      kind=commonKinds[(S.contractClaims+S.rituals)%commonKinds.length]||"clicks";
+    }
+    let goal=kind==="clicks"?(forceCommon?36:60+12*tier):kind==="purchases"?(forceCommon?6:10+4*tier):["cache","gold","items","beat","boss"].includes(kind)?1:(rarity==="common"?Math.max(120,Math.ceil((cps()+clickVal()*3)*68)):Math.max(600,Math.ceil(cps()*120),Math.ceil(clickVal()*70)));
     goal=Math.max(1,Math.min(1e300,Math.ceil(goal*difficulty),contractGoalLimit(kind,rarity)));
-    if(kind==="purchases")goal=Math.max(1,Math.min(goal,remainingLevels));
-    let reward=kind==="souls"?goal*.11:kind==="boss"?Math.max(80,cps()*75,clickVal()*80):
-      kind==="purchases"?Math.max(40,cps()*40,clickVal()*30):Math.max(30,cps()*25,clickVal()*24);
-    return {kind,start:contractMetric(kind),goal,reward:Math.min(1e300,Math.ceil(reward*difficulty*(rarity==="legendary"?1.2:1))),tier:rarity};
+    if(kind==="purchases")goal=Math.max(1,Math.min(goal,remainingLevels||goal));
+    // Prêmio pré-fixado por tier, com limite pela meta do Ritual; nunca escala com o objetivo bruto.
+    return {kind,start:contractMetric(kind),goal,reward:contractRewardCap(kind,rarity),tier:rarity,balanceV:2};
   }
   function ensureContracts(){
+    // Contratos antigos excessivos têm o prêmio corrigido uma única vez ao carregar.
+    S.contracts.forEach(c=>{if(c.balanceV!==2){c.reward=Math.min(c.reward,contractRewardCap(c.kind,c.tier));c.balanceV=2}});
     const uniq=new Set();S.contracts=S.contracts.filter(c=>{if(uniq.has(c.kind))return false;uniq.add(c.kind);return true});
-    // Slot principal sempre tem um contrato comum de cliques, concluível na run recém-resetada.
-    const quick=S.contracts.findIndex(c=>c.tier==="common"&&c.kind==="clicks"&&c.goal<=75);
+    const quick=S.contracts.findIndex(c=>c.tier==="common"&&c.goal<=Math.max(80,Math.ceil((cps()+clickVal())*45)));
     if(quick<0){S.contracts[0]=makeContract(0,true)}
     else if(quick!==0){const found=S.contracts.splice(quick,1)[0];S.contracts.unshift(found)}
-    // No máximo três contratos; sem gerar missões idênticas.
     const found=new Set([S.contracts[0]?.kind]);
     S.contracts=S.contracts.filter((c,i)=>i===0||(!found.has(c.kind)&&found.add(c.kind)));
-    while(S.contracts.length<3){const next=makeContract(S.contracts.length);if(found.has(next.kind)){
+    while(S.contracts.length<4){const next=makeContract(S.contracts.length);if(found.has(next.kind)){
       const candidates=["souls","purchases","boss","cache","items","gold","beat"].filter(k=>!found.has(k));
-      if(candidates.length){next.kind=candidates[0];next.start=contractMetric(next.kind);next.goal=next.kind==="souls"?Math.max(600,Math.ceil(cps()*90)):next.kind==="purchases"?8:1;}
+      if(candidates.length){next.kind=candidates[0];next.start=contractMetric(next.kind);next.goal=next.kind==="souls"?Math.max(420,Math.ceil(cps()*72)):next.kind==="purchases"?6:1;}
     }
       S.contracts.push(next);found.add(next.kind);
     }
@@ -5479,7 +5825,7 @@ function initAlmasMortas(root){
     const bonus=S.contractClaims%3===0;
     if(bonus){const now=Date.now();const kind=c.kind==="clicks"||c.kind==="boss"?"click":"auto";
       S.contractBoost={type:kind,since:now,until:now+60000};}
-    const name=ct(c.kind);S.contracts.splice(slot,1);
+    const name=ct(c.kind);S.contractHistory=(Array.isArray(S.contractHistory)?S.contractHistory:[]).concat(c.kind).slice(-8);S.contracts.splice(slot,1);
     ensureContracts();
     syncAchievements();soulTone("gold");
     toast(ct("claimed")+": "+name+" · +"+fmt(c.reward)+" Souls"+(bonus?" · "+ct(S.contractBoost.type):""));soulTone("contract");showSoulBurst("contract","✓");
@@ -5493,11 +5839,11 @@ function initAlmasMortas(root){
     }
   }
   // Consórcio das Ruas: depósito único, 3 min, lucro adicional ligado a contratos cumpridos.
-  function fundPrice(){return Math.max(120,Math.min(ritualTarget()*.10,Math.ceil(Math.max(1,cps())*42)));}
+  function fundPrice(){return Math.max(120,Math.min(ritualTarget()*.15,Math.ceil(Math.max(1,cps())*60)));}
   function fundPayout(){
     if(!S.fund)return 0;
     const completed=Math.max(0,S.contractClaims-S.fund.claims);
-    const rate=Math.min(.95,.35+.10*completed);
+    const rate=Math.min(2.00,.90+.18*completed);
     return Math.floor(S.fund.deposit*(1+rate));
   }
   function drawFund(){
@@ -5536,7 +5882,7 @@ function initAlmasMortas(root){
     $("contractsHeading").textContent=ct("title");
     $("contractsInfo").textContent=ct("info")+" "+et("contractsTier");
     const complete=S.contracts.filter(c=>contractProgress(c)>=c.goal).length;
-    $("contractsCounter").textContent="("+complete+"/3)";
+    $("contractsCounter").textContent="("+complete+"/"+S.contracts.length+")";
     if(complete)panel.classList.add("has-ready");else panel.classList.remove("has-ready");
     if(list.children.length!==S.contracts.length){
       list.replaceChildren();
@@ -5559,19 +5905,28 @@ function initAlmasMortas(root){
     });
   }
   // Combo temporário e opcional: recompensa participação sem prejudicar quem prefere automação.
-  const combo={count:0,last:0};const COMBO_GRACE=2800;
+  const combo={count:0,last:0};const COMBO_GRACE=2800,COMBO_CAP=100;
   function currentCombo(now=Date.now()){
     if(now-combo.last>COMBO_GRACE)combo.count=0;
     return combo.count;
   }
   function drawCombo(){
     const count=currentCombo(),el=$("comboStatus");
+    if(!el)return;
     el.hidden=count<2;
     if(el.hidden)return;
-    $("comboLabel").textContent=ct("combo")+" · "+count;
-    $("comboMult").textContent="x"+(1+Math.min(50,count-1)*.02).toFixed(2).replace(".",soulLang==="en"?".":",");
-    $("comboBar").style.width=Math.min(100,(count/50)*100)+"%";
-    el.classList.toggle("peak",count>=50);
+    $("comboLabel").textContent=ct("combo")+" "+count+"/100";
+    $("comboMult").textContent="x"+(1+Math.min(COMBO_CAP,count-1)*.02).toFixed(2).replace(".",soulLang==="en"?".":",");
+    $("comboBar").style.width=Math.min(100,(count/COMBO_CAP)*100)+"%";
+    el.classList.toggle("peak",count>=50);el.classList.toggle("maxed",count>=COMBO_CAP);
+  }
+  function comboSpark(strength=1){
+    const st=$("stage");if(!st)return;const rect=st.getBoundingClientRect();const n=Math.max(3,Math.round(4*strength));
+    for(let i=0;i<n;i++){
+      const s=document.createElement("span");s.className="am-combo-spark";
+      s.style.left=(rect.width*(.18+Math.random()*.64))+"px";s.style.top=(rect.height*(.28+Math.random()*.38))+"px";
+      s.style.transform+=` rotate(${(-25+Math.random()*50).toFixed(1)}deg)`;st.appendChild(s);setTimeout(()=>s.remove(),650);
+    }
   }
 
   function logEvent(kind,amount=0,label=""){
@@ -5665,7 +6020,7 @@ function initAlmasMortas(root){
     if(goal)return goal.label+(goal.missing?" · "+tx("missing")+" "+fmt(goal.missing)+" Souls":" · "+tx("ready"));
     return tx("ritualReady")+": "+fmt(Math.max(0,ritualTarget()-S.records.runSouls))+" Souls";
   }
-  const GUIDE_TEXT={welcome:"Bem-vindo à Segunda Era. Toque no emblema para coletar Souls. Conclua contratos, financie operações e faça Rituais para ganhar Favor e subir de elo. Você pode rever os guias pelo botão i.",p:"COLETA: clique no emblema, conclua contratos, resgate ocorrências e desafie o Mid-Boss e o Pulso. O Consórcio rende mais quanto mais contratos você cumprir.",a:"DOMÍNIO: compre níveis para ganhar Souls/s. Os investimentos surgem conforme você produz Souls; marque uma operação para aplicar um PLATINUM permanente.",r:"LOJA: itens de Arma aumentam o clique, Vitalidade melhora a produção offline e Espírito fortalece a renda. Os itens reiniciam após cada Ritual.",l:"RITUAL: ao cumprir as metas, reinicie a run para ganhar Favor e progredir no elo. Após o Ritual, escolha uma Bênção e uma Tática.",firstInvestment:"Você desbloqueou seu primeiro investimento! Comprar níveis aumenta a renda automática. Mais adiante, o PLATINUM permite uma melhoria permanente de +15% em uma operação."};
+  const GUIDE_TEXT={welcome:"Bem-vindo à Segunda Era. Toque no emblema para coletar Souls. Conclua contratos, financie operações e faça Rituais para ganhar Favor e subir de elo. Você pode rever os guias pelo botão i.",p:"COLETA: clique no emblema, conclua contratos, resgate ocorrências e desafie o Mid-Boss e o Pulso. O Consórcio rende mais quanto mais contratos você cumprir.",a:"DOMÍNIO: compre níveis para ganhar Souls/s. Os investimentos surgem conforme você produz Souls; marque uma operação para aplicar um PLATINUM permanente.",r:"LOJA: itens de Arma aumentam o clique, Vitalidade melhora a produção offline e Espírito fortalece a renda. Os itens reiniciam após cada Ritual.",l:"RITUAL: ao cumprir as metas, reinicie a run para ganhar Favor e progredir no elo. Após o Ritual, escolha uma Bênção e uma Tática.",firstInvestment:"Você desbloqueou seu primeiro investimento! Comprar níveis aumenta a renda automática. Mais adiante, o PLATINUM dobra permanentemente a produção de uma operação."};
   const GUIDE_TITLES={welcome:"Uma nova jornada",p:"Coleta de Souls",a:"Domínio da Cidade",r:"A Loja",l:"O Ritual do Patrono",firstInvestment:"Primeiro investimento"};
   let priorGuideFocus=null,currentGuideId="";
   function showGameGuide(id){
@@ -5732,10 +6087,10 @@ function initAlmasMortas(root){
       for(let tier=1;tier<=5;tier++)r.b.classList.toggle("am-visual-tier-"+tier,visualTier===tier);
       r.b.classList.toggle("am-visual-tier-high",visualTier>=6);
       r.b.dataset.milestone=visualTier?(visualTier<=8?"★".repeat(visualTier):"★×"+visualTier):"";r.b.querySelector("b").dataset.stars=visualTier?" "+r.b.dataset.milestone:"";
-      r.b.dataset.achievementTier=visualTier?"Nv. "+visualTier*50:"";r.b.setAttribute("aria-label",GEN[i][0]+" · nível "+S.own[i]+" · "+visualTier+" estrelas"+(ticketed?" · Golden permanente":""));
+      r.b.dataset.achievementTier=visualTier?"Nv. "+visualTier*50:"";r.b.setAttribute("aria-label",GEN[i][0]+" · nível "+S.own[i]+" · "+visualTier+" estrelas"+(ticketed?" · PLATINUM x2":""));
       const fullDetails=lang.lv+" "+S.own[i]+" (+"+n+") · +"+fmt(inc)+" Souls/s ("+lang.gain+") · "+lang.payback+" ~"+roi+
         (crossed.length?" · "+lang.cross:"")+(nx&&!crossed.length?" · "+lang.next+" "+nx:"")+
-        " · "+et("masteryLevel")+" "+masteryLevel(S.masteryXp[i])+"/5"+(ticketed?" · Mandado do Patrono: +15% permanente":"")+
+        " · "+et("masteryLevel")+" "+masteryLevel(S.masteryXp[i])+"/5"+(ticketed?" · Ticket PLATINUM: x2 permanente":"")+
         (S.own[i]>=10?" · "+et("special")+" +"+Math.round((operationMilestoneMult(S.own[i])-1)*100)+"%":"")+
         (S.f<c?" · "+lang.missing+" "+fmt(c-S.f)+" Souls":" · "+lang.ready);
       // Na lista exibir apenas o essencial; detalhes completos permanecem no tooltip.
@@ -5756,7 +6111,7 @@ function initAlmasMortas(root){
     // Duas projeções: passiva e com 3 cliques/s, incluindo caches e tributos.
     const baselineCps=cps(),oldSyn=operationSynergy(S.own),fixedPMult=pMul()/oldSyn;
     const oldBase=S.own.reduce((total,lv,j)=>total+lv*GEN[j][3]*gMul(j),0);
-    const manualBase=cMul()*(S.tactic==="lanes"?.92:1)*(extActive(S.booster,"click")?1.20:1)*(S.stance===3?.95:1);
+    const manualBase=cMul()*(extActive(S.booster,"click")?1.20:1)*(S.stance===3?.95:1);
     const rewardExtra=rewardActive("click")?BOSS_BALANCE.clickCpsBonus:0;
     function projectedRates(passive,crateLevel,sinnerLevel){
       const cache=crateLevel>0?passive*Math.min(4,1+.65*Math.log1p(crateLevel))*crateMultiplier()/45:0;
@@ -5807,7 +6162,7 @@ function initAlmasMortas(root){
   let selectedGolden=null,armingGolden=false;
   function ticketCost(i){
     const op=GEN[i];if(!op)return Infinity;
-    return Math.ceil(ritualTarget()*.40+op[2]*4+op[3]*240);
+    return Math.ceil(ritualTarget()*.48+op[2]*4.6+op[3]*280);
   }
   function drawTickets(){
     const i=selectedGolden;
@@ -5821,7 +6176,7 @@ function initAlmasMortas(root){
     root.querySelectorAll(".operation.am-golden-target").forEach(el=>el.classList.remove("am-golden-target"));
     if(selected)root.querySelector('.operation[data-op="'+i+'"]').classList.add("am-golden-target");
     $("ticketSelection").textContent=selected
-      ?GEN[i][0]+" · "+fmt(price)+" Souls · "+(acquired?"Já tem PLATINUM":S.ticketBoughtRun?"Limite de 1 por Ritual":!unlocked?"Ainda não descoberto":S.f<price?"Faltam "+fmt(price-S.f)+" Souls":"+15% permanente")
+      ?GEN[i][0]+" · "+fmt(price)+" Souls · "+(acquired?"Já tem PLATINUM":S.ticketBoughtRun?"Limite de 1 por Ritual":!unlocked?"Ainda não descoberto":S.f<price?"Faltam "+fmt(price-S.f)+" Souls":"produção x2 permanente")
       :"Selecione um cartão de investimento acima para definir o destino do PLATINUM.";
     $("ticketStatus").textContent=S.ticketBoughtRun?"Você já comprou um PLATINUM nesta run.":"Uma melhoria por operação, permanente após cada Ritual.";
     $("ticketBuy").textContent="Comprar PLATINUM";
@@ -5845,7 +6200,7 @@ function initAlmasMortas(root){
     const price=ticketCost(i);
     if(i<0||i>=GEN.length||S.ticketBoughtRun||!S.unlockedOps[i]||S.tickets[i]||S.f<price)return;
     if(transact(()=>{S.f-=price;S.tickets[i]=1;S.ticketBoughtRun=true;})){
-      toast("PLATINUM permanente · +15% em "+GEN[i][0]);soulTone("milestone");
+      toast("PLATINUM permanente · produção x2 em "+GEN[i][0]);soulTone("milestone");
       selectedGolden=null;drawAll();
     }
   });
@@ -5855,13 +6210,36 @@ function initAlmasMortas(root){
       r.b.classList.toggle("done",own);r.b.classList.toggle("lock",lock&&!own);r.b.classList.toggle("no",!own&&!lock&&S.f<it[1]);r.b.classList.toggle("ready",!own&&!lock&&S.f>=it[1]);
       r.n.textContent=own?"adquirido":fmt(it[1]);r.s.textContent=own?"":lock?"requer o item anterior":S.f<it[1]?"faltam "+fmt(it[1]-S.f)+" Souls":"disponível"});
   }
-  const BEAT_INTERVAL=760,BEAT_WINDOW=245,BEAT_LENGTH=8,BEAT_COOLDOWN=7*60000;
+  const BEAT_LENGTH=8,BEAT_COOLDOWN=7*60000,BEAT_SWEEP=3600,BEAT_TAP_GAP=420;
+  // A cada marca o ponteiro acelera ~6%, sem saltar na transição de velocidade.
+  const beatSweepFor=hits=>BEAT_SWEEP*Math.pow(.94,Math.min(BEAT_LENGTH-1,hits));
+  function beatPhase(now=Date.now(),game=S.beatState){
+    if(!game)return 0;
+    const start=game.phaseStarted??game.start,offset=game.phaseOffset??0;
+    if(now<game.start)return 0;
+    const unit=(now-start)/beatSweepFor(game.hits)+offset;
+    return ((unit%1)+1)%1;
+  }
+  function beatNeedlePercent(now=Date.now(),game=S.beatState){
+    if(!game)return 0;
+    const unit=beatPhase(now,game);
+    const ping=unit<.5?unit*2:2-unit*2;
+    return 4+ping*92;
+  }
+  function beatScoreFor(percent){
+    const d=Math.abs(percent-50);
+    if(d<=1.6)return 3;
+    if(d<=8)return 2;
+    if(d<=16)return 1;
+    return 0;
+  }
   function beatFinish(){
     const state=S.beatState;if(!state)return;
-    const hits=state.scored,perfect=hits>=5,progress=hits/BEAT_LENGTH;
-    const amount=Math.max(25,Math.floor(Math.min(ritualTarget()*.08,Math.max(cps()*95,clickVal()*100))*(perfect?1:.18+.45*progress)));
+    const score=state.scored,perfect=score>=10,good=score>=6;
+    const quality=perfect?1:good?.72:Math.max(.24,score/16);
+    const amount=Math.max(30,Math.floor(Math.min(ritualTarget()*.10,Math.max(cps()*120,clickVal()*135))*quality));
     S.beatState=null;S.beatPlays++;if(perfect)S.beatWins++;
-    add(amount);toast((perfect?"Pulso perfeito! ":"Pulso concluído: ")+hits+"/8 · +"+fmt(amount)+" Souls");
+    add(amount);toast((perfect?"Pulso perfeito! ":good?"Pulso forte! ":"Pulso concluído: ")+score+" pts · +"+fmt(amount)+" Souls");
     soulTone(perfect?"gold":"contract");syncAchievements();save();drawAll();
   }
   function drawBeat(){
@@ -5870,30 +6248,32 @@ function initAlmasMortas(root){
     if(!game){
       const wait=Math.max(0,S.beatNext-now);
       $("beatStart").disabled=wait>0||!!S.postRitualPhase;
-      $("beatInfo").textContent=wait>0?"Próximo Pulso em "+Math.ceil(wait/1000)+" s":"Pronto. Acerte o centro do ritmo oito vezes; cinco acertos dão a recompensa completa.";
+      $("beatInfo").textContent=wait>0?"Próximo Pulso em "+Math.ceil(wait/1000)+" s":"Pronto. O ponteiro vai e volta sem gastar tentativas até o clique. Mire as zonas brilhantes.";
       $("beatScore").textContent="Recorde: "+S.beatWins+" vitórias perfeitas";
-      $("beatNeedle").style.left="0%";return;
+      $("beatNeedle").style.left="4%";return;
     }
-    const position=Math.max(0,(now-game.start)/BEAT_INTERVAL);
-    while(game.hits<BEAT_LENGTH&&now>game.start+game.hits*BEAT_INTERVAL+BEAT_WINDOW)game.hits++;
-    if(game.hits>=BEAT_LENGTH){beatFinish();return}
-    const expected=game.start+game.hits*BEAT_INTERVAL;
-    const dist=Math.max(-1,Math.min(1,(now-expected)/(BEAT_INTERVAL/2)));
-    $("beatNeedle").style.left=(50+dist*46)+"%";
-    $("beatInfo").textContent="Toque quando o indicador alcançar o centro iluminado.";
-    $("beatScore").textContent="Acertos: "+game.scored+"/8 · Batida "+(game.hits+1)+"/8";
+    const percent=beatNeedlePercent(now,game);
+    $("beatNeedle").style.left=percent+"%";
+    $("beatInfo").textContent="Clique quando o ponteiro atravessar as zonas. Centro = bônus maior.";
+    $("beatScore").textContent="Pontos: "+game.scored+" · Marca "+(game.hits+1)+"/"+BEAT_LENGTH+" · ritmo "+Math.round(100*(BEAT_SWEEP/beatSweepFor(game.hits)))+"%";
+    if(game.hits>=BEAT_LENGTH)beatFinish();
   }
   $("beatStart").addEventListener("click",()=>{
     if(S.beatState||S.beatNext>Date.now())return;
-    const now=Date.now();S.beatState={start:now+1100,hits:0,scored:0};S.beatNext=now+BEAT_COOLDOWN;
+    const now=Date.now();S.beatState={start:now+250,phaseStarted:now+250,phaseOffset:0,hits:0,scored:0,lastTap:0};S.beatNext=now+BEAT_COOLDOWN;
     if(!save(true)){S.beatState=null;return}drawBeat();
     const beatLoop=()=>{if(!S.beatState)return;drawBeat();if(S.beatState)requestAnimationFrame(beatLoop)};
     requestAnimationFrame(beatLoop);
   });
   $("beatTap").addEventListener("click",()=>{
     const game=S.beatState;if(!game)return;
-    const now=Date.now(),expected=game.start+game.hits*BEAT_INTERVAL;
-    if(Math.abs(now-expected)<=BEAT_WINDOW){game.scored++;game.hits++;soulTone("collect");}
+    const now=Date.now();if(now<game.start||now-(game.lastTap||0)<BEAT_TAP_GAP)return;
+    const points=beatScoreFor(beatNeedlePercent(now,game));
+    // Congela a fase exata sob o clique antes de trocar a velocidade.
+    const phase=beatPhase(now,game);
+    game.lastTap=now;game.hits++;game.scored+=points;
+    game.phaseStarted=now;game.phaseOffset=phase;
+    if(points>1)soulTone("gold"); else if(points===1)soulTone("collect");
     drawBeat();
   });
   function drawBoss(){
@@ -6042,9 +6422,9 @@ function initAlmasMortas(root){
     $("ritualPreviewRank").textContent=(ritualEligibility().ready?rt("ready"):rt("waiting"))+" · "+ritualRankTarget();
     ritualMetricGrid($("ritualPreviewMetrics"),run);
     $("ritualPreviewBonus").replaceChildren();
-    const label=document.createTextNode(rt("bonus")+": "),strong=document.createElement("strong");
-    strong.textContent="x"+gm().toFixed(2)+" → x"+ritualGlobalAfter(gain).toFixed(2);
-    $("ritualPreviewBonus").append(label,strong);
+    const before=gm(),after=ritualGlobalAfter(gain),strong=document.createElement("strong");
+    strong.textContent="x"+before.toFixed(2)+" → x"+after.toFixed(2)+" ("+(after-before>=0?"+":"")+(after-before).toFixed(2)+"x)";
+    $("ritualPreviewBonus").append(document.createTextNode("Evolução prevista do Legado após este Ritual: "),strong);
     drawBalanceCaps(gain);
     ritualCompare($("ritualPreviewCompare"),run,previous);
     $("ritualPreviewWarning").textContent="O Ritual reinicia Souls, operações e itens; seus ganhos permanentes continuam."+(S.fund?" Atenção: um financiamento ativo será encerrado sem retorno.":"");
@@ -6134,11 +6514,11 @@ function initAlmasMortas(root){
     };
     const x=ritualExtras[soulLang]||ritualExtras["pt-BR"];
     const bonusNow=gm();
-    const ritualDetailText=l.favor+" <b>"+S.legacy+"</b> "+l.earned+", "+l.grants+" x"+gm().toFixed(2)+" "+l.bonus+" (inclui outras fontes). "+
+    const ritualDetailText=l.favor+" <b>"+S.legacy+"</b> "+l.earned+" acumulados entre Rituais. O Legado Permanente atual é x"+gm().toFixed(2)+" (também inclui Mid-Bosses e conquistas). "+
       (gain>=1?l.claim+" +"+gain+" "+l.points+" "+l.reset:l.next+" "+fmt(nextThreshold)+" "+l.lifetime)+
       "<br>"+x.total+" <b>x"+bonusNow.toFixed(2)+" → x"+bonusAfter.toFixed(2)+"</b> ("+x.current+" → "+x.next+")."+
       "<br>"+ritualInstruction("rule",{target:fmt(ritualTarget()),levels:fmt(ritualLevelsNeeded())})+
-      "<br>"+(gain>=3?({"pt-BR":"Favor máximo desta run atingido: +3.",en:"Maximum Favor for this run reached: +3.",es:"Favor máximo de esta partida: +3.",fr:"Faveur maximale de cette partie : +3.",de:"Maximale Gunst in diesem Durchlauf: +3."}[soulLang]||"Favor máximo desta run atingido: +3."):x.more+" <b>"+fmt(futurePoints)+"</b> "+x.toNext+(passive>0?" · "+x.hours+" ~"+timeLabel(futurePoints/passive)+" ("+x.estimate+")":"")+".")+
+      "<br>"+(gain>=3?({"pt-BR":"Favor máximo atingido.",en:"Maximum Favor for this run reached: +3.",es:"Favor máximo de esta partida: +3.",fr:"Faveur maximale de cette partie : +3.",de:"Maximale Gunst in diesem Durchlauf: +3."}[soulLang]||"Favor máximo atingido."):x.more+" <b>"+fmt(futurePoints)+"</b> "+x.toNext+(passive>0?" · "+x.hours+" ~"+timeLabel(futurePoints/passive)+" ("+x.estimate+")":"")+".")+
       (S.rituals>0?"<br>"+x.history+" "+S.rituals+" · "+x.best+" "+S.bestRitualGain+" · "+x.last+" +"+S.lastRitualGain:"");
     const ritualDetailsNode=$("lg");
     const detailLabel={"pt-BR":"Detalhes do Favor",en:"Favor details",es:"Detalles del Favor",fr:"Détails de la Faveur",de:"Gunst-Details"}[soulLang]||"Detalhes do Favor";
@@ -6149,7 +6529,7 @@ function initAlmasMortas(root){
     const highlight=ritualDetailsNode.querySelector(".favor-highlight");
     highlight.querySelector("span").textContent=l.favor;
     highlight.querySelector("strong").textContent=String(S.legacy);
-    highlight.querySelector("small").textContent="";
+    highlight.querySelector("small").textContent="Acumulável";
     ritualDetailsNode.querySelector(".ritual-extra summary").textContent=detailLabel;
     ritualDetailsNode.querySelector(".ritual-extra-body").innerHTML=ritualDetailText;
     drawRitualPreview(gain);
@@ -6215,12 +6595,38 @@ function initAlmasMortas(root){
     if(t!=="l")openRitualPane("");
     drawAll();
   }
+  function drawPastSeasons(){
+    const list=$("seasonsList");list.replaceChildren();
+    let archive=null;
+    try{archive=JSON.parse(localStorage.getItem(ERA_ARCHIVE)||"null")}catch(e){}
+    if(!archive||!archive.hadSave){
+      const empty=document.createElement("p");empty.className="season-empty";
+      empty.textContent="Nenhuma temporada anterior com progresso arquivado neste navegador.";
+      list.append(empty);return;
+    }
+    const card=document.createElement("section");card.className="season-card";
+    const kicker=document.createElement("small");kicker.className="season-kicker";kicker.textContent="TEMPORADA 01 · ARQUIVADA";
+    const title=document.createElement("h4");title.textContent="Primeira Era — A Ruptura do Patrono";
+    const details=document.createElement("p");details.textContent="Seu progresso da Primeira Era antes da transição para a Segunda Era.";
+    const grid=document.createElement("div");grid.className="season-stats";
+    const rank=RANK_EMBLEMS[Math.max(0,Math.min(RANK_EMBLEMS.length-1,archive.rankIndex||0))];
+    const vals=[["Elo final",(rank?.name||"Initiate")+" "+["III","II","I"][(archive.rankSteps||0)%3]],
+      ["Souls acumuladas",fmt(archive.souls||0)],["Rituais",fmt(archive.rituals||0)],
+      ["Cliques",fmt(archive.clicks||0)],["Mid-Bosses",fmt(archive.midBosses||0)],
+      ["Favor",fmt(archive.favor||0)],["Recorde Souls/s",fmt(archive.bestCps||0)],
+      ["Maior combo",fmt(archive.bestCombo||0)],["Contratos",fmt(archive.contracts||0)]];
+    for(const [label,value] of vals){const cell=document.createElement("div");cell.className="season-stat";
+      const small=document.createElement("small"),strong=document.createElement("strong");
+      small.textContent=label;strong.textContent=value;cell.append(small,strong);grid.append(cell)}
+    card.append(kicker,title,details,grid);list.append(card);
+  }
   let ritualPane="";
   function openRitualPane(kind){
     ritualPane=kind;
     $("ritualSubpane").hidden=!kind;
-    $("ritualSubpane").querySelectorAll(":scope > .box").forEach(node=>node.hidden=node.id!==({blessings:"blessingsFold",achievements:"achievementsFold",saving:"savingFold"}[kind]||""));
+    $("ritualSubpane").querySelectorAll(":scope > .box").forEach(node=>node.hidden=node.id!==({blessings:"blessingsFold",achievements:"achievementsFold",seasons:"seasonsFold",saving:"savingFold"}[kind]||""));
     $("tl").classList.toggle("show-subpane",!!kind);
+    if(kind==="seasons")drawPastSeasons();
     if(kind)drawLeg();
   }
   root.querySelectorAll("[data-ritual-pane]").forEach(button=>button.addEventListener("click",()=>openRitualPane(button.dataset.ritualPane)));
@@ -6261,8 +6667,8 @@ function initAlmasMortas(root){
   root.querySelectorAll("#qs .btn").forEach(function(b){b.addEventListener("click",function(){Q=b.dataset.q==="max"?"max":+b.dataset.q;drawAl()})});
 
   $("orb").addEventListener("click",function(e){
-    const now=Date.now();combo.count=now-combo.last<=COMBO_GRACE?Math.min(combo.count+1,50):1;combo.last=now;
-    var v=clickVal()*(1+.02*Math.max(0,combo.count-1));add(v);S.clicks++;S.records.runClicks++;
+    const now=Date.now();combo.count=now-combo.last<=COMBO_GRACE?Math.min(combo.count+1,COMBO_CAP):1;combo.last=now;
+    var v=clickVal()*(1+.02*Math.max(0,Math.min(COMBO_CAP,combo.count)-1));add(v);S.clicks++;S.records.runClicks++;
     if(S.own[3]>0&&S.clicks%12===0){const tribute=Math.min(v*.10,cps()*.12+5);add(tribute);soulTone("sacrifice");showSoulBurst("sacrifice", "+"+fmt(tribute));}
     S.records.bestCombo=Math.max(S.records.bestCombo,combo.count);S.records.bestClick=Math.max(S.records.bestClick,v);
     soulTone("collect");if(boss.on){
@@ -6272,7 +6678,8 @@ function initAlmasMortas(root){
         if(boss.openHits>=BOSS_BALANCE.breakHits){boss.hp-=boss.max*BOSS_BALANCE.breakFraction;boss.openHits=0;soulTone("milestone");showSoulBurst("boss","QUEBRA!")}
       } else boss.openHits=0;
     }
-    if([10,25,50].includes(combo.count))soulTone("purchase");
+    if([10,25,50,100].includes(combo.count))soulTone("purchase");
+    if(combo.count===50)comboSpark(1); if(combo.count===100)comboSpark(2);
     var st=$("stage"),r=st.getBoundingClientRect(),x=e.clientX?e.clientX-r.left:r.width/2,y=e.clientX?e.clientY-r.top:r.height/2;
     var p=document.createElement("span");p.className="pop";p.textContent="+"+fmt(v);p.style.left=(x-14)+"px";p.style.top=(y-20)+"px";
     st.appendChild(p);setTimeout(function(){p.remove()},900);
@@ -6303,7 +6710,7 @@ function initAlmasMortas(root){
     boss.on=false;
     if(win){
       const urnBonus=1+Math.min(.25,.008*Math.sqrt(Math.max(0,S.own[5])));
-      const r=Math.max(cps()*BOSS_BALANCE.baseSeconds,bossBaseClick()*BOSS_BALANCE.manualClicks)*urnBonus*(S.tactic==="boss"?1.12:1)*(1+.03*S.perk[7]);add(r);S.boss++;S.bossT=Date.now()+3e5;
+      const r=Math.max(cps()*BOSS_BALANCE.baseSeconds,bossBaseClick()*BOSS_BALANCE.manualClicks)*urnBonus*(1+.03*S.perk[7]);add(r);S.boss++;S.bossT=Date.now()+3e5;
       S.pendingReward={base:r};S.records.runBossWins++;logEvent("boss",r);toast(tx("won"));soulTone("gold");showSoulBurst("boss","✦");
     }else{S.bossT=Date.now()+15e4;logEvent("bossFail");toast("O Mid-Boss resistiu. Ele volta em breve.")}
     save();drawAll();
@@ -6326,7 +6733,7 @@ function initAlmasMortas(root){
   // Revalida requisitos ao abrir E ao aceitar; prêmios de Mid-Boss não bloqueiam silenciosamente.
   let ritualDialogReturnFocus=null;
   let ritualReturnFromBoss=false;
-  function resetRitualConfirmation(){closeRitualConfirmation()}
+  function resetRitualConfirmation(){closeRitualConfirmation();closePlatinumWarning();closeGlobalWarning()}
   function closeRitualConfirmation(){
     const overlay=$("ritualConfirmOverlay");
     if(overlay.hidden)return;
@@ -6359,6 +6766,46 @@ function initAlmasMortas(root){
       else if(!e.shiftKey&&root.activeElement===last){e.preventDefault();first.focus()}
     }
   });
+  // Alerta de tela inteira antes da confirmação irreversível, sem impor compra.
+  let platinumFocus=null;
+  function closePlatinumWarning(){
+    if($("platinumWarning").hidden)return;
+    $("platinumWarning").hidden=true;
+    window.dispatchEvent(new CustomEvent("decklock:modal",{detail:{open:false}}));
+    const old=platinumFocus;platinumFocus=null;
+    if(old&&old.isConnected&&old.getClientRects().length)old.focus();
+  }
+  function openPlatinumWarning(){
+    platinumFocus=root.activeElement;
+    $("platinumWarning").hidden=false;
+    window.dispatchEvent(new CustomEvent("decklock:modal",{detail:{open:true}}));
+    $("platinumGoBuy").focus();
+  }
+  $("platinumGoBuy").addEventListener("click",()=>{
+    closePlatinumWarning();tab("a");
+    $("ticketPanel").scrollIntoView({block:"center",behavior:"smooth"});
+    $("ticketArm").focus({preventScroll:true});
+  });
+  $("platinumContinue").addEventListener("click",()=>{
+    closePlatinumWarning();
+    const check=ritualEligibility();
+    if(check.ready&&!check.pendingReward)continueRitualFlow(check,true);
+    else{drawLeg();toast(ritualCheckMessage("newStatus"))}
+  });
+  $("platinumWarning").addEventListener("keydown",e=>{
+    if(e.key==="Escape"){e.preventDefault();closePlatinumWarning()}
+    else if(e.key==="Tab"){
+      const first=$("platinumGoBuy"),last=$("platinumContinue");
+      if(e.shiftKey&&root.activeElement===first){e.preventDefault();last.focus()}
+      else if(!e.shiftKey&&root.activeElement===last){e.preventDefault();first.focus()}
+    }
+  });
+  // O bônus global é uma progressão entre runs, não um bloqueio ou aviso de Ritual.
+  function closeGlobalWarning(){ $("globalWarning").hidden=true; }
+  function continueRitualFlow(check,skipPlatinum=false){
+    if(!skipPlatinum&&!S.ticketBoughtRun){openPlatinumWarning();return}
+    openRitualConfirmation(check);
+  }
   $("asc").addEventListener("click",function(){
     const check=ritualEligibility();
     if(check.pendingReward){
@@ -6371,7 +6818,7 @@ function initAlmasMortas(root){
       return;
     }
     if(!check.ready){drawLeg();toast(ritualCheckMessage("newStatus"));return}
-    openRitualConfirmation(check);
+    continueRitualFlow(check);
   });
   $("ritualAccept").addEventListener("click",function(){
     // Recheck: the game may have been imported, a different tab selected,
@@ -6399,9 +6846,9 @@ function initAlmasMortas(root){
     S.rituals++;S.bestRitualGain=Math.max(S.bestRitualGain,g);S.lastRitualGain=g;
     S.legacy+=g;S.postRitualPhase="blessing";S.postBlessingChosen=false;
     S.rewardBoost=null;S.pendingReward=null;S.almasCardBuff=null;
-    S.booster=null;S.boosterReadyAt=0;S.streetEffect=null;S.streetPending=false;S.streetCount=0;S.streetNext=Date.now()+240000;
+    S.booster=null;S.boosterReadyAt=0;S.streetEffect=null;S.streetPending=false;S.streetCount=0;S.streetOffers=[];S.streetLastPick="";S.streetNext=Date.now()+240000;
     S.fund=null;S.fundReadyAt=Date.now()+180000;
-    S.contracts=[]; // renova as três metas para a renda da nova run, preservando contratos concluídos.
+    S.contracts=[]; // renova os contratos para a renda da nova run, preservando os concluídos.
     S.tactic="none";S.tacticChangedAt=0;
     soulTone("ritual");S.f=500*S.perk[0];logEvent("ritual",g);
     S.own=Array(GEN.length).fill(0);S.items=[];S.itemSchema=2;S.ticketBoughtRun=false;S.beatState=null;S.cacheT=Date.now()+45000;norm();ensureContracts();
@@ -6424,9 +6871,9 @@ function initAlmasMortas(root){
     try{var o=JSON.parse(decodeURIComponent(escape(atob($("sv").value.trim()))));
       if(!o||typeof o!=="object"||Array.isArray(o)||!Number.isFinite(o.f)||o.f<0||!Array.isArray(o.own)||!Array.isArray(o.items))throw 0;
       // Um código importado também passa pela migração e validação.
-      const validKeys=["rankFormat","itemSchema","unlockedOps","tickets","ticketBoughtRun","beatNext","beatState","beatWins","beatPlays","extraStats","tutorialSeen","f","life","own","items","legacy","spent","perk","boss","bossT","stance","clicks","ts","soundOn","cosmetics","cosmeticSpent","achievements","rituals","bestRitualGain","lastRitualGain","events","ritualPath","nextPath","rewardBoost","pendingReward","contracts","contractStats","contractClaims","contractBoost","rankCredit","masteryXp","records","cacheT","doctrinesOwned","doctrineSpent","doctrineActive","doctrineRefunded","tactic","tacticChangedAt","booster","boosterReadyAt","streetNext","streetPending","streetCount","streetEffect","fund","fundReadyAt","fundCompleted","postRitualPhase","postBlessingChosen","brawlNext","brawl","brawlWins","brawlMatches","almasCardReadyAt","almasCardLast","almasCardResult","almasCardBuff"];
+      const validKeys=["rankFormat","itemSchema","unlockedOps","tickets","ticketBoughtRun","beatNext","beatState","beatWins","beatPlays","extraStats","tutorialSeen","f","life","own","items","legacy","spent","perk","boss","bossT","stance","clicks","ts","soundOn","cosmetics","cosmeticSpent","achievements","rituals","bestRitualGain","lastRitualGain","events","ritualPath","nextPath","rewardBoost","pendingReward","contracts","contractStats","contractClaims","contractHistory","contractBoost","rankCredit","masteryXp","records","cacheT","doctrinesOwned","doctrineSpent","doctrineActive","doctrineRefunded","tactic","tacticChangedAt","booster","boosterReadyAt","streetNext","streetPending","streetCount","streetOffers","streetLastPick","streetEffect","fund","fundReadyAt","fundCompleted","postRitualPhase","postBlessingChosen","brawlNext","brawl","brawlWins","brawlMatches","almasCardReadyAt","almasCardLast","almasCardResult","almasCardBuff"];
       const imported={};for(const k of validKeys)if(Object.prototype.hasOwnProperty.call(o,k))imported[k]=o[k];
-      S={...S,...imported,rankCredit:imported.rankCredit??null,rankFormat:imported.rankFormat??1,itemSchema:imported.itemSchema??1,unlockedOps:imported.unlockedOps??null,tickets:imported.tickets??null,ticketBoughtRun:imported.ticketBoughtRun??false,beatNext:imported.beatNext??Date.now()+420000,beatState:imported.beatState??null,beatWins:imported.beatWins??0,beatPlays:imported.beatPlays??0,extraStats:imported.extraStats??null,tutorialSeen:imported.tutorialSeen??{},masteryXp:imported.masteryXp??null,records:imported.records??null,contracts:imported.contracts??[],contractStats:imported.contractStats??{purchases:0},contractClaims:imported.contractClaims??0,contractBoost:imported.contractBoost??null,doctrinesOwned:imported.doctrinesOwned??[],doctrineSpent:imported.doctrineSpent??null,doctrineActive:imported.doctrineActive??"none",doctrineRefunded:imported.doctrineRefunded??false,tactic:imported.tactic??"none",tacticChangedAt:imported.tacticChangedAt??0,booster:imported.booster??null,boosterReadyAt:imported.boosterReadyAt??0,streetNext:imported.streetNext??Date.now()+240000,streetPending:imported.streetPending??false,streetCount:imported.streetCount??null,streetEffect:imported.streetEffect??null,fund:imported.fund??null,fundReadyAt:imported.fundReadyAt??0,fundCompleted:imported.fundCompleted??0,postRitualPhase:imported.postRitualPhase??"",postBlessingChosen:imported.postBlessingChosen??false,brawlNext:imported.brawlNext??Date.now()+600000,brawl:imported.brawl??null,brawlWins:imported.brawlWins??0,brawlMatches:imported.brawlMatches??0};norm();ensureContracts();combo.count=0;
+      S={...S,...imported,rankCredit:imported.rankCredit??null,rankFormat:imported.rankFormat??1,itemSchema:imported.itemSchema??1,unlockedOps:imported.unlockedOps??null,tickets:imported.tickets??null,ticketBoughtRun:imported.ticketBoughtRun??false,beatNext:imported.beatNext??Date.now()+420000,beatState:imported.beatState??null,beatWins:imported.beatWins??0,beatPlays:imported.beatPlays??0,extraStats:imported.extraStats??null,tutorialSeen:imported.tutorialSeen??{},masteryXp:imported.masteryXp??null,records:imported.records??null,contracts:imported.contracts??[],contractStats:imported.contractStats??{purchases:0},contractClaims:imported.contractClaims??0,contractHistory:imported.contractHistory??[],contractBoost:imported.contractBoost??null,doctrinesOwned:imported.doctrinesOwned??[],doctrineSpent:imported.doctrineSpent??null,doctrineActive:imported.doctrineActive??"none",doctrineRefunded:imported.doctrineRefunded??false,tactic:imported.tactic??"none",tacticChangedAt:imported.tacticChangedAt??0,booster:imported.booster??null,boosterReadyAt:imported.boosterReadyAt??0,streetNext:imported.streetNext??Date.now()+240000,streetPending:imported.streetPending??false,streetCount:imported.streetCount??null,streetOffers:imported.streetOffers??[],streetLastPick:imported.streetLastPick??"",streetEffect:imported.streetEffect??null,fund:imported.fund??null,fundReadyAt:imported.fundReadyAt??0,fundCompleted:imported.fundCompleted??0,postRitualPhase:imported.postRitualPhase??"",postBlessingChosen:imported.postBlessingChosen??false,brawlNext:imported.brawlNext??Date.now()+600000,brawl:imported.brawl??null,brawlWins:imported.brawlWins??0,brawlMatches:imported.brawlMatches??0};norm();ensureContracts();combo.count=0;
       S.cosmetics={...shopData().cosmetics,...(S.cosmetics||{})};
       S.cosmeticSpent=Math.max(Number(shopData().cosmeticSpent)||0,Number(S.cosmeticSpent)||0);
       syncAchievements();renderedRankKey="";resetRitualConfirmation();last=Date.now();save();toast("Progresso importado.");tab("p");drawEvents()}catch(e){toast("Código inválido.")}
@@ -6435,7 +6882,7 @@ function initAlmasMortas(root){
   $("wipe").addEventListener("click",function(){
     var b=$("wipe");
     if(b.dataset.arm){try{localStorage.removeItem(KEY)}catch(e){}
-      S={f:0,life:0,own:[0,0,0,0,0,0,0,0],items:[],legacy:0,spent:0,perk:Array(PRK.length).fill(0),boss:0,bossT:Date.now()+120000,stance:0,clicks:0,ts:Date.now(),achievements:[],events:[],rituals:0,bestRitualGain:0,lastRitualGain:0,rewardBoost:null,pendingReward:null,contracts:[],contractStats:{purchases:0},contractClaims:0,contractBoost:null,rankCredit:0,rankFormat:2,tutorialSeen:{},masteryXp:Array(GEN.length).fill(0),records:null,unlockedOps:null,tickets:null,ticketBoughtRun:false,beatNext:Date.now()+420000,beatState:null,beatWins:0,beatPlays:0,extraStats:null,itemSchema:2,cacheT:Date.now()+45000,doctrinesOwned:[],doctrineSpent:0,doctrineActive:"none",doctrineRefunded:true,tactic:"none",tacticChangedAt:0,booster:null,boosterReadyAt:0,streetNext:Date.now()+240000,streetPending:false,streetCount:0,streetEffect:null,fund:null,fundReadyAt:0,fundCompleted:0,postRitualPhase:"",postBlessingChosen:false,brawlNext:Date.now()+600000,brawl:null,brawlWins:0,brawlMatches:0,soundOn:S.soundOn,cosmetics:shopLedger().cosmetics||{},cosmeticSpent:shopLedger().cosmeticSpent||0};norm();ensureContracts();combo.count=0;renderedRankKey="";resetRitualConfirmation();last=Date.now();window.dispatchEvent(new Event("decklock:economy"));
+      S={f:0,life:0,own:[0,0,0,0,0,0,0,0],items:[],legacy:0,spent:0,perk:Array(PRK.length).fill(0),boss:0,bossT:Date.now()+120000,stance:0,clicks:0,ts:Date.now(),achievements:[],events:[],rituals:0,bestRitualGain:0,lastRitualGain:0,rewardBoost:null,pendingReward:null,contracts:[],contractStats:{purchases:0},contractClaims:0,contractHistory:[],contractBoost:null,rankCredit:0,rankFormat:2,tutorialSeen:{},masteryXp:Array(GEN.length).fill(0),records:null,unlockedOps:null,tickets:null,ticketBoughtRun:false,beatNext:Date.now()+420000,beatState:null,beatWins:0,beatPlays:0,extraStats:null,itemSchema:2,cacheT:Date.now()+45000,doctrinesOwned:[],doctrineSpent:0,doctrineActive:"none",doctrineRefunded:true,tactic:"none",tacticChangedAt:0,booster:null,boosterReadyAt:0,streetNext:Date.now()+240000,streetPending:false,streetCount:0,streetOffers:[],streetLastPick:"",streetEffect:null,fund:null,fundReadyAt:0,fundCompleted:0,postRitualPhase:"",postBlessingChosen:false,brawlNext:Date.now()+600000,brawl:null,brawlWins:0,brawlMatches:0,soundOn:S.soundOn,cosmetics:shopLedger().cosmetics||{},cosmeticSpent:shopLedger().cosmeticSpent||0};norm();ensureContracts();combo.count=0;renderedRankKey="";resetRitualConfirmation();last=Date.now();window.dispatchEvent(new Event("decklock:economy"));
       b.dataset.arm="";b.textContent="Apagar";tab("p");drawEvents();toast("Progresso apagado.");return}
     b.dataset.arm="1";b.textContent="Certeza?";clearTimeout(wt);wt=setTimeout(function(){b.dataset.arm="";b.textContent="Apagar"},3500);
   });
@@ -6519,17 +6966,19 @@ function initAlmasMortas(root){
     var unlocked=syncAchievements();
     if(unlocked.length){unlocked.forEach(name=>logEvent("achievement",0,name));toast("Conquista: "+unlocked[unlocked.length-1]);save()}
   }
+  let lastSoulBackupTick=Date.now();
   setInterval(function(){
     if(document.hidden)return;
     settleElapsed(Date.now());
     n++;if(n%10===0){S.records.bestCps=Math.max(S.records.bestCps,cps());recordRunSample();
-      if(accumulateStreet(Date.now())){save();if(tab_==="p")drawStreet();toast(ext("street")+" · "+S.streetCount+"/3");soulTone("cache");}
-    }if(n%50===0)save();
+      if(accumulateStreet(Date.now())){save();if(tab_==="p")drawStreet();toast(ext("street")+" · "+S.streetCount+" pendente");soulTone("cache");}
+    }    if(Date.now()-lastSoulBackupTick>=5*60*1000){lastSoulBackupTick=Date.now();save(true);window.dispatchEvent(new CustomEvent("almas:backup",{detail:{reason:"rotina"}}))}
+if(n%50===0)save();
     if(n%2===0&&(tab_!=="l"||n%10===0))drawAll();
   },100);
   document.addEventListener("visibilitychange",function(){
     if(document.hidden){settleElapsed(Date.now());save()}
-    else{settleElapsed(Date.now());save();drawAll()}
+    else{settleElapsed(Date.now());save(true);window.dispatchEvent(new CustomEvent("almas:backup",{detail:{reason:"retorno",force:true}}));lastSoulBackupTick=Date.now();drawAll()}
   });
   window.addEventListener("pagehide",function(){settleElapsed(Date.now());save()});
   // Console local de QA: lista branca de comandos, sem eval() e sem acesso ao save real.
@@ -6575,7 +7024,7 @@ function initAlmasMortas(root){
     function rewindTimers(seconds){
       const delta=seconds*1000,now=Date.now(),fields=["bossT","beatNext","streetNext","boosterReadyAt","cacheT"];
       fields.forEach(k=>{if(Number.isFinite(S[k]))S[k]=Math.max(1,S[k]-delta)});
-      if(S.streetNext<=now){S.streetCount=Math.min(3,S.streetCount+1);S.streetPending=true;}
+      if(S.streetNext<=now&&!S.streetPending){S.streetCount=1;S.streetPending=true;}
     }
     function runCheat(raw){
       const args=String(raw||"").trim().replace(/\s+/g," ").split(" ");const cmd=(args.shift()||"").toUpperCase();
@@ -6604,7 +7053,7 @@ function initAlmasMortas(root){
         }else if(cmd==="BEAT"&&args.length===1&&args[0].toUpperCase()==="READY"){
           if(S.beatState)throw Error("Finalize o Pulso do Patrono atual antes.");S.beatNext=Date.now()-1000;message="Pulso do Patrono disponível na Coleta.";
         }else if(cmd==="STREET"&&args.length===1&&args[0].toUpperCase()==="READY"){
-          S.streetNext=Date.now()+240000;S.streetCount=Math.min(3,S.streetCount+1);S.streetPending=true;message="Ocorrência de rua acumulada ("+S.streetCount+"/3).";
+          S.streetNext=Date.now()+240000;S.streetCount=1;S.streetPending=true;message="Uma ocorrência de rua está disponível.";
         }else if(cmd==="RITUAL"&&args.length===1&&args[0].toUpperCase()==="READY"){
           const target=ritualTarget(),missing=ritualLevelsNeeded()-ritualLevelsBought();
           S.records.runSouls=Math.max(S.records.runSouls,target);
