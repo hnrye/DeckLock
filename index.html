@@ -6,7 +6,7 @@
 <title>DeckLock</title>
 <meta name="description" content="Sorteador de cartas de desafio para partidas de Deadlock, com decks editáveis.">
 <meta name="theme-color" content="#222021">
-<meta name="decklock-version" content="1.28.6">
+<meta name="decklock-version" content="1.29.1">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="DeckLock">
@@ -1721,6 +1721,104 @@ textarea{width:100%;height:70px;background:var(--am-ink);color:var(--am-text);bo
 .am-dev-examples{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .am-dev-examples code{font:11px/1.4 ui-monospace,monospace;color:var(--am-muted);padding:3px 5px;border:1px solid var(--am-line);border-radius:4px}
 @media(max-width:430px){.am-dev-form{flex-direction:column}.am-dev-form .btn{width:100%}}
+
+/* v1.29.1 — identidade tipográfica do Almas, somente no Shadow DOM.
+   Uma fonte de interface previsível + Georgia para títulos cerimoniais.
+   Sem downloads de fontes e sem mudanças no sorteador do DeckLock. */
+:host{
+  --am-font-ui:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --am-font-display:Georgia,"Times New Roman",serif;
+  --am-size-body:14px;
+  --am-size-caption:12px;
+  --am-size-label:11px;
+  font-family:var(--am-font-ui);
+  font-size:var(--am-size-body);
+  font-weight:400;
+  line-height:1.5;
+  letter-spacing:0;
+  font-synthesis:none;
+  text-rendering:optimizeLegibility;
+  -webkit-font-smoothing:antialiased;
+}
+:host *{min-width:0}
+.wrap{overflow-wrap:break-word}
+.wrap :is(button,select,input,textarea){font-family:var(--am-font-ui)}
+.wrap :is(p,small,span,summary,button){text-wrap:pretty}
+/* Cabeçalhos: a fonte serifada identifica capítulos e marcos, nunca valores ou metadados. */
+.wrap :is(h1,h2,h3,h4){font-family:var(--am-font-display);font-weight:600;letter-spacing:0;line-height:1.25;text-wrap:balance}
+.wrap h2{font-size:21px}
+.wrap h3,.am-panel-heading h3,.ritual-main-head h3{font-family:var(--am-font-display);font-size:19px;line-height:1.3}
+.wrap h4,.run-analytics h4{font-family:var(--am-font-display);font-size:15px;line-height:1.3}
+/* Controles: legibilidade uniforme entre as quatro abas, os painéis e os diálogos. */
+.wrap :is(.tab,.btn,.up,.reward-option,.path-option,.am-choice,.ritual-menu-btn,.run-view-btn,.affinity-shortcut){font-family:var(--am-font-ui);letter-spacing:0}
+.tabs .tab{font-size:14px;font-weight:650;line-height:1.25;white-space:nowrap}
+.btn,.ritual-menu-btn{font-size:13px;font-weight:650;line-height:1.4}
+.ritual-menu-btn>b{font:650 13px/1.3 var(--am-font-ui)}
+.ritual-menu-btn>small{font:450 11px/1.4 var(--am-font-ui)}
+/* Saldo, elo e números ficam nítidos em qualquer tema. */
+.dock-label,.resource-name,.am-subtitle{font:700 10px/1.4 var(--am-font-ui);letter-spacing:.09em}
+.dock-wallet #f{font-family:var(--am-font-ui);font-weight:750;line-height:1.16;font-variant-numeric:tabular-nums;letter-spacing:-.035em}
+.dock-wallet small,.dock-rank small{font-size:11px;line-height:1.4}
+.rank-status strong{font:700 clamp(14px,1.6vw,18px)/1.22 var(--am-font-display);letter-spacing:0;text-wrap:balance}
+.affinity-shortcut{font-size:11px;line-height:1.3;font-weight:700}
+.am-goal-strip,#nextGoal,.tab-guide{font-size:12px;line-height:1.45}
+/* Investimentos e itens: título visível, descrição secundária e custo consistente. */
+#gl>.operation>div:first-child b,#il>.up>div:first-child b,#pl .up b{
+  font:700 clamp(13px,1.2vw,15px)/1.32 var(--am-font-ui);
+  letter-spacing:-.008em;
+  overflow-wrap:anywhere;
+  text-wrap:balance;
+}
+#gl>.operation .d,#il>.up .d,#pl .up .d{font:450 12px/1.46 var(--am-font-ui);color:var(--am-muted);overflow-wrap:anywhere}
+#gl>.operation>.r em,#il>.up>.r em,#pl .up .r em{font:750 14px/1.3 var(--am-font-ui);font-variant-numeric:tabular-nums}
+#gl>.operation>.r small,#il>.up .r small,#pl .up .r small{font:450 11px/1.45 var(--am-font-ui);overflow-wrap:anywhere}
+#gl>.operation,#il>.up{gap:8px;align-content:space-between}
+.cat,#il>.cat{font:750 11px/1.35 var(--am-font-ui);letter-spacing:.08em}
+.section-intro,.investment-tip,.purchase-feedback,.am-shop-heading{line-height:1.5}
+.am-shop-heading{font:700 15px/1.35 var(--am-font-ui);margin-bottom:10px}
+/* Contratos e coleta: objetivos como títulos, progresso e prêmio como dados. */
+.contracts>summary,.reward-history summary,.mastery-panel summary,.records-panel summary{font:700 14px/1.4 var(--am-font-ui)}
+.contract-header strong{font:700 14px/1.35 var(--am-font-ui);text-wrap:balance}
+.contract-header span,.contract-tier,.contracts-info{font-family:var(--am-font-ui);line-height:1.45}
+.contract-tier{letter-spacing:.06em}
+.boss h3{font:600 18px/1.3 var(--am-font-display)}
+.boss p,.boss-rewards p{line-height:1.5}
+.reward-option strong,.path-option strong,.am-choice strong{font:700 13px/1.3 var(--am-font-ui);margin-bottom:4px}
+.am-choice span,.reward-option span,.path-option span{font-size:12px;line-height:1.48;overflow-wrap:anywhere}
+/* Ritual: título, métricas, limites e comparação usam as mesmas escalas. */
+.ritual-main-head h3{font-size:20px}
+.ritual-preview-head strong{font:600 16px/1.3 var(--am-font-display)}
+.ritual-metric small,.run-stats-grid small,.ritual-cap .limit-label{font:500 11px/1.45 var(--am-font-ui);letter-spacing:0}
+.ritual-metric b,.run-stats-grid strong,.ritual-cap .limit-value{font:750 15px/1.25 var(--am-font-ui);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.ritual-cap .limit-state,.ritual-cap-note,.ritual-compare-grid{font-family:var(--am-font-ui);line-height:1.45}
+.ritual-compare-grid{font-size:11px}
+.rank-ritual-summary strong{font:600 15px/1.3 var(--am-font-display)}
+.rank-ritual-summary small{font:450 12px/1.45 var(--am-font-ui)}
+.run-view-btn{font:700 12px/1.35 var(--am-font-ui)}
+.run-chart-caption,.run-chart-foot{font-size:11px;line-height:1.5}
+/* Caixas de confirmação e cerimônia de promoção. */
+.am-dialog h3,.rank-promotion-dialog h3,.ritual-confirm-dialog h3{font-family:var(--am-font-display);line-height:1.25;letter-spacing:0}
+.am-dialog p,.rank-promotion-dialog p,.ritual-confirm-dialog p{font-family:var(--am-font-ui);line-height:1.55}
+.am-step-kicker,.rank-promotion-eyebrow{font:750 10px/1.4 var(--am-font-ui);letter-spacing:.12em}
+.am-modal-options .am-choice{line-height:1.45}
+.am-dev-form input,.am-dev-result,.am-dev-examples code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
+/* Em celulares e telas divididas, manter as duas colunas sem esmagar os nomes. */
+@media(max-width:700px){
+  #gl>.operation,#il>.up{padding-block:12px}
+  #gl>.operation>div:first-child b,#il>.up>div:first-child b{font-size:13px;line-height:1.36}
+  #gl>.operation .d,#il>.up .d{font-size:11.5px}
+  .ritual-main-head h3{font-size:19px}
+}
+@media(max-width:420px){
+  .tabs{gap:clamp(8px,2.5vw,14px)}
+  .tabs .tab{font-size:12px}
+  .dock-wallet #f{font-size:clamp(17px,4.5vw,22px)}
+  .dock-label{font-size:9px;letter-spacing:.04em}
+  #gl>.operation>div:first-child b,#il>.up>div:first-child b{font-size:12.5px}
+  #gl>.operation>.r em,#il>.up>.r em{font-size:13px}
+  .ritual-cap .limit-value{font-size:14px}
+}
+
 </style>
 
 <div class="wrap">
@@ -2053,7 +2151,7 @@ function upgradeDefaultCards(state,raw){
 const KEY="deadlock-deck-v3";
 /* Reset único: quem tem dados salvos sem "epoch" (versões antigas) volta ao início UMA vez.
    Os dados antigos são guardados em BKEY antes. Só aumente RESET_EPOCH se quiser forçar outro reset. */
-const RESET_EPOCH=3,APP_VERSION="1.29.0",BKEY="deadlock-deck-v3:backup";
+const RESET_EPOCH=3,APP_VERSION="1.29.1",BKEY="deadlock-deck-v3:backup";
 // Reset único de estados criados antes da v1.9.4. Futuras atualizações não reiniciam
 // os dados sem uma migração explícita; o backup deve ser confirmado antes do reset.
 const RESET_BEFORE_VERSION="1.9.4",INTRO_KEY="deadlock-deck-v3:intro-hidden";
@@ -4194,7 +4292,7 @@ function initAlmasMortas(root){
     ["Rotas de Caixas","Produção automática e caches extras a cada 45 s.",850,7],
     ["Sinner's Sacrifice","Cliques fortalecidos (limite de +20% no clique base); tributo extra a cada 12 cliques.",5200,34],
     ["Patrulha dos Walkers","Patrulhas protegem os avanços e recolhem Souls nas ruas.",32000,160],
-    ["Rede da Soul Urn","Rotas de entrega da Urna financiam a coleta automática.",210000,820],
+    ["Escolta da Soul Urn","Rotas de entrega da Urna financiam a coleta automática.",210000,820],
     ["Investida aos Shrines","Expedições contra os Shrines ampliam a coleta de Souls.",1.6e6,4600],
     ["Cerco ao Patrono","Operação avançada que mantém pressão sobre o Patrono inimigo.",13e6,29000]];
   var GEN_GROUPS={0:"Lanes e economia de rua",2:"Coleta e sacrifícios",4:"Objetivos de domínio"};
@@ -4205,6 +4303,7 @@ function initAlmasMortas(root){
   SOUL_LANGS["Rotas de Caixas"]=["Crate Routes", "Rutas de cajas", "Routes des caisses", "Kistenrouten"];
   SOUL_LANGS["Sinner's Sacrifice"]=["Sinner's Sacrifice", "Sinner's Sacrifice", "Sinner's Sacrifice", "Sinner's Sacrifice"];
   SOUL_LANGS["Queda do Guardian"]=["Guardian Down", "Caída del Guardian", "Chute du Guardian", "Guardian gefallen"];
+  SOUL_LANGS["Escolta da Soul Urn"]=["Soul Urn Escort", "Escolta de la Soul Urn", "Escorte de la Soul Urn", "Soul-Urn-Eskorte"];
   SOUL_LANGS["Entrega da Soul Urn"]=["Soul Urn Delivery", "Entrega de Soul Urn", "Livraison de la Soul Urn", "Soul-Urn-Lieferung"];
   SOUL_LANGS["Cerco aos Shrines"]=["Shrine Siege", "Asedio a los Shrines", "Siège des Shrines", "Shrine-Belagerung"];
   SOUL_LANGS["Covil do Mid-Boss"]=["Mid-Boss Lair", "Guarida del Mid-Boss", "Repaire du Mid-Boss", "Mid-Boss-Höhle"];
