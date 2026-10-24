@@ -6,7 +6,7 @@
 <title>DeckLock</title>
 <meta name="description" content="Sorteador de cartas de desafio para partidas de Deadlock, com decks editáveis.">
 <meta name="theme-color" content="#222021">
-<meta name="decklock-version" content="1.34.0">
+<meta name="decklock-version" content="1.34.2">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="DeckLock">
@@ -2954,7 +2954,7 @@ if(testModeButton){
 const KEY="deadlock-deck-v3";
 /* Reset único: quem tem dados salvos sem "epoch" (versões antigas) volta ao início UMA vez.
    Os dados antigos são guardados em BKEY antes. Só aumente RESET_EPOCH se quiser forçar outro reset. */
-const RESET_EPOCH=3,APP_VERSION="1.34.0",BKEY="deadlock-deck-v3:backup";
+const RESET_EPOCH=3,APP_VERSION="1.34.2",BKEY="deadlock-deck-v3:backup";
 // Reset único de estados criados antes da v1.9.4. Futuras atualizações não reiniciam
 // os dados sem uma migração explícita; o backup deve ser confirmado antes do reset.
 const RESET_BEFORE_VERSION="1.9.4",INTRO_KEY="deadlock-deck-v3:intro-hidden";
@@ -5580,7 +5580,11 @@ function initAlmasMortas(root){
     if(!Number.isFinite(S.ticketPriceAnchor)||S.ticketPriceAnchor<0){
       S.ticketPriceAnchor=GEN.reduce((max,g,i)=>ritualistOperationUnlocked(i)&&S.unlockedOps[i]?Math.max(max,g[2]):max,0);
     }
-    S.pendingPlatinum=(S.pendingPlatinum&&Number.isFinite(S.pendingPlatinum.cost)&&S.pendingPlatinum.cost>=0)?{cost:S.pendingPlatinum.cost}:null;
+    // Saves antigos mantêm o ticket único; novos saves armazenam uma pilha.
+    if(S.pendingPlatinum&&typeof S.pendingPlatinum==="object"){
+      const count=Math.floor(nonneg(S.pendingPlatinum.count??1,1000));
+      S.pendingPlatinum=count>0?{count,cost:nonneg(S.pendingPlatinum.cost,1e18)}:null;
+    }else S.pendingPlatinum=null;
     S.beatNext=nonneg(S.beatNext,Date.now()+365*864e5)||Date.now()+420000;
     S.beatWins=Math.floor(nonneg(S.beatWins,1e7));S.beatPlays=Math.floor(nonneg(S.beatPlays,1e7));
     S.beatState=S.beatState&&typeof S.beatState==="object"&&Number.isFinite(S.beatState.start)&&S.beatState.start>0&&Date.now()-S.beatState.start<24000
@@ -6558,19 +6562,21 @@ function initAlmasMortas(root){
     // operação mais cara já desbloqueada (além da meta do Ritual).
     const acquired=S.tickets.reduce((sum,level)=>sum+Math.max(0,Math.min(3,level||0)),0);
     const base=Math.max(ritualTarget()*.85,S.ticketPriceAnchor*.58);
-    return Math.ceil(base*Math.pow(1.26,acquired));
+    // Tickets guardados também contam para o encarecimento do próximo.
+    const stock=S.pendingPlatinum?.count||0;
+    return Math.ceil(base*Math.pow(1.26,acquired+stock));
   }
   function drawTickets(){
-    const holding=S.pendingPlatinum;
+    const holding=S.pendingPlatinum?.count||0;
     const eligible=GEN.some((_,i)=>platinumApplicable(i));
     const limit=platinumPurchaseLimit(),bought=S.ticketBoughtRun;
-    const price=ticketShopPrice(),canBuy=eligible&&!holding&&bought<limit&&S.f>=price;
+    const price=ticketShopPrice(),canBuy=eligible&&bought<limit&&S.f>=price;
     $("ticketShopPrice").textContent=Number.isFinite(price)?fmt(price)+" Souls":"Indisponível";
     $("ticketShopBalance").textContent=Number.isFinite(price)&&S.f<price?"Faltam "+fmt(price-S.f)+" Souls":"";
     $("ticketBuy").disabled=!canBuy;
-    $("ticketShopHint").textContent=holding?"Na carteira":bought>=limit?"Limite deste Ritual atingido":!eligible?"Sem operação elegível":"";
-    $("ticketIconStage").textContent=holding?"1 TICKET":"SEM TICKET";
-    $("ticketInventoryTitle").textContent=holding?"PLATINUM disponível":"Nenhum PLATINUM disponível";
+    $("ticketShopHint").textContent=bought>=limit?"Limite deste Ritual atingido":!eligible?"Sem operação elegível":"";
+    $("ticketIconStage").textContent=holding?holding+" TICKET"+(holding>1?"S":""):"SEM TICKET";
+    $("ticketInventoryTitle").textContent=holding?holding+" PLATINUM"+(holding>1?" disponíveis":" disponível"):"Nenhum PLATINUM disponível";
     const coverageI=platinumCoverage(1),coverageII=platinumCoverage(2);
     const collection=S.tickets.filter(level=>level>=1).length;
     const collectionNote="Coleção "+collection+"/16 · +"+(collection*.75).toFixed(2).replace(".",",")+"% global";
@@ -6579,7 +6585,7 @@ function initAlmasMortas(root){
     $("ticketStatus").textContent=collectionNote+" · "+coverageNote;
     $("ticketCoverageHint").textContent="";
     $("dockPlatinum").hidden=!holding;
-    $("dockPlatinumText").textContent="PLATINUM";
+    $("dockPlatinumText").textContent=holding>1?"PLATINUM ×"+holding:"PLATINUM";
     $("ticketArm").disabled=!holding;
     $("ticketArm").setAttribute("aria-pressed",String(armingGolden));
     $("ticketCancel").hidden=!armingGolden;
@@ -6594,14 +6600,23 @@ function initAlmasMortas(root){
   }
   $("ticketBuy").addEventListener("click",()=>{
     const price=ticketShopPrice();
-    if(S.pendingPlatinum||S.ticketBoughtRun>=platinumPurchaseLimit()||!Number.isFinite(price)||S.f<price||!GEN.some((_,i)=>platinumApplicable(i)))return;
-    if(transact(()=>{S.f-=price;S.pendingPlatinum={cost:price};S.ticketBoughtRun+=1;})){
+    if(S.ticketBoughtRun>=platinumPurchaseLimit()||!Number.isFinite(price)||S.f<price||!GEN.some((_,i)=>platinumApplicable(i)))return;
+    if(transact(()=>{S.f-=price;S.pendingPlatinum={cost:price,count:(S.pendingPlatinum?.count||0)+1};S.ticketBoughtRun+=1;})){
       toast("Ticket PLATINUM adicionado à carteira!");soulTone("milestone");drawAll();
     }
   });
   $("dockPlatinum").addEventListener("click",()=>{if(!S.pendingPlatinum)return;tab("a");armingGolden=true;drawTickets();toast("Escolha uma operação destacada para aplicar o PLATINUM.")});
   $("ticketArm").addEventListener("click",()=>{if(!S.pendingPlatinum)return;armingGolden=!armingGolden;drawTickets();if(armingGolden)toast("Selecione uma operação com borda prateada.")});
   $("ticketCancel").addEventListener("click",()=>{armingGolden=false;selectedGolden=null;drawTickets()});
+  // Esc cancela a seleção ativa, sem gastar ticket ou fechar outras janelas.
+  root.addEventListener("keydown",e=>{
+    if(e.key!=="Escape"||!armingGolden||!$("ticketConfirmOverlay").hidden)return;
+    e.preventDefault();e.stopPropagation();armingGolden=false;selectedGolden=null;drawTickets();
+  },true);
+  document.addEventListener("keydown",e=>{
+    if(e.key!=="Escape"||!armingGolden||!$("ticketConfirmOverlay").hidden||document.querySelector("dialog[open]"))return;
+    e.preventDefault();e.stopImmediatePropagation();armingGolden=false;selectedGolden=null;drawTickets();
+  },true);
   function closeTicketConfirm(){ $("ticketConfirmOverlay").hidden=true;window.dispatchEvent(new CustomEvent("decklock:modal",{detail:{open:false}}));selectedGolden=null;drawTickets(); }
   root.addEventListener("click",e=>{
     if(!armingGolden||!S.pendingPlatinum)return;
@@ -6620,7 +6635,7 @@ function initAlmasMortas(root){
     const i=selectedGolden,holding=S.pendingPlatinum;
     if(!holding||!Number.isInteger(i)||!platinumApplicable(i)){closeTicketConfirm();return}
     const level=(S.tickets[i]||0)+1;
-    if(transact(()=>{S.tickets[i]=level;S.pendingPlatinum=null;})){
+    if(transact(()=>{S.tickets[i]=level;const left=(S.pendingPlatinum?.count||0)-1;S.pendingPlatinum=left>0?{...S.pendingPlatinum,count:left}:null;})){
       const label="PLATINUM "+["","I","II","III"][level]+" aplicado em "+GEN[i][0];closeTicketConfirm();toast(label);soulTone("milestone");drawAll();
     }
   });
@@ -7246,7 +7261,7 @@ function initAlmasMortas(root){
   // O bônus global é uma progressão entre runs, não um bloqueio ou aviso de Ritual.
   function closeGlobalWarning(){ $("globalWarning").hidden=true; }
   function continueRitualFlow(check,skipPlatinum=false){
-    if(!skipPlatinum&&S.ticketBoughtRun<platinumPurchaseLimit()&&!S.pendingPlatinum&&S.tickets.some((level,i)=>level<3&&ritualistOperationUnlocked(i)&&S.unlockedOps[i])){openPlatinumWarning();return}
+    if(!skipPlatinum&&S.ticketBoughtRun<platinumPurchaseLimit()&&S.tickets.some((level,i)=>level<3&&ritualistOperationUnlocked(i)&&S.unlockedOps[i])){openPlatinumWarning();return}
     openRitualConfirmation(check);
   }
   $("asc").addEventListener("click",function(){
