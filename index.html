@@ -6,7 +6,7 @@
 <title>DeckLock</title>
 <meta name="description" content="Sorteador de cartas de desafio para partidas de Deadlock, com decks editáveis.">
 <meta name="theme-color" content="#222021">
-<meta name="decklock-version" content="1.34.2">
+<meta name="decklock-version" content="1.35.1">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="DeckLock">
@@ -596,7 +596,7 @@ dialog .ed-list button:focus-visible{outline-offset:-2px}
 @media(max-width:480px){.hr{gap:5px}.lang-menu{min-width:166px}}
 
 /* Espaço integrado: o sorteador permanece centralizado até abrir Almas Mortas.
-   Desktop: duas colunas animadas 55% / 45%; em telas estreitas, modos separados. */
+   Desktop: duas colunas animadas de igual largura (50% / 50%); em telas estreitas, modos separados. */
 .site-tabs{display:flex;align-items:center;justify-content:center;gap:6px;margin:8px auto 0;padding:4px;width:fit-content;max-width:calc(100% - 24px);background:color-mix(in srgb,var(--bg2) 72%,var(--bg));border:1px solid var(--line);border-radius:12px}
 .site-tab{font-size:.9rem;font-weight:600;min-height:40px;padding:8px 22px;border:1px solid transparent;border-radius:9px;background:transparent;color:var(--mute);white-space:nowrap}
 .site-tab:hover{color:var(--ink)}
@@ -605,7 +605,7 @@ dialog .ed-list button:focus-visible{outline-offset:-2px}
 .workspace>#main{grid-column:2;grid-row:1;min-width:0;max-width:1280px;width:100%;margin:0 auto;transition:padding 300ms ease,gap 300ms ease}
 .workspace>#soulView{grid-column:1;grid-row:1;min-width:0;width:100%;overflow:clip;padding:0;opacity:0;visibility:hidden;pointer-events:none;transform:translateX(-18px);transition:opacity 330ms ease,transform 480ms cubic-bezier(.22,1,.36,1),visibility 480ms}
 #soulMount{width:100%;min-width:0;padding:12px 12px 24px}
-.workspace.dual{grid-template-columns:minmax(0,11fr) minmax(0,9fr)}
+.workspace.dual{grid-template-columns:repeat(2,minmax(0,1fr))}
 .workspace.dual>#soulView{opacity:1;visibility:visible;pointer-events:auto;transform:none;transition-delay:80ms,0ms,0ms}
 .workspace.dual>#main{align-self:start;position:sticky;top:12px;max-height:calc(100dvh - 24px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;padding:18px 16px 30px;gap:18px}
 .workspace.dual #table{gap:12px}
@@ -839,6 +839,89 @@ body.fs #trackingView,body.fs #histbox{display:none!important}
   @keyframes deckReturnCenter{from{opacity:.9;transform:translateX(-7vw)}to{opacity:1;transform:none}}
 }
 
+
+/* v1.34.3: a coluna que antes exibia Cartas da Cidade vira Domínio / Loja. */
+.workspace.almas-deck-mode .deck-choice,
+.workspace.almas-deck-mode #table,
+.workspace.almas-deck-mode .simple-actions,
+.workspace.almas-deck-mode #moreOptions,
+.workspace.almas-deck-mode #histbox {display:none!important}
+.workspace.almas-deck-mode>#main{overflow:hidden!important;padding-bottom:12px!important}
+.workspace.almas-deck-mode #main .stage{width:100%;min-width:0;display:flex;flex-direction:column;gap:10px}
+.workspace.almas-deck-mode .almas-side-panel:not([hidden]){display:flex;flex-direction:column;width:100%;min-height:0;gap:11px}
+.almas-side-heading{display:flex;flex-direction:column;gap:4px;padding:4px 3px 1px}
+.almas-side-heading small{font:750 10px/1.3 system-ui,sans-serif;letter-spacing:.14em;color:var(--mute)}
+.almas-side-heading strong{font:650 clamp(19px,2vw,25px)/1.25 Georgia,serif;color:var(--ink)}
+.almas-side-tabs{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:5px;border:1px solid var(--line);border-radius:12px;background:var(--bg2)}
+.almas-side-tabs button{min-height:43px;border:1px solid transparent;border-radius:9px;background:transparent;color:var(--mute);font:750 13px system-ui,sans-serif;cursor:pointer;transition:background .2s,border-color .2s,color .2s}
+.almas-side-tabs button.active{border-color:color-mix(in srgb,var(--gold) 44%,var(--line));background:color-mix(in srgb,var(--gold) 11%,var(--panel));color:var(--ink);box-shadow:0 3px 12px #0001}
+.almas-side-tabs button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.almas-side-anchor{height:clamp(370px,calc(100dvh - 240px),760px);width:100%;min-width:0;border:1px solid var(--line);border-radius:11px;background:color-mix(in srgb,var(--panel) 48%,var(--bg));overflow:hidden}
+
+/* v1.34.6 — Rolagem independente no painel Almas, sem bloquear os controles do jogo. */
+@media(min-width:1050px){
+  .workspace.dual>#soulView{
+    position:sticky;top:12px;align-self:start;
+    height:calc(100dvh - 24px);max-height:calc(100dvh - 24px);
+    overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;
+    scrollbar-width:thin;scrollbar-gutter:stable;
+    touch-action:pan-y;
+  }
+  .workspace.dual>#main{scrollbar-gutter:stable;}
+  .workspace.dual #soulMount{min-height:100%;}
+}
+
+
+/* v1.34.7 — Uma página, um scroll: sem painéis negros ou regiões de rolagem independentes. */
+@media(min-width:1050px){
+ .workspace.dual{align-items:start!important;background:transparent!important}
+ .workspace.dual>#main,.workspace.dual>#soulView{
+   position:relative!important;top:auto!important;align-self:start!important;
+   height:auto!important;max-height:none!important;min-height:0!important;
+   overflow:visible!important;overscroll-behavior:auto!important;
+   scrollbar-gutter:auto!important;background:transparent!important;
+   border:0!important;box-shadow:none!important;
+ }
+ .workspace.almas-deck-mode>#main{overflow:visible!important}
+ .workspace.almas-deck-mode .almas-side-anchor{
+   height:auto;min-height:100px;border:0!important;border-radius:0!important;
+   background:transparent!important;overflow:visible!important;
+ }
+ .workspace.dual #soulMount{background:transparent!important}
+}
+/* v1.34.6 — Interface compacta, mantendo as ações e tooltips originais. */
+@media(min-width:1050px){
+ .workspace.dual{gap:8px!important;max-width:1900px!important;margin-inline:auto}
+ .workspace.dual>#main{padding:8px 7px 12px!important;gap:7px!important;background:transparent!important}
+ .workspace.dual>#soulView{padding:0!important;background:transparent!important;box-shadow:none!important;border:0!important}
+ .workspace.dual #soulMount{padding:0 2px 8px!important;background:transparent!important}
+ .workspace.almas-deck-mode .almas-side-anchor{height:calc(100dvh - 146px);border-color:var(--line);background:transparent}
+ .workspace.almas-deck-mode .almas-side-panel:not([hidden]){gap:5px}
+ .workspace.almas-deck-mode .almas-side-heading{display:none}
+ .workspace.almas-deck-mode .almas-side-tabs{padding:3px;gap:4px}
+ .workspace.almas-deck-mode .almas-side-tabs button{min-height:32px}
+}
+/* v1.34.9 — Duas colunas, uma página: nenhum painel opaco atrás dos cards.
+   Apenas os próprios cards, abas e controles conservam fundos e bordas. */
+.workspace.dual,.workspace.dual>#main,.workspace.dual>#soulView,
+.workspace.dual #soulMount,.workspace.almas-deck-mode .almas-side-panel,
+.workspace.almas-deck-mode .almas-side-anchor{
+  background:transparent!important;background-image:none!important;
+  border:0!important;box-shadow:none!important;
+  outline:0!important;backdrop-filter:none!important;
+}
+.workspace.dual>#main,.workspace.dual>#soulView{border-radius:0!important}
+@media(min-width:1050px){
+  .workspace.dual>#main,.workspace.dual>#soulView{
+    position:relative!important;top:auto!important;height:auto!important;
+    max-height:none!important;overflow:visible!important;
+    overscroll-behavior:auto!important;scrollbar-gutter:auto!important;
+  }
+  .workspace.almas-deck-mode .almas-side-anchor{
+    height:auto;overflow:visible!important;border-radius:0!important;
+  }
+}
+
 /* v1.29.2 — Cartas da Cidade: baralho experimental exclusivo do Almas lado a lado.
    Não usa EXEMPLOS, S.decks, histórico, favoritos ou cartas criadas pelos jogadores. */
 .workspace.almas-deck-mode .deck-choice,
@@ -952,6 +1035,14 @@ body.season-history-open .footer-shortcuts,body.soul-modal-open .footer-shortcut
 #dlgWhatsNew .whatsnew-outro{margin:4px 0 14px;font-size:.86rem;line-height:1.6;color:var(--mute);text-align:center}
 #dlgWhatsNew .whatsnew-top strong{color:var(--ink)}
 @media(max-width:540px){#dlgWhatsNew .whatsnew-items li{grid-template-columns:1fr;gap:2px}#dlgWhatsNew .whatsnew-section{margin-bottom:15px;padding-bottom:15px}#dlgWhatsNew .whatsnew-content{padding:17px 16px 8px}}
+
+/* Suprimentos compactos. Os estilos do Almas ficam dentro do Shadow DOM. */
+#boostersList{gap:4px!important}
+#boostersList .am-choice{min-height:52px!important;padding:5px 6px!important;gap:1px!important;border-radius:6px!important}
+#boostersList .am-choice-desc{font-size:10px!important;line-height:1.15!important}
+#boostersList .am-choice-meta{font-size:9px!important;line-height:1.15!important}
+#boostersHeading{font-size:13px!important}
+@media(max-width:480px){#gl>.operation>div:first-child b,#specialOps>.operation>div:first-child b{padding-right:120px!important;font-size:11px!important}#boostersList .am-choice{padding:4px!important}}
 </style>
 </head>
 <body>
@@ -999,13 +1090,17 @@ body.season-history-open .footer-shortcuts,body.soul-modal-open .footer-shortcut
       </div>
       <div class="chips" id="deckChips" role="group" aria-label="Escolha os decks para sortear"></div>
     </div>
-    <div id="almasDeckMode" class="almas-deck-intro" hidden>
-      <span class="almas-deck-eyebrow">ALMAS · MODO EXPERIMENTAL</span>
-      <strong>Cartas da Cidade</strong>
-      <p>Revele acontecimentos para o Almas. Os decks de desafios ficam guardados enquanto o jogo está lado a lado.</p>
+    <div id="almasSidePanel" class="almas-side-panel" hidden>
+      <div class="almas-side-heading"><small>ALMAS · CENTRAL DE OPERAÇÕES</small><strong>Seu império</strong></div>
+      <nav class="almas-side-tabs" aria-label="Domínio e Loja">
+        <button type="button" data-almas-side="a" class="active" aria-pressed="true">Domínio</button>
+        <button type="button" data-almas-side="r" aria-pressed="false">Loja</button>
+      </nav>
+      <div id="almasSideAnchor" class="almas-side-anchor" aria-label="Conteúdo de Domínio e Loja"></div>
     </div>
-    <div id="almasCardTable" class="almas-card-table" role="region" aria-label="Carta do Almas" hidden></div>
-    <div id="almasCardStatus" class="almas-card-status" role="status" aria-live="off" hidden></div>
+    <div id="almasDeckMode" hidden></div>
+    <div id="almasCardTable" hidden></div>
+    <div id="almasCardStatus" hidden></div>
     <div id="table" role="region" aria-label="Cartas sorteadas"></div>
     <div class="ctrl simple-actions">
       <div class="quick-count" aria-label="Quantidade de cartas por deck">
@@ -2137,6 +2232,20 @@ textarea{width:100%;height:70px;background:var(--am-ink);color:var(--am-text);bo
 .am-section-title strong{font:600 16px/1.35 var(--am-font-display);color:var(--am-text)}
 .am-section-title small{color:var(--am-muted);font-size:11px;max-width:100%;line-height:1.55}
 .am-feature-desc{font-size:12px;line-height:1.55}
+
+/* v1.34.3: content is the original living tab, visually docked in the adjacent column. */
+:host(.am-side-layout) .tabs [data-t="a"],:host(.am-side-layout) .tabs [data-t="r"]{display:none!important}
+:host(.am-side-layout) #ta,:host(.am-side-layout) #tr{
+ position:fixed!important;left:var(--am-side-left,0px);top:var(--am-side-top,0px);
+ width:var(--am-side-width,0px);height:var(--am-side-height,0px);
+ max-height:var(--am-side-height,0px);box-sizing:border-box;
+ overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;
+ scrollbar-width:thin;padding:12px!important;margin:0!important;
+ background:var(--am-bg);z-index:40;border-radius:10px;
+}
+:host(.am-side-layout) #ta[hidden],:host(.am-side-layout) #tr[hidden]{display:none!important}
+:host(.am-side-layout) #ta:not([hidden]),:host(.am-side-layout) #tr:not([hidden]){display:grid!important;align-content:start}
+
 /* Investimentos: dois por fileira, títulos uniformes e ações legíveis. */
 #gl,#specialOps,#il{gap:10px;align-items:stretch}
 #gl>.operation,#specialOps>.operation,#il>.up{position:relative;isolation:isolate;overflow:hidden;margin:0;min-height:151px;padding:14px!important;gap:8px;border:1px solid var(--am-ui-edge)!important;border-radius:12px!important;background:linear-gradient(164deg,color-mix(in srgb,var(--am-raised) 84%,var(--am-surface)),var(--am-ui-panel))!important;box-shadow:0 5px 17px rgba(0,0,0,.11)!important;transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease,background .22s ease!important}
@@ -2446,6 +2555,66 @@ textarea{width:100%;height:70px;background:var(--am-ink);color:var(--am-text);bo
 .boss .hp.boss-recharge i{background:linear-gradient(90deg,var(--am-muted),var(--am-brass))}
 .boss .hp.boss-recharge{opacity:.9}
 
+
+/* v1.34.7 — O conteúdo lateral acompanha a altura da página em vez de rolar sozinho. */
+:host(.am-side-layout) #ta,:host(.am-side-layout) #tr{
+ max-height:none!important;overflow:visible!important;overscroll-behavior:auto!important;
+ height:auto!important;min-height:0!important;background:transparent!important;
+ border:0!important;border-radius:0!important;box-shadow:none!important;
+}
+#gl>.operation,#specialOps>.operation{position:relative!important}
+#gl>.operation .am-investment-level,#specialOps>.operation .am-investment-level{
+ position:absolute;right:9px;top:8px;display:inline-flex;align-items:center;
+ min-width:31px;justify-content:center;padding:3px 6px;
+ border-radius:5px;border:1px solid color-mix(in srgb,var(--am-brass) 35%,var(--am-line));
+ background:color-mix(in srgb,var(--am-brass) 9%,var(--am-bg));
+ color:var(--am-brass);font:800 12px/1.2 var(--am-font-ui);font-variant-numeric:tabular-nums;
+}
+#gl>.operation>div:first-child b,#specialOps>.operation>div:first-child b{display:block;padding-right:51px!important}
+#gl>.operation.am-ticketed .am-investment-level,#specialOps>.operation.am-ticketed .am-investment-level{top:23px;border-color:#aebdd2;color:#e1eafa;background:rgba(131,152,184,.14)}
+#il>.up .d{display:block!important;margin-top:3px;font:500 10px/1.3 var(--am-font-ui)!important;color:var(--am-muted);overflow-wrap:anywhere}
+#il>.up{min-height:86px!important}
+/* v1.34.6 — Cards enxutos: todas as informações longas ficam no tooltip. */
+:host(.am-side-layout) .wrap{padding:7px 8px 15px!important;max-width:none!important}
+:host(.am-side-layout) #ta,:host(.am-side-layout) #tr{gap:7px!important}
+:host(.am-side-layout) .am-ticket-inventory{padding:9px!important}
+:host(.am-side-layout) #boostersPanel .am-panel-heading{margin:0!important}
+:host(.am-side-layout) #boostersPanel .am-panel-heading small{display:none!important}
+
+#gl,#specialOps{gap:5px!important;align-items:stretch!important}
+#gl>.cat,#specialOps>.cat,#il>.cat{margin:3px 0 1px!important;padding:3px 0!important;min-height:0!important}
+#gl>.operation,#specialOps>.operation{min-height:92px!important;height:100%!important;padding:9px 10px!important;gap:3px!important;border-radius:8px!important;justify-content:space-between!important}
+#gl>.operation>div:first-child,#specialOps>.operation>div:first-child{padding:0!important}
+#gl>.operation>div:first-child b,#specialOps>.operation>div:first-child b{font-size:12px!important;line-height:1.16!important;padding-right:0}
+#gl>.operation .d,#specialOps>.operation .d{display:none!important}
+#gl>.operation .am-op-production,#specialOps>.operation .am-op-production{margin:3px 0 0!important;padding:3px 0 0!important;gap:3px!important;line-height:1.2!important}
+#gl>.operation .am-op-production-label,#specialOps>.operation .am-op-production-label{display:none!important}
+#gl>.operation .am-op-production-value,#specialOps>.operation .am-op-production-value{font-size:14px!important}
+#gl>.operation .am-op-production-unit,#specialOps>.operation .am-op-production-unit{font-size:10px!important}
+#gl>.operation>.r,#specialOps>.operation>.r{gap:1px 6px!important;line-height:1.1!important}
+#gl>.operation>.r em,#specialOps>.operation>.r em{font-size:12px!important}
+#gl>.operation>.r small,#specialOps>.operation>.r small{flex:1 1 100%;font-size:10px!important;line-height:1.15!important}
+#gl>.operation .am-ticket-seal,#specialOps>.operation .am-ticket-seal{top:4px!important;right:4px!important;font-size:7px!important;padding:2px 4px!important}
+#gl>.operation.am-ticketed>div:first-child,#specialOps>.operation.am-ticketed>div:first-child{padding-top:12px!important}
+#il{gap:5px!important}
+#il>.up{min-height:74px!important;padding:8px!important;gap:4px!important;border-radius:8px!important}
+#il>.up .d{display:block!important;margin-top:3px!important;font-size:10px!important;line-height:1.3!important}
+#il>.up>div:first-child b{font-size:11px!important;line-height:1.2!important}
+#il>.up .r em{font-size:12px!important}
+#il>.up .r small:empty{display:none!important}
+#boostersPanel{padding:10px!important}
+#boostersIntro:empty{display:none!important}
+#boostersList{gap:5px!important;grid-template-columns:repeat(3,minmax(0,1fr))!important}
+#boostersList .am-choice{min-height:72px!important;padding:8px!important;gap:3px!important;border-radius:7px!important}
+#boostersList .am-choice strong{display:none!important}
+#boostersList .am-choice-sign{display:none!important}
+#boostersList .am-choice-desc{font-size:11px!important;line-height:1.25!important}
+#boostersList .am-choice-meta{font-size:10px!important;margin:0!important;line-height:1.3!important}
+.am-base-shop,#ta,#tr{gap:8px!important}
+.am-section-title small{display:none!important}
+.am-section-title{margin:2px 0 4px!important;min-height:0!important}
+@media(max-width:540px){#boostersList{grid-template-columns:repeat(3,minmax(0,1fr))!important}#gl>.operation,#specialOps>.operation{min-height:98px!important}}
+
 /* v1.32.9 · PLATINUM com compra independente e inventário. */
 .am-dock-platinum{display:inline-flex;align-items:center;gap:4px;justify-self:start;width:auto;min-height:24px;padding:2px 7px;margin-top:4px;border-radius:5px;border:1px solid #b9c9e0;color:#e6eefb;background:linear-gradient(125deg,#62768e,#33455a);font:700 10px system-ui,sans-serif;letter-spacing:.03em}
 .am-dock-platinum:hover{border-color:#f2f6ff}
@@ -2509,6 +2678,71 @@ textarea{width:100%;height:70px;background:var(--am-ink);color:var(--am-text);bo
 .up.operation .am-op-production[data-zero="true"] .am-op-production-value{color:var(--am-muted)}
 .up.operation .r small{line-height:1.5}
 @media(max-width:680px){.up.operation .am-op-production{margin-top:5px;padding-top:5px}.up.operation .am-op-production-value{font-size:17px}}
+
+/* v1.34.9 · PLATINUM integrado, operação padronizada, rodas de produção e compras automáticas. */
+#ticketPanel{display:none!important}
+#gl>.operation,#specialOps>.operation{min-height:98px!important;display:flex!important;flex-direction:column!important;justify-content:space-between!important;gap:3px!important}
+#gl>.operation>div:first-child,#specialOps>.operation>div:first-child{padding-top:0!important}
+#gl>.operation>div:first-child b,#specialOps>.operation>div:first-child b{font:750 12px/1.23 var(--am-font-ui)!important;padding-right:70px!important;margin:0!important;min-height:16px!important}
+#gl>.operation .am-investment-level,#specialOps>.operation .am-investment-level,#gl>.operation.am-ticketed .am-investment-level,#specialOps>.operation.am-ticketed .am-investment-level{top:7px!important;right:8px!important;min-width:31px!important;z-index:3}
+#gl>.operation .am-ticket-seal,#specialOps>.operation .am-ticket-seal{top:7px!important;right:46px!important;left:auto!important;font-size:8px!important;padding:3px 5px!important;z-index:3}
+#gl>.operation.am-ticketed>div:first-child,#specialOps>.operation.am-ticketed>div:first-child{padding-top:0!important}
+#gl>.operation .am-op-spinner,#specialOps>.operation .am-op-spinner{position:absolute!important;right:15px;top:34px;width:17px;height:17px;border:2px solid color-mix(in srgb,var(--am-soul) 30%,transparent);border-top-color:var(--am-soul);border-radius:50%;animation:amIncomeSpin 4s linear infinite;pointer-events:none;opacity:.85}
+#gl>.operation .am-op-spinner[hidden],#specialOps>.operation .am-op-spinner[hidden]{display:none!important}
+@keyframes amIncomeSpin{to{transform:rotate(360deg)}}
+#gl>.operation .am-op-info,#specialOps>.operation .am-op-info{position:absolute;bottom:6px;right:8px;color:var(--am-muted);font:700 12px/1 var(--am-font-ui);z-index:2}
+#gl>.operation>.r,#specialOps>.operation>.r{padding-right:17px!important}
+#gl>.operation .am-op-production,#specialOps>.operation .am-op-production{padding-right:22px!important}
+.am-platinum-shop{padding:8px 10px!important;margin:5px 0 8px!important;border-radius:9px!important}
+.am-platinum-shop-head{margin:0 0 6px!important}
+.am-platinum-shop-head h3{font:700 12px/1.2 var(--am-font-ui)!important;letter-spacing:.05em}
+.am-platinum-shop-row{gap:8px!important}
+.am-platinum-shop-info{display:flex!important;align-items:center!important;gap:9px!important;flex-wrap:wrap!important}
+.am-platinum-shop-info strong{font:700 13px/1.3 var(--am-font-ui)!important;color:var(--am-text)!important}
+.am-platinum-shop-info .btn{width:auto!important;min-height:30px!important;padding:5px 10px!important;font-size:11px!important}
+.am-platinum-shop-info small{font-size:10px!important}
+.am-encounters .boss,.am-encounters .am-fund{padding:9px 10px!important;gap:5px!important}
+.am-encounters .am-encounter-heading{min-height:0!important;margin:0 0 4px!important;gap:2px!important}
+.am-encounters .am-encounter-heading h3{font:700 13px/1.25 var(--am-font-ui)!important}
+.am-encounters .am-encounter-state{min-height:0!important;margin:0!important;font-size:11px!important}
+.am-encounters .btn{min-height:30px!important;padding:5px 9px!important;font-size:11px!important}
+.am-autobuy-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:6px 0 9px;padding:7px 10px;border:1px solid var(--am-ui-edge);border-radius:8px;color:var(--am-text);font:700 11px/1.3 var(--am-font-ui);cursor:pointer}
+.am-autobuy-row[hidden]{display:none!important}
+.am-autobuy-row input{accent-color:var(--am-brass);width:15px;height:15px}
+.am-autobuy-row small{font-size:10px;color:var(--am-muted);font-weight:500}
+@media(prefers-reduced-motion:reduce){.am-op-spinner{animation:none!important;border-color:var(--am-soul)!important}}
+
+/* v1.35.1: selos sem sobreposição, acabamento prata e indicador ligado à produção. */
+#gl>.operation,#specialOps>.operation{padding-bottom:27px!important}
+#gl>.operation>div:first-child b,#specialOps>.operation>div:first-child b{padding-right:54px!important}
+#gl>.operation .am-investment-level,#specialOps>.operation .am-investment-level,
+#gl>.operation.am-ticketed .am-investment-level,#specialOps>.operation.am-ticketed .am-investment-level{
+ top:7px!important;right:8px!important;left:auto!important;min-width:34px!important;
+ font-variant-numeric:tabular-nums;white-space:nowrap;z-index:3
+}
+#gl>.operation .am-ticket-seal,#specialOps>.operation .am-ticket-seal{
+ position:absolute!important;top:auto!important;bottom:7px!important;right:8px!important;left:auto!important;
+ max-width:none!important;white-space:nowrap!important;font-size:8px!important;letter-spacing:.055em!important;
+ padding:3px 6px!important;z-index:3;pointer-events:none
+}
+#gl>.operation .am-op-info,#specialOps>.operation .am-op-info{
+ bottom:8px!important;left:9px!important;right:auto!important;top:auto!important
+}
+#gl>.operation .am-op-spinner,#specialOps>.operation .am-op-spinner{
+ animation:amIncomeSpin var(--am-spin-duration,6s) linear infinite!important;
+ animation-duration:var(--am-spin-duration,6s)!important;
+ transform-origin:center;will-change:transform
+}
+#platinumShop.am-platinum-shop{
+ background:linear-gradient(125deg,#a5b6cf 0%,#cdd8e8 26%,#e7edf6 48%,#becce0 73%,#97abc5 100%)!important;
+ background-color:#c5d3e6!important;
+ border:1px solid #eef5ff!important;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.82),inset 0 0 0 1px rgba(80,106,147,.12),0 6px 17px rgba(79,107,147,.22)!important;
+ color:#223149!important
+}
+#platinumShop .am-platinum-shop-head h3{color:#26374f!important;text-shadow:0 1px 0 rgba(255,255,255,.42)}
+#platinumShop .am-platinum-shop-info strong{color:#1c304b!important}
+#platinumShop .am-platinum-shop-info small{color:#435873!important}
 </style>
 
 <div class="wrap">
@@ -2570,7 +2804,7 @@ textarea{width:100%;height:70px;background:var(--am-ink);color:var(--am-text);bo
     </div>
     <div class="am-encounters">
     <div class="boss" id="bs">
-      <div class="am-encounter-heading"><h3>Confronto com o Mid-Boss</h3><p>Derrote o inimigo em 30 s. Explore as aberturas no escudo para conquistar Souls e bônus permanentes.</p></div>
+      <div class="am-encounter-heading"><h3 title="30 segundos · Ataque nas aberturas do escudo · Souls e bônus">Mid-Boss</h3></div>
       <div class="am-encounter-state"><p id="bt"></p><div id="bossShieldState" class="boss-shield-state" hidden></div></div>
       <div class="hp" id="hpw" hidden><i id="hpi"></i></div>
       <button class="btn pri" id="bgo" hidden>Iniciar confronto</button>
@@ -2581,7 +2815,7 @@ textarea{width:100%;height:70px;background:var(--am-ink);color:var(--am-text);bo
     </div>
 
     <section class="am-fund box" id="fundPanel">
-      <div class="am-encounter-heading"><h3>Consórcio das Ruas</h3><p>Financie por 3 min e receba de +90% a +200% de lucro conforme os contratos. O Ritual encerra depósitos pendentes.</p></div>
+      <div class="am-encounter-heading"><h3 title="3 minutos · Lucro de 90% a 200% conforme contratos · Ritual encerra depósitos">Consórcio</h3></div>
       <div class="am-encounter-state am-fund-info"><span id="fundStatus">Sem financiamento ativo</span><strong id="fundReturn"></strong></div>
       <div class="fund-progress"><i id="fundProgressBar"></i></div>
       <button type="button" class="btn" id="fundAction">Financiar operação</button>
@@ -2606,7 +2840,7 @@ textarea{width:100%;height:70px;background:var(--am-ink);color:var(--am-text);bo
     <div class="am-section-title"><strong>Operações de Domínio</strong><small>Novas operações aparecem ao alcançar 100% do custo inicial em Souls obtidas na run. Descobertas persistem após o Ritual.</small></div>
     <div id="gl"></div>
     <p class="am-next-unlock" id="nextUnlock" aria-live="off"></p>
-    <section class="am-ticket-inventory box" id="ticketPanel">
+    <section class="am-ticket-inventory box" id="ticketPanel" hidden aria-hidden="true">
       <h3>Carteira PLATINUM</h3>
       <div class="am-ticket-inventory-row">
         <button type="button" id="ticketArm" class="am-ticket-square" aria-pressed="false" title="Selecionar operação para usar o ticket"><span class="am-ticket-sigil">✧</span><strong id="ticketIconLabel">PLATINUM</strong><small id="ticketIconStage">SEM TICKET</small></button>
@@ -2624,10 +2858,10 @@ textarea{width:100%;height:70px;background:var(--am-ink);color:var(--am-text);bo
     </section>
     <section class="am-platinum-shop box" id="platinumShop">
       <div class="am-platinum-shop-head"><div><h3>PLATINUM</h3></div></div>
-      <div class="am-platinum-shop-row"><div class="am-platinum-shop-square"><span>✧</span><b>PLATINUM</b></div>
+      <div class="am-platinum-shop-row">
       <div class="am-platinum-shop-info"><strong id="ticketShopPrice">—</strong><button class="btn pri" type="button" id="ticketBuy">Comprar ticket</button><small id="ticketShopBalance"></small><small id="ticketShopHint"></small><small id="ticketCoverageHint" class="am-ticket-coverage" hidden></small></div></div>
     </section>
-    <div class="am-base-shop" aria-label="Itens e melhorias permanentes da run"><div id="il"></div></div>
+    <div class="am-base-shop" aria-label="Itens e melhorias permanentes da run"><label id="amAutoItemsRow" class="am-autobuy-row" hidden><input type="checkbox" id="amAutoItems"> Compra automática <small>Arma → Espírito → Vitalidade</small></label><div id="il"></div></div>
   </section>
 
   <section id="tl" hidden>
@@ -2954,7 +3188,7 @@ if(testModeButton){
 const KEY="deadlock-deck-v3";
 /* Reset único: quem tem dados salvos sem "epoch" (versões antigas) volta ao início UMA vez.
    Os dados antigos são guardados em BKEY antes. Só aumente RESET_EPOCH se quiser forçar outro reset. */
-const RESET_EPOCH=3,APP_VERSION="1.34.2",BKEY="deadlock-deck-v3:backup";
+const RESET_EPOCH=3,APP_VERSION="1.35.1",BKEY="deadlock-deck-v3:backup";
 // Reset único de estados criados antes da v1.9.4. Futuras atualizações não reiniciam
 // os dados sem uma migração explícita; o backup deve ser confirmado antes do reset.
 const RESET_BEFORE_VERSION="1.9.4",INTRO_KEY="deadlock-deck-v3:intro-hidden";
@@ -3441,21 +3675,16 @@ function syncAlmasCardUi(){
   if(info.result){const note=document.createElement("span");note.className="almas-status-secondary";note.textContent="Última carta: "+info.result;status.append(note)}
 }
 function setAlmasDeckMode(enabled){
-  const box=document.getElementById("workspace"),willShow=!!enabled&&!almasCardsDisabled;
-  if(almasDeckVisible===willShow){if(willShow)syncAlmasCardUi();return}
+  const box=document.getElementById("workspace"),willShow=!!enabled;
   almasDeckVisible=willShow;
   box.classList.toggle("almas-deck-mode",willShow);
-  for(const id of ["almasDeckMode","almasCardTable","almasCardStatus"])document.getElementById(id).hidden=!willShow;
-  if(willShow){
-    closeShareMenu();
-    const last=almasCardApi()?.status()?.lastId||null;
-    showAlmasCard(last);
-    syncAlmasCardUi();
-  }else{
-    document.getElementById("bDraw").disabled=busy;
-    syncCount();
-  }
+  document.getElementById("almasSidePanel").hidden=!willShow;
+  for(const id of ["almasDeckMode","almasCardTable","almasCardStatus"])
+    document.getElementById(id).hidden=true;
+  window.decklockAlmasSide?.setEnabled(willShow);
+  if(!willShow){document.getElementById("bDraw").disabled=busy;syncCount()}
 }
+
 async function drawAlmasCard(){
   if(!inAlmasDeckMode()||almasDeckBusy)return;
   const api=almasCardApi();if(!api)return;
@@ -5783,7 +6012,7 @@ function initAlmasMortas(root){
     b.append(name,desc,meta,sign);b.addEventListener("click",callback);row.append(b);return b;
   }
   function refreshExpansionText(){
-    $("boostersKicker").textContent=ext("boostersKicker");$("boostersHeading").textContent=ext("boosters");$("boostersIntro").textContent=ext("boostersIntro");
+    $("boostersKicker").textContent=ext("boostersKicker");$("boostersHeading").textContent=ext("boosters");$("boostersIntro").textContent="";
     $("streetKicker").textContent=ext("streetKicker");$("streetHeading").textContent=ext("street");$("streetInfo").textContent=streetText(["Escolha uma das três opções. Você recebe apenas uma recompensa por ocorrência.","Choose one of three options. You get one reward per encounter.","Elige una entre tres opciones. Recibes una recompensa por encuentro.","Choisissez une option sur trois. Une récompense par rencontre.","Wähle eine von drei Möglichkeiten. Eine Belohnung je Begegnung."]);
   }
   function drawBoosters(){
@@ -5805,8 +6034,8 @@ function initAlmasMortas(root){
       const price=boosterPrice(spec.id),active=extActive(S.booster,spec.id),remaining=active?Math.ceil((S.booster.until-now)/1000):0;
       const state=active?ext("active")+" · "+remaining+" s":running?ext("wait"):wait>0?ext("cooldown")+" "+wait+" s":fmt(price)+" Souls · "+ext("buy");
       const button=list.children[i];
-      button.querySelector("strong").textContent=spec.id==="crates"?ext("cratesBoost"):ext(spec.id);
-      button.querySelector(".am-choice-desc").textContent=ext(spec.desc);
+      button.querySelector("strong").textContent="";button.title=(spec.id==="crates"?ext("cratesBoost"):ext(spec.id))+" · "+ext(spec.desc);
+      button.querySelector(".am-choice-desc").textContent=ext(spec.desc).replace(/ por 45 s\.?$/i,"")+" · 45 s";
       button.querySelector(".am-choice-meta").textContent=state;
       button.disabled=running||wait>0||S.f<price;
       button.classList.toggle("chosen",active);
@@ -6329,11 +6558,12 @@ function initAlmasMortas(root){
     }
     gR.push(row($("gl"),g[0],g[1],function(){purchaseInvestment(i,qty(i))}));
     gR[i].b.classList.add("operation");gR[i].b.dataset.op=String(i);
+    const levelBadge=document.createElement("span");levelBadge.className="am-investment-level";levelBadge.textContent="0";levelBadge.setAttribute("aria-label","Nível do investimento");gR[i].b.appendChild(levelBadge);gR[i].levelBadge=levelBadge;const spinner=document.createElement("span");spinner.className="am-op-spinner";spinner.setAttribute("aria-hidden","true");gR[i].b.appendChild(spinner);gR[i].spinner=spinner;
     const production=document.createElement("div");production.className="am-op-production";
     production.innerHTML='<span class="am-op-production-label">Produção</span><strong class="am-op-production-value">0</strong><span class="am-op-production-unit">Souls/s</span>';
     gR[i].b.firstElementChild.appendChild(production);
     gR[i].production=production;gR[i].productionValue=production.querySelector(".am-op-production-value");
-    const seal=document.createElement("span");seal.className="am-ticket-seal";seal.textContent="PLATINUM";seal.hidden=true;seal.setAttribute("aria-hidden","true");gR[i].b.append(seal);gR[i].seal=seal;
+    const seal=document.createElement("span");seal.className="am-ticket-seal";seal.textContent="PLATINUM";seal.hidden=true;seal.setAttribute("aria-hidden","true");gR[i].b.append(seal);gR[i].seal=seal;const info=document.createElement("span");info.className="am-op-info";info.textContent="ⓘ";info.setAttribute("aria-label","Informações do investimento");gR[i].b.append(info);gR[i].info=info;
     if(i===2||i===3)$("specialOps").appendChild(gR[i].b);
   });
   CAT.forEach(function(c,ci){
@@ -6422,11 +6652,12 @@ function initAlmasMortas(root){
       const lang=allLanguage[soulLang]||allLanguage["pt-BR"];
       const unlocked=ritualistOperationUnlocked(i)&&(S.unlockedOps[i]||S.own[i]>0);
       r.b.classList.toggle("undiscovered",!unlocked);
+      if(r.levelBadge)r.levelBadge.textContent="Nv. "+S.own[i];
       const ticketLevel=S.tickets[i]||0,ticketed=ticketLevel>0;r.b.classList.toggle("am-ticketed",ticketed);if(r.seal){r.seal.hidden=!ticketed;r.seal.textContent="PLATINUM "+["","I","II","III"][ticketLevel];}
       r.b.hidden=!unlocked;
       r.b.disabled=!unlocked;
-      r.b.querySelector("b").textContent=unlocked?GEN[i][0]:"Operação desconhecida";
-      r.b.querySelector(".d").textContent=unlocked?GEN[i][1]:i>=12&&!ritualistOperationUnlocked(i)?"Disponível a partir do elo Ritualista.":"Descubra ao obter "+fmt(GEN[i][2])+" Souls nesta run.";
+      r.b.querySelector("b").textContent=unlocked?GEN[i][0].split(" · ").pop():"Operação desconhecida";
+      r.b.querySelector(".d").textContent=unlocked?"":i>=12&&!ritualistOperationUnlocked(i)?"Disponível a partir do elo Ritualista.":"Descubra ao obter "+fmt(GEN[i][2])+" Souls nesta run.";
       if(!unlocked){r.n.textContent="?";r.s.textContent="Ainda não descoberta";r.b.title="";if(r.production)r.production.hidden=true;return}
       // Atualizado em cada render, inclusive após compras, tickets, bônus e retorno à aba.
       const currentProduction=operationCps(i);
@@ -6446,10 +6677,12 @@ function initAlmasMortas(root){
         (S.own[i]>=10?" · "+et("special")+" +"+Math.round((operationMilestoneMult(S.own[i])-1)*100)+"%":"")+
         (S.f<c?" · "+lang.missing+" "+fmt(c-S.f)+" Souls":" · "+lang.ready);
       // Na lista exibir apenas o essencial; detalhes completos permanecem no tooltip.
-      r.s.textContent=lang.lv+" "+S.own[i]+" (+"+n+") · próxima compra +"+fmt(inc)+" Souls/s"+
-        (crossed.length?" · "+lang.cross:nx&&nx-S.own[i]<=5?" · "+lang.next+" "+nx:"")+
-        (S.f<c?" · "+lang.missing+" "+fmt(c-S.f)+" Souls":"");
-      r.b.title=fullDetails;
+      r.s.textContent="Nv. "+S.own[i]+" · +"+fmt(inc)+" Souls/s";
+      r.b.title=GEN[i][0]+" · "+fullDetails;r.info.title=GEN[i][0]+" · "+GEN[i][1]+" · "+fullDetails;const rate=Math.max(0,currentProduction);
+      // Roda reage à produção real, com teto alcançável pelos 16 investimentos.
+      const spinSeconds=Math.max(.42,6-1.15*Math.log10(1+rate));
+      r.spinner.style.setProperty("--am-spin-duration",spinSeconds.toFixed(2)+"s");
+      r.spinner.hidden=rate<=0;
     });
     $("specialOps").parentElement.hidden=![2,3].some(i=>S.unlockedOps[i]);
     const nextUnknown=GEN.map((g,i)=>({i,requirement:Math.ceil(g[2])})).filter(o=>!S.unlockedOps[o.i]&&ritualistOperationUnlocked(o.i)).sort((a,b)=>a.requirement-b.requirement)[0];
@@ -6579,7 +6812,7 @@ function initAlmasMortas(root){
     $("ticketInventoryTitle").textContent=holding?holding+" PLATINUM"+(holding>1?" disponíveis":" disponível"):"Nenhum PLATINUM disponível";
     const coverageI=platinumCoverage(1),coverageII=platinumCoverage(2);
     const collection=S.tickets.filter(level=>level>=1).length;
-    const collectionNote="Coleção "+collection+"/16 · +"+(collection*.75).toFixed(2).replace(".",",")+"% global";
+    const collectionNote="Coleção "+collection+"/16 · +"+(collection*.75).toFixed(2).replace(".",",")+"% global";$("dockPlatinum").title="Usar tickets PLATINUM · "+collectionNote;
     const coverageNote="II: "+coverageI.owned+"/"+coverageI.requirement+" · III: "+coverageII.owned+"/"+coverageII.requirement+" · Compras: "+bought+"/"+limit;
     $("ticketSelection").textContent=holding?(armingGolden?"Selecione uma operação destacada.":"Toque no ticket para escolher uma operação."):"Compre na Loja para usar aqui.";
     $("ticketStatus").textContent=collectionNote+" · "+coverageNote;
@@ -6640,10 +6873,34 @@ function initAlmasMortas(root){
     }
   });
   let masteryRenderKey="";
+  S.autoItems=!!S.autoItems;
+  const autoItemsToggle=$("amAutoItems");
+  autoItemsToggle.checked=S.autoItems;
+  autoItemsToggle.addEventListener("change",()=>{S.autoItems=autoItemsToggle.checked;save();drawIt()});
+  function autoBuyItems(){
+    if(!S.autoItems||rankInfo(rankSteps()).i<5)return false;
+    let changed=false;
+    // Uma compra por ciclo impede rajadas imprevistas e respeita a ordem interna das linhas.
+    for(const category of [0,2,1]){
+      const base=category*6;
+      for(let j=0;j<6;j++){
+        const id=base+j,it=ITM[category][j];
+        if(S.items[id])continue;
+        if(j>0&&!S.items[id-1])break;
+        if(S.f>=it[1]){S.f-=it[1];S.items[id]=true;S.extraStats.items++;changed=true;break}
+        break;
+      }
+      if(changed)break;
+    }
+    if(changed){save();drawAll()}
+    return changed;
+  }
   function drawIt(){
+    $("amAutoItemsRow").hidden=rankInfo(rankSteps()).i<5;
+    autoItemsToggle.checked=!!S.autoItems;
     iR.forEach(function(r,id){var ci=Math.floor(id/6),t=id%6,it=ITM[ci][t],own=S.items[id],lock=t>0&&!S.items[id-1];
       r.b.classList.toggle("done",own);r.b.classList.toggle("lock",lock&&!own);r.b.classList.toggle("no",!own&&!lock&&S.f<it[1]);r.b.classList.toggle("ready",!own&&!lock&&S.f>=it[1]);
-      r.n.textContent=own?"adquirido":fmt(it[1]);r.s.textContent=own?"":lock?"requer o item anterior":S.f<it[1]?"faltam "+fmt(it[1]-S.f)+" Souls":"disponível"});
+      r.n.textContent=own?"✓":fmt(it[1]);r.s.textContent="";const effect=r.b.querySelector(".d");if(effect)effect.textContent=it[2];r.b.title=it[0]+" · "+it[2]+" · "+(own?"Adquirido":lock?"Bloqueado":S.f<it[1]?"Faltam "+fmt(it[1]-S.f)+" Souls":"Disponível")});
   }
   const BEAT_LENGTH=3,BEAT_COOLDOWN=7*60000,BEAT_SWEEP=1350,BEAT_TAP_GAP=230;
   // A cada marca o ponteiro acelera ~6%, sem saltar na transição de velocidade.
@@ -7017,10 +7274,64 @@ function initAlmasMortas(root){
     shortcut.setAttribute("aria-haspopup","dialog");
     shortcut.setAttribute("aria-expanded",String(!$("affinityOverlay").hidden));
   }
-  function drawAll(){if(S.pendingReward)chooseBossReward(["auto","click","souls"][Math.floor(Math.random()*3)],true);drawHead();drawAffinityShortcut();drawExpansionStatus();if(tab_==="a"){drawAl();drawTickets()}else if(tab_==="r"){drawIt();drawBoosters();drawTickets()}else if(tab_==="p"){drawBoss();drawContracts();drawFund()}else if(tab_==="l"){drawLeg()}}
+  // Domínio e Loja compartilham a própria instância do jogo, sem duplicar estado.
+  let almasSideEnabled=false,almasSideTab="a";
+  function sideSwitch(t){
+    if(t!=="a"&&t!=="r")return;
+    almasSideTab=t;
+    if(almasSideEnabled){$("ta").hidden=t!=="a";$("tr").hidden=t!=="r";}
+    document.querySelectorAll("[data-almas-side]").forEach(b=>{
+      const active=b.dataset.almasSide===t;
+      b.classList.toggle("active",active);
+      b.setAttribute("aria-pressed",String(active));
+    });
+    if(t==="a"){drawAl();drawTickets()}else{drawIt();drawBoosters();drawTickets()}
+    requestAnimationFrame(positionAlmasSide);
+  }
+  function positionAlmasSide(){
+    if(!almasSideEnabled)return;
+    const anchor=document.getElementById("almasSideAnchor");if(!anchor)return;
+    const activeTab=$(almasSideTab==="a"?"ta":"tr");
+    if(activeTab){
+      const wanted=Math.max(100,Math.ceil(activeTab.scrollHeight+6));
+      if(Math.abs(anchor.offsetHeight-wanted)>2)anchor.style.height=wanted+"px";
+    }
+    const r=anchor.getBoundingClientRect();
+    const visible=r.width>0&&r.height>0;
+    root.host.style.setProperty("--am-side-left",Math.round(r.left)+"px");
+    root.host.style.setProperty("--am-side-top",Math.round(r.top)+"px");
+    root.host.style.setProperty("--am-side-width",Math.round(visible?r.width:0)+"px");
+    root.host.style.setProperty("--am-side-height",Math.round(visible?r.height:0)+"px");
+  }
+  window.decklockAlmasSide={
+    setEnabled(on){
+      almasSideEnabled=!!on;
+      root.host.classList.toggle("am-side-layout",almasSideEnabled);
+      if(almasSideEnabled){
+        if(tab_==="a"||tab_==="r")tab_="p";
+        tab(tab_);
+        sideSwitch(almasSideTab);
+        requestAnimationFrame(positionAlmasSide);
+      }else{
+        tab(tab_);
+      }
+    },
+    select:sideSwitch,
+    align:positionAlmasSide
+  };
+  document.querySelectorAll("[data-almas-side]").forEach(b=>b.addEventListener("click",()=>sideSwitch(b.dataset.almasSide)));
+  window.addEventListener("resize",positionAlmasSide,{passive:true});
+  window.addEventListener("scroll",positionAlmasSide,{passive:true});
+  // A coluna direita também rola de modo independente no desktop.
+  document.getElementById("soulView")?.addEventListener("scroll",positionAlmasSide,{passive:true});
+  document.getElementById("main")?.addEventListener("scroll",positionAlmasSide,{passive:true});
+  const sideAnchor=document.getElementById("almasSideAnchor");
+  if(sideAnchor&&typeof ResizeObserver!=="undefined")new ResizeObserver(positionAlmasSide).observe(sideAnchor);
+  function drawAll(){if(S.pendingReward)chooseBossReward(["auto","click","souls"][Math.floor(Math.random()*3)],true);drawHead();drawAffinityShortcut();drawExpansionStatus();if(tab_==="a"){drawAl();drawTickets()}else if(tab_==="r"){drawIt();drawBoosters();drawTickets()}else if(tab_==="p"){drawBoss();drawContracts();drawFund()}else if(tab_==="l"){drawLeg()}if(almasSideEnabled){if(almasSideTab==="a"){drawAl();drawTickets()}else{drawIt();drawBoosters();drawTickets()}requestAnimationFrame(positionAlmasSide)}}
 
   function tab(t){
-    const oldTab=tab_;tab_=t;["p","a","r","l"].forEach(function(k){$("t"+k).hidden=k!==t});
+    if(almasSideEnabled&&(t==="a"||t==="r")){sideSwitch(t);return}
+    const oldTab=tab_;tab_=t;["p","a","r","l"].forEach(function(k){$("t"+k).hidden=almasSideEnabled&&(k==="a"||k==="r")?k!==almasSideTab:k!==t});
     if(oldTab!==t){
       // Feedback sonoro discreto apenas em trocas reais, nunca ao iniciar a interface.
       soulTone("tab");
@@ -7434,7 +7745,7 @@ function initAlmasMortas(root){
   setInterval(function(){
     if(document.hidden)return;
     settleElapsed(Date.now());
-    n++;if(n%10===0){S.records.bestCps=Math.max(S.records.bestCps,cps());recordRunSample();
+    n++;if(n%10===0){autoBuyItems();S.records.bestCps=Math.max(S.records.bestCps,cps());recordRunSample();
       // Nenhuma nova Ocorrência de Rua é gerada.
     }    if(Date.now()-lastSoulBackupTick>=5*60*1000){lastSoulBackupTick=Date.now();save(true);window.dispatchEvent(new CustomEvent("almas:backup",{detail:{reason:"rotina"}}))}
 if(n%50===0)save();
