@@ -6,7 +6,7 @@
 <title>DeckLock</title>
 <meta name="description" content="Sorteador de cartas de desafio para partidas de Deadlock, com decks editáveis.">
 <meta name="theme-color" content="#222021">
-<meta name="decklock-version" content="1.33.8">
+<meta name="decklock-version" content="1.34.0">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="DeckLock">
@@ -2156,6 +2156,34 @@ textarea{width:100%;height:70px;background:var(--am-ink);color:var(--am-text);bo
 #gl>.operation .am-ticket-seal,#specialOps>.operation .am-ticket-seal{font-size:9px;letter-spacing:.11em;padding:4px 7px;border-radius:5px;background:linear-gradient(180deg,#edf3fc,#b9c7dc)!important;color:#223044!important;border:1px solid #fff!important}
 #gl>.operation.am-ticketed>div:first-child,#specialOps>.operation.am-ticketed>div:first-child{padding-top:16px}
 #gl>.operation.am-golden-target,#specialOps>.operation.am-golden-target{outline:2px solid #d7e3f7!important;outline-offset:2px}
+/* PLATINUM: contraste claro entre pode comprar e não pode comprar. */
+#gl>.operation.am-ticketed.ready,#specialOps>.operation.am-ticketed.ready{
+ border-color:#edf4ff!important;
+ background:linear-gradient(152deg,color-mix(in srgb,#eef4ff 24%,var(--am-raised)) 0%,color-mix(in srgb,#c2d1ea 15%,var(--am-ui-panel)) 100%)!important;
+ box-shadow:inset 0 0 0 1px rgba(245,249,255,.55),0 0 0 1px rgba(225,235,251,.28),0 10px 26px rgba(185,204,236,.20)!important;
+}
+#gl>.operation.am-ticketed.ready>.r em,#specialOps>.operation.am-ticketed.ready>.r em{color:#f1f6ff!important;text-shadow:0 0 10px rgba(231,240,255,.18)}
+#gl>.operation.am-ticketed.ready .am-ticket-seal,#specialOps>.operation.am-ticketed.ready .am-ticket-seal{
+ background:linear-gradient(180deg,#ffffff,#dbe6f6)!important;
+ color:#18263a!important;
+ border-color:#ffffff!important;
+ box-shadow:0 4px 12px rgba(214,225,243,.22);
+}
+#gl>.operation.am-ticketed.no,#specialOps>.operation.am-ticketed.no{
+ border-color:#8694aa!important;
+ background:linear-gradient(168deg,color-mix(in srgb,#8d9cb3 9%,var(--am-bg)) 0%,color-mix(in srgb,var(--am-raised) 45%,var(--am-bg)) 100%)!important;
+ box-shadow:inset 0 0 0 1px rgba(157,171,194,.12),0 4px 14px rgba(24,32,47,.10)!important;
+}
+#gl>.operation.am-ticketed.no>.r em,#specialOps>.operation.am-ticketed.no>.r em{color:#a6b3c6!important}
+#gl>.operation.am-ticketed.no .am-ticket-seal,#specialOps>.operation.am-ticketed.no .am-ticket-seal{
+ background:linear-gradient(180deg,#d8e1ee,#aebacf)!important;
+ color:#304056!important;
+ border-color:#eef4ff!important;
+ opacity:.88;
+}
+#gl>.operation.am-ticketed.no .d,#specialOps>.operation.am-ticketed.no .d,
+#gl>.operation.am-ticketed.no>.r small,#specialOps>.operation.am-ticketed.no>.r small{color:#a0adbf!important}
+@media(hover:hover){#gl>.operation.am-ticketed.ready:hover,#specialOps>.operation.am-ticketed.ready:hover{border-color:#ffffff!important;box-shadow:0 14px 30px rgba(195,211,239,.24),0 0 0 1px rgba(237,244,255,.35)!important}}
 /* Botões: três graus de importância, e desabilitados legíveis sem fade excessivo. */
 .wrap :is(.btn,.reward-option,.am-choice,.ritual-menu-btn,.seg button,.run-view-btn,.am-dev-quick button){position:relative;isolation:isolate;overflow:hidden;transition:transform .18s cubic-bezier(.2,.9,.2,1),box-shadow .22s,border-color .22s,background .22s,filter .2s!important}
 .wrap .btn{min-height:40px;border:1px solid var(--am-ui-edge);border-radius:9px;font:680 13px/1.35 var(--am-font-ui);padding:9px 13px;color:var(--am-text);background:linear-gradient(180deg,color-mix(in srgb,var(--am-raised) 90%,var(--am-surface)),var(--am-ui-panel));box-shadow:0 3px 10px rgba(0,0,0,.1)}
@@ -2472,6 +2500,15 @@ textarea{width:100%;height:70px;background:var(--am-ink);color:var(--am-text);bo
 .am-platinum-shop-info #ticketShopBalance:empty,.am-platinum-shop-info #ticketShopHint:empty{display:none}
 .am-platinum-shop-info #ticketShopBalance,.am-platinum-shop-info #ticketShopHint{font-size:11px;line-height:1.35}
 .am-ticket-wallet-copy #ticketStatus{font-size:11px;line-height:1.5}
+
+/* v1.34.0 — produção por operação: valor atual destacado e responsivo. */
+.up.operation .am-op-production{display:flex;align-items:baseline;flex-wrap:wrap;gap:3px 7px;margin-top:7px;padding-top:7px;border-top:1px solid color-mix(in srgb,var(--am-line) 75%,transparent);font-variant-numeric:tabular-nums}
+.up.operation .am-op-production-label{font:650 10px/1.3 "Instrument Sans",system-ui,sans-serif;letter-spacing:.065em;text-transform:uppercase;color:var(--am-muted)}
+.up.operation .am-op-production-value{font:750 clamp(15px,2.1vw,19px)/1.25 "Instrument Sans",system-ui,sans-serif;color:var(--am-soul);overflow-wrap:anywhere}
+.up.operation .am-op-production-unit{font:600 11px/1.3 "Instrument Sans",system-ui,sans-serif;color:var(--am-muted)}
+.up.operation .am-op-production[data-zero="true"] .am-op-production-value{color:var(--am-muted)}
+.up.operation .r small{line-height:1.5}
+@media(max-width:680px){.up.operation .am-op-production{margin-top:5px;padding-top:5px}.up.operation .am-op-production-value{font-size:17px}}
 </style>
 
 <div class="wrap">
@@ -2917,7 +2954,7 @@ if(testModeButton){
 const KEY="deadlock-deck-v3";
 /* Reset único: quem tem dados salvos sem "epoch" (versões antigas) volta ao início UMA vez.
    Os dados antigos são guardados em BKEY antes. Só aumente RESET_EPOCH se quiser forçar outro reset. */
-const RESET_EPOCH=3,APP_VERSION="1.33.8",BKEY="deadlock-deck-v3:backup";
+const RESET_EPOCH=3,APP_VERSION="1.34.0",BKEY="deadlock-deck-v3:backup";
 // Reset único de estados criados antes da v1.9.4. Futuras atualizações não reiniciam
 // os dados sem uma migração explícita; o backup deve ser confirmado antes do reset.
 const RESET_BEFORE_VERSION="1.9.4",INTRO_KEY="deadlock-deck-v3:intro-hidden";
@@ -5898,6 +5935,12 @@ function initAlmasMortas(root){
   }
   function pMul(levels=S.own){var m=gm()*platinumCoverageBonus()*(1+.1*S.perk[2])*(1+.025*S.perk[5])*operationSynergy(levels);for(var t=0;t<6;t++)if(S.items[12+t])m*=1.25;if(S.stance===1)m*=1.25;if(S.stance===5)m*=1.12;if(S.stance===3)m*=.95;if(rewardActive("auto"))m*=BOSS_BALANCE.autoMult;if(contractBoostActive("auto"))m*=1.15;if(extActive(S.booster,"production"))m*=1.12;if(extActive(S.streetEffect,"production"))m*=1.15;if(cardBonusActive("auto"))m*=1.10;return m}
   function cpsFor(levels,xps=S.masteryXp){let value=0;for(let i=0;i<GEN.length;i++)value+=levels[i]*GEN[i][3]*gMul(i,levels[i],xps[i]);return value*pMul(levels)*1.30}
+  // Contribuição por operação: mesma expressão usada por cpsFor, inclusive os bônus globais.
+  // Somar todos os valores equivale a cps() (salvo arredondamento da interface).
+  function operationCps(i,levels=S.own,xps=S.masteryXp){
+    if(!Number.isInteger(i)||i<0||i>=GEN.length)return 0;
+    return levels[i]*GEN[i][3]*gMul(i,levels[i],xps[i])*pMul(levels)*1.30;
+  }
   function cps(){return cpsFor(S.own)}
   function cMul(){var m=gm()*(1+.18*S.perk[1]);for(var t=0;t<6;t++)if(S.items[t])m*=WM[t];if(S.stance===0)m*=1.35;if(S.stance===3)m*=1.25;if(S.stance===5)m*=.92;if(rewardActive("click"))m*=BOSS_BALANCE.clickMult;if(contractBoostActive("click"))m*=1.25;if(buff.t>0)m*=4;if(cardBonusActive("click"))m*=1.15;if(extActive(S.streetEffect,"click"))m*=1.20;return m}
   function clickVal(){
@@ -6282,6 +6325,10 @@ function initAlmasMortas(root){
     }
     gR.push(row($("gl"),g[0],g[1],function(){purchaseInvestment(i,qty(i))}));
     gR[i].b.classList.add("operation");gR[i].b.dataset.op=String(i);
+    const production=document.createElement("div");production.className="am-op-production";
+    production.innerHTML='<span class="am-op-production-label">Produção</span><strong class="am-op-production-value">0</strong><span class="am-op-production-unit">Souls/s</span>';
+    gR[i].b.firstElementChild.appendChild(production);
+    gR[i].production=production;gR[i].productionValue=production.querySelector(".am-op-production-value");
     const seal=document.createElement("span");seal.className="am-ticket-seal";seal.textContent="PLATINUM";seal.hidden=true;seal.setAttribute("aria-hidden","true");gR[i].b.append(seal);gR[i].seal=seal;
     if(i===2||i===3)$("specialOps").appendChild(gR[i].b);
   });
@@ -6376,7 +6423,11 @@ function initAlmasMortas(root){
       r.b.disabled=!unlocked;
       r.b.querySelector("b").textContent=unlocked?GEN[i][0]:"Operação desconhecida";
       r.b.querySelector(".d").textContent=unlocked?GEN[i][1]:i>=12&&!ritualistOperationUnlocked(i)?"Disponível a partir do elo Ritualista.":"Descubra ao obter "+fmt(GEN[i][2])+" Souls nesta run.";
-      if(!unlocked){r.n.textContent="?";r.s.textContent="Ainda não descoberta";r.b.title="";return}
+      if(!unlocked){r.n.textContent="?";r.s.textContent="Ainda não descoberta";r.b.title="";if(r.production)r.production.hidden=true;return}
+      // Atualizado em cada render, inclusive após compras, tickets, bônus e retorno à aba.
+      const currentProduction=operationCps(i);
+      if(r.production){r.production.hidden=false;r.production.dataset.zero=String(S.own[i]===0);r.productionValue.textContent=fmt(currentProduction);}
+
       r.b.classList.toggle("no",S.f<c);r.b.classList.toggle("ready",S.f>=c);
       r.b.setAttribute("aria-disabled",String(S.f<c));r.n.textContent=fmt(c);
       const visualTier=Math.floor(S.own[i]/50);
@@ -6391,7 +6442,7 @@ function initAlmasMortas(root){
         (S.own[i]>=10?" · "+et("special")+" +"+Math.round((operationMilestoneMult(S.own[i])-1)*100)+"%":"")+
         (S.f<c?" · "+lang.missing+" "+fmt(c-S.f)+" Souls":" · "+lang.ready);
       // Na lista exibir apenas o essencial; detalhes completos permanecem no tooltip.
-      r.s.textContent=lang.lv+" "+S.own[i]+" (+"+n+") · +"+fmt(inc)+" Souls/s"+
+      r.s.textContent=lang.lv+" "+S.own[i]+" (+"+n+") · próxima compra +"+fmt(inc)+" Souls/s"+
         (crossed.length?" · "+lang.cross:nx&&nx-S.own[i]<=5?" · "+lang.next+" "+nx:"")+
         (S.f<c?" · "+lang.missing+" "+fmt(c-S.f)+" Souls":"");
       r.b.title=fullDetails;
@@ -6413,7 +6464,7 @@ function initAlmasMortas(root){
     function projectedRates(passive,crateLevel,sinnerLevel){
       const cache=crateLevel>0?passive*Math.min(4,1+.65*Math.log1p(crateLevel))*crateMultiplier()/45:0;
       const share=Math.min(.075,.023+Math.min(.025,.0012*Math.sqrt(Math.max(0,sinnerLevel)))+rewardExtra);
-      const click=(1+Math.min(.20,.015*Math.sqrt(Math.max(0,sinnerLevel))))*manualBase*1.10*(1+.03*S.perk[6])+passive*share;
+      const click=(1+Math.min(.20,.015*Math.sqrt(Math.max(0,sinnerLevel))))*manualBase*1.16*(1+.03*S.perk[6])+passive*share;
       const trib=sinnerLevel>0?Math.min(click*.10,passive*.12+5)*3/12:0;
       return {passive:passive+cache,active:passive+cache+3*click+trib};
     }
